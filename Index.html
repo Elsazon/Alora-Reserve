@@ -1,0 +1,711 @@
+<!-- index.html — Plantilla elegante (gratis) para Alora + tu backend (Apps Script /exec)
+INSTRUCCIONES RÁPIDAS:
+1) Crea un repo en GitHub Pages y pega ESTE archivo como index.html
+2) Cambia: BACKEND_URL y SHARED_SECRET
+3) Ajusta las opciones de Función/Hora si cambian en Notion
+4) (Opcional) Cambia textos/branding/fotos
+-->
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alora | Reservaciones</title>
+
+  <!-- Tipografías elegantes (gratis) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #0f1210;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.68);
+      --line: rgba(255,255,255,.14);
+      --accent: #c26a4a;      /* terracota */
+      --accent2:#2a4a3a;      /* verde oscuro */
+      --ok:#2ecc71;
+      --warn:#f1c40f;
+      --err:#ff5c5c;
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1000px 800px at 15% 10%, rgba(194,106,74,.20), transparent 50%),
+        radial-gradient(900px 700px at 90% 20%, rgba(42,74,58,.22), transparent 55%),
+        linear-gradient(180deg, #0b0e0c 0%, #0f1210 35%, #0b0e0c 100%);
+      min-height:100vh;
+    }
+
+    a{ color: inherit; }
+
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 18px 80px;
+    }
+
+    /* Hero */
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 860px){
+      .hero{ grid-template-columns:1fr; }
+    }
+
+    .heroLeft{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 26px 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      margin-bottom: 10px;
+    }
+    .logoMark{
+      width: 34px; height:34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), rgba(194,106,74,.4));
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: 0 12px 30px rgba(194,106,74,.18);
+    }
+    h1{
+      font-family: "Playfair Display", serif;
+      font-weight: 700;
+      font-size: clamp(34px, 4vw, 46px);
+      margin: 6px 0 8px;
+      letter-spacing: .2px;
+    }
+    .subtitle{
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0 0 16px;
+      max-width: 62ch;
+    }
+    .chips{
+      display:flex; flex-wrap:wrap; gap:8px;
+    }
+    .chip{
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.84);
+      font-size: 12px;
+    }
+    .heroRight{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      background: rgba(255,255,255,.04);
+      box-shadow: var(--shadow);
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+    .infoRow{
+      display:flex; justify-content:space-between; gap:12px;
+      border-bottom: 1px solid var(--line);
+      padding: 10px 2px;
+      color: rgba(255,255,255,.84);
+      font-size: 13px;
+    }
+    .infoRow:last-child{ border-bottom:none; }
+    .infoRow span{ color: var(--muted); }
+
+    /* Layout */
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns:1fr; }
+    }
+
+    .card{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.04);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .cardHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .cardTitle{
+      font-family: "Playfair Display", serif;
+      font-size: 20px;
+      margin: 0;
+    }
+    .cardHint{
+      color: var(--muted);
+      font-size: 12px;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    /* Form */
+    .fieldRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 520px){
+      .fieldRow{ grid-template-columns:1fr; }
+    }
+
+    label{
+      display:block;
+      color: rgba(255,255,255,.78);
+      font-size: 12px;
+      margin: 10px 0 6px;
+    }
+    input, select, textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      color: rgba(255,255,255,.92);
+      outline:none;
+    }
+    textarea{ min-height: 92px; resize: vertical; }
+    input::placeholder, textarea::placeholder{ color: rgba(255,255,255,.45); }
+
+    .divider{
+      height: 1px;
+      background: var(--line);
+      margin: 14px 0;
+    }
+
+    /* Guests */
+    .guest{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.03);
+      border-radius: 16px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+    .guestTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .guestLabel{
+      font-weight: 600;
+      font-size: 13px;
+      color: rgba(255,255,255,.88);
+    }
+    .ghostBtn{
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.82);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor:pointer;
+    }
+    .ghostBtn:hover{ border-color: rgba(255,255,255,.32); }
+
+    .btnRow{
+      display:flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap:wrap;
+    }
+    .btn{
+      cursor:pointer;
+      border:none;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .btnPrimary{
+      background: linear-gradient(135deg, var(--accent), rgba(194,106,74,.75));
+      color: #120b08;
+      box-shadow: 0 18px 40px rgba(194,106,74,.18);
+      flex: 1;
+      min-width: 220px;
+    }
+    .btnSecondary{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.88);
+    }
+    .btnPrimary:disabled{
+      opacity: .65;
+      cursor:not-allowed;
+    }
+
+    /* Toast */
+    .toast{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.28);
+      color: rgba(255,255,255,.9);
+      display:none;
+      line-height:1.45;
+    }
+    .toast.ok{ border-color: rgba(46,204,113,.35); }
+    .toast.err{ border-color: rgba(255,92,92,.35); }
+    .toast.warn{ border-color: rgba(241,196,15,.35); }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      color: rgba(255,255,255,.82);
+      margin-top: 8px;
+      word-break: break-word;
+    }
+
+    /* Menu preview */
+    .menuGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .menuGroup{
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 16px;
+      background: rgba(255,255,255,.03);
+      padding: 12px;
+    }
+    .menuGroup h3{
+      margin: 0 0 8px;
+      font-size: 14px;
+      color: rgba(255,255,255,.88);
+      font-weight: 600;
+    }
+    .pill{
+      display:inline-block;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      margin: 4px 6px 0 0;
+      font-size: 12px;
+      color: rgba(255,255,255,.82);
+    }
+    footer{
+      margin-top: 26px;
+      color: rgba(255,255,255,.52);
+      font-size: 12px;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <section class="hero">
+      <div class="heroLeft">
+        <div class="brand">
+          <div class="logoMark" aria-hidden="true"></div>
+          <div style="font-weight:600; letter-spacing:.4px; color:rgba(255,255,255,.88)">ALORA</div>
+        </div>
+
+        <h1>Reservación + Pre-orden</h1>
+        <p class="subtitle">
+          Cada persona incluye <b>1 aperitivo</b>, <b>1 plato principal</b> y <b>1 postre</b>.
+          Cupos limitados por hora para que la cocina trabaje impecable.
+        </p>
+
+        <div class="chips">
+          <div class="chip">Menú fijo por persona</div>
+          <div class="chip">Cupos por hora</div>
+          <div class="chip">Confirmación en Notion</div>
+          <div class="chip">Experiencia Alora</div>
+        </div>
+      </div>
+
+      <div class="heroRight">
+        <div class="infoRow"><div>Incluye</div><span>Aperitivo + Principal + Postre</span></div>
+        <div class="infoRow"><div>Cambios</div><span>Por teléfono (futuro)</span></div>
+        <div class="infoRow"><div>Ubicación</div><span>Viejo San Juan</span></div>
+        <div class="infoRow"><div>Contacto</div><span>WhatsApp / Teléfono</span></div>
+      </div>
+    </section>
+
+    <section class="grid">
+
+      <!-- FORM -->
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <h2 class="cardTitle">Datos de la reservación</h2>
+            <p class="cardHint">Completa la reservación y añade las personas (covers).</p>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:12px;color:var(--muted)">Sistema</div>
+            <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.88)">Alora · Notion</div>
+          </div>
+        </div>
+
+        <div class="fieldRow">
+          <div>
+            <label for="cliente">Cliente</label>
+            <input id="cliente" placeholder="Nombre y apellido" autocomplete="name" />
+          </div>
+          <div>
+            <label for="telefono">Teléfono</label>
+            <input id="telefono" placeholder="+1 787 000 0000" inputmode="tel" autocomplete="tel" />
+          </div>
+        </div>
+
+        <div class="fieldRow">
+          <div>
+            <label for="funcion">Función</label>
+            <select id="funcion"></select>
+          </div>
+          <div>
+            <label for="hora">Hora Reserva</label>
+            <select id="hora"></select>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="cardHeader" style="margin-bottom:0">
+          <div>
+            <h2 class="cardTitle" style="font-size:18px">Personas (covers)</h2>
+            <p class="cardHint">Añade una persona por cover. Cada una escoge su menú.</p>
+          </div>
+        </div>
+
+        <div id="guests"></div>
+
+        <div class="btnRow">
+          <button class="btn btnSecondary" id="addGuestBtn" type="button">+ Añadir persona</button>
+          <button class="btn btnPrimary" id="submitBtn" type="button">Confirmar reservación</button>
+        </div>
+
+        <div id="toast" class="toast"></div>
+        <div id="debug" class="mono" style="display:none;"></div>
+
+        <div class="divider"></div>
+        <label for="notas">Notas (opcional)</label>
+        <textarea id="notas" placeholder="Alergias, cumpleaños, indicaciones… (opcional)"></textarea>
+
+        <footer>
+          © <span id="year"></span> Alora · Reservas
+        </footer>
+      </div>
+
+      <!-- MENU PREVIEW -->
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <h2 class="cardTitle">Menú disponible</h2>
+            <p class="cardHint">Opciones activas (igual que en Notion).</p>
+          </div>
+        </div>
+
+        <div class="menuGrid">
+          <div class="menuGroup">
+            <h3>Aperitivos</h3>
+            <div id="menuAperitivos"></div>
+          </div>
+
+          <div class="menuGroup">
+            <h3>Platos principales</h3>
+            <div id="menuPrincipales"></div>
+          </div>
+
+          <div class="menuGroup">
+            <h3>Postres</h3>
+            <div id="menuPostres"></div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="menuGroup">
+          <h3>Política rápida</h3>
+          <div style="color:var(--muted);font-size:13px;line-height:1.55">
+            • Cada persona incluye 1 aperitivo, 1 principal y 1 postre.<br>
+            • Cupos limitados por hora. Si se llena, el sistema no permite confirmar.<br>
+            • Cambios adicionales se atienden por contacto directo (futuro: edición por teléfono).
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+<script>
+/* =========================
+   CONFIG (CAMBIA ESTO)
+   ========================= */
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyjjKTQe-NSBv9BXB9KwkBGzct4pp4lYYM2OnCEMS6Gq6NDN4saHkA55D7SiFDcEUvH/exec
+";
+const SHARED_SECRET = "demo123";
+
+/* =========================
+   OPCIONES (DEBEN COINCIDIR EXACTO CON NOTION)
+   Reservaciones:
+   - Funcion = multi_select
+   - Hora Reserva = select
+   Platos:
+   - Curso = multi_select, Plato = title, Activo = checkbox (ya en Notion)
+   ========================= */
+const FUNCIONES = ["Función 1"]; // añade más si usas Función 2, etc.
+const HORAS = ["6:00 PM", "7:00 PM", "8:00 PM"]; // ajusta a tus options reales en Notion
+
+// Menú activo (lo que me dijiste)
+const MENU = {
+  aperitivos: ["Arancini", "Montaditos de Guiso"],
+  principales: ["Mac and Cheese", "Tenders", "Pasta Vegana", "Risotto de Calabaza", "Rigatoni Salsa Setas"],
+  postres: ["Dulce de Papaya", "Flan Tiramisu"]
+};
+
+// Máximo covers por reserva (ajusta a tu operación)
+const MAX_GUESTS = 8;
+
+/* =========================
+   UI helpers
+   ========================= */
+const $ = (id) => document.getElementById(id);
+
+function setToast(type, message, extra) {
+  const t = $("toast");
+  t.className = "toast " + (type || "");
+  t.style.display = "block";
+  t.innerHTML = message + (extra ? `<div class="mono" style="margin-top:8px">${extra}</div>` : "");
+}
+
+function clearToast() {
+  const t = $("toast");
+  t.style.display = "none";
+  t.innerHTML = "";
+}
+
+function fillSelect(selectEl, options) {
+  selectEl.innerHTML = "";
+  options.forEach(v => {
+    const o = document.createElement("option");
+    o.value = v;
+    o.textContent = v;
+    selectEl.appendChild(o);
+  });
+}
+
+function pillList(containerId, items) {
+  const c = $(containerId);
+  c.innerHTML = "";
+  items.forEach(x => {
+    const s = document.createElement("span");
+    s.className = "pill";
+    s.textContent = x;
+    c.appendChild(s);
+  });
+}
+
+/* =========================
+   Guests builder (dinámico)
+   ========================= */
+let guestCount = 0;
+
+function guestTemplate(idx) {
+  const wrap = document.createElement("div");
+  wrap.className = "guest";
+  wrap.dataset.idx = String(idx);
+
+  wrap.innerHTML = `
+    <div class="guestTop">
+      <div class="guestLabel">Persona ${idx}</div>
+      <button type="button" class="ghostBtn" data-action="remove">Eliminar</button>
+    </div>
+
+    <label>Nombre Persona</label>
+    <input data-k="name" placeholder="Nombre" />
+
+    <div class="fieldRow">
+      <div>
+        <label>Aperitivo</label>
+        <select data-k="aperitivo"></select>
+      </div>
+      <div>
+        <label>Plato Principal</label>
+        <select data-k="principal"></select>
+      </div>
+    </div>
+
+    <label>Postre</label>
+    <select data-k="postre"></select>
+  `;
+
+  // Populate selects
+  fillSelect(wrap.querySelector('select[data-k="aperitivo"]'), MENU.aperitivos);
+  fillSelect(wrap.querySelector('select[data-k="principal"]'), MENU.principales);
+  fillSelect(wrap.querySelector('select[data-k="postre"]'), MENU.postres);
+
+  // Remove handler
+  wrap.querySelector('button[data-action="remove"]').addEventListener("click", () => {
+    wrap.remove();
+    renumberGuests();
+  });
+
+  return wrap;
+}
+
+function renumberGuests() {
+  const all = Array.from($("guests").querySelectorAll(".guest"));
+  guestCount = all.length;
+  all.forEach((g, i) => {
+    const n = i + 1;
+    g.dataset.idx = String(n);
+    g.querySelector(".guestLabel").textContent = `Persona ${n}`;
+  });
+  $("addGuestBtn").disabled = guestCount >= MAX_GUESTS;
+}
+
+function addGuest() {
+  if (guestCount >= MAX_GUESTS) return;
+  const idx = guestCount + 1;
+  $("guests").appendChild(guestTemplate(idx));
+  renumberGuests();
+}
+
+/* =========================
+   Payload builder + validation
+   ========================= */
+function getGuests() {
+  const gs = Array.from($("guests").querySelectorAll(".guest"));
+  return gs.map(g => {
+    const name = (g.querySelector('input[data-k="name"]').value || "").trim();
+    const aperitivo = g.querySelector('select[data-k="aperitivo"]').value;
+    const principal = g.querySelector('select[data-k="principal"]').value;
+    const postre = g.querySelector('select[data-k="postre"]').value;
+    return { name, aperitivo, principal, postre };
+  });
+}
+
+function validate(payload) {
+  if (!payload.cliente || payload.cliente.trim().length < 3) return "Escribe el nombre del cliente.";
+  if (!payload.phone || payload.phone.trim().length < 7) return "Escribe un teléfono válido.";
+  if (!payload.funcion) return "Selecciona la función.";
+  if (!payload.hora) return "Selecciona la hora.";
+
+  if (!payload.guests || payload.guests.length === 0) return "Añade al menos 1 persona.";
+  for (let i=0;i<payload.guests.length;i++){
+    const g = payload.guests[i];
+    if (!g.name) return `Falta el nombre en Persona ${i+1}.`;
+    // En tu sistema siempre deben escoger 3 cosas:
+    if (!g.aperitivo || !g.principal || !g.postre) return `Persona ${i+1}: debes escoger aperitivo, principal y postre.`;
+  }
+  return null;
+}
+
+/* =========================
+   Submit
+   ========================= */
+async function submitReservation() {
+  clearToast();
+
+  const payload = {
+    secret: SHARED_SECRET,
+    action: "create",
+    cliente: $("cliente").value,
+    phone: $("telefono").value,
+    funcion: $("funcion").value,
+    hora: $("hora").value,
+    guests: getGuests(),
+    notas: $("notas").value || "" // (no lo usas en backend ahora, pero lo dejamos listo)
+  };
+
+  const err = validate(payload);
+  if (err) {
+    setToast("warn", "Revisa el formulario:", err);
+    return;
+  }
+
+  if (!BACKEND_URL || BACKEND_URL.includes("PEGA_AQUI")) {
+    setToast("err", "Falta configurar el backend.", "Cambia BACKEND_URL en el código por tu URL /exec.");
+    return;
+  }
+
+  const btn = $("submitBtn");
+  btn.disabled = true;
+  btn.textContent = "Enviando…";
+
+  try {
+    const res = await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (data.ok) {
+      setToast("ok", "Reservación confirmada ✅",
+        `ID: ${data.reservation_id}<br>Covers: ${data.creado?.covers ?? ""} · Items cocina: ${data.creado?.items ?? ""}`
+      );
+      // Reset suave
+      $("notas").value = "";
+    } else if (data.full) {
+      setToast("warn", "Esa hora está llena ⚠️",
+        `Reservado: ${data.yaReservado} · Entrando: ${data.entrando} · Límite: ${data.limite}`
+      );
+    } else {
+      setToast("err", "No se pudo confirmar la reservación.", data.error || "Error desconocido");
+    }
+
+  } catch (e) {
+    setToast("err", "Error de conexión.", String(e));
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Confirmar reservación";
+  }
+}
+
+/* =========================
+   Init
+   ========================= */
+(function init(){
+  $("year").textContent = new Date().getFullYear();
+  fillSelect($("funcion"), FUNCIONES);
+  fillSelect($("hora"), HORAS);
+
+  pillList("menuAperitivos", MENU.aperitivos);
+  pillList("menuPrincipales", MENU.principales);
+  pillList("menuPostres", MENU.postres);
+
+  $("addGuestBtn").addEventListener("click", addGuest);
+  $("submitBtn").addEventListener("click", submitReservation);
+
+  // Start with 2 personas (puedes cambiar a 1 si prefieres)
+  addGuest();
+  addGuest();
+})();
+</script>
+</body>
+</html>
