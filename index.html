@@ -464,7 +464,7 @@ INSTRUCCIONES RÁPIDAS:
 /* =========================
    CONFIG (CAMBIA ESTO)
    ========================= */
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyf4yl3Za8AusgQp3KHOhf_vGB0IIgGjKDkmBs0Z_lGHmHioExFlL6XHZLAWAiKSdT5/exec";
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbwKTibwZZ1HoHixqupj5YLw-cACUlHbK2NWMulE2TCtqOm8LIE7QA1WU7jK672Z9jdS/exec";
 const SHARED_SECRET = "demo123";
 
 /* =========================
@@ -495,6 +495,34 @@ const HORAS = [
   "8:30 PM",
   "9:00 PM"
 ]; // ajusta a tus options reales en Notion
+  
+  /***** CargarHoras Disponibles *****/
+  async function cargarHorasDisponibles() {
+  const selectHora = document.getElementById("hora");
+  selectHora.innerHTML = "";
+
+  for (const hora of HORAS) {
+    const res = await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: "availability",
+        hora: hora,
+        funcion: document.getElementById("funcion").value,
+        secret: SHARED_SECRET
+      })
+    });
+
+    const data = await res.json();
+
+    if (!data.full) {
+      const opt = document.createElement("option");
+      opt.value = hora;
+      opt.textContent = `${hora} (${data.disponibles} disponibles)`;
+      selectHora.appendChild(opt);
+    }
+  }
+}
 
 // Menú activo (lo que me dijiste)
 const MENU = {
@@ -710,7 +738,10 @@ const res = await fetch(BACKEND_URL, {
 (function init(){
   $("year").textContent = new Date().getFullYear();
   fillSelect($("funcion"), FUNCIONES);
-  fillSelect($("hora"), HORAS);
+  
+  document.getElementById("funcion")
+    .addEventListener("change", cargarHorasDisponibles);
+  cargarHorasDisponibles();
 
   pillList("menuAperitivos", MENU.aperitivos);
   pillList("menuPrincipales", MENU.principales);
