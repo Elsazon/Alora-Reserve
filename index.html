@@ -475,8 +475,26 @@ const SHARED_SECRET = "demo123";
    Platos:
    - Curso = multi_select, Plato = title, Activo = checkbox (ya en Notion)
    ========================= */
-const FUNCIONES = ["Función 1"]; // añade más si usas Función 2, etc.
-const HORAS = ["6:00 PM", "7:00 PM", "8:00 PM"]; // ajusta a tus options reales en Notion
+const FUNCIONES = [
+  "Función 1",
+  "Función 2",
+  "Función 3",
+  "Función 4",
+  "Función 5",
+  "Función 6",
+  "Función 7",
+  "Función 8"
+];
+const HORAS = [
+  "5:30 PM",
+  "6:00 PM",
+  "6:30 PM",
+  "7:00 PM",
+  "7:30 PM",
+  "8:00 PM",
+  "8:30 PM",
+  "9:00 PM"
+]; // ajusta a tus options reales en Notion
 
 // Menú activo (lo que me dijiste)
 const MENU = {
@@ -702,7 +720,6 @@ const res = await fetch(BACKEND_URL, {
   $("submitBtn").addEventListener("click", submitReservation);
 
   // Start with 2 personas (puedes cambiar a 1 si prefieres)
-  addGuest();
   addGuest();
 })();
 </script>
