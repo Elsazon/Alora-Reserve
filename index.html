@@ -48,33 +48,40 @@ function toast(type,msg,extra){
 
 /* ================= HORAS DISPONIBLES ================= */
 async function cargarHorasDisponibles(){
-  const sel=$("hora");
-  sel.innerHTML="";
+  const sel = $("hora");
+  sel.innerHTML = "";
 
   for(const hora of HORAS){
-    const res=await fetch(BACKEND_URL,{
-      method:"POST",
-      headers:{ "Content-Type":"text/plain;charset=utf-8"},
-      body:JSON.stringify({
-        action:"availability",
-        hora,
-        funcion:$("funcion").value,
-        secret:SHARED_SECRET
-      })
-    });
+    try {
 
-    const data=await res.json();
+      const res = await fetch(BACKEND_URL,{
+        method:"POST",
+        headers:{ "Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({
+          action:"availability",
+          hora,
+          funcion:$("funcion").value,
+          secret:SHARED_SECRET
+        })
+      });
 
-    if(!data.full){
-      const disponibles=data.disponibles ?? 0;
-      const opt=document.createElement("option");
-      opt.value=hora;
-      opt.textContent=`${hora} (${disponibles} disponibles)`;
-      sel.appendChild(opt);
+      if(!res.ok) continue;
+
+      const data = await res.json();
+      const disponibles = data?.disponibles ?? 0;
+
+      if(!data.full){
+        const opt=document.createElement("option");
+        opt.value=hora;
+        opt.textContent=`${hora} (${disponibles} disponibles)`;
+        sel.appendChild(opt);
+      }
+
+    } catch(err){
+      console.log("Error disponibilidad:", err);
     }
   }
 }
-
 /* ================= TOTAL ================= */
 function actualizarTotal(){
   let total=0;
