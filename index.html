@@ -229,14 +229,24 @@ async function submitReservation(){
 }
 
 /* ================= INIT ================= */
-(function(){
-  fillSelect($("funcion"),FUNCIONES);
-  $("funcion").addEventListener("change",cargarHorasDisponibles);
+/* ================= INIT ================= */
+document.addEventListener("DOMContentLoaded", function(){
+
+  if(!$("funcion")) return console.error("Falta #funcion");
+  if(!$("hora")) return console.error("Falta #hora");
+  if(!$("guests")) return console.error("Falta #guests");
+  if(!$("addGuestBtn")) return console.error("Falta #addGuestBtn");
+  if(!$("submitBtn")) return console.error("Falta #submitBtn");
+
+  fillSelect($("funcion"), FUNCIONES);
+
+  $("funcion").addEventListener("change", cargarHorasDisponibles);
+
   cargarHorasDisponibles();
 
-  $("addGuestBtn").onclick=addGuest;
-  $("submitBtn").onclick=submitReservation;
+  $("addGuestBtn").onclick = addGuest;
+  $("submitBtn").onclick = submitReservation;
 
   addGuest();
-})();
+});
 </script>
