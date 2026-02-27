@@ -5,103 +5,130 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Alora | Reservaciones</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
+:root{
+  --bg:#0f1210;
+  --card:rgba(255,255,255,.05);
+  --line:rgba(255,255,255,.12);
+  --accent:#c26a4a;
+  --accent2:#2a4a3a;
+}
 body{
   margin:0;
   font-family:Inter,sans-serif;
-  background:#0f1210;
+  background:
+    radial-gradient(800px 600px at 10% 10%, rgba(194,106,74,.2), transparent),
+    radial-gradient(900px 700px at 90% 20%, rgba(42,74,58,.25), transparent),
+    var(--bg);
   color:white;
 }
-.container{
-  max-width:900px;
+.wrap{
+  max-width:1000px;
   margin:auto;
-  padding:30px;
+  padding:40px 20px 80px;
 }
 h1{
   font-family:"Playfair Display",serif;
-  font-size:40px;
+  font-size:42px;
+  margin-bottom:8px;
+}
+.subtitle{
+  color:rgba(255,255,255,.7);
+  margin-bottom:30px;
 }
 .card{
-  background:rgba(255,255,255,.05);
-  padding:20px;
-  border-radius:16px;
-  margin-top:20px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:25px;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+label{
+  font-size:13px;
+  color:rgba(255,255,255,.75);
+  margin-top:12px;
+  display:block;
 }
 input,select{
   width:100%;
-  padding:10px;
+  padding:12px;
   margin-top:6px;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,.2);
-  background:#111;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:rgba(0,0,0,.3);
   color:white;
 }
 button{
-  padding:12px 18px;
+  padding:14px 20px;
   border:none;
-  border-radius:10px;
+  border-radius:14px;
   font-weight:600;
   cursor:pointer;
+  margin-top:15px;
 }
 .primary{
-  background:#c26a4a;
+  background:linear-gradient(135deg,var(--accent),rgba(194,106,74,.7));
   color:black;
 }
 .secondary{
-  background:#2a4a3a;
+  background:rgba(255,255,255,.08);
+  border:1px solid var(--line);
   color:white;
 }
 .guest{
-  border:1px solid rgba(255,255,255,.15);
-  padding:12px;
-  border-radius:12px;
-  margin-top:12px;
+  border:1px solid var(--line);
+  padding:15px;
+  border-radius:15px;
+  margin-top:15px;
 }
 .total{
+  margin-top:20px;
   font-size:18px;
-  margin-top:15px;
 }
 #toast{
-  margin-top:15px;
+  margin-top:20px;
+  padding:15px;
+  border-radius:14px;
+  display:none;
 }
+.success{ background:#2ecc71; color:black; }
+.error{ background:#ff5c5c; color:white; }
+.warn{ background:#f1c40f; color:black; }
 </style>
 </head>
 
 <body>
-<div class="container">
+<div class="wrap">
+  <h1>Alora</h1>
+  <p class="subtitle">Experiencia gastronómica · Reservación con pre-orden</p>
 
-<h1>Alora Reservaciones</h1>
+  <div class="card">
+    <label>Cliente</label>
+    <input id="cliente"/>
 
-<div class="card">
-<label>Cliente</label>
-<input id="cliente"/>
+    <label>Teléfono</label>
+    <input id="telefono"/>
 
-<label>Teléfono</label>
-<input id="telefono"/>
+    <label>Función</label>
+    <select id="funcion"></select>
 
-<label>Función</label>
-<select id="funcion"></select>
+    <label>Hora</label>
+    <select id="hora"></select>
 
-<label>Hora</label>
-<select id="hora"></select>
+    <h3 style="margin-top:30px;">Personas</h3>
+    <div id="guests"></div>
 
-<h3>Personas</h3>
-<div id="guests"></div>
+    <button class="secondary" id="addGuestBtn">+ Añadir Persona</button>
+    <button class="primary" id="submitBtn">Confirmar Reservación</button>
 
-<button class="secondary" id="addGuestBtn">Añadir Persona</button>
-<button class="primary" id="submitBtn">Confirmar Reservación</button>
-
-<div class="total">Total estimado: <span id="total">$0.00</span></div>
-
-<div id="toast"></div>
-</div>
-
+    <div class="total">Total estimado: <span id="total">$0.00</span></div>
+    <div id="toast"></div>
+  </div>
 </div>
 
 <script>
-
 /* ================= CONFIG ================= */
 const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyOde3SksOR_CMmSDNrA7F-5ptCO78M7yr7dxG5Usty8E0hu6kE93PbSuTao0OeXsx-/exec";
 const SHARED_SECRET = "demo123";
@@ -109,146 +136,183 @@ const SHARED_SECRET = "demo123";
 const PRECIO_ADULTO = 35;
 const PRECIO_NINO = 12.50;
 
-const FUNCIONES = [
-"Función 1","Función 2","Función 3","Función 4",
-"Función 5","Función 6","Función 7","Función 8"
-];
-
-const HORAS = [
-"5:30 PM","6:00 PM","6:30 PM","7:00 PM",
-"7:30 PM","8:00 PM","8:30 PM","9:00 PM"
-];
+const FUNCIONES = ["Función 1","Función 2","Función 3","Función 4","Función 5","Función 6","Función 7","Función 8"];
+const HORAS = ["5:30 PM","6:00 PM","6:30 PM","7:00 PM","7:30 PM","8:00 PM","8:30 PM","9:00 PM"];
 
 const MENU = {
-aperitivos:["Arancini","Montaditos de Guiso"],
-principales:["Pasta Vegana","Risotto de Calabaza","Rigatoni Salsa Setas"],
-postres:["Dulce de Papaya","Flan Tiramisu"],
-ninos:["Tenders","Mac and Cheese"]
+  aperitivos:["Arancini","Montaditos de Guiso"],
+  principales:["Pasta Vegana","Risotto de Calabaza","Rigatoni Salsa Setas"],
+  postres:["Dulce de Papaya","Flan Tiramisu"],
+  ninos:["Tenders","Mac and Cheese"]
 };
 
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
 
 function fillSelect(el,arr){
-el.innerHTML="";
-arr.forEach(v=>{
-const o=document.createElement("option");
-o.value=v;
-o.textContent=v;
-el.appendChild(o);
-});
+  el.innerHTML="";
+  arr.forEach(v=>{
+    const o=document.createElement("option");
+    o.value=v;
+    o.textContent=v;
+    el.appendChild(o);
+  });
 }
 
 function actualizarTotal(){
-let total=0;
-document.querySelectorAll(".tipoPersona").forEach(sel=>{
-total+=sel.value==="nino"?PRECIO_NINO:PRECIO_ADULTO;
-});
-$("total").textContent="$"+total.toFixed(2);
+  let total=0;
+  document.querySelectorAll(".tipoPersona").forEach(sel=>{
+    total+=sel.value==="nino"?PRECIO_NINO:PRECIO_ADULTO;
+  });
+  $("total").textContent="$"+total.toFixed(2);
 }
 
-function guestTemplate(idx){
-const div=document.createElement("div");
-div.className="guest";
-
-div.innerHTML=`
-<label>Nombre Persona</label>
-<input class="name"/>
-
-<label>Tipo</label>
-<select class="tipoPersona">
-<option value="adulto">Adulto $35</option>
-<option value="nino">Niño $12.50</option>
-</select>
-
-<div class="adulto">
-<label>Aperitivo</label>
-<select class="aperitivo"></select>
-<label>Principal</label>
-<select class="principal"></select>
-<label>Postre</label>
-<select class="postre"></select>
-</div>
-
-<div class="nino" style="display:none">
-<label>Menú Niño</label>
-<select class="principalNino"></select>
-</div>
-`;
-
-fillSelect(div.querySelector(".aperitivo"),MENU.aperitivos);
-fillSelect(div.querySelector(".principal"),MENU.principales);
-fillSelect(div.querySelector(".postre"),MENU.postres);
-fillSelect(div.querySelector(".principalNino"),MENU.ninos);
-
-div.querySelector(".tipoPersona").onchange=e=>{
-if(e.target.value==="nino"){
-div.querySelector(".adulto").style.display="none";
-div.querySelector(".nino").style.display="block";
-}else{
-div.querySelector(".adulto").style.display="block";
-div.querySelector(".nino").style.display="none";
-}
-actualizarTotal();
-};
-
-return div;
+function toast(msg,type){
+  const t=$("toast");
+  t.style.display="block";
+  t.className=type;
+  t.innerText=msg;
 }
 
-function addGuest(){
-$("guests").appendChild(guestTemplate());
-actualizarTotal();
+function guestTemplate(){
+  const div=document.createElement("div");
+  div.className="guest";
+
+  div.innerHTML=`
+    <label>Nombre Persona</label>
+    <input class="name"/>
+
+    <label>Tipo</label>
+    <select class="tipoPersona">
+      <option value="adulto">Adulto $35</option>
+      <option value="nino">Niño $12.50</option>
+    </select>
+
+    <div class="adulto">
+      <label>Aperitivo</label>
+      <select class="aperitivo"></select>
+      <label>Principal</label>
+      <select class="principal"></select>
+      <label>Postre</label>
+      <select class="postre"></select>
+    </div>
+
+    <div class="nino" style="display:none">
+      <label>Menú Niño</label>
+      <select class="principalNino"></select>
+    </div>
+  `;
+
+  fillSelect(div.querySelector(".aperitivo"),MENU.aperitivos);
+  fillSelect(div.querySelector(".principal"),MENU.principales);
+  fillSelect(div.querySelector(".postre"),MENU.postres);
+  fillSelect(div.querySelector(".principalNino"),MENU.ninos);
+
+  div.querySelector(".tipoPersona").onchange=e=>{
+    if(e.target.value==="nino"){
+      div.querySelector(".adulto").style.display="none";
+      div.querySelector(".nino").style.display="block";
+    }else{
+      div.querySelector(".adulto").style.display="block";
+      div.querySelector(".nino").style.display="none";
+    }
+    actualizarTotal();
+  };
+
+  return div;
+}
+
+async function cargarHorasDisponibles(){
+  const sel=$("hora");
+  sel.innerHTML="";
+
+  for(const hora of HORAS){
+    try{
+      const res=await fetch(BACKEND_URL,{
+        method:"POST",
+        headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({
+          action:"availability",
+          hora,
+          funcion:$("funcion").value,
+          secret:SHARED_SECRET
+        })
+      });
+      if(!res.ok) continue;
+      const data=await res.json();
+      if(!data.full){
+        const disponibles = data?.disponibles ?? 0;
+        const opt=document.createElement("option");
+        opt.value=hora;
+        opt.textContent=`${hora} (${disponibles} disponibles)`;
+        sel.appendChild(opt);
+      }
+    }catch(e){}
+  }
 }
 
 async function submitReservation(){
-const guests=Array.from(document.querySelectorAll(".guest")).map(g=>{
-const tipo=g.querySelector(".tipoPersona").value;
-if(tipo==="nino"){
-return{
-name:g.querySelector(".name").value,
-aperitivo:"",
-principal:g.querySelector(".principalNino").value,
-postre:""
-};
-}
-return{
-name:g.querySelector(".name").value,
-aperitivo:g.querySelector(".aperitivo").value,
-principal:g.querySelector(".principal").value,
-postre:g.querySelector(".postre").value
-};
-});
+  const guests=Array.from(document.querySelectorAll(".guest")).map(g=>{
+    const tipo=g.querySelector(".tipoPersona").value;
+    if(tipo==="nino"){
+      return{
+        name:g.querySelector(".name").value,
+        aperitivo:"",
+        principal:g.querySelector(".principalNino").value,
+        postre:""
+      };
+    }
+    return{
+      name:g.querySelector(".name").value,
+      aperitivo:g.querySelector(".aperitivo").value,
+      principal:g.querySelector(".principal").value,
+      postre:g.querySelector(".postre").value
+    };
+  });
 
-const payload={
-secret:SHARED_SECRET,
-action:"create",
-cliente:$("cliente").value,
-phone:$("telefono").value,
-funcion:$("funcion").value,
-hora:$("hora").value,
-guests
-};
+  try{
+    const res=await fetch(BACKEND_URL,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify({
+        secret:SHARED_SECRET,
+        action:"create",
+        cliente:$("cliente").value,
+        phone:$("telefono").value,
+        funcion:$("funcion").value,
+        hora:$("hora").value,
+        guests
+      })
+    });
+    const data=await res.json();
 
-try{
-const res=await fetch(BACKEND_URL,{
-method:"POST",
-headers:{"Content-Type":"text/plain;charset=utf-8"},
-body:JSON.stringify(payload)
-});
-const data=await res.json();
-$("toast").innerText=data.ok?"Reservación confirmada":"Error";
-}catch(e){
-$("toast").innerText="Error conexión";
-}
+    if(data.ok){
+      toast("Reservación confirmada ✔","success");
+    }else if(data.full){
+      toast("Hora llena ⚠️","warn");
+    }else{
+      toast("Error en reservación","error");
+    }
+  }catch(e){
+    toast("Error de conexión","error");
+  }
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
-fillSelect($("funcion"),FUNCIONES);
-fillSelect($("hora"),HORAS);
-$("addGuestBtn").onclick=addGuest;
-$("submitBtn").onclick=submitReservation;
-addGuest();
-});
+  fillSelect($("funcion"),FUNCIONES);
+  $("funcion").addEventListener("change",cargarHorasDisponibles);
+  cargarHorasDisponibles();
 
+  $("addGuestBtn").onclick=()=>{
+    $("guests").appendChild(guestTemplate());
+    actualizarTotal();
+  };
+
+  $("submitBtn").onclick=submitReservation;
+
+  $("guests").appendChild(guestTemplate());
+  actualizarTotal();
+});
 </script>
+
 </body>
 </html>
