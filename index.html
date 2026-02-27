@@ -1,210 +1,977 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alora | Fusión Boritaly</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ALORA | Fusión Boritaly</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- Tipografías (gratis) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<style>
-:root{
-  --olive:#5f5d46;
-  --olive-dark:#4f4d38;
-  --cream:#F3EFE6;
-  --muted:#d9d4c8;
-}
+  <style>
+    :root{
+      --bg0:#0b0e0c;
+      --bg1:#0f1210;
+      --ink:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.68);
+      --line:rgba(255,255,255,.14);
 
-*{margin:0;padding:0;box-sizing:border-box;}
+      --olive:#4f5138;
+      --terracotta:#c26a4a;
 
-body{
-  font-family:Inter,sans-serif;
-  background:linear-gradient(180deg,var(--olive) 0%, var(--olive-dark) 100%);
-  color:var(--cream);
-  overflow-x:hidden;
-}
+      --ok:#2ecc71;
+      --warn:#f1c40f;
+      --err:#ff5c5c;
 
-/* HERO */
+      --radius:20px;
+      --shadow:0 22px 70px rgba(0,0,0,.55);
+    }
 
-.hero{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  padding:20px;
-}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1100px 800px at 12% 12%, rgba(194,106,74,.16), transparent 55%),
+        radial-gradient(1000px 750px at 85% 18%, rgba(79,81,56,.20), transparent 55%),
+        linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 40%, var(--bg0) 100%);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
 
-.logo-main{
-  width:100%;
-  max-width:600px;
-  height:auto;
-  object-fit:contain;
-  filter:drop-shadow(0 30px 60px rgba(0,0,0,0.5));
-  animation:fadeUp 1.5s ease forwards;
-}
+    .wrap{max-width:1100px; margin:0 auto; padding:0 18px;}
+    a{color:inherit; text-decoration:none}
 
-.tagline{
-  margin-top:30px;
-  font-size:14px;
-  letter-spacing:2px;
-  text-transform:uppercase;
-  color:var(--muted);
-  opacity:0;
-  animation:fadeUp 1.5s ease forwards;
-  animation-delay:.4s;
-}
+    /* ===== HERO ===== */
+    .hero{
+      min-height: 92vh;
+      display:flex;
+      align-items:center;
+      padding: 64px 0 34px;
+      position:relative;
+    }
+    .heroInner{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius: calc(var(--radius) + 6px);
+      padding: 34px 26px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .glow{
+      position:absolute;
+      inset:-40%;
+      background:
+        radial-gradient(closest-side at 22% 20%, rgba(194,106,74,.18), transparent 50%),
+        radial-gradient(closest-side at 78% 30%, rgba(79,81,56,.22), transparent 55%);
+      filter: blur(18px);
+      pointer-events:none;
+      opacity:.9;
+    }
 
-/* SCROLL SECTION */
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:18px;
+      position:relative;
+      z-index:1;
+    }
+    @media (max-width: 900px){
+      .heroGrid{grid-template-columns:1fr;}
+    }
 
-.section{
-  padding:120px 20px;
-  max-width:900px;
-  margin:auto;
-  text-align:center;
-  opacity:0;
-  transform:translateY(60px);
-  transition:all 1s ease;
-}
+    .logoMain{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:14px;
+    }
+    .logoMain img{
+      height:56px;
+      width:auto;
+      filter: drop-shadow(0 18px 40px rgba(0,0,0,.45));
+    }
 
-.section.visible{
-  opacity:1;
-  transform:translateY(0);
-}
+    .brandMeta{
+      color:var(--muted);
+      font-size:12px;
+      letter-spacing:.35px;
+      text-transform:uppercase;
+      margin-top: 2px;
+    }
 
-.section h2{
-  font-family:"Playfair Display",serif;
-  font-size:42px;
-  margin-bottom:30px;
-}
+    h1{
+      font-family:"Playfair Display", serif;
+      font-weight:700;
+      font-size: clamp(40px, 4.4vw, 58px);
+      margin: 6px 0 10px;
+      letter-spacing:.2px;
+    }
 
-.section p{
-  font-size:18px;
-  line-height:1.7;
-  color:var(--muted);
-}
+    .tagline{
+      font-family:"Playfair Display", serif;
+      font-weight:500;
+      color: rgba(255,255,255,.88);
+      font-size: 18px;
+      margin:0 0 14px;
+    }
 
-/* MARK */
+    .lede{
+      color: var(--muted);
+      line-height:1.7;
+      font-size: 14px;
+      max-width: 72ch;
+      margin:0 0 18px;
+    }
+    .lede strong{color: rgba(255,255,255,.88); font-weight:600;}
 
-.mark-section{
-  padding:120px 0;
-  text-align:center;
-  opacity:0;
-  transform:translateY(60px);
-  transition:all 1s ease;
-}
+    .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;}
+    .chip{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: rgba(255,255,255,.82);
+    }
 
-.mark-section.visible{
-  opacity:1;
-  transform:translateY(0);
-}
+    .heroCard{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      background: rgba(0,0,0,.18);
+      box-shadow: 0 16px 55px rgba(0,0,0,.45);
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      height:100%;
+    }
 
-.logo-mark{
-  width:140px;
-  height:auto;
-  opacity:.95;
-}
+    .infoRow{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      padding: 10px 2px;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      color: rgba(255,255,255,.86);
+    }
+    .infoRow:last-child{border-bottom:none;}
+    .infoRow span{color:var(--muted)}
 
-/* BUTTON */
+    .ctaRow{
+      display:flex;
+      gap:10px;
+      margin-top: 6px;
+      flex-wrap:wrap;
+    }
+    .btn{
+      border:none;
+      cursor:pointer;
+      border-radius: 16px;
+      padding: 12px 14px;
+      font-weight:600;
+      font-size: 14px;
+    }
+    .btnPrimary{
+      background: linear-gradient(135deg, var(--terracotta), rgba(194,106,74,.72));
+      color:#120b08;
+      box-shadow: 0 18px 48px rgba(194,106,74,.18);
+      flex:1;
+      min-width: 220px;
+    }
+    .btnGhost{
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--line);
+      color: rgba(255,255,255,.88);
+      min-width: 160px;
+    }
 
-.reserve-btn{
-  margin-top:50px;
-  padding:16px 40px;
-  background:var(--cream);
-  color:var(--olive-dark);
-  font-weight:600;
-  letter-spacing:1px;
-  border:none;
-  border-radius:40px;
-  cursor:pointer;
-  transition:all .4s ease;
-}
+    /* ===== SECTIONS ===== */
+    section.block{padding: 18px 0 30px;}
+    .sectionCard{
+      border:1px solid var(--line);
+      border-radius: calc(var(--radius) + 6px);
+      padding: 24px;
+      background: rgba(255,255,255,.04);
+      box-shadow: var(--shadow);
+    }
+    .sectionTitle{
+      font-family:"Playfair Display", serif;
+      font-size: 24px;
+      margin: 0 0 10px;
+    }
+    .sectionText{
+      color: var(--muted);
+      line-height: 1.75;
+      margin: 0;
+      font-size: 14px;
+    }
+    .divider{
+      height:1px;
+      background: var(--line);
+      margin: 16px 0;
+    }
 
-.reserve-btn:hover{
-  background:white;
-  transform:translateY(-3px);
-  box-shadow:0 15px 40px rgba(0,0,0,.4);
-}
+    /* ===== MENU PREVIEW ===== */
+    .menuGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 16px;
+    }
+    @media (max-width: 900px){
+      .menuGrid{grid-template-columns:1fr;}
+    }
+    .menuCol{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(0,0,0,.16);
+      padding: 16px;
+    }
+    .menuCol h3{
+      margin: 0 0 10px;
+      font-size: 13px;
+      letter-spacing: .35px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.84);
+    }
+    .pill{
+      display:inline-block;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      border-radius: 999px;
+      padding: 8px 10px;
+      margin: 6px 8px 0 0;
+      font-size: 12px;
+      color: rgba(255,255,255,.86);
+    }
+    .smallNote{
+      font-size: 12px;
+      color: rgba(255,255,255,.62);
+      margin-top: 10px;
+      line-height: 1.55;
+    }
 
-/* ANIMATION */
+    /* ===== RESERVA ===== */
+    .reserveGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 16px;
+    }
+    @media (max-width: 900px){
+      .reserveGrid{grid-template-columns:1fr;}
+    }
 
-@keyframes fadeUp{
-  from{
-    opacity:0;
-    transform:translateY(40px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
+    .formCard{
+      border:1px solid var(--line);
+      border-radius: calc(var(--radius) + 6px);
+      padding: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+    }
 
-/* RESPONSIVE */
+    label{
+      display:block;
+      font-size:12px;
+      color: rgba(255,255,255,.76);
+      margin: 10px 0 6px;
+    }
+    input, select, textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      color: rgba(255,255,255,.92);
+      outline:none;
+    }
+    textarea{min-height: 96px; resize:vertical;}
+    input::placeholder, textarea::placeholder{color: rgba(255,255,255,.45);}
 
-@media(max-width:768px){
-  .section h2{font-size:30px;}
-  .section p{font-size:16px;}
-}
-</style>
+    .row2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 520px){
+      .row2{grid-template-columns:1fr;}
+    }
+
+    .guest{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.03);
+      border-radius: 16px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+    .guestTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:6px;
+    }
+    .guestLabel{font-weight:600; font-size:13px; color: rgba(255,255,255,.9);}
+    .ghostBtn{
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.18);
+      color: rgba(255,255,255,.82);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor:pointer;
+    }
+    .ghostBtn:hover{border-color: rgba(255,255,255,.34);}
+
+    .btnRow{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;}
+    .btnSecondary{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.9);
+      min-width: 170px;
+    }
+
+    .priceLine{
+      margin-top: 12px;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      align-items:baseline;
+    }
+    .priceLine .label{color: var(--muted); font-size:13px;}
+    .priceLine .total{
+      font-family:"Playfair Display", serif;
+      font-size: 22px;
+      color: rgba(255,255,255,.92);
+    }
+
+    .toast{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.28);
+      color: rgba(255,255,255,.92);
+      display:none;
+      line-height:1.45;
+    }
+    .toast.ok{border-color: rgba(46,204,113,.35);}
+    .toast.warn{border-color: rgba(241,196,15,.35);}
+    .toast.err{border-color: rgba(255,92,92,.35);}
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      color: rgba(255,255,255,.82);
+      margin-top: 8px;
+      word-break: break-word;
+    }
+
+    .markRow{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-top: 10px;
+    }
+    .markRow img{
+      height:44px;
+      width:auto;
+      opacity:.94;
+      filter: drop-shadow(0 14px 28px rgba(0,0,0,.40));
+    }
+
+    footer{
+      padding: 26px 0 50px;
+      color: rgba(255,255,255,.55);
+      font-size: 12px;
+      text-align:center;
+    }
+
+    /* ===== Animaciones suaves ===== */
+    .reveal{
+      opacity:0;
+      transform: translateY(14px);
+      transition: opacity .7s ease, transform .7s ease;
+      will-change: opacity, transform;
+    }
+    .reveal.show{
+      opacity:1;
+      transform: translateY(0);
+    }
+    .floatIn{
+      animation: floatIn .9s ease both;
+    }
+    @keyframes floatIn{
+      from{opacity:0; transform: translateY(14px);}
+      to{opacity:1; transform: translateY(0);}
+    }
+  </style>
 </head>
 
 <body>
+  <div class="wrap">
 
-<!-- HERO -->
-<section class="hero">
-  <img src="7E279685-0A21-4575-9890-80E64F81A59E.png" class="logo-main" alt="Alora Logo">
-  
-  <div class="tagline">
-    Universidad Ana G. Méndez · Recinto de Carolina
+    <!-- HERO -->
+    <section class="hero">
+      <div class="heroInner floatIn">
+        <div class="glow" aria-hidden="true"></div>
+
+        <div class="heroGrid">
+          <div>
+            <div class="logoMain">
+              <!-- Logo -->
+              <img src="7E279685-0A21-4575-9890-80E64F81A59E.png" alt="ALORA">
+            </div>
+
+            <div class="brandMeta">Universidad Ana G. Méndez · Recinto de Carolina</div>
+            <h1>ALORA</h1>
+            <div class="tagline">Fusión Boritaly</div>
+
+            <p class="lede">
+              Un concepto de alta cocina donde la <strong>tradición italiana</strong> y la <strong>esencia puertorriqueña</strong>
+              convergen en una propuesta sofisticada y contemporánea. Una experiencia culinaria cuidadosamente diseñada,
+              ejecutada y presentada con estándares de <strong>fine dining</strong>.
+            </p>
+
+            <div class="chips">
+              <div class="chip">Tradición</div>
+              <div class="chip">Técnica</div>
+              <div class="chip">Elegancia</div>
+              <div class="chip">Cupos por hora</div>
+            </div>
+          </div>
+
+          <aside class="heroCard">
+            <div class="infoRow"><div>Formato</div><span>Pre-orden por persona</span></div>
+            <div class="infoRow"><div>Adulto</div><span>$35 · 1 aperitivo + 1 principal + 1 postre</span></div>
+            <div class="infoRow"><div>Niño</div><span>$12.50 · menú infantil</span></div>
+            <div class="infoRow"><div>Ubicación</div><span>Viejo San Juan</span></div>
+
+            <div class="ctaRow">
+              <a class="btn btnPrimary" href="#reservar">Reservar ahora</a>
+              <a class="btn btnGhost" href="#menu">Ver menú</a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCIA -->
+    <section class="block">
+      <div class="sectionCard reveal">
+        <div class="sectionTitle">Una experiencia abierta al público</div>
+        <p class="sectionText">
+          Desarrollado en la Universidad Ana G. Méndez (Recinto de Carolina) como un proyecto gastronómico profesional,
+          ALORA trasciende lo académico para convertirse en una experiencia culinaria de autor.
+          <br><br>
+          Próximamente abrimos nuestras puertas, con más detalles sobre precios y menú.
+        </p>
+        <div class="divider"></div>
+        <p class="sectionText" style="text-align:center; letter-spacing:.3px;">
+          <strong>Tradición. Técnica. Elegancia.</strong>
+        </p>
+
+        <div class="markRow" style="justify-content:center;">
+          <img src="2BE6E097-CFDA-4844-A545-BCFA182CF730.png" alt="ALORA mark">
+        </div>
+      </div>
+    </section>
+
+    <!-- MENÚ -->
+    <section id="menu" class="block">
+      <div class="sectionCard reveal">
+        <div class="sectionTitle">Menú disponible</div>
+        <p class="sectionText">Opciones activas para la pre-orden. (Los adicionales se atienden en restaurante.)</p>
+
+        <div class="menuGrid">
+          <div class="menuCol">
+            <h3>Aperitivos</h3>
+            <div id="menuAperitivos"></div>
+          </div>
+
+          <div class="menuCol">
+            <h3>Platos principales</h3>
+            <div id="menuPrincipales"></div>
+          </div>
+
+          <div class="menuCol">
+            <h3>Postres</h3>
+            <div id="menuPostres"></div>
+          </div>
+
+          <div class="menuCol">
+            <h3>Menú infantil</h3>
+            <div id="menuNinos"></div>
+            <div class="smallNote">Al seleccionar “Niño”, solo se muestran platos infantiles (sin aperitivo/postre).</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESERVAR -->
+    <section id="reservar" class="block">
+      <div class="reserveGrid">
+        <div class="formCard reveal">
+          <div class="sectionTitle" style="margin-bottom:6px;">Reservar</div>
+          <p class="sectionText" style="margin-top:0;">
+            Completa la reserva y añade las personas. Se ocultan automáticamente las horas llenas.
+          </p>
+
+          <div class="row2">
+            <div>
+              <label for="cliente">Cliente</label>
+              <input id="cliente" placeholder="Nombre y apellido" autocomplete="name">
+            </div>
+            <div>
+              <label for="telefono">Teléfono</label>
+              <input id="telefono" placeholder="+1 787 000 0000" inputmode="tel" autocomplete="tel">
+            </div>
+          </div>
+
+          <div class="row2">
+            <div>
+              <label for="funcion">Función</label>
+              <select id="funcion"></select>
+            </div>
+            <div>
+              <label for="hora">Hora</label>
+              <select id="hora"></select>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="sectionTitle" style="font-size:18px; margin:0;">Personas</div>
+          <p class="sectionText" style="margin:6px 0 0;">
+            Adulto: aperitivo + principal + postre. Niño: menú infantil.
+          </p>
+
+          <div id="guests"></div>
+
+          <div class="btnRow">
+            <button class="btn btnSecondary" id="addGuestBtn" type="button">+ Añadir persona</button>
+            <button class="btn btnPrimary" id="submitBtn" type="button">Confirmar experiencia</button>
+          </div>
+
+          <div class="priceLine">
+            <div class="label">Total estimado</div>
+            <div class="total" id="total">$0.00</div>
+          </div>
+
+          <div id="toast" class="toast"></div>
+
+          <div class="divider"></div>
+          <label for="notas">Notas (opcional)</label>
+          <textarea id="notas" placeholder="Alergias, cumpleaños, indicaciones…"></textarea>
+        </div>
+
+        <div class="sectionCard reveal">
+          <div class="sectionTitle">Detalles</div>
+          <p class="sectionText">
+            • Se crea automáticamente la reservación + covers + items en Notion.<br>
+            • Cupos limitados por hora (por personas, no por reservación).<br>
+            • Si una hora se llena, no aparecerá disponible.<br><br>
+            <strong>Precios:</strong> Adulto $35 · Niño $12.50
+          </p>
+
+          <div class="divider"></div>
+
+          <div class="markRow">
+            <img src="2BE6E097-CFDA-4844-A545-BCFA182CF730.png" alt="ALORA mark">
+            <div>
+              <div style="font-weight:600; color:rgba(255,255,255,.88)">ALORA</div>
+              <div style="font-size:12px; color:var(--muted)">Fusión Boritaly · Fine dining</div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <p class="sectionText" style="text-align:center">
+            <strong>Tradición. Técnica. Elegancia.</strong>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="year"></span> ALORA · Universidad Ana G. Méndez (Recinto de Carolina)
+    </footer>
   </div>
-</section>
 
-<!-- CONCEPTO -->
-<section class="section reveal">
-  <h2>Fusión Boritaly</h2>
-  <p>
-    Un concepto de alta cocina donde la tradición italiana y la esencia puertorriqueña convergen en una propuesta sofisticada y contemporánea.
-    <br><br>
-    Desarrollado en la Universidad Ana G. Méndez, Recinto de Carolina, como un proyecto gastronómico profesional.
-    <br><br>
-    Alora trasciende lo académico para convertirse en una experiencia culinaria cuidadosamente diseñada, ejecutada y presentada con estándares de fine dining.
-    <br><br>
-    Próximamente abrimos nuestras puertas. Una experiencia abierta al público.
-    <br><br>
-    <strong>Tradición. Técnica. Elegancia.</strong>
-  </p>
+  <script>
+    /***********************
+     * CONFIG
+     ***********************/
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyOde3SksOR_CMmSDNrA7F-5ptCO78M7yr7dxG5Usty8E0hu6kE93PbSuTao0OeXsx-/exec";
+    const SHARED_SECRET = "demo123";
 
-  <button class="reserve-btn" onclick="window.location.href='https://elsazon.github.io/Alora-Reserve/';">
-  Reserva Ahora
-</button>
-</section>
+    const PRECIO_ADULTO = 35;
+    const PRECIO_NINO = 12.50;
 
-<!-- MARK SECTION -->
-<section class="mark-section reveal">
-  <img src="2BE6E097-CFDA-4844-A545-BCFA182CF730.png" class="logo-mark" alt="Alora Mark">
-</section>
+    const FUNCIONES = [
+      "Función 1","Función 2","Función 3","Función 4",
+      "Función 5","Función 6","Función 7","Función 8"
+    ];
 
-<script>
+    const HORAS = [
+      "5:30 PM","6:00 PM","6:30 PM","7:00 PM",
+      "7:30 PM","8:00 PM","8:30 PM","9:00 PM"
+    ];
 
-/* Scroll Reveal */
-const reveals = document.querySelectorAll(".reveal");
+    const MENU = {
+      aperitivos:["Arancini","Montaditos de Guiso"],
+      principales:["Mac and Cheese","Tenders","Pasta Vegana","Risotto de Calabaza","Rigatoni Salsa Setas"],
+      postres:["Dulce de Papaya","Flan Tiramisu"],
+      ninos:["Tenders","Mac and Cheese"]
+    };
 
-window.addEventListener("scroll", () => {
-  reveals.forEach(el => {
-    const top = el.getBoundingClientRect().top;
-    if(top < window.innerHeight - 100){
-      el.classList.add("visible");
+    const MAX_GUESTS = 8;
+
+    const $ = (id) => document.getElementById(id);
+
+    function setToast(type, message, extraHtml){
+      const t = $("toast");
+      t.className = "toast " + (type || "");
+      t.style.display = "block";
+      t.innerHTML = message + (extraHtml ? `<div class="mono">${extraHtml}</div>` : "");
     }
-  });
-});
 
-/* Scroll placeholder */
-function scrollToReservation(){
-  alert("Próximamente activaremos el sistema de reservaciones.");
-}
+    function clearToast(){
+      const t = $("toast");
+      t.style.display = "none";
+      t.innerHTML = "";
+    }
 
-</script>
+    function fillSelect(selectEl, options){
+      selectEl.innerHTML = "";
+      options.forEach(v=>{
+        const o = document.createElement("option");
+        o.value = v;
+        o.textContent = v;
+        selectEl.appendChild(o);
+      });
+    }
 
+    function pillList(containerId, items){
+      const c = $(containerId);
+      c.innerHTML = "";
+      items.forEach(x=>{
+        const s = document.createElement("span");
+        s.className = "pill";
+        s.textContent = x;
+        c.appendChild(s);
+      });
+    }
+
+    /***********************
+     * Animaciones suaves (scroll reveal)
+     ***********************/
+    function initReveal(){
+      const els = Array.from(document.querySelectorAll(".reveal"));
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting) e.target.classList.add("show");
+        });
+      }, {threshold: 0.12});
+      els.forEach(el=>io.observe(el));
+    }
+
+    /***********************
+     * Disponibilidad por hora (oculta las llenas)
+     ***********************/
+    async function cargarHorasDisponibles(){
+      const selHora = $("hora");
+      selHora.innerHTML = "";
+
+      const funcion = $("funcion").value;
+
+      for(const hora of HORAS){
+        try{
+          const res = await fetch(BACKEND_URL,{
+            method:"POST",
+            headers:{ "Content-Type":"text/plain;charset=utf-8" },
+            body: JSON.stringify({
+              action:"availability",
+              hora,
+              funcion,
+              secret: SHARED_SECRET
+            })
+          });
+
+          if(!res.ok) continue;
+
+          const data = await res.json();
+
+          if(!data.full){
+            const disp = data?.disponibles ?? 0;
+            const opt = document.createElement("option");
+            opt.value = hora;
+            opt.textContent = `${hora} (${disp} disponibles)`;
+            selHora.appendChild(opt);
+          }
+        }catch(err){
+          console.log("availability error:", err);
+        }
+      }
+
+      if(selHora.options.length === 0){
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "No hay horas disponibles";
+        selHora.appendChild(opt);
+      }
+    }
+
+    /***********************
+     * Total
+     ***********************/
+    function actualizarTotal(){
+      let total = 0;
+      document.querySelectorAll(".tipoPersona").forEach(sel=>{
+        total += (sel.value === "nino") ? PRECIO_NINO : PRECIO_ADULTO;
+      });
+      $("total").textContent = "$" + total.toFixed(2);
+    }
+
+    /***********************
+     * Guests
+     ***********************/
+    let guestCount = 0;
+
+    function guestTemplate(idx){
+      const wrap = document.createElement("div");
+      wrap.className = "guest";
+      wrap.dataset.idx = String(idx);
+
+      wrap.innerHTML = `
+        <div class="guestTop">
+          <div class="guestLabel">Persona ${idx}</div>
+          <button type="button" class="ghostBtn" data-action="remove">Eliminar</button>
+        </div>
+
+        <label>Nombre Persona</label>
+        <input class="name" placeholder="Nombre" />
+
+        <label>Tipo</label>
+        <select class="tipoPersona">
+          <option value="adulto">Adulto $${PRECIO_ADULTO}</option>
+          <option value="nino">Niño $${PRECIO_NINO.toFixed(2)}</option>
+        </select>
+
+        <div class="menuAdulto">
+          <div class="row2">
+            <div>
+              <label>Aperitivo</label>
+              <select class="aperitivo"></select>
+            </div>
+            <div>
+              <label>Plato principal</label>
+              <select class="principal"></select>
+            </div>
+          </div>
+
+          <label>Postre</label>
+          <select class="postre"></select>
+        </div>
+
+        <div class="menuNino" style="display:none">
+          <label>Menú Niño</label>
+          <select class="principalNino"></select>
+          <div class="smallNote">Incluye solo plato principal en pre-orden.</div>
+        </div>
+      `;
+
+      fillSelect(wrap.querySelector(".aperitivo"), MENU.aperitivos);
+      fillSelect(wrap.querySelector(".principal"), MENU.principales);
+      fillSelect(wrap.querySelector(".postre"), MENU.postres);
+      fillSelect(wrap.querySelector(".principalNino"), MENU.ninos);
+
+      wrap.querySelector('[data-action="remove"]').addEventListener("click", ()=>{
+        wrap.remove();
+        renumberGuests();
+        actualizarTotal();
+      });
+
+      wrap.querySelector(".tipoPersona").addEventListener("change", (e)=>{
+        const adulto = wrap.querySelector(".menuAdulto");
+        const nino = wrap.querySelector(".menuNino");
+
+        if(e.target.value === "nino"){
+          adulto.style.display = "none";
+          nino.style.display = "block";
+        }else{
+          adulto.style.display = "block";
+          nino.style.display = "none";
+        }
+        actualizarTotal();
+      });
+
+      return wrap;
+    }
+
+    function renumberGuests(){
+      const all = Array.from($("guests").querySelectorAll(".guest"));
+      guestCount = all.length;
+
+      all.forEach((g,i)=>{
+        const n = i + 1;
+        g.dataset.idx = String(n);
+        g.querySelector(".guestLabel").textContent = `Persona ${n}`;
+      });
+
+      $("addGuestBtn").disabled = guestCount >= MAX_GUESTS;
+    }
+
+    function addGuest(){
+      if(guestCount >= MAX_GUESTS) return;
+      const idx = guestCount + 1;
+      $("guests").appendChild(guestTemplate(idx));
+      renumberGuests();
+      actualizarTotal();
+    }
+
+    function getGuests(){
+      const gs = Array.from($("guests").querySelectorAll(".guest"));
+
+      return gs.map(g=>{
+        const tipo = g.querySelector(".tipoPersona").value;
+        const name = (g.querySelector(".name").value || "").trim();
+
+        if(tipo === "nino"){
+          return {
+            name,
+            aperitivo: "",
+            principal: g.querySelector(".principalNino").value,
+            postre: ""
+          };
+        }
+
+        return {
+          name,
+          aperitivo: g.querySelector(".aperitivo").value,
+          principal: g.querySelector(".principal").value,
+          postre: g.querySelector(".postre").value
+        };
+      });
+    }
+
+    function validate(payload){
+      if(!payload.cliente || payload.cliente.trim().length < 3) return "Escribe el nombre del cliente.";
+      if(!payload.phone || payload.phone.trim().length < 7) return "Escribe un teléfono válido.";
+      if(!payload.funcion) return "Selecciona la función.";
+      if(!payload.hora) return "Selecciona una hora.";
+
+      if(!payload.guests || payload.guests.length === 0) return "Añade al menos 1 persona.";
+
+      for(let i=0;i<payload.guests.length;i++){
+        const g = payload.guests[i];
+
+        if(!g.name) return `Falta el nombre en Persona ${i+1}.`;
+        if(!g.principal) return `Persona ${i+1}: selecciona el plato principal.`;
+
+        const isAdult = (g.aperitivo && g.aperitivo.trim() !== "") || (g.postre && g.postre.trim() !== "");
+        if(isAdult){
+          if(!g.aperitivo || !g.postre) return `Persona ${i+1}: adulto requiere aperitivo y postre.`;
+        }
+      }
+      return null;
+    }
+
+    async function submitReservation(){
+      clearToast();
+
+      const payload = {
+        secret: SHARED_SECRET,
+        action: "create",
+        cliente: $("cliente").value,
+        phone: $("telefono").value,
+        funcion: $("funcion").value,
+        hora: $("hora").value,
+        guests: getGuests(),
+        notas: $("notas").value || ""
+      };
+
+      const err = validate(payload);
+      if(err){
+        setToast("warn", "Revisa el formulario:", err);
+        return;
+      }
+
+      if(!$("hora").value){
+        setToast("warn", "No hay horas disponibles.", "Selecciona otra función o intenta más tarde.");
+        return;
+      }
+
+      const btn = $("submitBtn");
+      btn.disabled = true;
+      btn.textContent = "Confirmando…";
+
+      try{
+        const res = await fetch(BACKEND_URL,{
+          method:"POST",
+          headers:{ "Content-Type":"text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if(data.ok){
+          setToast("ok",
+            "Su experiencia en ALORA ha sido confirmada.",
+            `ID: ${data.reservation_id}<br>Covers: ${data.creado?.covers ?? ""} · Items: ${data.creado?.items ?? ""}`
+          );
+          await cargarHorasDisponibles();
+        }else if(data.full){
+          setToast("warn",
+            "Esa hora está llena.",
+            `Reservado: ${data.yaReservado} · Entrando: ${data.entrando} · Límite: ${data.limite}`
+          );
+          await cargarHorasDisponibles();
+        }else{
+          setToast("err", "No se pudo confirmar.", data.error || "Error desconocido");
+        }
+
+      }catch(e){
+        setToast("err", "Error de conexión.", String(e));
+      }finally{
+        btn.disabled = false;
+        btn.textContent = "Confirmar experiencia";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", ()=>{
+      $("year").textContent = new Date().getFullYear();
+
+      // Menu
+      pillList("menuAperitivos", MENU.aperitivos);
+      pillList("menuPrincipales", MENU.principales);
+      pillList("menuPostres", MENU.postres);
+      pillList("menuNinos", MENU.ninos);
+
+      // Selects
+      fillSelect($("funcion"), FUNCIONES);
+      $("funcion").addEventListener("change", cargarHorasDisponibles);
+
+      // Inicial
+      addGuest();
+      cargarHorasDisponibles();
+
+      // Botones
+      $("addGuestBtn").addEventListener("click", addGuest);
+      $("submitBtn").addEventListener("click", submitReservation);
+
+      // Reveal
+      initReveal();
+    });
+  </script>
 </body>
 </html>
