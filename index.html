@@ -885,49 +885,48 @@ async function cargarMenu() {
     /***********************
      * Disponibilidad por hora (oculta las llenas)
      ***********************/
-    async function cargarHorasDisponibles(){
-      const selHora = $("hora");
-      selHora.innerHTML = "";
+async function cargarHorasDisponibles(){
 
-      const funcion = $("funcion").value;
+  const selHora = $("hora");
+  selHora.innerHTML = "<option>Cargando...</option>";
 
-      for(const hora of HORAS){
-        try{
-          const res = await fetch(BACKEND_URL,{
-            method:"POST",
-            headers:{ "Content-Type":"text/plain;charset=utf-8" },
-            body: JSON.stringify({
-              action:"availability",
-              hora,
-              funcion,
-              secret: SHARED_SECRET
-            })
-          });
+  const funcion = $("funcion").value;
 
-          if(!res.ok) continue;
+  const requests = HORAS.map(hora =>
+    fetch(BACKEND_URL,{
+      method:"POST",
+      headers:{ "Content-Type":"text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action:"availability",
+        hora,
+        funcion,
+        secret: SHARED_SECRET
+      })
+    }).then(r=>r.json()).then(data=>({hora,data}))
+      .catch(()=>null)
+  );
 
-          const data = await res.json();
+  const results = await Promise.all(requests);
 
-          if(!data.full){
-            const disp = data?.disponibles ?? 0;
-            const opt = document.createElement("option");
-            opt.value = hora;
-            opt.textContent = `${hora} (${disp} disponibles)`;
-            selHora.appendChild(opt);
-          }
-        }catch(err){
-          console.log("availability error:", err);
-        }
-      }
+  selHora.innerHTML = "";
 
-      if(selHora.options.length === 0){
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.textContent = "No hay horas disponibles";
-        selHora.appendChild(opt);
-      }
-    }
+  results.forEach(r=>{
+    if(!r || r.data.full) return;
 
+    const disp = r.data?.disponibles ?? 0;
+    const opt = document.createElement("option");
+    opt.value = r.hora;
+    opt.textContent = `${r.hora} (${disp} disponibles)`;
+    selHora.appendChild(opt);
+  });
+
+  if(selHora.options.length === 0){
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = "No hay horas disponibles";
+    selHora.appendChild(opt);
+  }
+}
     /***********************
      * Total
      ***********************/
