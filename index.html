@@ -1148,11 +1148,23 @@ fillSelect(wrap.querySelector(".principalNino"), CURRENT_MENU.principales.map(p 
     document.addEventListener("DOMContentLoaded", async ()=>{
       $("year").textContent = new Date().getFullYear();
 
-      // Menu
-      pillList("menuAperitivos", MENU.aperitivos);
-      pillList("menuPrincipales", MENU.principales);
-      pillList("menuPostres", MENU.postres);
-      pillList("menuNinos", MENU.ninos);
+// Menu preview dinámico
+await cargarMenu();
+
+pillList(
+  "menuAperitivos",
+  CURRENT_MENU.aperitivos.map(p => p.nombre)
+);
+
+pillList(
+  "menuPrincipales",
+  CURRENT_MENU.principales.map(p => p.nombre)
+);
+
+pillList(
+  "menuPostres",
+  CURRENT_MENU.postres.map(p => p.nombre)
+);
 
       // Selects
       fillSelect($("funcion"), FUNCIONES);
