@@ -766,7 +766,12 @@ body{
       "Función 1","Función 2","Función 3","Función 4",
       "Función 5","Función 6","Función 7","Función 8"
     ];
-
+    let CURRENT_MENU = {
+      aperitivos: [],
+      principales: [],
+      postres: [],
+      ninos: []
+    };
     const HORAS = [
       "5:30 PM","6:00 PM","6:30 PM","7:00 PM",
       "7:30 PM","8:00 PM","8:30 PM","9:00 PM"
@@ -982,10 +987,10 @@ async function cargarMenu() {
         </div>
       `;
 
-      fillSelect(wrap.querySelector(".aperitivo"), MENU.aperitivos);
-      fillSelect(wrap.querySelector(".principal"), MENU.principales);
-      fillSelect(wrap.querySelector(".postre"), MENU.postres);
-      fillSelect(wrap.querySelector(".principalNino"), MENU.ninos);
+fillSelect(wrap.querySelector(".aperitivo"), CURRENT_MENU.aperitivos.map(p => p.nombre));
+fillSelect(wrap.querySelector(".principal"), CURRENT_MENU.principales.map(p => p.nombre));
+fillSelect(wrap.querySelector(".postre"), CURRENT_MENU.postres.map(p => p.nombre));
+fillSelect(wrap.querySelector(".principalNino"), CURRENT_MENU.principales.map(p => p.nombre));
 
       wrap.querySelector('[data-action="remove"]').addEventListener("click", ()=>{
         wrap.remove();
