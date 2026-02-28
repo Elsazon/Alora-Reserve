@@ -1148,7 +1148,7 @@ fillSelect(wrap.querySelector(".principalNino"), CURRENT_MENU.principales.map(p 
     document.addEventListener("DOMContentLoaded", async ()=>{
       $("year").textContent = new Date().getFullYear();
 
-// Menu preview dinámico
+// Menu dinámico desde backend
 await cargarMenu();
 
 pillList(
@@ -1166,6 +1166,11 @@ pillList(
   CURRENT_MENU.postres.map(p => p.nombre)
 );
 
+// Menú infantil vacío (por ahora usa principales)
+pillList(
+  "menuNinos",
+  CURRENT_MENU.principales.map(p => p.nombre)
+);
       // Selects
       fillSelect($("funcion"), FUNCIONES);
      $("funcion").addEventListener("change", async () => {
