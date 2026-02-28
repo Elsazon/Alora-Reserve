@@ -772,12 +772,59 @@ body{
       "7:30 PM","8:00 PM","8:30 PM","9:00 PM"
     ];
 
-    const MENU = {
-      aperitivos:["Arancini","Montaditos de Guiso"],
-      principales:["Mac and Cheese","Tenders","Pasta Vegana","Risotto de Calabaza","Rigatoni Salsa Setas"],
-      postres:["Dulce de Papaya","Flan Tiramisu"],
-      ninos:["Tenders","Mac and Cheese"]
-    };
+async function cargarMenu() {
+
+  const res = await fetch(BACKEND_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({
+      action: "menu",
+      funcion: $("funcion").value,
+      secret: SHARED_SECRET
+    })
+  });
+
+  const data = await res.json();
+
+  if (!data.ok) {
+    console.error("Error cargando menu");
+    return;
+  }
+
+  CURRENT_MENU = data.menu;
+
+  regenerarSelectsGuests();
+}
+    function regenerarSelectsGuests() {
+
+  document.querySelectorAll(".guest").forEach(g => {
+
+    const aperitivoSel = g.querySelector(".aperitivo");
+    const principalSel = g.querySelector(".principal");
+    const postreSel = g.querySelector(".postre");
+
+    fillSelect(
+      aperitivoSel,
+      CURRENT_MENU.aperitivos.map(p => p.nombre)
+    );
+
+    fillSelect(
+      principalSel,
+      CURRENT_MENU.principales.map(p => p.nombre)
+    );
+
+    fillSelect(
+      postreSel,
+      CURRENT_MENU.postres.map(p => p.nombre)
+    );
+
+    // Reset proteína si existía
+    const proteinaBox = g.querySelector(".proteinaBox");
+    if (proteinaBox) proteinaBox.style.display = "none";
+
+  });
+
+}
 
     const MAX_GUESTS = 8;
 
@@ -1104,11 +1151,15 @@ body{
 
       // Selects
       fillSelect($("funcion"), FUNCIONES);
-      $("funcion").addEventListener("change", cargarHorasDisponibles);
+     $("funcion").addEventListener("change", async () => {
+      await cargarMenu();
+      await cargarHorasDisponibles();
+      });
 
       // Inicial
       addGuest();
-      cargarHorasDisponibles();
+      await cargarMenu();
+await cargarHorasDisponibles();
 
       // Botones
       $("addGuestBtn").addEventListener("click", addGuest);
