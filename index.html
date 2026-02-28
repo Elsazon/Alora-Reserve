@@ -790,7 +790,7 @@ async function cargarMenu() {
   });
 
   const data = await res.json();
-
+console.log("MENU RESPONSE:", data);
   if (!data.ok) {
     console.error("Error cargando menu");
     return;
