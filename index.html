@@ -1145,51 +1145,54 @@ fillSelect(wrap.querySelector(".principalNino"), CURRENT_MENU.principales.map(p 
       }
     }
 
-    document.addEventListener("DOMContentLoaded", async ()=>{
-      $("year").textContent = new Date().getFullYear();
+   document.addEventListener("DOMContentLoaded", async ()=>{
+  $("year").textContent = new Date().getFullYear();
 
-// Menu dinámico desde backend
-await cargarMenu();
+  // 1️⃣ Primero llenar select función
+  fillSelect($("funcion"), FUNCIONES);
 
-pillList(
-  "menuAperitivos",
-  CURRENT_MENU.aperitivos.map(p => p.nombre)
-);
+  // 2️⃣ Listeners
+  $("funcion").addEventListener("change", async () => {
+    await cargarMenu();
+    await cargarHorasDisponibles();
+  });
 
-pillList(
-  "menuPrincipales",
-  CURRENT_MENU.principales.map(p => p.nombre)
-);
+  // 3️⃣ Ahora sí cargar menú
+  await cargarMenu();
 
-pillList(
-  "menuPostres",
-  CURRENT_MENU.postres.map(p => p.nombre)
-);
+  pillList(
+    "menuAperitivos",
+    CURRENT_MENU.aperitivos.map(p => p.nombre)
+  );
 
-// Menú infantil vacío (por ahora usa principales)
-pillList(
-  "menuNinos",
-  CURRENT_MENU.principales.map(p => p.nombre)
-);
-      // Selects
-      fillSelect($("funcion"), FUNCIONES);
-     $("funcion").addEventListener("change", async () => {
-      await cargarMenu();
-      await cargarHorasDisponibles();
-      });
+  pillList(
+    "menuPrincipales",
+    CURRENT_MENU.principales.map(p => p.nombre)
+  );
 
-      // Inicial
-      addGuest();
-      await cargarMenu();
-await cargarHorasDisponibles();
+  pillList(
+    "menuPostres",
+    CURRENT_MENU.postres.map(p => p.nombre)
+  );
 
-      // Botones
-      $("addGuestBtn").addEventListener("click", addGuest);
-      $("submitBtn").addEventListener("click", submitReservation);
+  pillList(
+    "menuNinos",
+    CURRENT_MENU.principales.map(p => p.nombre)
+  );
 
-      // Reveal
-      initReveal();
-    });
+  // 4️⃣ Guests
+  addGuest();
+
+  // 5️⃣ Horas
+  await cargarHorasDisponibles();
+
+  // 6️⃣ Botones
+  $("addGuestBtn").addEventListener("click", addGuest);
+  $("submitBtn").addEventListener("click", submitReservation);
+
+  // 7️⃣ Animaciones
+  initReveal();
+});
   </script>
 </body>
 </html>
