@@ -11,23 +11,22 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --bg0:#0b0e0c;
-      --bg1:#0f1210;
-      --ink:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.68);
-      --line:rgba(255,255,255,.14);
+ :root{
+  --bg0:#0e1511;
+  --bg1:#121a16;
 
-      --olive:#4f5138;
-      --terracotta:#c26a4a;
+  --ink:#f4f1ea;
+  --muted:rgba(244,241,234,.65);
 
-      --ok:#2ecc71;
-      --warn:#f1c40f;
-      --err:#ff5c5c;
+  --olive:#4f5138;
+  --terracotta:#c26a4a;
+  --gold:#bfa15a;
 
-      --radius:20px;
-      --shadow:0 22px 70px rgba(0,0,0,.55);
-    }
+  --line:rgba(255,255,255,.08);
+
+  --radius:24px;
+  --shadow:0 30px 80px rgba(0,0,0,.65);
+}
 
     *{box-sizing:border-box}
     html{scroll-behavior:smooth;}
@@ -414,6 +413,86 @@
       from{opacity:0; transform: translateY(14px);}
       to{opacity:1; transform: translateY(0);}
     }
+    /* ===== OLIVA EDITORIAL OVERRIDES ===== */
+
+body{
+  background:linear-gradient(180deg,var(--bg0),var(--bg1));
+  color:var(--ink);
+}
+
+/* Terracota más dominante */
+.btnPrimary{
+  background:var(--terracotta) !important;
+  color:#111 !important;
+  border-radius:30px !important;
+  box-shadow:0 15px 35px rgba(194,106,74,.25) !important;
+}
+
+.btnPrimary:hover{
+  background:#b95839 !important;
+}
+
+/* Micro detalle dorado */
+.sectionTitle::after{
+  content:"";
+  display:block;
+  width:50px;
+  height:2px;
+  background:var(--gold);
+  margin-top:10px;
+  opacity:.5;
+}
+
+/* Formulario tarjeta premium */
+.formCard{
+  border:1px solid rgba(191,161,90,.15) !important;
+  background:rgba(255,255,255,.04) !important;
+  box-shadow:var(--shadow) !important;
+  padding:50px !important;
+  position:relative;
+}
+
+.formCard::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:3px;
+  background:var(--gold);
+  opacity:.5;
+}
+
+/* Inputs más elegantes */
+input,select,textarea{
+  border:1px solid rgba(255,255,255,.08) !important;
+  background:rgba(255,255,255,.05) !important;
+  border-radius:14px !important;
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:var(--terracotta) !important;
+  box-shadow:0 0 0 1px var(--terracotta) !important;
+}
+
+/* Total más premium */
+.total{
+  font-family:"Playfair Display", serif;
+  font-size:24px !important;
+  color:var(--gold) !important;
+}
+
+/* Árbol con glow dorado sutil */
+.markRow img{
+  filter:drop-shadow(0 0 12px rgba(191,161,90,.15)) !important;
+}
+
+/* Tagline más editorial */
+.tagline{
+  color:var(--terracotta) !important;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
   </style>
 </head>
 
@@ -481,7 +560,7 @@
         </p>
 
         <div class="markRow" style="justify-content:center;">
-          <img src="2BE6E097-CFDA-4844-A545-BCFA182CF730.png" alt="ALORA mark">
+          <img src="0F20BD63-E7D0-44D4-B9DA-C78048846944.png" alt="ALORA mark">
         </div>
       </div>
     </section>
