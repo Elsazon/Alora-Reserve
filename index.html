@@ -1146,52 +1146,46 @@ fillSelect(wrap.querySelector(".principalNino"), CURRENT_MENU.principales.map(p 
     }
 
    document.addEventListener("DOMContentLoaded", async ()=>{
+
   $("year").textContent = new Date().getFullYear();
 
-  // 1️⃣ Primero llenar select función
+  // 1️⃣ Llenar select de función primero
   fillSelect($("funcion"), FUNCIONES);
 
-  // 2️⃣ Listeners
+  // 2️⃣ Cargar menú inicial
+  await cargarMenu();
+
+  // 3️⃣ Render preview del menú
+  pillList("menuAperitivos", CURRENT_MENU.aperitivos.map(p => p.nombre));
+  pillList("menuPrincipales", CURRENT_MENU.principales.map(p => p.nombre));
+  pillList("menuPostres", CURRENT_MENU.postres.map(p => p.nombre));
+  pillList("menuNinos", CURRENT_MENU.principales.map(p => p.nombre));
+
+  // 4️⃣ Cargar horas disponibles
+  await cargarHorasDisponibles();
+
+  // 5️⃣ Evento cuando cambie función
   $("funcion").addEventListener("change", async () => {
     await cargarMenu();
+
+    pillList("menuAperitivos", CURRENT_MENU.aperitivos.map(p => p.nombre));
+    pillList("menuPrincipales", CURRENT_MENU.principales.map(p => p.nombre));
+    pillList("menuPostres", CURRENT_MENU.postres.map(p => p.nombre));
+    pillList("menuNinos", CURRENT_MENU.principales.map(p => p.nombre));
+
     await cargarHorasDisponibles();
   });
 
-  // 3️⃣ Ahora sí cargar menú
-  await cargarMenu();
-
-  pillList(
-    "menuAperitivos",
-    CURRENT_MENU.aperitivos.map(p => p.nombre)
-  );
-
-  pillList(
-    "menuPrincipales",
-    CURRENT_MENU.principales.map(p => p.nombre)
-  );
-
-  pillList(
-    "menuPostres",
-    CURRENT_MENU.postres.map(p => p.nombre)
-  );
-
-  pillList(
-    "menuNinos",
-    CURRENT_MENU.principales.map(p => p.nombre)
-  );
-
-  // 4️⃣ Guests
+  // 6️⃣ Inicializar guests
   addGuest();
 
-  // 5️⃣ Horas
-  await cargarHorasDisponibles();
-
-  // 6️⃣ Botones
+  // 7️⃣ Botones
   $("addGuestBtn").addEventListener("click", addGuest);
   $("submitBtn").addEventListener("click", submitReservation);
 
-  // 7️⃣ Animaciones
+  // 8️⃣ Reveal animations
   initReveal();
+
 });
   </script>
 </body>
