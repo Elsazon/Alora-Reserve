@@ -772,6 +772,7 @@ body{
       postres: [],
       ninos: []
     };
+    let PLATOS_MAP = {};
     const HORAS = [
       "5:30 PM","6:00 PM","6:30 PM","7:00 PM",
       "7:30 PM","8:00 PM","8:30 PM","9:00 PM"
@@ -805,7 +806,10 @@ async function cargarMenu() {
       principales: [],
       postres: []
     };
+    PLATOS_MAP = {};
 
+    [...CURRENT_MENU.principales].forEach(p => {PLATOS_MAP[p.nombre] = p;});
+    
     // 🔥 Actualizar los pills visuales del menú
     pillList(
       "menuAperitivos",
@@ -977,7 +981,16 @@ async function cargarHorasDisponibles(){
               <select class="principal"></select>
             </div>
           </div>
-
+          
+        <div class="proteinaBox" style="display:none">
+              <label>Selecciona proteína</label>
+            <div class="chipsProteina">
+            <button type="button" class="chip" data-prot="Churrasco">Churrasco</button>
+            <button type="button" class="chip" data-prot="Pollo">Pollo</button>
+        </div>
+          <input type="hidden" class="proteinaSeleccionada" />
+        </div>
+        
           <label>Postre</label>
           <select class="postre"></select>
         </div>
@@ -994,6 +1007,32 @@ fillSelect(wrap.querySelector(".principal"), CURRENT_MENU.principales.map(p => p
 fillSelect(wrap.querySelector(".postre"), CURRENT_MENU.postres.map(p => p.nombre));
 fillSelect(wrap.querySelector(".principalNino"), CURRENT_MENU.ninos.map(p => p.nombre));
 
+const principalSelect = wrap.querySelector(".principal");
+const proteinaBox = wrap.querySelector(".proteinaBox");
+const proteinaInput = wrap.querySelector(".proteinaSeleccionada");
+const chips = wrap.querySelectorAll(".chip");
+
+principalSelect.addEventListener("change", () => {
+
+  const plato = PLATOS_MAP[principalSelect.value];
+
+  if (plato && plato.tieneProteina) {
+    proteinaBox.style.display = "block";
+  } else {
+    proteinaBox.style.display = "none";
+    proteinaInput.value = "";
+    chips.forEach(c => c.classList.remove("active"));
+  }
+
+});
+      chips.forEach(chip => {
+  chip.addEventListener("click", () => {
+    chips.forEach(c => c.classList.remove("active"));
+    chip.classList.add("active");
+    proteinaInput.value = chip.dataset.prot;
+  });
+});
+      
       wrap.querySelector('[data-action="remove"]').addEventListener("click", ()=>{
         wrap.remove();
         renumberGuests();
@@ -1058,6 +1097,7 @@ fillSelect(wrap.querySelector(".principalNino"), CURRENT_MENU.ninos.map(p => p.n
           name,
           aperitivo: g.querySelector(".aperitivo").value,
           principal: g.querySelector(".principal").value,
+          proteina: g.querySelector(".proteinaSeleccionada")?.value || "",
           postre: g.querySelector(".postre").value
         };
       });
@@ -1077,6 +1117,14 @@ fillSelect(wrap.querySelector(".principalNino"), CURRENT_MENU.ninos.map(p => p.n
         if(!g.name) return `Falta el nombre en Persona ${i+1}.`;
         if(!g.principal) return `Persona ${i+1}: selecciona el plato principal.`;
 
+        const principal = g.principal;
+        const platoInfo = PLATOS_MAP[principal];
+
+        if (platoInfo && platoInfo.tieneProteina) {
+          if (!g.proteina) {
+            return `Persona ${i+1}: selecciona proteína.`;
+        }
+    }
         const isAdult = (g.aperitivo && g.aperitivo.trim() !== "") || (g.postre && g.postre.trim() !== "");
         if(isAdult){
           if(!g.aperitivo || !g.postre) return `Persona ${i+1}: adulto requiere aperitivo y postre.`;
