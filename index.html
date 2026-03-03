@@ -790,6 +790,7 @@ async function cargarMenu() {
   });
 
   const data = await res.json();
+  setToast("warn", "DEBUG MENU:", JSON.stringify(data));
 console.log("MENU RESPONSE:", data);
   if (!data.ok) {
     console.error("Error cargando menu");
