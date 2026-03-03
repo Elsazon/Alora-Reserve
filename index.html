@@ -779,59 +779,61 @@ body{
 
 async function cargarMenu() {
 
-  const res = await fetch(BACKEND_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({
-      action: "menu",
-      funcion: $("funcion").value,
-      secret: SHARED_SECRET
-    })
-  });
+  try {
 
-  const data = await res.json();
-  setToast("warn", "DEBUG MENU:", JSON.stringify(data));
-console.log("MENU RESPONSE:", data);
-  if (!data.ok) {
-    console.error("Error cargando menu");
-    return;
-  }
+    const res = await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: "menu",
+        funcion: $("funcion").value,
+        secret: SHARED_SECRET
+      })
+    });
 
-  CURRENT_MENU = data.menu;
+    const data = await res.json();
 
-  regenerarSelectsGuests();
-}
-    function regenerarSelectsGuests() {
+    console.log("MENU RESPONSE:", data);
 
-  document.querySelectorAll(".guest").forEach(g => {
+    if (!data.ok) {
+      console.error("Menu error:", data);
+      return;
+    }
 
-    const aperitivoSel = g.querySelector(".aperitivo");
-    const principalSel = g.querySelector(".principal");
-    const postreSel = g.querySelector(".postre");
+    CURRENT_MENU = data.menu || {
+      aperitivos: [],
+      principales: [],
+      postres: []
+    };
 
-    fillSelect(
-      aperitivoSel,
+    // 🔥 Actualizar los pills visuales del menú
+    pillList(
+      "menuAperitivos",
       CURRENT_MENU.aperitivos.map(p => p.nombre)
     );
 
-    fillSelect(
-      principalSel,
+    pillList(
+      "menuPrincipales",
       CURRENT_MENU.principales.map(p => p.nombre)
     );
 
-    fillSelect(
-      postreSel,
+    pillList(
+      "menuPostres",
       CURRENT_MENU.postres.map(p => p.nombre)
     );
 
-    // Reset proteína si existía
-    const proteinaBox = g.querySelector(".proteinaBox");
-    if (proteinaBox) proteinaBox.style.display = "none";
+    pillList(
+      "menuNinos",
+      CURRENT_MENU.principales.map(p => p.nombre)
+    );
 
-  });
+    regenerarSelectsGuests();
+
+  } catch (err) {
+    console.error("Fetch error:", err);
+  }
 
 }
-
     const MAX_GUESTS = 8;
 
     const $ = (id) => document.getElementById(id);
