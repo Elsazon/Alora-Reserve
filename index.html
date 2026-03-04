@@ -1290,7 +1290,7 @@ $("funcion").addEventListener("change", async () => {
   pillList("menuPostres", CURRENT_MENU.postres.map(p => p.nombre));
   pillList("menuNinos", CURRENT_MENU.ninos.map(p => p.nombre));
 
-  await cargarHorasDisponibles();
+
 
 });
 
@@ -1298,7 +1298,7 @@ $("funcion").addEventListener("change", async () => {
 $("guests").innerHTML = "";
 guestCount = 0;
 addGuest();
-
+  await cargarHorasDisponibles();
   // 7️⃣ Botones
   $("addGuestBtn").addEventListener("click", addGuest);
   $("submitBtn").addEventListener("click", submitReservation);
