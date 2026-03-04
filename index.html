@@ -413,24 +413,31 @@
       from{opacity:0; transform: translateY(14px);}
       to{opacity:1; transform: translateY(0);}
     }
-.chip {
+.chipProteina {
   border: 1px solid #d6d6d6;
   padding: 6px 14px;
   border-radius: 20px;
-  background: transparent;
-  color: #444;
+  background: #f7f7f7;
+  color: #333;
   cursor: pointer;
   font-size: 14px;
+  transition: all .2s ease;
 }
 
-.chip:hover {
-  background: #f2f2f2;
+.chipProteina:hover {
+  background: #ececec;
 }
 
-.chip.active {
+.chipProteina.active {
   background: #2c2c2c;
   color: white;
   border-color: #2c2c2c;
+}
+
+.chipsProteina {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
 }
     /* ===== OLIVA EDITORIAL OVERRIDES ===== */
 
@@ -1004,8 +1011,8 @@ async function cargarHorasDisponibles(){
         <div class="proteinaBox" style="display:none">
               <label>Selecciona proteína</label>
             <div class="chipsProteina">
-            <button type="button" class="chip" data-prot="Churrasco">Churrasco</button>
-            <button type="button" class="chip" data-prot="Pollo">Pollo</button>
+<button type="button" class="chipProteina" data-prot="Churrasco">Churrasco</button>
+<button type="button" class="chipProteina" data-prot="Pollo">Pollo</button>
         </div>
           <input type="hidden" class="proteinaSeleccionada" />
         </div>
@@ -1029,7 +1036,7 @@ fillSelect(wrap.querySelector(".principalNino"), CURRENT_MENU.ninos.map(p => p.n
 const principalSelect = wrap.querySelector(".principal");
 const proteinaBox = wrap.querySelector(".proteinaBox");
 const proteinaInput = wrap.querySelector(".proteinaSeleccionada");
-const chips = wrap.querySelectorAll(".chip");
+const chips = wrap.querySelectorAll(".chipProteina");
 
 chips.forEach(chip => {
   chip.addEventListener("click", () => {
