@@ -413,33 +413,33 @@
       from{opacity:0; transform: translateY(14px);}
       to{opacity:1; transform: translateY(0);}
     }
-.chipProteina {
-  border: 1px solid #e2e2e2;
-  padding: 6px 14px;
-  border-radius: 18px;
-  background: #fafafa;
-  color: #555;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  transition: all .2s ease;
+.chipsProteina{
+display:flex;
+gap:10px;
+margin-top:8px;
 }
 
-.chipProteina:hover {
-  background: #f1f1f1;
-  border-color: #d8d8d8;
+.chipProteina{
+border:1px solid var(--line);
+background:rgba(255,255,255,.04);
+color:rgba(255,255,255,.82);
+padding:8px 12px;
+border-radius:999px;
+font-size:12px;
+cursor:pointer;
+transition:all .2s ease;
 }
 
-.chipProteina.active {
-  background: #1f1f1f;
-  color: white;
-  border-color: #1f1f1f;
+.chipProteina:hover{
+border-color:var(--terracotta);
+color:white;
 }
 
-.chipsProteina {
-  display: flex;
-  gap: 8px;
-  margin-top: 6px;
+.chipProteina.active{
+background:var(--terracotta);
+color:#1b0f0a;
+border-color:var(--terracotta);
+box-shadow:0 8px 20px rgba(194,106,74,.25);
 }
     /* ===== OLIVA EDITORIAL OVERRIDES ===== */
 
@@ -627,7 +627,14 @@ body{
             <div class="infoRow"><div>Formato</div><span>Pre-orden por persona</span></div>
             <div class="infoRow"><div>Adulto</div><span>$35 · 1 aperitivo + 1 principal + 1 postre</span></div>
             <div class="infoRow"><div>Niño</div><span>$12.50 · menú infantil</span></div>
-            <div class="infoRow"><div>Ubicación</div><span>Viejo San Juan</span></div>
+<div class="infoRow">
+  <div>Ubicación</div>
+  <span>
+    <a href="#" id="openMap" style="text-decoration:underline;cursor:pointer;">
+      Restaurante UAGM Carolina
+    </a>
+  </span>
+</div>
 
             <div class="ctaRow">
               <a class="btn btnPrimary" href="#reservar">Reservar ahora</a>
@@ -1286,6 +1293,87 @@ principalSelect.addEventListener("change", () => {
   initReveal();
 
 });
+  // MAP POPUP
+
+const mapModal = document.getElementById("mapModal");
+
+document.getElementById("openMap").addEventListener("click",(e)=>{
+  e.preventDefault();
+  mapModal.style.display="flex";
+});
+
+document.getElementById("closeMap").addEventListener("click",()=>{
+  mapModal.style.display="none";
+});
+
+mapModal.addEventListener("click",(e)=>{
+  if(e.target===mapModal){
+    mapModal.style.display="none";
+  }
+});
   </script>
+  
+<div id="mapModal" style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.75);
+backdrop-filter:blur(6px);
+align-items:center;
+justify-content:center;
+z-index:9999;
+">
+
+<div style="
+background:#111;
+border-radius:18px;
+padding:20px;
+max-width:800px;
+width:90%;
+box-shadow:0 40px 120px rgba(0,0,0,.7);
+position:relative;
+">
+
+<button id="closeMap" style="
+position:absolute;
+top:10px;
+right:12px;
+background:none;
+border:none;
+color:white;
+font-size:20px;
+cursor:pointer;
+">✕</button>
+
+<h3 style="margin-top:0;font-family:'Playfair Display',serif;">
+Restaurante UAGM Carolina
+</h3>
+
+<iframe
+src="https://www.google.com/maps?q=UAGM+Carolina&output=embed"
+width="100%"
+height="400"
+style="border:0;border-radius:12px;"
+loading="lazy">
+</iframe>
+
+<div style="margin-top:12px;text-align:right;">
+<a
+href="https://maps.google.com/?q=UAGM+Carolina"
+target="_blank"
+style="
+background:var(--terracotta);
+color:#111;
+padding:10px 16px;
+border-radius:12px;
+font-weight:600;
+display:inline-block;
+">
+Abrir en Google Maps
+</a>
+</div>
+
+</div>
+</div>
 </body>
 </html>
