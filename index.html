@@ -791,7 +791,7 @@ body{
     /***********************
      * CONFIG
      ***********************/
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz-H5CW4rmi5xVYZ65Y_q-yCPnrOaB5M3sepLS1ttPTKj1TfzVdX2CDi8eSwHzm0mnj/exec";
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz2doUzpNOJXFky79C1-bO6Ha54QwfkMl9B1UU6I1Rxi0CFEg_lPcFxyNANbXH1bWWn/exec";
     const SHARED_SECRET = "demo123";
 
     const PRECIO_ADULTO = 35;
@@ -950,40 +950,52 @@ async function cargarHorasDisponibles(){
 
   const funcion = $("funcion").value;
 
-  const requests = HORAS.map(hora =>
-    fetch(BACKEND_URL,{
+  try{
+
+    const res = await fetch(BACKEND_URL,{
       method:"POST",
       headers:{ "Content-Type":"text/plain;charset=utf-8" },
       body: JSON.stringify({
-        action:"availability",
-        hora,
+        action:"availability_all",
         funcion,
         secret: SHARED_SECRET
       })
-    }).then(r=>r.json()).then(data=>({hora,data}))
-      .catch(()=>null)
-  );
+    });
 
-  const results = await Promise.all(requests);
+    const data = await res.json();
 
-  selHora.innerHTML = "";
+    selHora.innerHTML = "";
 
-  results.forEach(r=>{
-    if(!r || r.data.full) return;
+    data.horas.forEach(h=>{
 
-    const disp = r.data?.disponibles ?? 0;
-    const opt = document.createElement("option");
-    opt.value = r.hora;
-    opt.textContent = `${r.hora} (${disp} disponibles)`;
-    selHora.appendChild(opt);
-  });
+      if(h.full) return;
 
-  if(selHora.options.length === 0){
-    const opt = document.createElement("option");
-    opt.value = "";
-    opt.textContent = "No hay horas disponibles";
-    selHora.appendChild(opt);
+      const opt = document.createElement("option");
+      opt.value = h.hora;
+      opt.textContent = `${h.hora} (${h.disponibles} disponibles)`;
+
+      selHora.appendChild(opt);
+
+    });
+
+    if(selHora.options.length === 0){
+
+      const opt = document.createElement("option");
+      opt.value = "";
+      opt.textContent = "No hay horas disponibles";
+
+      selHora.appendChild(opt);
+
+    }
+
+  }catch(err){
+
+    console.error(err);
+
+    selHora.innerHTML = "<option>Error cargando horas</option>";
+
   }
+
 }
     /***********************
      * Total
