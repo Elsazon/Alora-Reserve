@@ -1203,6 +1203,8 @@ principalSelect.addEventListener("change", () => {
         notas: $("notas").value || ""
       };
 
+      console.log("PAYLOAD:", payload);
+      
       const err = validate(payload);
       if(err){
         setToast("warn", "Revisa el formulario:", err);
