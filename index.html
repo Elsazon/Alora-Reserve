@@ -844,7 +844,14 @@ async function cargarMenu() {
     };
     PLATOS_MAP = {};
 
-    [...CURRENT_MENU.principales].forEach(p => {PLATOS_MAP[p.nombre] = p;});
+[
+  ...CURRENT_MENU.principales,
+  ...CURRENT_MENU.ninos
+].forEach(p=>{
+  PLATOS_MAP[p.nombre] = p;
+});
+
+   
     
     // 🔥 Actualizar los pills visuales del menú
     pillList(
@@ -1073,7 +1080,7 @@ wrap.querySelector(".principal").addEventListener("change", e => {
 
   if(plato && plato.tieneProteina){
 
-    fillSelect(selectProteina, plato.proteinas || []);
+fillSelect(selectProteina, plato.proteinas ? plato.proteinas : []);
     bloqueProteina.style.display = "block";
 
   }else{
