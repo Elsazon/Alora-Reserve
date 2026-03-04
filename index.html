@@ -1127,13 +1127,26 @@ fillSelect(selectProteina, plato.proteinas ? plato.proteinas : []);
       $("addGuestBtn").disabled = guestCount >= MAX_GUESTS;
     }
 
-    function addGuest(){
-      if(guestCount >= MAX_GUESTS) return;
-      const idx = guestCount + 1;
-      $("guests").appendChild(guestTemplate(idx));
-      renumberGuests();
-      actualizarTotal();
-    }
+function addGuest(){
+
+  if(guestCount >= MAX_GUESTS) return;
+
+  const idx = guestCount + 1;
+
+  const guest = guestTemplate(idx);
+
+  $("guests").appendChild(guest);
+
+  // 🔥 Forzar carga de menú después de insertarlo
+  fillSelect(guest.querySelector(".aperitivo"), CURRENT_MENU.aperitivos.map(p => p.nombre));
+  fillSelect(guest.querySelector(".principal"), CURRENT_MENU.principales.map(p => p.nombre));
+  fillSelect(guest.querySelector(".postre"), CURRENT_MENU.postres.map(p => p.nombre));
+  fillSelect(guest.querySelector(".principalNino"), CURRENT_MENU.ninos.map(p => p.nombre));
+
+  renumberGuests();
+  actualizarTotal();
+
+}
 
     function getGuests(){
       const gs = Array.from($("guests").querySelectorAll(".guest"));
