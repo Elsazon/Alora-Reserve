@@ -413,6 +413,19 @@
       from{opacity:0; transform: translateY(14px);}
       to{opacity:1; transform: translateY(0);}
     }
+.chip {
+  border: 1px solid #bbb;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: white;
+  cursor: pointer;
+}
+
+.chip.active {
+  background: #111;
+  color: white;
+  border-color: #111;
+}
     /* ===== OLIVA EDITORIAL OVERRIDES ===== */
 
 body{
@@ -1012,7 +1025,23 @@ const proteinaBox = wrap.querySelector(".proteinaBox");
 const proteinaInput = wrap.querySelector(".proteinaSeleccionada");
 const chips = wrap.querySelectorAll(".chip");
 
+chips.forEach(chip => {
+  chip.addEventListener("click", () => {
 
+    // quitar activo de todos
+    chips.forEach(c => c.classList.remove("active"));
+
+    // activar el seleccionado
+    chip.classList.add("active");
+
+    // guardar valor
+    proteinaInput.value = chip.dataset.prot;
+
+    console.log("Proteina seleccionada:", proteinaInput.value);
+
+  });
+});
+      
 principalSelect.addEventListener("change", () => {
   
   console.log("Principal cambiado:", principalSelect.value);
