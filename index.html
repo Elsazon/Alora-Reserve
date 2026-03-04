@@ -839,7 +839,8 @@ async function cargarMenu() {
     CURRENT_MENU = data.menu || {
       aperitivos: [],
       principales: [],
-      postres: []
+      postres: [],
+      ninos:[]
     };
     PLATOS_MAP = {};
 
@@ -1264,8 +1265,6 @@ wrap.querySelector(".principal").addEventListener("change", e => {
   pillList("menuPrincipales", CURRENT_MENU.principales.map(p => p.nombre));
   pillList("menuPostres", CURRENT_MENU.postres.map(p => p.nombre));
   pillList("menuNinos", CURRENT_MENU.ninos.map(p => p.nombre));
-
-  regenerarSelectsGuests();
      
   // 4️⃣ Cargar horas disponibles
   await cargarHorasDisponibles();
