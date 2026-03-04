@@ -1012,10 +1012,15 @@ const proteinaBox = wrap.querySelector(".proteinaBox");
 const proteinaInput = wrap.querySelector(".proteinaSeleccionada");
 const chips = wrap.querySelectorAll(".chip");
 
-principalSelect.addEventListener("change", () => {
 
+principalSelect.addEventListener("change", () => {
+  
+  console.log("Principal cambiado:", principalSelect.value);
+  console.log("Mapa:", PLATOS_MAP);
+  
   const plato = PLATOS_MAP[principalSelect.value];
 
+  console.log("Plato encontrado:", plato);
   if (plato && plato.tieneProteina) {
     proteinaBox.style.display = "block";
   } else {
