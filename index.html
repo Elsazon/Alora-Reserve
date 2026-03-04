@@ -1005,30 +1005,32 @@ async function cargarHorasDisponibles(){
           <option value="nino">Niño $${PRECIO_NINO.toFixed(2)}</option>
         </select>
 
-        <div class="menuAdulto">
-          <div class="row2">
-            <div>
-              <label>Aperitivo</label>
-              <select class="aperitivo"></select>
-            </div>
-            <div>
-              <label>Plato principal</label>
-              <select class="principal"></select>
-            </div>
-          </div>
-          
-        <div class="proteinaBox" style="display:none">
-              <label>Selecciona proteína</label>
-            <div class="chipsProteina">
-<button type="button" class="chipProteina" data-prot="Churrasco">Churrasco</button>
-<button type="button" class="chipProteina" data-prot="Pollo">Pollo</button>
-        </div>
-          <input type="hidden" class="proteinaSeleccionada" />
-        </div>
-        
-          <label>Postre</label>
-          <select class="postre"></select>
-        </div>
+<div class="menuAdulto">
+
+  <div class="row2">
+    <div>
+      <label>Aperitivo</label>
+      <select class="aperitivo"></select>
+    </div>
+    <div>
+      <label>Plato principal</label>
+      <select class="principal"></select>
+    </div>
+  </div>
+
+  <!-- 🔥 BLOQUE PROTEÍNA DINÁMICO -->
+  <div class="proteinaBlock" style="display:none">
+
+    <label>Proteína</label>
+
+    <select class="proteina"></select>
+
+  </div>
+
+  <label>Postre</label>
+  <select class="postre"></select>
+
+</div>
 
         <div class="menuNino" style="display:none">
           <label>Menú Niño</label>
@@ -1042,6 +1044,31 @@ fillSelect(wrap.querySelector(".principal"), CURRENT_MENU.principales.map(p => p
 fillSelect(wrap.querySelector(".postre"), CURRENT_MENU.postres.map(p => p.nombre));
 fillSelect(wrap.querySelector(".principalNino"), CURRENT_MENU.ninos.map(p => p.nombre));
 
+// 🔥 Proteínas dinámicas según plato
+wrap.querySelector(".principal").addEventListener("change", e => {
+
+  const platoNombre = e.target.value;
+
+  const plato = CURRENT_MENU.principales.find(
+    p => p.nombre === platoNombre
+  );
+
+  const bloqueProteina = wrap.querySelector(".proteinaBlock");
+  const selectProteina = wrap.querySelector(".proteina");
+
+  if(plato && plato.tieneProteina){
+
+    fillSelect(selectProteina, plato.proteinas);
+    bloqueProteina.style.display = "block";
+
+  }else{
+
+    bloqueProteina.style.display = "none";
+
+  }
+
+});
+      
 const principalSelect = wrap.querySelector(".principal");
 const proteinaBox = wrap.querySelector(".proteinaBox");
 const proteinaInput = wrap.querySelector(".proteinaSeleccionada");
@@ -1153,7 +1180,7 @@ principalSelect.addEventListener("change", () => {
           name,
           aperitivo: g.querySelector(".aperitivo").value,
           principal: g.querySelector(".principal").value,
-          proteina: g.querySelector(".proteinaSeleccionada")?.value || "",
+          proteina: g.querySelector(".proteina")?.value || "",
           postre: g.querySelector(".postre").value
         };
       });
