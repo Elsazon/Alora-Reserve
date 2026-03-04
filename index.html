@@ -890,15 +890,25 @@ async function cargarMenu() {
       t.innerHTML = "";
     }
 
-    function fillSelect(selectEl, options){
-      selectEl.innerHTML = "";
-      options.forEach(v=>{
-        const o = document.createElement("option");
-        o.value = v;
-        o.textContent = v;
-        selectEl.appendChild(o);
-      });
-    }
+function fillSelect(selectEl, options){
+
+  selectEl.innerHTML = "";
+
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = "Seleccionar";
+  placeholder.disabled = true;
+  placeholder.selected = true;
+  selectEl.appendChild(placeholder);
+
+  options.forEach(v=>{
+    const o = document.createElement("option");
+    o.value = v;
+    o.textContent = v;
+    selectEl.appendChild(o);
+  });
+
+}
 
     function pillList(containerId, items){
       const c = $(containerId);
@@ -1049,72 +1059,31 @@ wrap.querySelector(".principal").addEventListener("change", e => {
 
   const platoNombre = e.target.value;
 
-  const plato = CURRENT_MENU.principales.find(
-    p => p.nombre === platoNombre
-  );
-
   const bloqueProteina = wrap.querySelector(".proteinaBlock");
   const selectProteina = wrap.querySelector(".proteina");
 
+  if(!platoNombre){
+    bloqueProteina.style.display = "none";
+    selectProteina.innerHTML = "";
+    return;
+  }
+
+  const plato = PLATOS_MAP[platoNombre];
+
   if(plato && plato.tieneProteina){
 
-    fillSelect(selectProteina, plato.proteinas);
+    fillSelect(selectProteina, plato.proteinas || []);
     bloqueProteina.style.display = "block";
 
   }else{
 
     bloqueProteina.style.display = "none";
+    selectProteina.innerHTML = "";
 
   }
 
 });
-      
-const principalSelect = wrap.querySelector(".principal");
-const proteinaBox = wrap.querySelector(".proteinaBox");
-const proteinaInput = wrap.querySelector(".proteinaSeleccionada");
-const chips = wrap.querySelectorAll(".chipProteina");
 
-chips.forEach(chip => {
-  chip.addEventListener("click", () => {
-
-    // quitar activo de todos
-    chips.forEach(c => c.classList.remove("active"));
-
-    // activar el seleccionado
-    chip.classList.add("active");
-
-    // guardar valor
-    proteinaInput.value = chip.dataset.prot;
-
-    console.log("Proteina seleccionada:", proteinaInput.value);
-
-  });
-});
-      
-principalSelect.addEventListener("change", () => {
-  
-  console.log("Principal cambiado:", principalSelect.value);
-  console.log("Mapa:", PLATOS_MAP);
-  
-  const plato = PLATOS_MAP[principalSelect.value];
-
-  console.log("Plato encontrado:", plato);
-  if (plato && plato.tieneProteina) {
-    proteinaBox.style.display = "block";
-  } else {
-    proteinaBox.style.display = "none";
-    proteinaInput.value = "";
-    chips.forEach(c => c.classList.remove("active"));
-  }
-
-});
-      chips.forEach(chip => {
-  chip.addEventListener("click", () => {
-    chips.forEach(c => c.classList.remove("active"));
-    chip.classList.add("active");
-    proteinaInput.value = chip.dataset.prot;
-  });
-});
       
       wrap.querySelector('[data-action="remove"]').addEventListener("click", ()=>{
         wrap.remove();
