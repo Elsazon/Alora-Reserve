@@ -1265,23 +1265,35 @@ wrap.querySelector(".principal").addEventListener("change", e => {
   pillList("menuPostres", CURRENT_MENU.postres.map(p => p.nombre));
   pillList("menuNinos", CURRENT_MENU.ninos.map(p => p.nombre));
 
+  regenerarSelectsGuests();
+     
   // 4️⃣ Cargar horas disponibles
   await cargarHorasDisponibles();
 
   // 5️⃣ Evento cuando cambie función
-  $("funcion").addEventListener("change", async () => {
-    await cargarMenu();
+$("funcion").addEventListener("change", async () => {
 
-    pillList("menuAperitivos", CURRENT_MENU.aperitivos.map(p => p.nombre));
-    pillList("menuPrincipales", CURRENT_MENU.principales.map(p => p.nombre));
-    pillList("menuPostres", CURRENT_MENU.postres.map(p => p.nombre));
-    pillList("menuNinos",CURRENT_MENU.ninos.map(p => p.nombre));
+  await cargarMenu();
 
-    await cargarHorasDisponibles();
-  });
+  // 🔥 LIMPIAR selecciones anteriores
+  document.querySelectorAll(".principal").forEach(s => s.value = "");
+  document.querySelectorAll(".aperitivo").forEach(s => s.value = "");
+  document.querySelectorAll(".postre").forEach(s => s.value = "");
+  document.querySelectorAll(".principalNino").forEach(s => s.value = "");
 
-  // 6️⃣ Inicializar guests
-  addGuest();
+  pillList("menuAperitivos", CURRENT_MENU.aperitivos.map(p => p.nombre));
+  pillList("menuPrincipales", CURRENT_MENU.principales.map(p => p.nombre));
+  pillList("menuPostres", CURRENT_MENU.postres.map(p => p.nombre));
+  pillList("menuNinos", CURRENT_MENU.ninos.map(p => p.nombre));
+
+  await cargarHorasDisponibles();
+
+});
+
+// 6️⃣ Inicializar guests después del menú
+$("guests").innerHTML = "";
+guestCount = 0;
+addGuest();
 
   // 7️⃣ Botones
   $("addGuestBtn").addEventListener("click", addGuest);
