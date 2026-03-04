@@ -851,7 +851,35 @@ async function cargarMenu() {
   PLATOS_MAP[p.nombre] = p;
 });
 
-   
+   regenerarSelectsGuests();
+
+  function regenerarSelectsGuests(){
+
+  document.querySelectorAll(".guest").forEach(g=>{
+
+    fillSelect(
+      g.querySelector(".aperitivo"),
+      CURRENT_MENU.aperitivos.map(p=>p.nombre)
+    );
+
+    fillSelect(
+      g.querySelector(".principal"),
+      CURRENT_MENU.principales.map(p=>p.nombre)
+    );
+
+    fillSelect(
+      g.querySelector(".postre"),
+      CURRENT_MENU.postres.map(p=>p.nombre)
+    );
+
+    fillSelect(
+      g.querySelector(".principalNino"),
+      CURRENT_MENU.ninos.map(p=>p.nombre)
+    );
+
+  });
+
+}
     
     // 🔥 Actualizar los pills visuales del menú
     pillList(
