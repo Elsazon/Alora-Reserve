@@ -9,13 +9,12 @@
 <title>ALORA Service Console</title>
 
 <style>
-
 body{
-background:#0e1511;
+background:#0b1210;
 color:#f4f1ea;
 font-family:Inter,system-ui;
 margin:0;
-padding:30px;
+padding:40px;
 }
 
 .container{
@@ -23,126 +22,134 @@ max-width:1400px;
 margin:auto;
 }
 
+/* HEADER */
+
 .header{
-background:#121a16;
-border:1px solid rgba(255,255,255,.08);
-border-radius:14px;
-padding:20px;
-margin-bottom:25px;
+background:#111916;
+border:1px solid rgba(255,255,255,.05);
+border-radius:16px;
+padding:25px;
+margin-bottom:30px;
+box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
 .controls{
 display:flex;
 gap:20px;
+align-items:center;
 margin-top:10px;
 }
 
 select,input{
 background:#0e1511;
-border:1px solid rgba(255,255,255,.12);
+border:1px solid rgba(255,255,255,.08);
 color:white;
-padding:8px;
+padding:10px;
+border-radius:10px;
+font-size:14px;
+}
+
+/* STATS */
+
+.stats{
+margin-top:18px;
+display:flex;
+gap:35px;
+font-size:14px;
+opacity:.9;
+}
+
+.stats div{
+background:#0e1511;
+padding:8px 14px;
 border-radius:8px;
 }
 
-.stats{
-margin-top:15px;
-display:flex;
-gap:25px;
-font-size:14px;
-}
+/* LAYOUT */
 
 .layout{
 display:grid;
 grid-template-columns:1fr 420px;
-gap:25px;
+gap:30px;
 }
+
+/* RESERVAS PANEL */
 
 .resList{
-background:#121a16;
-border-radius:14px;
-border:1px solid rgba(255,255,255,.08);
+background:#111916;
+border-radius:16px;
+border:1px solid rgba(255,255,255,.05);
 padding:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.25);
 }
+
+/* TARJETA RESERVA */
 
 .resCard{
 display:flex;
 justify-content:space-between;
-padding:12px;
-border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.resCard:last-child{
-border-bottom:none;
-}
-
-.statusDot{
-width:10px;
-height:10px;
-border-radius:50%;
-margin-right:10px;
-}
-
-.pending{
-background:#FFC107;
-}
-
-.arrived{
-background:#4CAF50;
-}
-
-button{
-background:#c26a4a;
-border:none;
-padding:6px 10px;
-border-radius:6px;
-cursor:pointer;
-font-weight:600;
-}
-
-.detail{
-background:#121a16;
-border-radius:14px;
-border:1px solid rgba(255,255,255,.08);
-padding:20px;
-}
-
-.cover{
-padding:6px 0;
-border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.note{
-margin-top:15px;
-background:#0e1511;
-padding:12px;
-border-radius:8px;
-font-size:14px;
-}
-.resCard{
-display:flex;
-justify-content:space-between;
-padding:12px;
-border-bottom:1px solid rgba(255,255,255,.06);
-font-size:15px;
+align-items:center;
+padding:14px 16px;
+border-radius:10px;
+margin-bottom:8px;
+transition:.2s;
+background:rgba(255,255,255,.02);
 }
 
 .resCard:hover{
 background:#18221c;
+transform:translateY(-1px);
 }
+
+/* DETALLE */
+
+.detail{
+background:#111916;
+border-radius:16px;
+border:1px solid rgba(255,255,255,.05);
+padding:24px;
+box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+/* COVERS */
+
+.cover{
+padding:10px 0;
+border-bottom:1px solid rgba(255,255,255,.05);
+font-size:14px;
+}
+
+.cover:last-child{
+border-bottom:none;
+}
+
+/* NOTAS */
+
+.note{
+margin-top:18px;
+background:#0e1511;
+padding:14px;
+border-radius:10px;
+font-size:14px;
+line-height:1.4;
+}
+
+/* BOTONES */
 
 button{
 background:#c26a4a;
 border:none;
-padding:6px 12px;
-border-radius:6px;
+padding:8px 14px;
+border-radius:8px;
 cursor:pointer;
 font-weight:600;
+font-size:13px;
 transition:.2s;
 }
 
 button:hover{
 background:#e07c58;
+transform:translateY(-1px);
 }
 </style>
 
@@ -289,8 +296,8 @@ card.className = "resCard";
 card.innerHTML = `
 
 <div>
-${dot} <strong>${r.hora}</strong>  
-${r.cliente} (${r.personas})
+${dot} <strong>${r.hora}</strong> — ${r.cliente}
+<span style="opacity:.7">${r.personas} pax</span>
 </div>
 
 <div>
