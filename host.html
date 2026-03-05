@@ -177,7 +177,8 @@ const FUNCIONES=[
 ];
 
 const $=id=>document.getElementById(id);
-
+let HOST_CACHE = {};
+  
 function fillSelect(el,list){
 
 el.innerHTML="";
@@ -210,7 +211,13 @@ renderReservas(data.reservas||[]);
 }
 
 function renderReservas(list){
+  
+HOST_CACHE = {};
 
+list.forEach(r=>{
+HOST_CACHE[r.id] = r;
+});
+  
 const container=$("reservas");
 container.innerHTML="";
 
@@ -269,9 +276,13 @@ loadReservas();
 
 async function verDetalle(id){
 
-const res=await fetch(BACKEND_URL,{
+let r = HOST_CACHE[id];
+
+if(!r){
+
+const res = await fetch(BACKEND_URL,{
 method:"POST",
-headers:{"Content-Type":"text/plain;charset=utf-8"},
+headers:{ "Content-Type":"text/plain;charset=utf-8" },
 body:JSON.stringify({
 action:"host_get",
 id:id,
@@ -279,9 +290,11 @@ secret:SHARED_SECRET
 })
 });
 
-const data=await res.json();
+const data = await res.json();
 
-const r=data.reserva;
+r = data.reserva;
+
+}
 
 $("detalle").innerHTML=`
 
@@ -295,16 +308,18 @@ Personas: ${r.personas}
 ${r.covers.map(c=>`
 <div class="cover">
 <strong>${c.nombre}</strong><br>
-Aperitivo: ${c.aperitivo||"-"}<br>
-Principal: ${c.principal||"-"}<br>
-Postre: ${c.postre||"-"}<br>
-Proteína: ${c.proteina||"-"}
+Aperitivo: ${c.aperitivo || "-"}<br>
+Principal: ${c.principal || "-"}<br>
+Postre: ${c.postre || "-"}<br>
+Proteína: ${c.proteina || "-"}
 </div>
 `).join("")}
 
 ${r.notas?`
+
 <h4>Notas</h4>
 <div class="note">${r.notas}</div>
+
 `:""}
 
 `;
