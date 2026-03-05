@@ -278,7 +278,9 @@ async function verDetalle(id){
 
 let r = HOST_CACHE[id];
 
-if(!r){
+/* si no tiene covers aún → traerlos del backend */
+
+if(!r || !r.covers){
 
 const res = await fetch(BACKEND_URL,{
 method:"POST",
@@ -294,7 +296,13 @@ const data = await res.json();
 
 r = data.reserva;
 
+/* guardarlo en cache */
+
+HOST_CACHE[id] = r;
+
 }
+
+/* render detalle */
 
 $("detalle").innerHTML=`
 
@@ -315,12 +323,10 @@ Proteína: ${c.proteina || "-"}
 </div>
 `).join("")}
 
-${r.notas?`
-
+${r.notas ? `
 <h4>Notas</h4>
 <div class="note">${r.notas}</div>
-
-`:""}
+` : ""}
 
 `;
 
