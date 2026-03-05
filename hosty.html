@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>ALORA Service Control</title>
+
+<style>
+
+body{
+background:#0e1511;
+color:#f4f1ea;
+font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+margin:0;
+padding:40px;
+}
+
+.panel{
+max-width:900px;
+margin:auto;
+}
+
+h1{
+font-size:28px;
+margin-bottom:25px;
+}
+
+label{
+font-size:13px;
+opacity:.7;
+}
+
+select{
+margin-top:6px;
+padding:8px;
+border-radius:8px;
+background:#121a16;
+color:white;
+border:1px solid rgba(255,255,255,.15);
+}
+
+.card{
+background:#121a16;
+border:1px solid rgba(255,255,255,.08);
+border-radius:12px;
+padding:16px;
+margin-bottom:10px;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+}
+
+button{
+background:#c26a4a;
+border:none;
+padding:7px 12px;
+border-radius:8px;
+color:black;
+font-weight:600;
+cursor:pointer;
+}
+
+button:hover{
+opacity:.85;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="panel">
+
+<h1>ALORA Service Control</h1>
+
+<label>Función</label><br>
+<select id="funcion"></select>
+
+<div id="reservas" style="margin-top:25px"></div>
+
+</div>
+
+<script>
+
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbzdKNVULHVMBPz14LXn0wz2-D--FaU_s6fQQZeDGxHpnAR8WllvQbUcexwRM4rCKfzO/exec";
+const SHARED_SECRET = "demo123";
+
+const FUNCIONES = [
+"Función 1",
+"Función 2",
+"Función 3",
+"Función 4",
+"Función 5",
+"Función 6",
+"Función 7",
+"Función 8"
+];
+
+const $ = id => document.getElementById(id);
+
+function fillSelect(select, options){
+
+select.innerHTML="";
+
+options.forEach(v=>{
+
+const o=document.createElement("option");
+o.value=v;
+o.textContent=v;
+
+select.appendChild(o);
+
+});
+
+}
+
+async function loadReservas(){
+
+const funcion=$("funcion").value;
+
+const res = await fetch(BACKEND_URL,{
+method:"POST",
+headers:{ "Content-Type":"text/plain;charset=utf-8" },
+body:JSON.stringify({
+action:"host_list",
+funcion:funcion,
+secret:SHARED_SECRET
+})
+});
+
+const data=await res.json();
+
+const container=$("reservas");
+container.innerHTML="";
+
+if(!data.reservas){
+container.innerHTML="No hay reservas.";
+return;
+}
+
+data.reservas.forEach(r=>{
+
+const card=document.createElement("div");
+card.className="card";
+
+card.innerHTML=`
+
+<div class="row">
+
+<div>
+<strong>${r.hora}</strong><br>
+${r.cliente} (${r.personas})<br>
+Mesa: ${r.mesa || "-"}
+</div>
+
+<div>
+<button onclick="arrive('${r.id}')">
+Llegó
+</button>
+</div>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+async function arrive(id){
+
+await fetch(BACKEND_URL,{
+method:"POST",
+headers:{ "Content-Type":"text/plain;charset=utf-8" },
+body:JSON.stringify({
+action:"host_arrive",
+id:id,
+secret:SHARED_SECRET
+})
+});
+
+loadReservas();
+
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+fillSelect($("funcion"),FUNCIONES);
+
+$("funcion").addEventListener("change",loadReservas);
+
+loadReservas();
+
+});
+
+</script>
+
+</body>
+
+</html>
