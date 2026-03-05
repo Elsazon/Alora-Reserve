@@ -1,74 +1,107 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>ALORA Service Control</title>
+<title>ALORA Host Control</title>
 
 <style>
 
 body{
 background:#0e1511;
 color:#f4f1ea;
-font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+font-family:Inter,system-ui;
 margin:0;
-padding:40px;
+padding:30px;
 }
 
-.panel{
-max-width:900px;
+.container{
+max-width:1300px;
 margin:auto;
 }
 
-h1{
-font-size:28px;
+.header{
+border:1px solid rgba(255,255,255,.08);
+border-radius:14px;
+padding:20px;
 margin-bottom:25px;
 }
 
-label{
-font-size:13px;
-opacity:.7;
+.controls{
+display:flex;
+gap:20px;
+align-items:center;
+margin-top:10px;
 }
 
-select{
-margin-top:6px;
+.controls select,
+.controls input{
+
 padding:8px;
 border-radius:8px;
 background:#121a16;
 color:white;
 border:1px solid rgba(255,255,255,.15);
+
 }
 
-.card{
-background:#121a16;
+.stats{
+display:flex;
+gap:25px;
+margin-top:15px;
+font-size:14px;
+opacity:.9;
+}
+
+.layout{
+display:grid;
+grid-template-columns:1fr 400px;
+gap:25px;
+}
+
+.resList{
 border:1px solid rgba(255,255,255,.08);
 border-radius:12px;
-padding:16px;
-margin-bottom:10px;
+padding:15px;
 }
 
 .row{
 display:flex;
 justify-content:space-between;
 align-items:center;
-gap:10px;
+padding:10px 0;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.row:last-child{
+border-bottom:none;
 }
 
 button{
 background:#c26a4a;
 border:none;
-padding:7px 12px;
-border-radius:8px;
-color:black;
+padding:6px 10px;
+border-radius:6px;
 font-weight:600;
 cursor:pointer;
 }
 
-button:hover{
-opacity:.85;
+.detail{
+border:1px solid rgba(255,255,255,.08);
+border-radius:12px;
+padding:18px;
+}
+
+.cover{
+padding:6px 0;
+font-size:14px;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.cover:last-child{
+border-bottom:none;
 }
 
 </style>
@@ -77,14 +110,48 @@ opacity:.85;
 
 <body>
 
-<div class="panel">
+<div class="container">
 
-<h1>ALORA Service Control</h1>
+<h2>ALORA • Host Control Panel</h2>
 
-<label>Función</label><br>
+<div class="header">
+
+<div class="controls">
+
+<label>Función</label>
 <select id="funcion"></select>
 
-<div id="reservas" style="margin-top:25px"></div>
+<label>Hora</label>
+<select id="hora">
+<option value="">Todas</option>
+</select>
+
+<label>Buscar</label>
+<input id="buscar" placeholder="Cliente">
+
+</div>
+
+<div class="stats">
+
+<div>Covers: <span id="coversTotal">0</span></div>
+<div>Llegaron: <span id="coversArrived">0</span></div>
+<div>Pendientes: <span id="coversPending">0</span></div>
+
+</div>
+
+</div>
+
+<div class="layout">
+
+<div class="resList" id="reservas"></div>
+
+<div class="detail" id="detalle">
+
+Selecciona una reserva
+
+</div>
+
+</div>
 
 </div>
 
@@ -94,14 +161,8 @@ const BACKEND_URL = "https://script.google.com/macros/s/AKfycbzdKNVULHVMBPz14LXn
 const SHARED_SECRET = "demo123";
 
 const FUNCIONES = [
-"Función 1",
-"Función 2",
-"Función 3",
-"Función 4",
-"Función 5",
-"Función 6",
-"Función 7",
-"Función 8"
+"Función 1","Función 2","Función 3","Función 4",
+"Función 5","Función 6","Función 7","Función 8"
 ];
 
 const $ = id => document.getElementById(id);
@@ -111,69 +172,71 @@ function fillSelect(select, options){
 select.innerHTML="";
 
 options.forEach(v=>{
-
 const o=document.createElement("option");
 o.value=v;
 o.textContent=v;
-
 select.appendChild(o);
-
 });
 
 }
 
 async function loadReservas(){
 
-const funcion=$("funcion").value;
-
 const res = await fetch(BACKEND_URL,{
 method:"POST",
 headers:{ "Content-Type":"text/plain;charset=utf-8" },
 body:JSON.stringify({
 action:"host_list",
-funcion:funcion,
+funcion:$("funcion").value,
 secret:SHARED_SECRET
 })
 });
 
 const data=await res.json();
 
+renderReservas(data.reservas || []);
+
+}
+
+function renderReservas(list){
+
 const container=$("reservas");
 container.innerHTML="";
 
-if(!data.reservas){
-container.innerHTML="No hay reservas.";
-return;
-}
+let covers=0;
 
-data.reservas.forEach(r=>{
+list.forEach(r=>{
 
-const card=document.createElement("div");
-card.className="card";
+covers+=r.personas;
 
-card.innerHTML=`
+const row=document.createElement("div");
+row.className="row";
 
-<div class="row">
+row.innerHTML=`
 
 <div>
-<strong>${r.hora}</strong><br>
-${r.cliente} (${r.personas})<br>
-Mesa: ${r.mesa || "-"}
+
+<strong>${r.hora}</strong>  
+${r.cliente} (${r.personas})
+
 </div>
 
 <div>
-<button onclick="arrive('${r.id}')">
-Llegó
-</button>
-</div>
+
+Mesa ${r.mesa || "—"}
+
+<button onclick="arrive('${r.id}')">Llegó</button>
+<button onclick="verDetalle('${r.id}')">Editar</button>
 
 </div>
 
 `;
 
-container.appendChild(card);
+container.appendChild(row);
 
 });
+
+$("coversTotal").textContent=covers;
 
 }
 
@@ -193,6 +256,57 @@ loadReservas();
 
 }
 
+async function verDetalle(id){
+
+const res = await fetch(BACKEND_URL,{
+method:"POST",
+headers:{ "Content-Type":"text/plain;charset=utf-8" },
+body:JSON.stringify({
+action:"host_get",
+id:id,
+secret:SHARED_SECRET
+})
+});
+
+const data=await res.json();
+
+const r=data.reserva;
+
+$("detalle").innerHTML=`
+
+<h3>${r.cliente}</h3>
+
+Teléfono: ${r.telefono}<br>
+Personas: ${r.personas}<br><br>
+
+Mesa
+<select id="mesa">
+
+<option>Mesa 1</option>
+<option>Mesa 2</option>
+<option>Mesa 3</option>
+<option>Mesa 4</option>
+
+</select>
+
+<br><br>
+
+<h4>COVERS</h4>
+
+${r.covers.map(c=>`
+<div class="cover">
+${c.nombre} — ${c.plato} — ${c.proteina || "-"}
+</div>
+`).join("")}
+
+<br>
+
+<button onclick="guardar('${r.id}')">Guardar cambios</button>
+
+`;
+
+}
+
 document.addEventListener("DOMContentLoaded",()=>{
 
 fillSelect($("funcion"),FUNCIONES);
@@ -206,5 +320,4 @@ loadReservas();
 </script>
 
 </body>
-
 </html>
