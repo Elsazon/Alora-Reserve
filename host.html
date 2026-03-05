@@ -119,7 +119,31 @@ padding:12px;
 border-radius:8px;
 font-size:14px;
 }
+.resCard{
+display:flex;
+justify-content:space-between;
+padding:12px;
+border-bottom:1px solid rgba(255,255,255,.06);
+font-size:15px;
+}
 
+.resCard:hover{
+background:#18221c;
+}
+
+button{
+background:#c26a4a;
+border:none;
+padding:6px 12px;
+border-radius:6px;
+cursor:pointer;
+font-weight:600;
+transition:.2s;
+}
+
+button:hover{
+background:#e07c58;
+}
 </style>
 
 </head>
@@ -177,6 +201,32 @@ const FUNCIONES=[
 ];
 
 const $=id=>document.getElementById(id);
+
+function estadoServicio(horaReserva,llego){
+
+if(llego) return "arrived";
+
+const now = new Date();
+
+const [h,m] = horaReserva.replace(" PM","").replace(" AM","").split(":");
+
+let hour = parseInt(h);
+const min = parseInt(m);
+
+if(horaReserva.includes("PM") && hour !== 12) hour += 12;
+if(horaReserva.includes("AM") && hour === 12) hour = 0;
+
+const reserva = new Date();
+reserva.setHours(hour,min,0,0);
+
+if(now > reserva){
+return "late";
+}
+
+return "pending";
+
+}
+  
 let HOST_CACHE = {};
   
 function fillSelect(el,list){
@@ -211,13 +261,7 @@ renderReservas(data.reservas||[]);
 }
 
 function renderReservas(list){
-  
-HOST_CACHE = {};
 
-list.forEach(r=>{
-HOST_CACHE[r.id] = r;
-});
-  
 const container=$("reservas");
 container.innerHTML="";
 
@@ -228,11 +272,43 @@ list.forEach(r=>{
 
 covers+=r.personas;
 
+const estado = estadoServicio(r.hora,r.llego);
+
+let dot="🟡";
+
+if(estado==="arrived") dot="🟢";
+if(estado==="late") dot="🔴";
+
 const card=document.createElement("div");
 card.className="resCard";
 
 card.innerHTML=`
 
+<div>
+
+${dot} <strong>${r.hora}</strong>  
+${r.cliente} (${r.personas})
+
+</div>
+
+<div>
+
+Mesa ${r.mesa||"—"}
+
+<button onclick="arrive('${r.id}')">Llegó</button>
+<button onclick="verDetalle('${r.id}')">Editar</button>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
+
+$("coversTotal").textContent=covers;
+
+}
 <div>
 
 <strong>${r.hora}</strong> — ${r.cliente} (${r.personas})
