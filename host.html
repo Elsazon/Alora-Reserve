@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>ALORA Host Control</title>
+<title>ALORA Service Console</title>
 
 <style>
 
@@ -18,11 +19,12 @@ padding:30px;
 }
 
 .container{
-max-width:1300px;
+max-width:1400px;
 margin:auto;
 }
 
 .header{
+background:#121a16;
 border:1px solid rgba(255,255,255,.08);
 border-radius:14px;
 padding:20px;
@@ -32,51 +34,61 @@ margin-bottom:25px;
 .controls{
 display:flex;
 gap:20px;
-align-items:center;
 margin-top:10px;
 }
 
-.controls select,
-.controls input{
-
+select,input{
+background:#0e1511;
+border:1px solid rgba(255,255,255,.12);
+color:white;
 padding:8px;
 border-radius:8px;
-background:#121a16;
-color:white;
-border:1px solid rgba(255,255,255,.15);
-
 }
 
 .stats{
+margin-top:15px;
 display:flex;
 gap:25px;
-margin-top:15px;
 font-size:14px;
-opacity:.9;
 }
 
 .layout{
 display:grid;
-grid-template-columns:1fr 400px;
+grid-template-columns:1fr 420px;
 gap:25px;
 }
 
 .resList{
+background:#121a16;
+border-radius:14px;
 border:1px solid rgba(255,255,255,.08);
-border-radius:12px;
-padding:15px;
+padding:20px;
 }
 
-.row{
+.resCard{
 display:flex;
 justify-content:space-between;
-align-items:center;
-padding:10px 0;
+padding:12px;
 border-bottom:1px solid rgba(255,255,255,.05);
 }
 
-.row:last-child{
+.resCard:last-child{
 border-bottom:none;
+}
+
+.statusDot{
+width:10px;
+height:10px;
+border-radius:50%;
+margin-right:10px;
+}
+
+.pending{
+background:#FFC107;
+}
+
+.arrived{
+background:#4CAF50;
 }
 
 button{
@@ -84,24 +96,28 @@ background:#c26a4a;
 border:none;
 padding:6px 10px;
 border-radius:6px;
-font-weight:600;
 cursor:pointer;
+font-weight:600;
 }
 
 .detail{
+background:#121a16;
+border-radius:14px;
 border:1px solid rgba(255,255,255,.08);
-border-radius:12px;
-padding:18px;
+padding:20px;
 }
 
 .cover{
 padding:6px 0;
-font-size:14px;
 border-bottom:1px solid rgba(255,255,255,.05);
 }
 
-.cover:last-child{
-border-bottom:none;
+.note{
+margin-top:15px;
+background:#0e1511;
+padding:12px;
+border-radius:8px;
+font-size:14px;
 }
 
 </style>
@@ -112,7 +128,7 @@ border-bottom:none;
 
 <div class="container">
 
-<h2>ALORA • Host Control Panel</h2>
+<h2>ALORA • Service Console</h2>
 
 <div class="header">
 
@@ -120,11 +136,6 @@ border-bottom:none;
 
 <label>Función</label>
 <select id="funcion"></select>
-
-<label>Hora</label>
-<select id="hora">
-<option value="">Todas</option>
-</select>
 
 <label>Buscar</label>
 <input id="buscar" placeholder="Cliente">
@@ -157,34 +168,34 @@ Selecciona una reserva
 
 <script>
 
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycbzPpusk0fvwygoZEZX6tjMZKiQTAyU1cu_uJZnvvu6wOQ7WLcJ2Q3DQfSYWm5kDqXp7/exec";
-const SHARED_SECRET = "demo123";
+const BACKEND_URL="https://script.google.com/macros/s/AKfycbze6juuZwnUdXm7Q-McVdLBHiZVTzGSe36tpFQQGdquJVXRDycKTo3webVAVbgBKizN/exec";
+const SHARED_SECRET="demo123";
 
-const FUNCIONES = [
+const FUNCIONES=[
 "Función 1","Función 2","Función 3","Función 4",
 "Función 5","Función 6","Función 7","Función 8"
 ];
 
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
 
-function fillSelect(select, options){
+function fillSelect(el,list){
 
-select.innerHTML="";
+el.innerHTML="";
 
-options.forEach(v=>{
+list.forEach(v=>{
 const o=document.createElement("option");
 o.value=v;
 o.textContent=v;
-select.appendChild(o);
+el.appendChild(o);
 });
 
 }
 
 async function loadReservas(){
 
-const res = await fetch(BACKEND_URL,{
+const res=await fetch(BACKEND_URL,{
 method:"POST",
-headers:{ "Content-Type":"text/plain;charset=utf-8" },
+headers:{"Content-Type":"text/plain;charset=utf-8"},
 body:JSON.stringify({
 action:"host_list",
 funcion:$("funcion").value,
@@ -194,7 +205,7 @@ secret:SHARED_SECRET
 
 const data=await res.json();
 
-renderReservas(data.reservas || []);
+renderReservas(data.reservas||[]);
 
 }
 
@@ -204,26 +215,26 @@ const container=$("reservas");
 container.innerHTML="";
 
 let covers=0;
+let arrived=0;
 
 list.forEach(r=>{
 
 covers+=r.personas;
 
-const row=document.createElement("div");
-row.className="row";
+const card=document.createElement("div");
+card.className="resCard";
 
-row.innerHTML=`
+card.innerHTML=`
 
 <div>
 
-<strong>${r.hora}</strong>  
-${r.cliente} (${r.personas})
+<strong>${r.hora}</strong> — ${r.cliente} (${r.personas})
 
 </div>
 
 <div>
 
-Mesa ${r.mesa || "—"}
+Mesa ${r.mesa||"—"}
 
 <button onclick="arrive('${r.id}')">Llegó</button>
 <button onclick="verDetalle('${r.id}')">Editar</button>
@@ -232,7 +243,7 @@ Mesa ${r.mesa || "—"}
 
 `;
 
-container.appendChild(row);
+container.appendChild(card);
 
 });
 
@@ -244,7 +255,7 @@ async function arrive(id){
 
 await fetch(BACKEND_URL,{
 method:"POST",
-headers:{ "Content-Type":"text/plain;charset=utf-8" },
+headers:{"Content-Type":"text/plain;charset=utf-8"},
 body:JSON.stringify({
 action:"host_arrive",
 id:id,
@@ -258,9 +269,9 @@ loadReservas();
 
 async function verDetalle(id){
 
-const res = await fetch(BACKEND_URL,{
+const res=await fetch(BACKEND_URL,{
 method:"POST",
-headers:{ "Content-Type":"text/plain;charset=utf-8" },
+headers:{"Content-Type":"text/plain;charset=utf-8"},
 body:JSON.stringify({
 action:"host_get",
 id:id,
@@ -277,31 +288,24 @@ $("detalle").innerHTML=`
 <h3>${r.cliente}</h3>
 
 Teléfono: ${r.telefono}<br>
-Personas: ${r.personas}<br><br>
-
-Mesa
-<select id="mesa">
-
-<option>Mesa 1</option>
-<option>Mesa 2</option>
-<option>Mesa 3</option>
-<option>Mesa 4</option>
-
-</select>
-
-<br><br>
+Personas: ${r.personas}
 
 <h4>COVERS</h4>
 
 ${r.covers.map(c=>`
 <div class="cover">
-${c.nombre} — ${c.plato} — ${c.proteina || "-"}
+<strong>${c.nombre}</strong><br>
+Aperitivo: ${c.aperitivo||"-"}<br>
+Principal: ${c.principal||"-"}<br>
+Postre: ${c.postre||"-"}<br>
+Proteína: ${c.proteina||"-"}
 </div>
 `).join("")}
 
-<br>
-
-<button onclick="guardar('${r.id}')">Guardar cambios</button>
+${r.notas?`
+<h4>Notas</h4>
+<div class="note">${r.notas}</div>
+`:""}
 
 `;
 
