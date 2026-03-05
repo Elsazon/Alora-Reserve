@@ -251,7 +251,7 @@ Selecciona una reserva
 
 <script>
 
-const BACKEND_URL="https://script.google.com/macros/s/AKfycbyb7-4j7fFq_Rr6QveZmJUIbM2fbHXcIQRgA8V4tiwzOqtNO8er9hsck9jv9fm5ve3x/exec";
+const BACKEND_URL="https://script.google.com/macros/s/AKfycbwLlwWJP7TiQvtDcuvd2hVZ6aL4kQdnwJHfYbOBFGAyzanSfRooWUlmEbcjGfF-_mid/exec";
 const SHARED_SECRET="demo123";
 
 const FUNCIONES=[
@@ -307,11 +307,21 @@ const res=await fetch(BACKEND_URL,{
 method:"POST",
 headers:{"Content-Type":"text/plain;charset=utf-8"},
 body:JSON.stringify({
-action:"host_list",
+action:"host_snapshot",
 funcion:$("funcion").value,
 secret:SHARED_SECRET
 })
 });
+
+const data=await res.json();
+
+$("coversTotal").textContent = data.coversTotal;
+$("coversArrived").textContent = data.coversArrived;
+$("coversPending").textContent = data.coversPending;
+
+renderReservas(data.reservas || []);
+
+}
 
 const data=await res.json();
 
