@@ -262,42 +262,42 @@ renderReservas(data.reservas||[]);
 
 function renderReservas(list){
 
-const container=$("reservas");
-container.innerHTML="";
+HOST_CACHE = {};
 
-let covers=0;
-let arrived=0;
+const container = $("reservas");
+container.innerHTML = "";
+
+let covers = 0;
 
 list.forEach(r=>{
 
-covers+=r.personas;
+covers += r.personas;
+
+/* guardar en cache */
+HOST_CACHE[r.id] = r;
 
 const estado = estadoServicio(r.hora,r.llego);
 
-let dot="🟡";
+let dot = "🟡";
 
-if(estado==="arrived") dot="🟢";
-if(estado==="late") dot="🔴";
+if(estado === "arrived") dot = "🟢";
+if(estado === "late") dot = "🔴";
 
-const card=document.createElement("div");
-card.className="resCard";
+const card = document.createElement("div");
+card.className = "resCard";
 
-card.innerHTML=`
+card.innerHTML = `
 
 <div>
-
 ${dot} <strong>${r.hora}</strong>  
 ${r.cliente} (${r.personas})
-
 </div>
 
 <div>
-
-Mesa ${r.mesa||"—"}
+Mesa ${r.mesa || "—"}
 
 <button onclick="arrive('${r.id}')">Llegó</button>
 <button onclick="verDetalle('${r.id}')">Editar</button>
-
 </div>
 
 `;
@@ -306,31 +306,7 @@ container.appendChild(card);
 
 });
 
-$("coversTotal").textContent=covers;
-
-}
-<div>
-
-<strong>${r.hora}</strong> — ${r.cliente} (${r.personas})
-
-</div>
-
-<div>
-
-Mesa ${r.mesa||"—"}
-
-<button onclick="arrive('${r.id}')">Llegó</button>
-<button onclick="verDetalle('${r.id}')">Editar</button>
-
-</div>
-
-`;
-
-container.appendChild(card);
-
-});
-
-$("coversTotal").textContent=covers;
+$("coversTotal").textContent = covers;
 
 }
 
