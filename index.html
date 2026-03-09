@@ -1300,7 +1300,7 @@ btn.textContent = "Confirmando…";
 
         const data = await res.json();
 
-        if(data.ok){
+       if(data.ok){
 
   setToast(
     "ok",
@@ -1308,7 +1308,6 @@ btn.textContent = "Confirmando…";
     `ID: ${data.reservation_id}<br>Covers: ${data.creado?.covers ?? ""} · Items: ${data.creado?.items ?? ""}`
   );
 
-  // limpiar formulario
   $("cliente").value = "";
   $("telefono").value = "";
   $("email").value = "";
@@ -1318,7 +1317,6 @@ btn.textContent = "Confirmando…";
     $("descorche").checked = false;
   }
 
-  // reset personas
   $("guests").innerHTML = "";
   guestCount = 0;
   addGuest();
@@ -1326,12 +1324,18 @@ btn.textContent = "Confirmando…";
   actualizarTotal();
 
   await cargarHorasDisponibles();
-}
-        }else{
-          setToast("err", "No se pudo confirmar.", data.error || "Error desconocido");
-        }
 
-    catch(e){
+}else{
+
+  setToast(
+    "err",
+    "No se pudo confirmar.",
+    data.error || "Error desconocido"
+  );
+
+}
+
+    }catch(e){
         setToast("err", "Error de conexión.", String(e));
       }finally{
 btn.dataset.loading = "0";
