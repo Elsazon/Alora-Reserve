@@ -744,10 +744,17 @@ body{
             <button class="btn btnPrimary" id="submitBtn" type="button">Confirmar experiencia</button>
           </div>
 
-          <div class="priceLine">
-            <div class="label">Total estimado</div>
-            <div class="total" id="total">$0.00</div>
-          </div>
+<div class="priceLine">
+<div class="label">Total estimado</div>
+<div class="total" id="total">$0.00</div>
+</div>
+
+<div style="margin-top:12px;">
+<label style="display:flex;align-items:center;gap:10px;">
+<input type="checkbox" id="descorche">
+Desea descorche (+$12)
+</label>
+</div>
 
           <div id="toast" class="toast"></div>
 
@@ -756,12 +763,7 @@ body{
           <textarea id="notas" placeholder="Alergias, cumpleaños, indicaciones…"></textarea>
         </div>
 
-        <div style="margin-top:12px;">
-<label style="display:flex;align-items:center;gap:10px;">
-<input type="checkbox" id="descorche">
-Desea descorche (+$12)
-</label>
-</div>
+
         <div class="sectionCard reveal">
           <div class="sectionTitle">Detalles</div>
           <p class="sectionText">
@@ -1329,7 +1331,7 @@ btn.textContent = "Confirmando…";
           setToast("err", "No se pudo confirmar.", data.error || "Error desconocido");
         }
 
-      }catch(e){
+    catch(e){
         setToast("err", "Error de conexión.", String(e));
       }finally{
 btn.dataset.loading = "0";
