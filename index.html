@@ -1038,14 +1038,21 @@ async function cargarHorasDisponibles(){
     /***********************
      * Total
      ***********************/
-    function actualizarTotal(){
-      let total = 0;
-      document.querySelectorAll(".tipoPersona").forEach(sel=>{
-        total += (sel.value === "nino") ? PRECIO_NINO : PRECIO_ADULTO;
-      });
-      $("total").textContent = "$" + total.toFixed(2);
-    }
+function actualizarTotal(){
 
+let total = 0;
+
+document.querySelectorAll(".tipoPersona").forEach(sel=>{
+  total += (sel.value === "nino") ? PRECIO_NINO : PRECIO_ADULTO;
+});
+
+if($("descorche") && $("descorche").checked){
+  total += 12;
+}
+
+$("total").textContent = "$" + total.toFixed(2);
+
+}
     /***********************
      * Guests
      ***********************/
@@ -1390,6 +1397,7 @@ addGuest();
   await cargarHorasDisponibles();
   // 7️⃣ Botones
   $("addGuestBtn").addEventListener("click", addGuest);
+  $("descorche").addEventListener("change", actualizarTotal);
   $("submitBtn").addEventListener("click", submitReservation);
 
   // 8️⃣ Reveal animations
