@@ -1309,28 +1309,54 @@ btn.textContent = "Confirmando…";
 
        if(data.ok){
 
-  setToast(
-    "ok",
-    "Su experiencia en ALORA ha sido confirmada.",
-    `ID: ${data.reservation_id}<br>Covers: ${data.creado?.covers ?? ""} · Items: ${data.creado?.items ?? ""}`
-  );
+const personas = payload.guests.length
 
-  $("cliente").value = "";
-  $("telefono").value = "";
-  $("email").value = "";
-  $("notas").value = "";
-
-  if($("descorche")){
-    $("descorche").checked = false;
+let total = 0
+payload.guests.forEach(g=>{
+  if(g.aperitivo || g.postre){
+    total += PRECIO_ADULTO
+  }else{
+    total += PRECIO_NINO
   }
+})
 
-  $("guests").innerHTML = "";
-  guestCount = 0;
-  addGuest();
+if(payload.descorche){
+  total += 12
+}
 
-  actualizarTotal();
+setToast(
+  "ok",
+  `
+  <strong>✔ Reserva confirmada</strong><br>
+  📧 Te enviamos un email de confirmación
+  `,
+  `
+ID: ${data.reservation_id}
 
-  await cargarHorasDisponibles();
+Hora: ${payload.hora}
+Personas: ${personas}
+
+Total estimado: $${total.toFixed(2)}
+`
+)
+
+$("cliente").value = "";
+$("telefono").value = "";
+$("email").value = "";
+$("notas").value = "";
+
+if($("descorche")){
+  $("descorche").checked = false;
+}
+
+$("guests").innerHTML = "";
+guestCount = 0;
+addGuest();
+
+actualizarTotal();
+
+await cargarHorasDisponibles();
+
 
 }else{
 
