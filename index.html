@@ -755,15 +755,26 @@ body{
           </div>
 
 <div class="priceLine">
+
+<div>
 <div class="label">Total estimado</div>
 <div class="total" id="total">$0.00</div>
 </div>
 
-<div style="margin-top:12px;">
-<label style="display:flex;align-items:center;gap:10px;">
+<label style="
+display:flex;
+align-items:center;
+gap:8px;
+font-size:13px;
+cursor:pointer;
+">
+
 <input type="checkbox" id="descorche">
-Desea descorche (+$12)
+
+Descorche +$12
+
 </label>
+
 </div>
 
           <div id="toast" class="toast"></div>
@@ -1010,7 +1021,14 @@ async function cargarHorasDisponibles(){
       })
     });
 
-    const data = await res.json();
+   const data = await res.json();
+
+console.log("HORAS RESPONSE:", data);
+
+if(!data || !data.horas){
+  selHora.innerHTML = "<option>Error cargando horas</option>";
+  return;
+}
 
     selHora.innerHTML = "";
 
@@ -1393,7 +1411,8 @@ btn.textContent = "Confirmar experiencia";
 
   // 1️⃣ Llenar select de función primero
   fillSelect($("funcion"), FUNCIONES);
-
+  $("hora").innerHTML = "<option>Seleccione función primero</option>";
+  $("hora").disabled = true;
   // 2️⃣ Cargar menú inicial
   await cargarMenu();
 
@@ -1408,7 +1427,7 @@ btn.textContent = "Confirmar experiencia";
 
   // 5️⃣ Evento cuando cambie función
 $("funcion").addEventListener("change", async () => {
-
+$("hora").disabled = false;
   await cargarMenu();
 
   // 🔥 LIMPIAR selecciones anteriores
