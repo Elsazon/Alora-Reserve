@@ -717,6 +717,8 @@ body{
             </div>
           </div>
 
+        <label for="email">Email</label>
+        <input id="email" placeholder="correo@email.com">
           <div class="row2">
             <div>
               <label for="funcion">Función</label>
@@ -754,6 +756,12 @@ body{
           <textarea id="notas" placeholder="Alergias, cumpleaños, indicaciones…"></textarea>
         </div>
 
+        <div style="margin-top:12px;">
+<label style="display:flex;align-items:center;gap:10px;">
+<input type="checkbox" id="descorche">
+Desea descorche (+$12)
+</label>
+</div>
         <div class="sectionCard reveal">
           <div class="sectionTitle">Detalles</div>
           <p class="sectionText">
@@ -791,7 +799,7 @@ body{
     /***********************
      * CONFIG
      ***********************/
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbzdKNVULHVMBPz14LXn0wz2-D--FaU_s6fQQZeDGxHpnAR8WllvQbUcexwRM4rCKfzO/exec";
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbw0hED7dFdDsVgLp7HAJJlXlNeXBiRwdOFXFMCNpBPK8som07ILIbyHqvlv9LAjp-3p/exec";
     const SHARED_SECRET = "demo123";
 
     const PRECIO_ADULTO = 35;
@@ -1252,10 +1260,12 @@ function addGuest(){
         action: "create",
         cliente: $("cliente").value,
         phone: $("telefono").value,
+        email: $("email").value,
         funcion: $("funcion").value,
         hora: $("hora").value,
         guests: getGuests(),
-        notas: $("notas").value || ""
+        notas: $("notas").value || "",
+        descorche: $("descorche").checked
       };
 
       console.log("PAYLOAD:", payload);
@@ -1271,9 +1281,13 @@ function addGuest(){
         return;
       }
 
-      const btn = $("submitBtn");
-      btn.disabled = true;
-      btn.textContent = "Confirmando…";
+const btn = $("submitBtn");
+
+if(btn.dataset.loading === "1") return;
+
+btn.dataset.loading = "1";
+btn.disabled = true;
+btn.textContent = "Confirmando…";
 
       try{
         const res = await fetch(BACKEND_URL,{
@@ -1285,17 +1299,32 @@ function addGuest(){
         const data = await res.json();
 
         if(data.ok){
-          setToast("ok",
-            "Su experiencia en ALORA ha sido confirmada.",
-            `ID: ${data.reservation_id}<br>Covers: ${data.creado?.covers ?? ""} · Items: ${data.creado?.items ?? ""}`
-          );
-          await cargarHorasDisponibles();
-        }else if(data.full){
-          setToast("warn",
-            "Esa hora está llena.",
-            `Reservado: ${data.yaReservado} · Entrando: ${data.entrando} · Límite: ${data.limite}`
-          );
-          await cargarHorasDisponibles();
+
+  setToast(
+    "ok",
+    "Su experiencia en ALORA ha sido confirmada.",
+    `ID: ${data.reservation_id}<br>Covers: ${data.creado?.covers ?? ""} · Items: ${data.creado?.items ?? ""}`
+  );
+
+  // limpiar formulario
+  $("cliente").value = "";
+  $("telefono").value = "";
+  $("email").value = "";
+  $("notas").value = "";
+
+  if($("descorche")){
+    $("descorche").checked = false;
+  }
+
+  // reset personas
+  $("guests").innerHTML = "";
+  guestCount = 0;
+  addGuest();
+
+  actualizarTotal();
+
+  await cargarHorasDisponibles();
+}
         }else{
           setToast("err", "No se pudo confirmar.", data.error || "Error desconocido");
         }
@@ -1303,8 +1332,9 @@ function addGuest(){
       }catch(e){
         setToast("err", "Error de conexión.", String(e));
       }finally{
-        btn.disabled = false;
-        btn.textContent = "Confirmar experiencia";
+btn.dataset.loading = "0";
+btn.disabled = false;
+btn.textContent = "Confirmar experiencia";
       }
     }
 
