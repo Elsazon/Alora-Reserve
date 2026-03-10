@@ -600,28 +600,34 @@ body{
 /* SERVICIO EXTRA */
 
 .serviceOption{
-margin-top:18px;
-padding:16px;
-border:1px solid var(--line);
-border-radius:16px;
-background:rgba(255,255,255,.03);
+margin-top:24px;
 }
 
 .descorcheCard{
 display:flex;
 align-items:center;
-gap:14px;
+gap:16px;
+padding:16px;
+border-radius:18px;
+border:1px solid var(--line);
+background:rgba(255,255,255,.03);
 cursor:pointer;
+transition:all .25s ease;
 }
 
-.descorcheCard input{
-width:18px;
-height:18px;
-accent-color:var(--terracotta);
-cursor:pointer;
+.descorcheCard:hover{
+background:rgba(255,255,255,.06);
+border-color:var(--gold);
+transform:translateY(-2px);
+box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+
+.descorcheIcon{
+font-size:22px;
 }
 
 .descorcheText{
+flex:1;
 display:flex;
 flex-direction:column;
 }
@@ -631,13 +637,26 @@ font-weight:600;
 font-size:14px;
 }
 
-.descorchePrice{
+.descorcheSubtitle{
 font-size:12px;
 color:var(--muted);
+margin-top:2px;
 }
-.descorcheCard:hover{
-background:rgba(255,255,255,.06);
-border-radius:12px;
+
+.descorchePrice{
+font-size:12px;
+color:var(--gold);
+margin-top:4px;
+}
+
+.descorcheCard input{
+width:20px;
+height:20px;
+accent-color:var(--terracotta);
+cursor:pointer;
+}
+    .descorcheCard input:checked{
+transform:scale(1.1);
 }
   </style>
 </head>
@@ -800,23 +819,17 @@ border-radius:12px;
 
 <label class="descorcheCard">
 
-<input type="checkbox" id="descorche">
+<div class="descorcheIcon">🍷</div>
 
 <div class="descorcheText">
 <div class="descorcheTitle">Descorche de vino</div>
+<div class="descorcheSubtitle">Trae tu propia botella a la mesa</div>
 <div class="descorchePrice">+$12 por mesa</div>
 </div>
 
+<input type="checkbox" id="descorche">
+
 </label>
-
-</div>
-
-<div class="priceLine">
-
-<div>
-<div class="label">Total estimado</div>
-<div class="total" id="total">$0.00</div>
-</div>
 
 </div>
 
@@ -865,7 +878,7 @@ border-radius:12px;
     /***********************
      * CONFIG
      ***********************/
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxVGcb9cHlnBog5V8G2oF8Li5LEph_g5qmUe17aHc-pcgo-MMrKB19z6wzwNf57fOg/exec";
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbwAjlzgp44kSpbGquLKjgqwZSrZlBS1JDWihLmMv7w45ele5SrLF7BRq73_i9gOAmnf/exec";
     const SHARED_SECRET = "demo123";
 
     const PRECIO_ADULTO = 35;
