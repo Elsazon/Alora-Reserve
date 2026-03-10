@@ -1446,75 +1446,69 @@ btn.textContent = "Confirmar experiencia";
 
    document.addEventListener("DOMContentLoaded", async ()=>{
 
-  $("year").textContent = new Date().getFullYear();
+$("year").textContent = new Date().getFullYear();
 
-  // 1️⃣ Llenar select de función primero
-  fillSelect($("funcion"), FUNCIONES);
-  $("hora").innerHTML = "<option>Seleccione función primero</option>";
-  $("hora").disabled = true;
-  // 2️⃣ Cargar menú inicial
-  await cargarMenu();
+/* llenar funciones */
 
-  // 3️⃣ Render preview del menú
-  pillList("menuAperitivos", CURRENT_MENU.aperitivos.map(p => p.nombre));
-  pillList("menuPrincipales", CURRENT_MENU.principales.map(p => p.nombre));
-  pillList("menuPostres", CURRENT_MENU.postres.map(p => p.nombre));
-  pillList("menuNinos", CURRENT_MENU.ninos.map(p => p.nombre));
-     
-  // 4️⃣ Cargar horas disponibles
-  await cargarHorasDisponibles();
+fillSelect($("funcion"), FUNCIONES);
 
-  // 5️⃣ Evento cuando cambie función
-$("funcion").addEventListener("change", async () => {
-$("hora").disabled = false;
-  await cargarMenu();
+/* hora bloqueada hasta elegir función */
 
-  // 🔥 LIMPIAR selecciones anteriores
-  document.querySelectorAll(".principal").forEach(s => s.value = "");
-  document.querySelectorAll(".aperitivo").forEach(s => s.value = "");
-  document.querySelectorAll(".postre").forEach(s => s.value = "");
-  document.querySelectorAll(".principalNino").forEach(s => s.value = "");
+$("hora").innerHTML = "<option>Seleccione función primero</option>";
+$("hora").disabled = true;
 
-  pillList("menuAperitivos", CURRENT_MENU.aperitivos.map(p => p.nombre));
-  pillList("menuPrincipales", CURRENT_MENU.principales.map(p => p.nombre));
-  pillList("menuPostres", CURRENT_MENU.postres.map(p => p.nombre));
-  pillList("menuNinos", CURRENT_MENU.ninos.map(p => p.nombre));
+/* cargar menú inicial */
 
+await cargarMenu();
 
+/* crear primer guest */
 
-});
-
-// 6️⃣ Inicializar guests después del menú
 $("guests").innerHTML = "";
 guestCount = 0;
 addGuest();
-  await cargarHorasDisponibles();
-  // 7️⃣ Botones
-  $("addGuestBtn").addEventListener("click", addGuest);
-  $("descorche").addEventListener("change", actualizarTotal);
-  $("submitBtn").addEventListener("click", submitReservation);
 
-  // 8️⃣ Reveal animations
-  initReveal();
+/* cuando cambie función */
 
-  // MAP POPUP
+$("funcion").addEventListener("change", async ()=>{
+
+$("hora").disabled = false;
+
+await cargarMenu();
+await cargarHorasDisponibles();
+
+});
+
+/* botones */
+
+$("addGuestBtn").addEventListener("click", addGuest);
+
+$("descorche").addEventListener("change", actualizarTotal);
+
+$("submitBtn").addEventListener("click", submitReservation);
+
+/* animaciones */
+
+initReveal();
+
+/* MAP POPUP */
 
 const mapModal = document.getElementById("mapModal");
 
 document.getElementById("openMap").addEventListener("click",(e)=>{
-  e.preventDefault();
-  mapModal.style.display="flex";
+e.preventDefault();
+mapModal.style.display="flex";
 });
 
 document.getElementById("closeMap").addEventListener("click",()=>{
-  mapModal.style.display="none";
+mapModal.style.display="none";
 });
 
 mapModal.addEventListener("click",(e)=>{
-  if(e.target===mapModal){
-    mapModal.style.display="none";
-  }
+if(e.target===mapModal){
+mapModal.style.display="none";
+}
 });
+
 });
   </script>
   
