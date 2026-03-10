@@ -678,6 +678,37 @@ outline:none;
 border-color:var(--terracotta);
 box-shadow:0 0 0 1px var(--terracotta);
 }
+    /* BEBIDAS PREMIUM */
+
+.drinkGrid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:14px;
+margin-top:20px;
+}
+
+.drinkCard{
+display:flex;
+align-items:center;
+gap:10px;
+padding:12px 14px;
+border-radius:14px;
+border:1px solid var(--line);
+background:rgba(255,255,255,.04);
+font-size:13px;
+}
+
+.drinkIcon{
+font-size:18px;
+}
+
+.drinkNote{
+margin-top:20px;
+font-size:13px;
+color:var(--muted);
+line-height:1.6;
+text-align:center;
+}
   </style>
 </head>
 
@@ -788,6 +819,95 @@ box-shadow:0 0 0 1px var(--terracotta);
       </div>
     </section>
 
+<!--BEBIDAS-->
+    <div class="sectionCard reveal">
+
+<div class="sectionTitle">Bebidas</div>
+
+<p class="sectionText" style="text-align:center">
+Cada reservación incluye <strong>una bebida de cortesía por persona</strong>
+para acompañar la experiencia gastronómica.
+</p>
+
+<div class="drinkGrid">
+
+<div class="drinkCard">
+<div class="drinkIcon">💧</div>
+Agua
+</div>
+
+<div class="drinkCard">
+<div class="drinkIcon">🥤</div>
+Soda (Coca-Cola / Sprite)
+</div>
+
+<div class="drinkCard">
+<div class="drinkIcon">🍊</div>
+Jugo de China
+</div>
+
+<div class="drinkCard">
+<div class="drinkIcon">🍋</div>
+Jugo de Limón
+</div>
+
+<div class="drinkCard">
+<div class="drinkIcon">🍹</div>
+Mocktail Sunrise
+</div>
+
+</div>
+
+<div class="drinkNote">
+
+Bebidas adicionales estarán disponibles en el restaurante
+y podrán solicitarse durante el servicio.
+
+Estas <strong>no están incluidas en el precio del menú</strong>
+y se facturarán por separado.
+
+</div>
+
+</div>
+
+    <div class="sectionCard reveal">
+
+<div class="sectionTitle">La experiencia</div>
+
+<p class="sectionText" style="text-align:center">
+Cada reservación incluye una experiencia gastronómica completa
+diseñada para disfrutar una fusión de cocina italiana y puertorriqueña.
+</p>
+
+<div class="drinkGrid" style="margin-top:20px">
+
+<div class="drinkCard">
+🍽 Aperitivo
+</div>
+
+<div class="drinkCard">
+🍝 Plato principal
+</div>
+
+<div class="drinkCard">
+🍰 Postre
+</div>
+
+<div class="drinkCard">
+🥤 1 bebida incluida
+</div>
+
+</div>
+
+<div class="drinkNote">
+
+Duración aproximada de la experiencia: <strong>90 minutos</strong><br>
+Precio fijo adulto: <strong>$35</strong> · Menú infantil: <strong>$12.50</strong>
+
+</div>
+
+</div>
+    
     <!-- RESERVAR -->
     <section id="reservar" class="block">
       <div class="reserveGrid">
