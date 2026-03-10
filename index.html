@@ -1044,9 +1044,16 @@ function fillSelect(selectEl, options){
 async function cargarHorasDisponibles(){
 
   const selHora = $("hora");
-  selHora.innerHTML = "<option>Cargando...</option>";
-
   const funcion = $("funcion").value;
+
+  if(!funcion){
+    selHora.innerHTML = "<option>Seleccione función primero</option>";
+    selHora.disabled = true;
+    return;
+  }
+
+  selHora.disabled = false;
+  selHora.innerHTML = "<option>Cargando...</option>";
 
   try{
 
@@ -1060,45 +1067,33 @@ async function cargarHorasDisponibles(){
       })
     });
 
-   const data = await res.json();
+    const data = await res.json();
+    console.log("HORAS RESPONSE:", data);
 
-console.log("HORAS RESPONSE:", data);
-
-if(!data || !data.horas){
-  selHora.innerHTML = "<option>Error cargando horas</option>";
-  return;
-}
+    if(!data || !data.ok || !Array.isArray(data.horas)){
+      console.error("Availability error:", data);
+      selHora.innerHTML = "<option>Error cargando horas</option>";
+      return;
+    }
 
     selHora.innerHTML = "";
 
     data.horas.forEach(h=>{
-
       if(h.full) return;
 
       const opt = document.createElement("option");
       opt.value = h.hora;
       opt.textContent = `${h.hora} (${h.disponibles} disponibles)`;
-
       selHora.appendChild(opt);
-
     });
 
     if(selHora.options.length === 0){
-
-      const opt = document.createElement("option");
-      opt.value = "";
-      opt.textContent = "No hay horas disponibles";
-
-      selHora.appendChild(opt);
-
+      selHora.innerHTML = "<option>No hay horas disponibles</option>";
     }
 
   }catch(err){
-
-    console.error(err);
-
+    console.error("HORAS FETCH ERROR:", err);
     selHora.innerHTML = "<option>Error cargando horas</option>";
-
   }
 
 }
@@ -1469,13 +1464,22 @@ addGuest();
 
 /* cuando cambie función */
 
-$("funcion").addEventListener("change", async ()=>{
+$("funcion").addEventListener("change", async () => {
+  $("hora").disabled = false;
 
-$("hora").disabled = false;
+  await cargarMenu();
+  await cargarHorasDisponibles();
 
-await cargarMenu();
-await cargarHorasDisponibles();
+  document.querySelectorAll(".principal").forEach(s => s.value = "");
+  document.querySelectorAll(".aperitivo").forEach(s => s.value = "");
+  document.querySelectorAll(".postre").forEach(s => s.value = "");
+  document.querySelectorAll(".principalNino").forEach(s => s.value = "");
 
+  pillList("menuAperitivos", CURRENT_MENU.aperitivos.map(p => p.nombre));
+  pillList("menuPrincipales", CURRENT_MENU.principales.map(p => p.nombre));
+  pillList("menuPostres", CURRENT_MENU.postres.map(p => p.nombre));
+  pillList("menuNinos", CURRENT_MENU.ninos.map(p => p.nombre));
+});
 });
 
 /* botones */
