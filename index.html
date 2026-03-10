@@ -1444,27 +1444,23 @@ btn.textContent = "Confirmar experiencia";
 $("year").textContent = new Date().getFullYear();
 
 /* llenar funciones */
-
 fillSelect($("funcion"), FUNCIONES);
 
 /* hora bloqueada hasta elegir función */
-
 $("hora").innerHTML = "<option>Seleccione función primero</option>";
 $("hora").disabled = true;
 
 /* cargar menú inicial */
-
 await cargarMenu();
 
 /* crear primer guest */
-
 $("guests").innerHTML = "";
 guestCount = 0;
 addGuest();
 
 /* cuando cambie función */
-
 $("funcion").addEventListener("change", async () => {
+
   $("hora").disabled = false;
 
   await cargarMenu();
@@ -1479,19 +1475,15 @@ $("funcion").addEventListener("change", async () => {
   pillList("menuPrincipales", CURRENT_MENU.principales.map(p => p.nombre));
   pillList("menuPostres", CURRENT_MENU.postres.map(p => p.nombre));
   pillList("menuNinos", CURRENT_MENU.ninos.map(p => p.nombre));
-});
+
 });
 
 /* botones */
-
 $("addGuestBtn").addEventListener("click", addGuest);
-
 $("descorche").addEventListener("change", actualizarTotal);
-
 $("submitBtn").addEventListener("click", submitReservation);
 
 /* animaciones */
-
 initReveal();
 
 /* MAP POPUP */
