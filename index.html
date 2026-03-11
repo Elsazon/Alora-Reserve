@@ -1689,51 +1689,7 @@ pillList("menuNinos", CURRENT_MENU.ninos.map(p=>p.nombre));
       "7:30 PM","8:00 PM","8:30 PM","9:00 PM"
     ];
 
-async function cargarMenu(){
 
-const funcion = $("funcion").value;
-
-  if(!funcion) return;
-
-CURRENT_MENU = window.ALL_MENUS[funcion] || {
-aperitivos:[],
-principales:[],
-postres:[],
-ninos:[]
-};
-
-PLATOS_MAP = {};
-
-[
-...CURRENT_MENU.aperitivos,
-...CURRENT_MENU.principales,
-...CURRENT_MENU.postres,
-...CURRENT_MENU.ninos
-].forEach(p=>{
-PLATOS_MAP[p.nombre] = p;
-});
-
-pillList(
-"menuAperitivos",
-CURRENT_MENU.aperitivos.map(p=>p.nombre)
-);
-
-pillList(
-"menuPrincipales",
-CURRENT_MENU.principales.map(p=>p.nombre)
-);
-
-pillList(
-"menuPostres",
-CURRENT_MENU.postres.map(p=>p.nombre)
-);
-
-pillList(
-"menuNinos",
-CURRENT_MENU.ninos.map(p=>p.nombre)
-);
-
-}
     const MAX_GUESTS = 8;
 
     const $ = (id) => document.getElementById(id);
