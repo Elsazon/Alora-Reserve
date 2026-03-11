@@ -1658,7 +1658,32 @@ track.appendChild(card);
       postres: [],
       ninos: []
     };
-    let PLATOS_MAP = {};
+    function hydrateMenu(funcion){
+
+CURRENT_MENU = window.ALL_MENUS[funcion] || {
+aperitivos:[],
+principales:[],
+postres:[],
+ninos:[]
+};
+
+PLATOS_MAP = {};
+
+[
+...CURRENT_MENU.aperitivos,
+...CURRENT_MENU.principales,
+...CURRENT_MENU.postres,
+...CURRENT_MENU.ninos
+].forEach(p=>{
+PLATOS_MAP[p.nombre] = p;
+});
+
+pillList("menuAperitivos", CURRENT_MENU.aperitivos.map(p=>p.nombre));
+pillList("menuPrincipales", CURRENT_MENU.principales.map(p=>p.nombre));
+pillList("menuPostres", CURRENT_MENU.postres.map(p=>p.nombre));
+pillList("menuNinos", CURRENT_MENU.ninos.map(p=>p.nombre));
+
+}
     const HORAS = [
       "5:30 PM","6:00 PM","6:30 PM","7:00 PM",
       "7:30 PM","8:00 PM","8:30 PM","9:00 PM"
@@ -2244,12 +2269,42 @@ $("year").textContent = new Date().getFullYear();
 
 const boot = await cargarBootstrap();
 
+console.log("BOOTSTRAP:",boot);
+
+if(!boot || !boot.ok){
+alert("Error cargando menú");
+return;
+}
+
 window.ALL_MENUS = boot.menus;
 
 fillSelect($("funcion"), boot.funciones);
 
 renderFunctionCarousel(boot.funciones);
+/* seleccionar primera función automáticamente */
 
+if(boot.funciones.length){
+
+const first = boot.funciones[0];
+
+$("funcion").value = first;
+
+hydrateMenu(first);
+
+await cargarHorasDisponibles();
+
+/* activar primera card del carousel */
+
+document.querySelector(".functionCard")?.classList.add("active");
+
+/* crear primer guest */
+
+$("guests").innerHTML = "";
+guestCount = 0;
+
+addGuest();
+
+}
 /* ocultar loader SOLO cuando todo esté listo */
 
 hideLoader();
