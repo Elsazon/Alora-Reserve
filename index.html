@@ -447,9 +447,22 @@ FORMULARIO
 ================================= */
 
 .formCard{
-box-shadow:
-0 40px 120px rgba(0,0,0,.7);
-padding:60px;
+
+border:1px solid var(--line);
+
+border-radius: calc(var(--radius) + 6px);
+
+padding: 22px;
+
+background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+
+box-shadow: 0 16px 55px rgba(0,0,0,.45);
+
+display:flex;
+
+flex-direction:column;
+
+gap:10px;
 
 position:relative;
 
@@ -469,40 +482,212 @@ height:3px;
 
 background:var(--gold);
 
-opacity:.6;
+opacity:.5;
 
 border-radius:26px 26px 0 0;
 
 }
 
-input,select,textarea{
+/* INPUTS */
+
+label{
+
+display:block;
+
+font-size:12px;
+
+color: rgba(255,255,255,.76);
+
+margin: 10px 0 6px;
+
+}
+
+input,
+select,
+textarea{
 
 width:100%;
 
-padding:12px 14px;
+padding: 12px 12px;
 
-border-radius:14px;
+border-radius: 12px;
 
-border:1px solid rgba(255,255,255,.12);
+border: 1px solid rgba(255,255,255,.14);
 
-background:rgba(0,0,0,.25);
+background: rgba(0,0,0,.25);
 
-color:white;
-
-}
-
-input:focus,
-select:focus,
-textarea:focus{
+color: rgba(255,255,255,.92);
 
 outline:none;
 
-border-color:var(--terracotta);
+}
 
-box-shadow:0 0 0 1px var(--terracotta);
+textarea{
+
+min-height: 96px;
+
+resize:vertical;
 
 }
 
+input::placeholder,
+textarea::placeholder{
+
+color: rgba(255,255,255,.45);
+
+}
+
+/* GRID */
+
+.row2{
+
+display:grid;
+
+grid-template-columns: 1fr 1fr;
+
+gap: 12px;
+
+}
+
+@media (max-width: 520px){
+
+.row2{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+/* GUEST CARD */
+
+.guest{
+
+border:1px solid rgba(255,255,255,.14);
+
+background: rgba(255,255,255,.03);
+
+border-radius: 16px;
+
+padding: 12px;
+
+margin-top: 12px;
+
+}
+
+.guestTop{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+gap:10px;
+
+margin-bottom:6px;
+
+}
+
+.guestLabel{
+
+font-weight:600;
+
+font-size:13px;
+
+color: rgba(255,255,255,.9);
+
+}
+
+/* BOTON ELIMINAR */
+
+.ghostBtn{
+
+background: transparent;
+
+border: 1px solid rgba(255,255,255,.18);
+
+color: rgba(255,255,255,.82);
+
+padding: 8px 10px;
+
+border-radius: 999px;
+
+font-size: 12px;
+
+cursor:pointer;
+
+}
+
+.ghostBtn:hover{
+
+border-color: rgba(255,255,255,.34);
+
+}
+
+/* BOTONES */
+
+.btnRow{
+
+display:flex;
+
+gap:10px;
+
+margin-top:14px;
+
+flex-wrap:wrap;
+
+}
+
+.btnSecondary{
+
+background: rgba(255,255,255,.06);
+
+border: 1px solid rgba(255,255,255,.14);
+
+color: rgba(255,255,255,.9);
+
+min-width: 170px;
+
+}
+
+/* TOTAL */
+
+.priceLine{
+
+margin-top: 12px;
+
+border-top: 1px solid var(--line);
+
+padding-top: 12px;
+
+display:flex;
+
+justify-content:space-between;
+
+gap: 12px;
+
+align-items:baseline;
+
+}
+
+.priceLine .label{
+
+color: var(--muted);
+
+font-size:13px;
+
+}
+
+.priceLine .total{
+
+font-family:"Playfair Display", serif;
+
+font-size: 22px;
+
+color: rgba(255,255,255,.92);
+
+}
     /* ===== FORM LAYOUT ===== */
 
 .row2{
