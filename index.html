@@ -1684,6 +1684,32 @@ pillList("menuPostres", CURRENT_MENU.postres.map(p=>p.nombre));
 pillList("menuNinos", CURRENT_MENU.ninos.map(p=>p.nombre));
 
 }
+    function renderHorasBootstrap(funcion){
+
+const selHora = $("hora");
+
+const horas = window.BOOTSTRAP_HORAS[funcion] || [];
+
+selHora.innerHTML = "";
+
+horas.forEach(h=>{
+
+if(h.full) return;
+
+const opt = document.createElement("option");
+
+opt.value = h.hora;
+opt.textContent = `${h.hora} (${h.disponibles} disponibles)`;
+
+selHora.appendChild(opt);
+
+});
+
+if(selHora.options.length === 0){
+selHora.innerHTML = "<option>No hay horas disponibles</option>";
+}
+
+}
     const HORAS = [
       "5:30 PM","6:00 PM","6:30 PM","7:00 PM",
       "7:30 PM","8:00 PM","8:30 PM","9:00 PM"
@@ -2195,7 +2221,8 @@ addGuest();
 
 actualizarTotal();
 
-await cargarHorasDisponibles();
+hydrateMenu(first);
+renderHorasBootstrap(first);
 
 
 }else{
@@ -2233,6 +2260,7 @@ return;
 }
 
 window.ALL_MENUS = boot.menus;
+window.BOOTSTRAP_HORAS = boot.horas;
 
 fillSelect($("funcion"), boot.funciones);
 
@@ -2247,7 +2275,7 @@ $("funcion").value = first;
 
 hydrateMenu(first);
 
-await cargarHorasDisponibles();
+renderHorasBootstrap(first);
 
 /* activar primera card del carousel */
 
@@ -2298,7 +2326,8 @@ $("hora").disabled = false;
 /* cargar menu y horas */
 
 hydrateMenu($("funcion").value);
-await cargarHorasDisponibles();
+hydrateMenu(first);
+renderHorasBootstrap(first);
 
 /* 🔥 resetear personas completamente */
 
