@@ -1329,12 +1329,30 @@ Precio fijo adulto: <strong>$35</strong> · Menú infantil: <strong>$12.50</stro
     /***********************
      * CONFIG
      ***********************/
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbw8q6-m5WjCsElmNGzdx405HMwyUo_kZFrZ35uw9FjitY-kQE2fDHLuvtFwPG7LQS4G/exec";
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyjLlErQ0bJIIwmh5mTIBdtM4g7GR5BPCuVzkeR6DgI-Tv6dZ6i6IFJFCQREbYgDO6e/exec";
     const SHARED_SECRET = "demo123";
 
     const PRECIO_ADULTO = 35;
     const PRECIO_NINO = 12.50;
 
+  /** BootStrapOptimizador **/
+async function cargarBootstrap(){
+
+const res = await fetch(BACKEND_URL,{
+method:"POST",
+headers:{ "Content-Type":"text/plain;charset=utf-8" },
+body:JSON.stringify({
+action:"bootstrap",
+secret:SHARED_SECRET
+})
+});
+
+const data = await res.json();
+
+return data;
+
+}
+    
     /** Cargar Funciones Dinamicas **/
 async function cargarFunciones(){
 
@@ -1414,100 +1432,47 @@ track.appendChild(card);
       "7:30 PM","8:00 PM","8:30 PM","9:00 PM"
     ];
 
-async function cargarMenu() {
+async function cargarMenu(){
 
-  try {
+const funcion = $("funcion").value;
 
-    const res = await fetch(BACKEND_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        action: "menu",
-        funcion: $("funcion").value,
-        secret: SHARED_SECRET
-      })
-    });
+CURRENT_MENU = window.ALL_MENUS[funcion] || {
+aperitivos:[],
+principales:[],
+postres:[],
+ninos:[]
+};
 
-    const data = await res.json();
-
-    console.log("MENU RESPONSE:", data);
-
-    if (!data.ok) {
-      console.error("Menu error:", data);
-      return;
-    }
-
-    CURRENT_MENU = data.menu || {
-      aperitivos: [],
-      principales: [],
-      postres: [],
-      ninos:[]
-    };
-    PLATOS_MAP = {};
+PLATOS_MAP = {};
 
 [
-  ...CURRENT_MENU.aperitivos,
-  ...CURRENT_MENU.principales,
-  ...CURRENT_MENU.postres,
-  ...CURRENT_MENU.ninos
+...CURRENT_MENU.aperitivos,
+...CURRENT_MENU.principales,
+...CURRENT_MENU.postres,
+...CURRENT_MENU.ninos
 ].forEach(p=>{
-  PLATOS_MAP[p.nombre] = p;
+PLATOS_MAP[p.nombre] = p;
 });
 
-   regenerarSelectsGuests();
+pillList(
+"menuAperitivos",
+CURRENT_MENU.aperitivos.map(p=>p.nombre)
+);
 
-  function regenerarSelectsGuests(){
+pillList(
+"menuPrincipales",
+CURRENT_MENU.principales.map(p=>p.nombre)
+);
 
-  document.querySelectorAll(".guest").forEach(g=>{
+pillList(
+"menuPostres",
+CURRENT_MENU.postres.map(p=>p.nombre)
+);
 
-    fillSelect(
-      g.querySelector(".aperitivo"),
-      CURRENT_MENU.aperitivos.map(p=>p.nombre)
-    );
-
-    fillSelect(
-      g.querySelector(".principal"),
-      CURRENT_MENU.principales.map(p=>p.nombre)
-    );
-
-    fillSelect(
-      g.querySelector(".postre"),
-      CURRENT_MENU.postres.map(p=>p.nombre)
-    );
-
-    fillSelect(
-      g.querySelector(".principalNino"),
-      CURRENT_MENU.ninos.map(p=>p.nombre)
-    );
-
-  });
-
-}
-    
-    // 🔥 Actualizar los pills visuales del menú
-    pillList(
-      "menuAperitivos",
-      CURRENT_MENU.aperitivos.map(p => p.nombre)
-    );
-
-    pillList(
-      "menuPrincipales",
-      CURRENT_MENU.principales.map(p => p.nombre)
-    );
-
-    pillList(
-      "menuPostres",
-      CURRENT_MENU.postres.map(p => p.nombre)
-    );
-
-    pillList(
-      "menuNinos",
-      CURRENT_MENU.ninos.map(p => p.nombre)
-    );
-
-  } catch (err) {
-    console.error("Fetch error:", err);
-  }
+pillList(
+"menuNinos",
+CURRENT_MENU.ninos.map(p=>p.nombre)
+);
 
 }
     const MAX_GUESTS = 8;
@@ -2002,7 +1967,10 @@ btn.textContent = "Confirmar experiencia";
 $("year").textContent = new Date().getFullYear();
 
 /* llenar funciones */
-const funciones = await cargarFunciones();
+const boot = await cargarBootstrap();
+
+const funciones = boot.funciones;
+window.ALL_MENUS = boot.menus;
 
 fillSelect($("funcion"), funciones);
 
