@@ -726,71 +726,212 @@ drop-shadow(0 0 18px rgba(191,161,90,.18));
 .block + .block{
 border-top:1px solid rgba(255,255,255,.05);
 }    
-  /* ===== MENU HOVER PREMIUM ===== */
+/* ===== MENU HOVER PREMIUM ===== */
 
 .menuItem{
 position:relative;
 display:inline-block;
+
 border:1px solid var(--line);
 background:rgba(255,255,255,.04);
+
 border-radius:999px;
-padding:8px 12px;
+padding:8px 14px;
 margin:6px 8px 0 0;
+
 font-size:12px;
 cursor:pointer;
+
 transition:all .25s ease;
 }
+
+/* glow terracotta al hover */
 
 .menuItem:hover{
 border-color:var(--terracotta);
 color:white;
+
 box-shadow:
 0 0 0 1px var(--terracotta),
-0 10px 25px rgba(194,106,74,.25);
+0 12px 28px rgba(194,106,74,.25);
 }
+
+/* nombre del plato */
 
 .menuName{
 pointer-events:none;
 }
 
+/* TOOLTIP */
+
 .menuTooltip{
+
 position:absolute;
-left:0;
-top:130%;
-width:220px;
+
+left:50%;
+top:140%;
+
+transform:translateX(-50%) translateY(6px);
+
+width:240px;
+
 background:#111;
+
 border:1px solid var(--line);
-padding:12px;
-border-radius:12px;
+
+padding:14px;
+
+border-radius:14px;
+
 font-size:12px;
-line-height:1.5;
+line-height:1.6;
+
 color:var(--muted);
 
 opacity:0;
-transform:translateY(6px);
-transition:.25s;
+
+transition:all .25s ease;
 
 z-index:20;
+
+box-shadow:
+0 20px 50px rgba(0,0,0,.65),
+0 0 0 1px rgba(255,255,255,.04);
 }
+
+/* mostrar tooltip */
 
 .menuItem:hover .menuTooltip{
 opacity:1;
-transform:translateY(0);
-}  
+transform:translateX(-50%) translateY(0);
+}
+
+/* flecha elegante */
+
+.menuTooltip::before{
+
+content:"";
+
+position:absolute;
+
+top:-6px;
+left:50%;
+
+transform:translateX(-50%) rotate(45deg);
+
+width:12px;
+height:12px;
+
+background:#111;
+
+border-left:1px solid var(--line);
+border-top:1px solid var(--line);
+
+}
+
+/* ===== MODO MOVIL ===== */
+
 @media (hover:none){
 
 .menuTooltip{
+
 position:relative;
-opacity:1;
+
+left:auto;
+top:auto;
+
 transform:none;
-margin-top:6px;
-display:none;
+
+margin-top:8px;
+
 width:100%;
+
+opacity:1;
+
+display:none;
+
 }
 
 .menuItem.active .menuTooltip{
 display:block;
 }
+
+}
+    /* ===== FUNCTION CAROUSEL ===== */
+
+.functionCarousel{
+margin-bottom:30px;
+overflow-x:auto;
+padding-bottom:10px;
+}
+
+.functionTrack{
+display:flex;
+gap:16px;
+min-width:100%;
+}
+
+.functionCard{
+
+min-width:220px;
+
+border:1px solid var(--line);
+background:rgba(255,255,255,.04);
+
+border-radius:18px;
+padding:16px;
+
+cursor:pointer;
+
+transition:.25s ease;
+
+}
+
+.functionCard:hover{
+
+border-color:var(--terracotta);
+
+box-shadow:
+0 12px 30px rgba(194,106,74,.25);
+
+transform:translateY(-2px);
+
+}
+
+.functionCard.active{
+
+border-color:var(--terracotta);
+
+box-shadow:
+0 0 0 1px var(--terracotta),
+0 16px 40px rgba(194,106,74,.35);
+
+}
+
+.functionTitle{
+
+font-family:"Playfair Display",serif;
+
+font-size:16px;
+
+margin-bottom:6px;
+
+}
+
+.functionMeta{
+
+font-size:12px;
+color:var(--muted);
+
+}
+
+.functionMenuPreview{
+
+margin-top:10px;
+font-size:12px;
+color:rgba(255,255,255,.75);
+
+line-height:1.5;
 
 }
   </style>
@@ -859,6 +1000,16 @@ contemporánea y cuidadosamente ejecutada.
     <!-- MENÚ -->
     <section id="menu" class="block">
       <div class="sectionCard reveal">
+        <!-- FUNCTION CAROUSEL -->
+<div class="functionCarousel">
+
+  <div class="functionTrack" id="functionTrack">
+
+    <!-- se llenará con JS -->
+
+  </div>
+
+</div>
         <div class="sectionTitle">Menú disponible</div>
         <p class="sectionText">Opciones activas para la pre-orden. (Los adicionales se atienden en restaurante.)</p>
 
@@ -1110,6 +1261,54 @@ Precio fijo adulto: <strong>$35</strong> · Menú infantil: <strong>$12.50</stro
       "Función 1","Función 2","Función 3","Función 4",
       "Función 5","Función 6","Función 7","Función 8"
     ];
+    /** Carousel **/
+    function renderFunctionCarousel(){
+
+const track = document.getElementById("functionTrack");
+
+track.innerHTML = "";
+
+FUNCIONES.forEach(funcion=>{
+
+const card = document.createElement("div");
+
+card.className = "functionCard";
+
+card.innerHTML = `
+
+<div class="functionTitle">
+${funcion}
+</div>
+
+<div class="functionMeta">
+Experiencia gastronómica
+</div>
+
+<div class="functionMenuPreview">
+Ver menú disponible
+</div>
+
+`;
+
+card.addEventListener("click", async ()=>{
+
+document.querySelectorAll(".functionCard")
+.forEach(c=>c.classList.remove("active"));
+
+card.classList.add("active");
+
+$("funcion").value = funcion;
+
+await cargarMenu();
+await cargarHorasDisponibles();
+
+});
+
+track.appendChild(card);
+
+});
+
+}
     let CURRENT_MENU = {
       aperitivos: [],
       principales: [],
@@ -1711,7 +1910,8 @@ $("year").textContent = new Date().getFullYear();
 
 /* llenar funciones */
 fillSelect($("funcion"), FUNCIONES);
-
+renderFunctionCarousel();
+     
 /* hora bloqueada hasta elegir función */
 $("hora").innerHTML = "<option>Seleccione función primero</option>";
 $("hora").disabled = true;
@@ -1726,7 +1926,16 @@ addGuest();
 
 /* cuando cambie función */
 $("funcion").addEventListener("change", async () => {
+document.querySelectorAll(".functionCard")
+.forEach(c=>{
 
+if(c.textContent.includes($("funcion").value)){
+c.classList.add("active");
+}else{
+c.classList.remove("active");
+}
+
+});
   $("hora").disabled = false;
 
   await cargarMenu();
