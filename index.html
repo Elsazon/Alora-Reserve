@@ -1335,18 +1335,33 @@ Precio fijo adulto: <strong>$35</strong> · Menú infantil: <strong>$12.50</stro
     const PRECIO_ADULTO = 35;
     const PRECIO_NINO = 12.50;
 
-    const FUNCIONES = [
-      "Función 1","Función 2","Función 3","Función 4",
-      "Función 5","Función 6","Función 7","Función 8"
-    ];
+    /** Cargar Funciones Dinamicas **/
+async function cargarFunciones(){
+
+const res = await fetch(BACKEND_URL,{
+method:"POST",
+headers:{ "Content-Type":"text/plain;charset=utf-8" },
+body:JSON.stringify({
+action:"funciones",
+secret:SHARED_SECRET
+})
+});
+
+const data = await res.json();
+
+if(!data.ok) return [];
+
+return data.funciones;
+
+}
     /** Carousel **/
-    function renderFunctionCarousel(){
+    function renderFunctionCarousel(funciones){
 
 const track = document.getElementById("functionTrack");
 
 track.innerHTML = "";
 
-FUNCIONES.forEach(funcion=>{
+funciones.forEach(funcion=>{
 
 const card = document.createElement("div");
 
@@ -1987,8 +2002,11 @@ btn.textContent = "Confirmar experiencia";
 $("year").textContent = new Date().getFullYear();
 
 /* llenar funciones */
-fillSelect($("funcion"), FUNCIONES);
-renderFunctionCarousel();
+const funciones = await cargarFunciones();
+
+fillSelect($("funcion"), funciones);
+
+renderFunctionCarousel(funciones);
      
 /* hora bloqueada hasta elegir función */
 $("hora").innerHTML = "<option>Seleccione función primero</option>";
