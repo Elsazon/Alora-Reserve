@@ -1832,29 +1832,101 @@ fillSelect(wrap.querySelector(".principal"), CURRENT_MENU.principales.map(p => p
 fillSelect(wrap.querySelector(".postre"), CURRENT_MENU.postres.map(p => p.nombre));
 fillSelect(wrap.querySelector(".principalNino"), CURRENT_MENU.ninos.map(p => p.nombre));
 
+
 // 🔥 Proteínas dinámicas según plato
 wrap.querySelector(".principal").addEventListener("change", e => {
 
-      
-      wrap.querySelector('[data-action="remove"]').addEventListener("click", ()=>{
-        wrap.remove();
-        renumberGuests();
-        actualizarTotal();
-      });
+const platoNombre = e.target.value;
 
-      wrap.querySelector(".tipoPersona").addEventListener("change", (e)=>{
-        const adulto = wrap.querySelector(".menuAdulto");
-        const nino = wrap.querySelector(".menuNino");
+const bloqueProteina = wrap.querySelector(".proteinaBlock");
+const selectProteina = wrap.querySelector(".proteina");
 
-        if(e.target.value === "nino"){
-          adulto.style.display = "none";
-          nino.style.display = "block";
-        }else{
-          adulto.style.display = "block";
-          nino.style.display = "none";
-        }
-        actualizarTotal();
-      });
+/* limpiar siempre */
+
+selectProteina.innerHTML = "";
+selectProteina.value = "";
+
+/* si no hay plato seleccionado */
+
+if(!platoNombre){
+bloqueProteina.style.display = "none";
+return;
+}
+
+/* buscar info del plato */
+
+const plato = PLATOS_MAP[platoNombre];
+
+if(plato && plato.tieneProteina){
+
+fillSelect(selectProteina, plato.proteinas ? plato.proteinas : []);
+
+bloqueProteina.style.display = "block";
+
+}else{
+
+bloqueProteina.style.display = "none";
+
+}
+
+});
+
+
+/* eliminar persona */
+
+wrap.querySelector('[data-action="remove"]').addEventListener("click", ()=>{
+
+wrap.remove();
+
+renumberGuests();
+
+setTimeout(()=>{
+actualizarTotal();
+},0);
+
+});
+
+
+/* cambiar adulto / niño */
+
+wrap.querySelector(".tipoPersona").addEventListener("change", (e)=>{
+
+const adulto = wrap.querySelector(".menuAdulto");
+const nino = wrap.querySelector(".menuNino");
+
+if(e.target.value === "nino"){
+
+adulto.style.display = "none";
+nino.style.display = "block";
+
+}else{
+
+adulto.style.display = "block";
+nino.style.display = "none";
+
+}
+
+actualizarTotal();
+
+});
+
+
+/* recalcular total cuando cambie algo */
+
+wrap.addEventListener("change", (e)=>{
+
+if(
+e.target.classList.contains("tipoPersona") ||
+e.target.classList.contains("principal") ||
+e.target.classList.contains("principalNino") ||
+e.target.classList.contains("aperitivo") ||
+e.target.classList.contains("postre") ||
+e.target.classList.contains("proteina")
+){
+actualizarTotal();
+}
+
+});
 
       return wrap;
     }
