@@ -1568,7 +1568,7 @@ Por favor selecciona nuevamente los platos.
     /***********************
      * CONFIG
      ***********************/
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbwGglXfAmz_vINIsPRe-jed933naKkJyD0q01rjGXpKMmY0YgpdBaqob7WzrO05ot-2/exec";
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyvJHQOkJ607FUYH3oCkpfzOXKAIqPqyeFMJitXRC8Jp5kHhuTDLW9XHCkO7QXT094I/exec";
     const SHARED_SECRET = "demo123";
 
     const PRECIO_ADULTO = 35;
@@ -1642,7 +1642,7 @@ card.classList.add("active");
 
 $("funcion").value = funcion;
 
-await cargarMenu();
+hydrateMenu(funcion);
 await cargarHorasDisponibles();
 
 });
@@ -2286,7 +2286,7 @@ $("hora").disabled = false;
 
 /* cargar menu y horas */
 
-await cargarMenu();
+hydrateMenu($("funcion").value);
 await cargarHorasDisponibles();
 
 /* 🔥 resetear personas completamente */
