@@ -1143,10 +1143,109 @@ transform .8s ease;
 opacity:1;
 transform:translateY(0);
 }
+    /* ===== PAGE LOADER ===== */
+
+#pageLoader{
+
+position:fixed;
+inset:0;
+
+background:#0e1511;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
+z-index:99999;
+
+transition:opacity .6s ease;
+
+}
+
+#pageLoader img{
+
+height:110px;
+
+margin-bottom:30px;
+
+filter:
+drop-shadow(0 30px 60px rgba(0,0,0,.7))
+drop-shadow(0 0 18px rgba(191,161,90,.2));
+
+}
+
+/* linea animada */
+
+.loaderLine{
+
+width:120px;
+height:1px;
+
+background:var(--gold);
+
+opacity:.4;
+
+position:relative;
+overflow:hidden;
+
+margin-bottom:18px;
+
+}
+
+.loaderLine::after{
+
+content:"";
+
+position:absolute;
+
+left:-40%;
+top:0;
+
+width:40%;
+height:100%;
+
+background:var(--gold);
+
+animation:loaderMove 1.4s infinite;
+
+}
+
+@keyframes loaderMove{
+
+0%{left:-40%}
+100%{left:120%}
+
+}
+
+.loaderText{
+
+font-size:12px;
+
+letter-spacing:2px;
+
+color:rgba(255,255,255,.6);
+
+text-transform:uppercase;
+
+}
   </style>
 </head>
 
 <body>
+  <div id="pageLoader">
+
+  <img 
+  src="7E279685-0A21-4575-9890-80E64F81A59E.png"
+  alt="ALORA">
+
+  <div class="loaderLine"></div>
+
+  <div class="loaderText">
+  Preparando experiencia…
+  </div>
+
+</div>
   <div class="wrap">
 
     <!-- HERO -->
@@ -1477,6 +1576,18 @@ Por favor selecciona nuevamente los platos.
     const PRECIO_ADULTO = 35;
     const PRECIO_NINO = 12.50;
 
+/** Loader **/
+    function hideLoader(){
+
+const loader = document.getElementById("pageLoader");
+
+loader.style.opacity = "0";
+
+setTimeout(()=>{
+loader.style.display = "none";
+},600);
+
+}
   /** BootStrapOptimizador **/
 async function cargarBootstrap(){
 
@@ -2156,16 +2267,17 @@ btn.textContent = "Confirmar experiencia";
 
 $("year").textContent = new Date().getFullYear();
 
-/* llenar funciones */
-const boot = await cargarBootstrap();
+cargarBootstrap().then(boot=>{
 
+hideLoader();
+  
 const funciones = boot.funciones;
 window.ALL_MENUS = boot.menus;
-window.ALL_HORAS = boot.horas;
-     
-fillSelect($("funcion"), funciones);
 
+fillSelect($("funcion"), funciones);
 renderFunctionCarousel(funciones);
+
+});
      
 /* hora bloqueada hasta elegir función */
 $("hora").innerHTML = "<option>Seleccione función primero</option>";
@@ -2174,7 +2286,7 @@ $("hora").disabled = true;
 /* crear primer guest */
 $("guests").innerHTML = "";
 guestCount = 0;
-addGuest();
+
 
 
      
