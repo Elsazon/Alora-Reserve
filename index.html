@@ -1986,7 +1986,9 @@ btn.textContent = "Confirmar experiencia";
 
    document.addEventListener("DOMContentLoaded", async ()=>{
 
+if($("year")){
 $("year").textContent = new Date().getFullYear();
+}
 
 /* llenar funciones */
 const boot = await cargarBootstrap();
@@ -2058,23 +2060,29 @@ initReveal();
 /* MAP POPUP */
 
 const mapModal = document.getElementById("mapModal");
+const openMap = document.getElementById("openMap");
+const closeMap = document.getElementById("closeMap");
 
-document.getElementById("openMap").addEventListener("click",(e)=>{
+if(openMap){
+openMap.addEventListener("click",(e)=>{
 e.preventDefault();
 mapModal.style.display="flex";
 });
+}
 
-document.getElementById("closeMap").addEventListener("click",()=>{
+if(closeMap){
+closeMap.addEventListener("click",()=>{
 mapModal.style.display="none";
 });
+}
 
+if(mapModal){
 mapModal.addEventListener("click",(e)=>{
 if(e.target===mapModal){
 mapModal.style.display="none";
 }
 });
-
-});
+}
   </script>
   
 <div id="mapModal" style="
