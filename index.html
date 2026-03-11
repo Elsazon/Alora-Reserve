@@ -1996,6 +1996,12 @@ window.ALL_MENUS = boot.menus;
 
 fillSelect($("funcion"), funciones);
 
+$("funcion").value = funciones[0];
+
+await cargarMenu();
+await cargarHorasDisponibles();
+
+
 renderFunctionCarousel(funciones);
      
 /* hora bloqueada hasta elegir función */
