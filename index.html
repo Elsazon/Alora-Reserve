@@ -1343,7 +1343,7 @@ Precio fijo adulto: <strong>$35</strong> · Menú infantil: <strong>$12.50</stro
             </div>
           </div>
 
-        <label for="email">Email</label>
+<label for="email">Email (recibirás tu confirmación y QR)</label>
         <input id="email" type="email" placeholder="correo@email.com" autocomplete="email">
           <div class="row2">
             <div>
@@ -1937,6 +1937,7 @@ function addGuest(){
     function validate(payload){
       if(!payload.cliente || payload.cliente.trim().length < 3) return "Escribe el nombre del cliente.";
       if(!payload.phone || payload.phone.trim().length < 7) return "Escribe un teléfono válido.";
+      if(!payload.email || !payload.email.includes("@")) return "Escribe un email válido para enviar la confirmación.";
       if(!payload.funcion) return "Selecciona la función.";
       if(!payload.hora) return "Selecciona una hora.";
 
