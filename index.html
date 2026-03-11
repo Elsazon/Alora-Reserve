@@ -1374,6 +1374,7 @@ funciones.forEach(funcion=>{
 const card = document.createElement("div");
 
 card.className = "functionCard";
+card.dataset.funcion = funcion;
 
 card.innerHTML = `
 
@@ -1435,6 +1436,8 @@ grid.classList.remove("show")
 await new Promise(r=>setTimeout(r,200))
 
 /* cambiar menú */
+
+if(!window.ALL_MENUS) return;
 
 CURRENT_MENU = window.ALL_MENUS[funcion] || {
 aperitivos:[],
@@ -1999,8 +2002,10 @@ renderFunctionCarousel(funciones);
 $("hora").innerHTML = "<option>Seleccione función primero</option>";
 $("hora").disabled = true;
 
-/* cargar menú inicial */
-await cargarMenu();
+/* cargar menú solo si hay función */
+if($("funcion").value){
+  await cargarMenu();
+}
 
 /* crear primer guest */
 $("guests").innerHTML = "";
@@ -2012,7 +2017,7 @@ $("funcion").addEventListener("change", async () => {
 document.querySelectorAll(".functionCard")
 .forEach(c=>{
 
-if(c.textContent.includes($("funcion").value)){
+if(c.dataset.funcion === $("funcion").value){
 c.classList.add("active");
 }else{
 c.classList.remove("active");
