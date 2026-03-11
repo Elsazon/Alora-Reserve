@@ -1552,6 +1552,8 @@ async function cargarMenu(){
 
 const funcion = $("funcion").value;
 
+  if(!funcion) return;
+
 CURRENT_MENU = window.ALL_MENUS[funcion] || {
 aperitivos:[],
 principales:[],
@@ -2118,8 +2120,19 @@ c.classList.remove("active");
 });
   $("hora").disabled = false;
 
-  await cargarMenu();
-  await cargarHorasDisponibles();
+ await cargarMenu();
+await cargarHorasDisponibles();
+
+/* 🔥 recargar selects de guests existentes */
+
+document.querySelectorAll(".guest").forEach(g=>{
+
+fillSelect(g.querySelector(".aperitivo"), CURRENT_MENU.aperitivos.map(p=>p.nombre));
+fillSelect(g.querySelector(".principal"), CURRENT_MENU.principales.map(p=>p.nombre));
+fillSelect(g.querySelector(".postre"), CURRENT_MENU.postres.map(p=>p.nombre));
+fillSelect(g.querySelector(".principalNino"), CURRENT_MENU.ninos.map(p=>p.nombre));
+
+});
 
   document.querySelectorAll(".principal").forEach(s => s.value = "");
   document.querySelectorAll(".aperitivo").forEach(s => s.value = "");
