@@ -1606,25 +1606,6 @@ return data;
 
 }
     
-    /** Cargar Funciones Dinamicas **/
-async function cargarFunciones(){
-
-const res = await fetch(BACKEND_URL,{
-method:"POST",
-headers:{ "Content-Type":"text/plain;charset=utf-8" },
-body:JSON.stringify({
-action:"funciones",
-secret:SHARED_SECRET
-})
-});
-
-const data = await res.json();
-
-if(!data.ok) return [];
-
-return data.funciones;
-
-}
     /** Carousel **/
     function renderFunctionCarousel(funciones){
 
@@ -2079,12 +2060,6 @@ function addGuest(){
 
   $("guests").appendChild(guest);
 
-  // 🔥 Forzar carga de menú después de insertarlo
-  fillSelect(guest.querySelector(".aperitivo"), CURRENT_MENU.aperitivos.map(p => p.nombre));
-  fillSelect(guest.querySelector(".principal"), CURRENT_MENU.principales.map(p => p.nombre));
-  fillSelect(guest.querySelector(".postre"), CURRENT_MENU.postres.map(p => p.nombre));
-  fillSelect(guest.querySelector(".principalNino"), CURRENT_MENU.ninos.map(p => p.nombre));
-
   renumberGuests();
   actualizarTotal();
 
@@ -2267,25 +2242,30 @@ btn.textContent = "Confirmar experiencia";
 
 $("year").textContent = new Date().getFullYear();
 
-cargarBootstrap().then(boot=>{
+/* cargar bootstrap primero */
 
-hideLoader();
-  
-const funciones = boot.funciones;
+const boot = await cargarBootstrap();
+
 window.ALL_MENUS = boot.menus;
 
-fillSelect($("funcion"), funciones);
-renderFunctionCarousel(funciones);
+fillSelect($("funcion"), boot.funciones);
 
-});
-     
-/* hora bloqueada hasta elegir función */
+renderFunctionCarousel(boot.funciones);
+
+/* ocultar loader SOLO cuando todo esté listo */
+
+hideLoader();
+
+/* hora bloqueada */
+
 $("hora").innerHTML = "<option>Seleccione función primero</option>";
 $("hora").disabled = true;
 
 /* crear primer guest */
+
 $("guests").innerHTML = "";
 guestCount = 0;
+addGuest();
 
 
 
