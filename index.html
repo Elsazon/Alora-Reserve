@@ -726,6 +726,73 @@ drop-shadow(0 0 18px rgba(191,161,90,.18));
 .block + .block{
 border-top:1px solid rgba(255,255,255,.05);
 }    
+  /* ===== MENU HOVER PREMIUM ===== */
+
+.menuItem{
+position:relative;
+display:inline-block;
+border:1px solid var(--line);
+background:rgba(255,255,255,.04);
+border-radius:999px;
+padding:8px 12px;
+margin:6px 8px 0 0;
+font-size:12px;
+cursor:pointer;
+transition:all .25s ease;
+}
+
+.menuItem:hover{
+border-color:var(--terracotta);
+color:white;
+box-shadow:
+0 0 0 1px var(--terracotta),
+0 10px 25px rgba(194,106,74,.25);
+}
+
+.menuName{
+pointer-events:none;
+}
+
+.menuTooltip{
+position:absolute;
+left:0;
+top:130%;
+width:220px;
+background:#111;
+border:1px solid var(--line);
+padding:12px;
+border-radius:12px;
+font-size:12px;
+line-height:1.5;
+color:var(--muted);
+
+opacity:0;
+transform:translateY(6px);
+transition:.25s;
+
+z-index:20;
+}
+
+.menuItem:hover .menuTooltip{
+opacity:1;
+transform:translateY(0);
+}  
+@media (hover:none){
+
+.menuTooltip{
+position:relative;
+opacity:1;
+transform:none;
+margin-top:6px;
+display:none;
+width:100%;
+}
+
+.menuItem.active .menuTooltip{
+display:block;
+}
+
+}
   </style>
 </head>
 
@@ -1033,7 +1100,7 @@ Precio fijo adulto: <strong>$35</strong> · Menú infantil: <strong>$12.50</stro
     /***********************
      * CONFIG
      ***********************/
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbywQVoGvf5N0lP5GHbkAbDljyfGA40BtgzJeCLB5IkyU3M4wJublA6EhkUEypAQwb47/exec";
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbwpt9aU0L_IV8SRjcEtxhq_ClJ3Bj8r529ovUANVrjiq9xDIaob4IxDbcDvmoC3uKnc/exec";
     const SHARED_SECRET = "demo123";
 
     const PRECIO_ADULTO = 35;
@@ -1087,7 +1154,9 @@ async function cargarMenu() {
     PLATOS_MAP = {};
 
 [
+  ...CURRENT_MENU.aperitivos,
   ...CURRENT_MENU.principales,
+  ...CURRENT_MENU.postres,
   ...CURRENT_MENU.ninos
 ].forEach(p=>{
   PLATOS_MAP[p.nombre] = p;
@@ -1186,17 +1255,42 @@ function fillSelect(selectEl, options){
 
 }
 
-    function pillList(containerId, items){
-      const c = $(containerId);
-      c.innerHTML = "";
-      items.forEach(x=>{
-        const s = document.createElement("span");
-        s.className = "pill";
-        s.textContent = x;
-        c.appendChild(s);
-      });
-    }
+function pillList(containerId, items){
 
+  const c = $(containerId);
+  c.innerHTML = "";
+
+  items.forEach(name=>{
+
+    const plato = PLATOS_MAP[name] || {};
+
+    const el = document.createElement("div");
+    el.className = "menuItem";
+
+    el.innerHTML = `
+      <div class="menuName">${name}</div>
+      <div class="menuTooltip">
+        ${plato.descripcion || "Descripción próximamente"}
+      </div>
+    `;
+
+    c.appendChild(el);
+  });
+}
+
+    /* TAP PARA VER DESCRIPCION EN MOVIL */
+
+document.addEventListener("click", e=>{
+
+  const item = e.target.closest(".menuItem");
+
+  if(!item) return;
+
+  if(window.matchMedia("(hover:none)").matches){
+    item.classList.toggle("active");
+  }
+
+});
     /***********************
      * Animaciones suaves (scroll reveal)
      ***********************/
