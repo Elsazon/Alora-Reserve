@@ -1129,6 +1129,20 @@ height:1px;
 background:var(--gold);
 opacity:.4;
 }
+  /* ===== EDITORIAL REVEAL ===== */
+
+.reveal{
+opacity:0;
+transform:translateY(25px);
+transition:
+opacity .8s ease,
+transform .8s ease;
+}
+
+.reveal.show{
+opacity:1;
+transform:translateY(0);
+}
   </style>
 </head>
 
