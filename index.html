@@ -53,6 +53,18 @@
       padding: 64px 0 34px;
       position:relative;
     }
+    .heroDivider{
+
+width:60px;
+height:1px;
+
+background:var(--line);
+
+margin:18px auto;
+
+opacity:.6;
+
+}
     .heroInner{
       width:100%;
       border:1px solid var(--line);
@@ -971,45 +983,9 @@ font-size:16px;
 .functionCarousel{
 position:relative;
 }
-
-.functionCarousel::before,
-.functionCarousel::after{
-
-content:"";
-
-position:absolute;
-top:0;
-bottom:0;
-
-width:50px;
-
-pointer-events:none;
-
-z-index:3;
-
-}
-
-.functionCarousel::before{
-
-left:0;
-
-background:linear-gradient(
-to right,
-var(--bg1),
-transparent
-);
-
-}
-
-.functionCarousel::after{
-
-right:0;
-
-background:linear-gradient(
-to left,
-var(--bg1),
-transparent
-);
+.functionCarousel{
+padding-bottom:20px;
+margin-bottom:40px;
 }
 /* HERO MICHELIN STYLE */
 
@@ -1137,6 +1113,22 @@ transform:translateY(-1px);
 .functionCarousel{
 scroll-padding-left:20px;
 }    
+.sectionTitle{
+position:relative;
+padding-bottom:12px;
+}
+
+.sectionTitle::after{
+content:"";
+position:absolute;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
+width:60px;
+height:1px;
+background:var(--gold);
+opacity:.4;
+}
   </style>
 </head>
 
@@ -1159,6 +1151,8 @@ scroll-padding-left:20px;
 
 </div>
 
+<div class="heroDivider"></div>
+  
 <div class="heroMeta">
 Universidad Ana G. Méndez · Recinto de Carolina
 </div>
