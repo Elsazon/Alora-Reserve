@@ -1643,7 +1643,7 @@ card.classList.add("active");
 $("funcion").value = funcion;
 
 hydrateMenu(funcion);
-await cargarHorasDisponibles();
+renderHorasBootstrap(funcion);
 
 });
 
@@ -1805,62 +1805,7 @@ document.addEventListener("click", e=>{
     /***********************
      * Disponibilidad por hora (oculta las llenas)
      ***********************/
-async function cargarHorasDisponibles(){
 
-  const selHora = $("hora");
-  const funcion = $("funcion").value;
-
-  if(!funcion){
-    selHora.innerHTML = "<option>Seleccione función primero</option>";
-    selHora.disabled = true;
-    return;
-  }
-
-  selHora.disabled = false;
-  selHora.innerHTML = "<option>Cargando...</option>";
-
-  try{
-
-    const res = await fetch(BACKEND_URL,{
-      method:"POST",
-      headers:{ "Content-Type":"text/plain;charset=utf-8" },
-      body: JSON.stringify({
-        action:"availability_all",
-        funcion,
-        secret: SHARED_SECRET
-      })
-    });
-
-    const data = await res.json();
-    console.log("HORAS RESPONSE:", data);
-
-    if(!data || !data.ok || !Array.isArray(data.horas)){
-      console.error("Availability error:", data);
-      selHora.innerHTML = "<option>Error cargando horas</option>";
-      return;
-    }
-
-    selHora.innerHTML = "";
-
-    data.horas.forEach(h=>{
-      if(h.full) return;
-
-      const opt = document.createElement("option");
-      opt.value = h.hora;
-      opt.textContent = `${h.hora} (${h.disponibles} disponibles)`;
-      selHora.appendChild(opt);
-    });
-
-    if(selHora.options.length === 0){
-      selHora.innerHTML = "<option>No hay horas disponibles</option>";
-    }
-
-  }catch(err){
-    console.error("HORAS FETCH ERROR:", err);
-    selHora.innerHTML = "<option>Error cargando horas</option>";
-  }
-
-}
     /***********************
      * Total
      ***********************/
@@ -2273,9 +2218,10 @@ const first = boot.funciones[0];
 
 $("funcion").value = first;
 
-hydrateMenu(first);
+const funcion = $("funcion").value;
 
-renderHorasBootstrap(first);
+hydrateMenu(funcion);
+renderHorasBootstrap(funcion);
 
 /* activar primera card del carousel */
 
@@ -2325,9 +2271,10 @@ $("hora").disabled = false;
 
 /* cargar menu y horas */
 
-hydrateMenu($("funcion").value);
-hydrateMenu(first);
-renderHorasBootstrap(first);
+const funcion = $("funcion").value;
+
+hydrateMenu(funcion);
+renderHorasBootstrap(funcion);
 
 /* 🔥 resetear personas completamente */
 
