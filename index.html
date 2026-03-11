@@ -2161,7 +2161,8 @@ const boot = await cargarBootstrap();
 
 const funciones = boot.funciones;
 window.ALL_MENUS = boot.menus;
-
+window.ALL_HORAS = boot.horas;
+     
 fillSelect($("funcion"), funciones);
 
 renderFunctionCarousel(funciones);
@@ -2170,14 +2171,13 @@ renderFunctionCarousel(funciones);
 $("hora").innerHTML = "<option>Seleccione función primero</option>";
 $("hora").disabled = true;
 
-/* cargar menú inicial */
-await cargarMenu();
-
 /* crear primer guest */
 $("guests").innerHTML = "";
 guestCount = 0;
 addGuest();
 
+
+     
 /* cuando cambie función */
 $("funcion").addEventListener("change", async () => {
 
