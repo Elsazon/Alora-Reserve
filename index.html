@@ -1010,6 +1010,118 @@ to left,
 var(--bg1),
 transparent
 );
+n"}
+/* HERO MICHELIN STYLE */
+
+.hero{
+padding-top:200px;
+padding-bottom:170px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.heroInner{
+width:100%;
+border:1px solid rgba(255,255,255,.06);
+border-radius:32px;
+background:rgba(255,255,255,.04);
+padding:100px 40px;
+text-align:center;
+position:relative;
+overflow:hidden;
+box-shadow:0 60px 140px rgba(0,0,0,.7);
+}
+
+.heroCenter{
+max-width:720px;
+margin:auto;
+position:relative;
+z-index:2;
+}
+
+.heroLogo img{
+height:210px;
+
+filter:
+drop-shadow(0 35px 80px rgba(0,0,0,.7))
+drop-shadow(0 0 30px rgba(191,161,90,.25));
+
+margin-bottom:34px;
+}
+
+.heroMeta{
+font-size:12px;
+letter-spacing:2px;
+color:var(--muted);
+text-transform:uppercase;
+margin-bottom:20px;
+}
+
+.heroTitle{
+font-family:"Playfair Display",serif;
+font-size:48px;
+margin-bottom:18px;
+}
+
+.heroText{
+color:var(--muted);
+line-height:1.9;
+font-size:15px;
+margin-bottom:30px;
+}
+
+.heroButtons{
+display:flex;
+gap:14px;
+justify-content:center;
+flex-wrap:wrap;
+margin-top:10px
+}
+  .functionSection{
+margin-bottom:40px;
+}
+
+.functionCard{
+
+flex:0 0 240px;
+
+padding:20px;
+
+border-radius:22px;
+
+border:1px solid rgba(255,255,255,.08);
+
+background:linear-gradient(
+180deg,
+rgba(255,255,255,.05),
+rgba(255,255,255,.02)
+);
+
+cursor:pointer;
+
+transition:.35s ease;
+
+}
+
+.functionCard:hover{
+
+transform:translateY(-3px);
+
+border-color:var(--terracotta);
+
+box-shadow:
+0 20px 50px rgba(194,106,74,.25);
+
+}
+
+.functionCard.active{
+
+border-color:var(--terracotta);
+
+box-shadow:
+0 0 0 1px var(--terracotta),
+0 20px 60px rgba(194,106,74,.35);
 
 }
   </style>
@@ -1019,61 +1131,54 @@ transparent
   <div class="wrap">
 
     <!-- HERO -->
-    <section class="hero">
-      <div class="heroInner floatIn">
-        <div class="glow" aria-hidden="true"></div>
+    }
+<section class="hero">
 
-        <div class="heroGrid">
-          <div>
-            <div class="heroLogo">
+<div class="heroInner floatIn">
+
+<div class="glow"></div>
+
+<div class="heroCenter">
+
+<div class="heroLogo">
 
 <img src="7E279685-0A21-4575-9890-80E64F81A59E.png" alt="ALORA">
 
 </div>
 
-  <div class="brandMeta" style="text-align:center;margin-top:10px">
+<div class="heroMeta">
 Universidad Ana G. Méndez · Recinto de Carolina
 </div>
 
-            <p class="lede">
+<h1 class="heroTitle">
+Una experiencia gastronómica
+</h1>
 
-ALORA es una propuesta gastronómica de autor donde la
-<strong>tradición italiana</strong> y la
-<strong>identidad puertorriqueña</strong>
-se encuentran en una experiencia culinaria elegante,
-contemporánea y cuidadosamente ejecutada.
+<p class="heroText">
+
+ALORA presenta una propuesta culinaria donde la tradición italiana
+y la identidad puertorriqueña se encuentran en una experiencia
+gastronómica elegante, contemporánea y cuidadosamente ejecutada.
 
 </p>
 
-            <div class="chips">
-              <div class="chip">Tradición</div>
-              <div class="chip">Técnica</div>
-              <div class="chip">Elegancia</div>
-              <div class="chip">Cupos por hora</div>
-            </div>
-          </div>
+<div class="heroButtons">
 
-          <aside class="heroCard">
-            <div class="infoRow"><div>Formato</div><span>Pre-orden por persona</span></div>
-            <div class="infoRow"><div>Adulto</div><span>$35 · 1 aperitivo + 1 principal + 1 postre</span></div>
-            <div class="infoRow"><div>Niño</div><span>$12.50 · menú infantil</span></div>
-<div class="infoRow">
-  <div>Ubicación</div>
-  <span>
-    <a href="#" id="openMap" style="text-decoration:underline;cursor:pointer;">
-      Restaurante UAGM Carolina
-    </a>
-  </span>
+<a class="btn btnPrimary" href="#menu">
+Explorar menú
+</a>
+
+<a class="btn btnGhost" href="#reservar">
+Reservar experiencia
+</a>
+
 </div>
 
-            <div class="ctaRow">
-              <a class="btn btnPrimary" href="#reservar">Reservar ahora</a>
-              <a class="btn btnGhost" href="#menu">Ver menú</a>
-            </div>
-          </aside>
-        </div>
-      </div>
-    </section>
+</div>
+
+</div>
+
+</section
 
     <!-- MENÚ -->
     <section id="menu" class="block">
@@ -1169,7 +1274,7 @@ y se facturarán por separado.
 
     <div class="sectionCard reveal">
 
-<div class="sectionTitle">La experiencia gastronómica</div>
+<div class="sectionTitle">La propuesta</div>
 
 <p class="sectionText" style="text-align:center">
 
