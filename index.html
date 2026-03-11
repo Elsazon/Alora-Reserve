@@ -952,6 +952,27 @@ height:18px;
 accent-color:var(--terracotta);
 cursor:pointer;
 }
+    /* MENU FADE */
+
+.menuFade{
+
+opacity:0;
+
+transform:translateY(6px);
+
+transition:
+opacity .35s ease,
+transform .35s ease;
+
+}
+
+.menuFade.show{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
   </style>
 </head>
 
@@ -1012,7 +1033,7 @@ Reservar experiencia
         <div class="sectionTitle">Menú disponible</div>
         <p class="sectionText">Opciones activas para la pre-orden. (Los adicionales se atienden en restaurante.)</p>
 
-        <div class="menuGrid">
+<div class="menuGrid menuFade show" id="menuGrid">
           <div class="menuCol">
             <h3>Aperitivos</h3>
             <div id="menuAperitivos"></div>
@@ -1355,16 +1376,26 @@ track.appendChild(card);
 
 async function cargarMenu(){
 
-const funcion = $("funcion").value;
+const funcion = $("funcion").value
+
+const grid = document.getElementById("menuGrid")
+
+/* fade out */
+
+grid.classList.remove("show")
+
+await new Promise(r=>setTimeout(r,200))
+
+/* cambiar menú */
 
 CURRENT_MENU = window.ALL_MENUS[funcion] || {
 aperitivos:[],
 principales:[],
 postres:[],
 ninos:[]
-};
+}
 
-PLATOS_MAP = {};
+PLATOS_MAP = {}
 
 [
 ...CURRENT_MENU.aperitivos,
@@ -1372,28 +1403,34 @@ PLATOS_MAP = {};
 ...CURRENT_MENU.postres,
 ...CURRENT_MENU.ninos
 ].forEach(p=>{
-PLATOS_MAP[p.nombre] = p;
-});
+PLATOS_MAP[p.nombre] = p
+})
 
 pillList(
 "menuAperitivos",
 CURRENT_MENU.aperitivos.map(p=>p.nombre)
-);
+)
 
 pillList(
 "menuPrincipales",
 CURRENT_MENU.principales.map(p=>p.nombre)
-);
+)
 
 pillList(
 "menuPostres",
 CURRENT_MENU.postres.map(p=>p.nombre)
-);
+)
 
 pillList(
 "menuNinos",
 CURRENT_MENU.ninos.map(p=>p.nombre)
-);
+)
+
+/* fade in */
+
+setTimeout(()=>{
+grid.classList.add("show")
+},50)
 
 }
     const MAX_GUESTS = 8;
