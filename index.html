@@ -2034,7 +2034,9 @@ c.classList.remove("active");
 });
   $("hora").disabled = false;
 
-  await cargarMenu();
+if($("funcion").value){
+await cargarMenu();
+}
   await cargarHorasDisponibles();
 
   document.querySelectorAll(".principal").forEach(s => s.value = "");
