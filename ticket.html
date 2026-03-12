@@ -119,12 +119,23 @@ text-transform:uppercase;
 
 .code{
 
-font-size:28px;
+font-size:30px;
+
 font-weight:600;
 
-letter-spacing:3px;
+letter-spacing:4px;
 
-margin:10px 0 24px;
+margin:12px 0 26px;
+
+padding:12px 24px;
+
+display:inline-block;
+
+border:2px solid var(--terracotta);
+
+border-radius:14px;
+
+background:rgba(255,255,255,.03);
 
 }
 
@@ -273,7 +284,13 @@ color:var(--muted);
 <div class="title">Reserva confirmada</div>
 
 <div class="meta">Experiencia gastronómica</div>
-
+<div style="
+width:80px;
+height:1px;
+background:var(--gold);
+margin:18px auto 22px;
+opacity:.6;
+"></div>
 <div class="codeLabel">Código de reserva</div>
 
 <div class="code" id="ticketCode">
@@ -348,7 +365,10 @@ const params = new URLSearchParams(window.location.search);
 
 const ticketId = params.get("id");
 
-document.getElementById("ticketCode").textContent = ticketId;
+const shortCode =
+"ALR-" + ticketId.replace(/-/g,"").slice(-6).toUpperCase();
+
+document.getElementById("ticketCode").textContent = shortCode;
 
 
 /* ======================
