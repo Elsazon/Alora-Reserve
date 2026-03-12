@@ -1605,6 +1605,16 @@ return data;
 }
     
     /** Carousel **/
+    const FUNCION_FECHAS = {
+"Función 1":"19 marzo",
+"Función 2":"26 marzo",
+"Función 3":"2 abril",
+"Función 4":"9 abril",
+"Funcion 5":"16 abril",
+"Funcion 6":"23 abril",
+"Funcion 7":"30 abril",
+"Funcion 8":"7 mayo"
+};
     function renderFunctionCarousel(funciones){
 
 const track = document.getElementById("functionTrack");
@@ -1624,8 +1634,9 @@ ${funcion}
 </div>
 
 <div class="functionMeta">
-Experiencia gastronómica
+${FUNCION_FECHAS[funcion] || ""}
 </div>
+
 
 <div class="functionMenuPreview">
 Ver menú disponible
