@@ -306,7 +306,7 @@ CONFIG
 ====================== */
 
 const BACKEND_URL =
-https://script.google.com/macros/s/AKfycbxEOh2tfBAE1polFuSI_BQsPfVPZMaoKAuTD_idk7CsYsZ5Bu-A07bpvqaNVl6iRqC_/exec";
+"https://script.google.com/macros/s/AKfycbxEOh2tfBAE1polFuSI_BQsPfVPZMaoKAuTD_idk7CsYsZ5Bu-A07bpvqaNVl6iRqC_/exec";
 
 const SHARED_SECRET = "demo123";
 
@@ -408,7 +408,12 @@ Postre: ${g.postre || "-"}
 menuDiv.appendChild(item);
 
 });
+if(reserva.notas){
 
+document.getElementById("notesBlock").style.display = "block";
+document.getElementById("notesText").textContent = reserva.notas;
+
+}
 }
 
 
