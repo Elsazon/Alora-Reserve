@@ -1,67 +1,193 @@
 <!doctype html>
-<html>
+<html lang="es">
+
 <head>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Reserva ALORA</title>
+<title>ALORA · Ticket</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
+:root{
+
+--bg0:#0e1511;
+--bg1:#121a16;
+
+--ink:#f4f1ea;
+--muted:rgba(244,241,234,.65);
+
+--terracotta:#c26a4a;
+--gold:#bfa15a;
+
+--line:rgba(255,255,255,.08);
+
+}
+
 body{
+
 margin:0;
-background:#0e1511;
-font-family:Arial;
-color:#f4f1ea;
+font-family:Inter;
+
+color:var(--ink);
+
+background:
+radial-gradient(900px 600px at 15% 10%, rgba(194,106,74,.10), transparent 60%),
+radial-gradient(1000px 700px at 85% 20%, rgba(79,81,56,.15), transparent 60%),
+linear-gradient(180deg,var(--bg0),var(--bg1));
+
 display:flex;
 align-items:center;
 justify-content:center;
-height:100vh;
+
+min-height:100vh;
+
 }
 
-.card{
+.ticket{
 
-background:#121a16;
-padding:40px;
-border-radius:20px;
-border:1px solid rgba(255,255,255,.08);
+width:520px;
+max-width:92%;
+
+background:rgba(255,255,255,.05);
+
+border:1px solid var(--line);
+
+border-radius:28px;
+
+padding:50px;
+
+box-shadow:
+0 40px 120px rgba(0,0,0,.7);
+
 text-align:center;
 
-box-shadow:0 40px 100px rgba(0,0,0,.7);
-
-max-width:400px;
-width:90%;
+backdrop-filter:blur(8px);
 
 }
 
-.logo{
-height:90px;
-margin-bottom:20px;
+.logo img{
+
+height:130px;
+
+filter:
+drop-shadow(0 30px 70px rgba(0,0,0,.6))
+drop-shadow(0 0 18px rgba(191,161,90,.15));
+
+margin-bottom:24px;
+
+}
+
+.title{
+
+font-family:"Playfair Display",serif;
+font-size:30px;
+
+margin-bottom:8px;
+
+}
+
+.meta{
+
+font-size:12px;
+letter-spacing:2px;
+
+color:var(--muted);
+
+text-transform:uppercase;
+
+margin-bottom:26px;
+
+}
+
+.codeLabel{
+
+font-size:12px;
+letter-spacing:2px;
+
+color:var(--muted);
+
+text-transform:uppercase;
+
 }
 
 .code{
 
 font-size:28px;
-letter-spacing:4px;
-border:2px solid #c26a4a;
-padding:10px 20px;
-display:inline-block;
-border-radius:10px;
-margin-bottom:20px;
+font-weight:600;
+
+letter-spacing:3px;
+
+margin:10px 0 24px;
+
+}
+
+.row{
+
+display:flex;
+justify-content:space-between;
+
+padding:10px 0;
+
+border-bottom:1px solid var(--line);
+
+font-size:14px;
+
+}
+
+.row span{
+
+color:var(--muted);
+
+}
+
+.menu{
+
+margin-top:28px;
+text-align:left;
+
+}
+
+.menu h3{
+
+font-family:"Playfair Display",serif;
+
+margin-bottom:14px;
 
 }
 
 .qr{
-background:white;
-padding:12px;
-border-radius:12px;
-display:inline-block;
+
+margin-top:36px;
+
 }
 
-.small{
-margin-top:20px;
+.qr img{
+
+width:170px;
+
+background:white;
+
+padding:12px;
+
+border-radius:12px;
+
+}
+
+.note{
+
+margin-top:12px;
+
 font-size:12px;
-color:rgba(244,241,234,.6);
+
+color:var(--muted);
+
 }
 
 </style>
@@ -70,33 +196,70 @@ color:rgba(244,241,234,.6);
 
 <body>
 
-<div class="card">
+<div class="ticket">
 
-<img class="logo"
-src="https://raw.githubusercontent.com/Elsazon/Alora-Reserve/main/7E279685-0A21-4575-9890-80E64F81A59E.png">
+<div class="logo">
 
-<div id="code" class="code"></div>
+<img src="7E279685-0A21-4575-9890-80E64F81A59E.png">
 
-<div class="qr">
-<img id="qr">
 </div>
 
-<div class="small">
-Presenta este código al llegar
+<div class="title">Reserva confirmada</div>
+
+<div class="meta">Experiencia gastronómica</div>
+
+<div class="codeLabel">Código de reserva</div>
+
+<div class="code" id="ticketCode">
+Cargando...
+</div>
+
+<div class="row">
+<span>Cliente</span>
+<div id="cliente"></div>
+</div>
+
+<div class="row">
+<span>Función</span>
+<div id="funcion"></div>
+</div>
+
+<div class="row">
+<span>Hora</span>
+<div id="hora"></div>
+</div>
+
+<div class="row">
+<span>Invitados</span>
+<div id="guests"></div>
+</div>
+
+<div class="menu">
+
+<h3>Selección del menú</h3>
+
+<div id="menu"></div>
+
+</div>
+
+<div class="qr">
+
+<img id="qr">
+
+<div class="note">
+Presenta este ticket al llegar al restaurante
+</div>
+
 </div>
 
 </div>
 
 <script>
 
-const params = new URLSearchParams(window.location.search)
+const params = new URLSearchParams(window.location.search);
+const ticketId = params.get("id");
 
-const id = params.get("id")
-
-document.getElementById("code").innerText = id
-
-document.getElementById("qr").src =
-"https://api.qrserver.com/v1/create-qr-code/?size=250x250&data="+id
+document.getElementById("ticketCode").textContent = ticketId;
 
 </script>
 
