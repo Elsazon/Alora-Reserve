@@ -2310,29 +2310,16 @@ fillSelect($("funcion"), boot.funciones);
 renderFunctionCarousel(boot.funciones);
 /* seleccionar primera función automáticamente */
 
-if(boot.funciones.length){
+/* no seleccionar función automáticamente */
 
-const first = boot.funciones[0];
+$("hora").innerHTML = "<option>Selecciona una función primero</option>";
+$("hora").disabled = true;
 
-$("funcion").value = first;
-
-const funcion = $("funcion").value;
-
-hydrateMenu(funcion);
-renderHorasBootstrap(funcion);
-
-/* activar primera card del carousel */
-
-document.querySelector(".functionCard")?.classList.add("active");
-
-/* crear primer guest */
+/* crear primer guest vacío */
 
 $("guests").innerHTML = "";
 guestCount = 0;
-
 addGuest();
-
-}
 /* ocultar loader SOLO cuando todo esté listo */
 
 hideLoader();
