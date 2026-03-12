@@ -164,19 +164,48 @@ margin-bottom:14px;
 
 .menuPerson{
 
-margin-bottom:16px;
+margin-bottom:22px;
 
-padding-bottom:10px;
+padding-bottom:16px;
 
 border-bottom:1px solid rgba(255,255,255,.08);
-
-font-size:14px;
 
 }
 
 .menuPerson strong{
+
+font-size:15px;
+
+font-weight:600;
+
+letter-spacing:.4px;
+
+margin-bottom:8px;
+
 display:block;
-margin-bottom:4px;
+
+}
+
+.menuCourse{
+
+font-size:11px;
+
+letter-spacing:2px;
+
+text-transform:uppercase;
+
+color:rgba(244,241,234,.45);
+
+margin-top:8px;
+
+}
+
+.menuDish{
+
+font-size:14px;
+
+margin-top:2px;
+
 }
 
 .notes{
@@ -273,7 +302,7 @@ Cargando...
 
 <div class="menu">
 
-<h3>Selección del menú</h3>
+<h3>Selección Gastronómica</h3>
 
 <div id="menu"></div>
 
@@ -395,14 +424,24 @@ reserva.guests.forEach((g,i)=>{
 
 const item = document.createElement("div");
 
-item.style.marginBottom = "10px";
+item.className = "menuPerson";
 
 item.innerHTML = `
-<strong>${g.name || "Invitado "+(i+1)}</strong><br>
-Aperitivo: ${g.aperitivo || "-"}<br>
-Principal: ${g.principal || "-"}<br>
-${g.proteina ? "Proteína: "+g.proteina+"<br>" : ""}
-Postre: ${g.postre || "-"}
+
+<strong>${g.name || "Invitado "+(i+1)}</strong>
+
+<div class="menuCourse">Aperitivo</div>
+<div class="menuDish">${g.aperitivo || "-"}</div>
+
+<div class="menuCourse">Principal</div>
+<div class="menuDish">
+${g.principal || "-"}
+${g.proteina ? "<br>+ "+g.proteina : ""}
+</div>
+
+<div class="menuCourse">Postre</div>
+<div class="menuDish">${g.postre || "-"}</div>
+
 `;
 
 menuDiv.appendChild(item);
