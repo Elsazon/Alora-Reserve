@@ -306,7 +306,7 @@ CONFIG
 ====================== */
 
 const BACKEND_URL =
-"https://script.google.com/macros/s/AKfycbzQgqsHbko6rJ0I_cuwhNZdhd48Y4ETAjXKmbm7Y_3uBG6ZApFeCK3TlVuqXR_ummk/exec";
+"https://script.google.com/macros/s/AKfycbwaWvrP43A1xVqcRjImeZwwU7Q9nASXW7T3e1WeAQMIyo4kht7WCTisqnc3mLCW5dtb/exec";
 
 const SHARED_SECRET = "demo123";
 
@@ -340,7 +340,6 @@ async function cargarReserva(){
 if(!ticketId){
 
 alert("Ticket inválido");
-
 return;
 
 }
@@ -362,7 +361,6 @@ const data = await res.json();
 if(!data.ok){
 
 alert("Reserva no encontrada");
-
 return;
 
 }
@@ -373,8 +371,6 @@ renderReserva(data.reserva);
 
 console.error(e);
 
-alert("Error cargando ticket");
-
 }
 
 }
@@ -384,51 +380,34 @@ alert("Error cargando ticket");
 RENDER RESERVA
 ====================== */
 
-function renderReserva(data){
+function renderReserva(reserva){
 
-document.getElementById("cliente").textContent = data.cliente;
+document.getElementById("cliente").textContent = reserva.cliente;
+document.getElementById("funcion").textContent = reserva.funcion;
+document.getElementById("hora").textContent = reserva.hora;
+document.getElementById("guests").textContent = reserva.guests.length;
 
-document.getElementById("funcion").textContent = data.funcion;
+const menuDiv = document.getElementById("menu");
 
-document.getElementById("hora").textContent = data.hora;
+menuDiv.innerHTML = "";
 
-document.getElementById("guests").textContent = data.guests.length;
+reserva.guests.forEach((g,i)=>{
 
+const item = document.createElement("div");
 
-/* MENU */
+item.style.marginBottom = "10px";
 
-const menu = document.getElementById("menu");
-
-menu.innerHTML = "";
-
-data.guests.forEach((g,i)=>{
-
-const div = document.createElement("div");
-
-div.className = "menuPerson";
-
-div.innerHTML = `
+item.innerHTML = `
 <strong>${g.name || "Invitado "+(i+1)}</strong><br>
-${g.aperitivo ? "Aperitivo: "+g.aperitivo+"<br>" : ""}
+Aperitivo: ${g.aperitivo || "-"}<br>
 Principal: ${g.principal || "-"}<br>
 ${g.proteina ? "Proteína: "+g.proteina+"<br>" : ""}
-${g.postre ? "Postre: "+g.postre : ""}
+Postre: ${g.postre || "-"}
 `;
 
-menu.appendChild(div);
+menuDiv.appendChild(item);
 
 });
-
-
-/* NOTAS */
-
-if(data.notas){
-
-document.getElementById("notesBlock").style.display = "block";
-
-document.getElementById("notesText").textContent = data.notas;
-
-}
 
 }
 
