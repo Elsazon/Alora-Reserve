@@ -301,60 +301,90 @@ Presenta este ticket al llegar al restaurante
 
 <script>
 
-/* ========================
-LEER ID DEL TICKET
-======================== */
+/* ======================
+CONFIG
+====================== */
+
+const BACKEND_URL =
+"https://script.google.com/macros/s/AKfycbxcsWaqnLp_4mOaxj7K1yH6_xafdCwN5f_xk__K-ZgPRn-X_xAuf7lZiHju--uww-zR/exec";
+
+const SHARED_SECRET = "demo123";
+
+
+/* ======================
+LEER ID
+====================== */
 
 const params = new URLSearchParams(window.location.search);
 
-const ticketId = params.get("id") || "ALR-TEST123";
+const ticketId = params.get("id");
 
 document.getElementById("ticketCode").textContent = ticketId;
 
-/* ========================
+
+/* ======================
 GENERAR QR
-======================== */
+====================== */
 
 document.getElementById("qr").src =
 "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
 encodeURIComponent(ticketId);
 
-/* ========================
-DATOS DEMO (luego backend)
-======================== */
 
-const data = {
+/* ======================
+CARGAR RESERVA
+====================== */
 
-cliente:"Carlos Rivera",
+async function cargarReserva(){
 
-funcion:"Función 4 · 9 abril 2026",
+if(!ticketId){
 
-hora:"7:30 PM",
+alert("Ticket inválido");
 
-guests:[
+return;
 
-{
-name:"Carlos",
-aperitivo:"Sopa de tomate cremosa",
-principal:"Falso risotto de calabaza",
-proteina:"Medallones de cerdo",
-postre:"Flan de queso"
-},
-
-{
-name:"Ana",
-principal:"Mac and Cheese"
 }
 
-],
+try{
 
-notas:"Alergia a nueces · Una persona vegetariana"
+const res = await fetch(BACKEND_URL,{
+method:"POST",
+headers:{ "Content-Type":"text/plain;charset=utf-8" },
+body:JSON.stringify({
+action:"get_ticket",
+secret:SHARED_SECRET,
+ticketId:ticketId
+})
+});
 
-};
+const data = await res.json();
 
-/* ========================
-LLENAR INFO
-======================== */
+if(!data.ok){
+
+alert("Reserva no encontrada");
+
+return;
+
+}
+
+renderReserva(data.reserva);
+
+}catch(e){
+
+console.error(e);
+
+alert("Error cargando ticket");
+
+}
+
+}
+
+
+/* ======================
+RENDER RESERVA
+====================== */
+
+function renderReserva(data){
 
 document.getElementById("cliente").textContent = data.cliente;
 
@@ -364,47 +394,50 @@ document.getElementById("hora").textContent = data.hora;
 
 document.getElementById("guests").textContent = data.guests.length;
 
-/* ========================
-RENDER MENU
-======================== */
+
+/* MENU */
 
 const menu = document.getElementById("menu");
+
+menu.innerHTML = "";
 
 data.guests.forEach((g,i)=>{
 
 const div = document.createElement("div");
 
-div.className="menuPerson";
+div.className = "menuPerson";
 
-div.innerHTML=`
-
-<strong>${g.name || "Invitado "+(i+1)}</strong>
-
+div.innerHTML = `
+<strong>${g.name || "Invitado "+(i+1)}</strong><br>
 ${g.aperitivo ? "Aperitivo: "+g.aperitivo+"<br>" : ""}
-
 Principal: ${g.principal || "-"}<br>
-
 ${g.proteina ? "Proteína: "+g.proteina+"<br>" : ""}
-
 ${g.postre ? "Postre: "+g.postre : ""}
-
 `;
 
 menu.appendChild(div);
 
 });
 
-/* ========================
-NOTAS
-======================== */
+
+/* NOTAS */
 
 if(data.notas){
 
-document.getElementById("notesBlock").style.display="block";
+document.getElementById("notesBlock").style.display = "block";
 
-document.getElementById("notesText").textContent=data.notas;
+document.getElementById("notesText").textContent = data.notas;
 
 }
+
+}
+
+
+/* ======================
+INIT
+====================== */
+
+cargarReserva();
 
 </script>
 
