@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="es">
+
 <head>
 
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>ALORA · Ticket de reserva</title>
+<title>ALORA · Ticket</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,12 +33,14 @@
 body{
 
 margin:0;
-
-font-family:Inter,system-ui;
-
-background:linear-gradient(180deg,var(--bg0),var(--bg1));
+font-family:Inter;
 
 color:var(--ink);
+
+background:
+radial-gradient(900px 600px at 15% 10%, rgba(194,106,74,.10), transparent 60%),
+radial-gradient(1000px 700px at 85% 20%, rgba(79,81,56,.15), transparent 60%),
+linear-gradient(180deg,var(--bg0),var(--bg1));
 
 display:flex;
 align-items:center;
@@ -45,172 +48,123 @@ justify-content:center;
 
 min-height:100vh;
 
-padding:40px 20px;
-
 }
 
-/* TICKET */
+.ticket{
 
-.ticketCard{
+width:520px;
+max-width:92%;
 
-position:relative;
+background:rgba(255,255,255,.05);
 
-background:#121a16;
+border:1px solid var(--line);
 
-border:1px solid rgba(255,255,255,.08);
+border-radius:28px;
 
-border-radius:20px;
-
-padding:44px;
-
-max-width:640px;
-
-width:100%;
+padding:50px;
 
 box-shadow:
 0 40px 120px rgba(0,0,0,.7);
 
-}
-
-/* perforaciones */
-
-.ticketCard:before,
-.ticketCard:after{
-
-content:"";
-
-position:absolute;
-
-top:50%;
-
-width:24px;
-height:24px;
-
-background:#0e1511;
-
-border-radius:50%;
-
-transform:translateY(-50%);
-
-}
-
-.ticketCard:before{ left:-12px; }
-.ticketCard:after{ right:-12px; }
-
-/* header */
-
-.logo{
-
 text-align:center;
-margin-bottom:18px;
+
+backdrop-filter:blur(8px);
 
 }
 
 .logo img{
 
-height:90px;
+height:130px;
 
 filter:
-drop-shadow(0 25px 60px rgba(0,0,0,.7))
-drop-shadow(0 0 20px rgba(191,161,90,.18));
+drop-shadow(0 30px 70px rgba(0,0,0,.6))
+drop-shadow(0 0 18px rgba(191,161,90,.15));
+
+margin-bottom:24px;
 
 }
 
 .title{
 
 font-family:"Playfair Display",serif;
-
-text-align:center;
-
-font-size:28px;
-
-margin-top:8px;
-
-}
-
-.subtitle{
-
-text-align:center;
-
-font-size:12px;
-
-letter-spacing:2px;
-
-text-transform:uppercase;
-
-color:var(--muted);
-
-margin-top:6px;
-
-}
-
-/* divider */
-
-.ticketDivider{
-
-margin:30px 0;
-
-border-top:1px dashed rgba(255,255,255,.2);
-
-}
-
-/* reserva info */
-
-.infoRow{
-
-display:flex;
-
-justify-content:space-between;
-
-font-size:14px;
+font-size:30px;
 
 margin-bottom:8px;
 
-color:var(--muted);
-
 }
 
-.infoRow strong{
-color:white;
-}
-
-/* QR */
-
-.qrSection{
-
-text-align:center;
-
-margin-top:10px;
-
-}
-
-.qrSection img{
-
-background:white;
-
-padding:10px;
-
-border-radius:10px;
-
-box-shadow:0 12px 30px rgba(0,0,0,.45);
-
-}
-
-.qrLabel{
-
-margin-top:10px;
+.meta{
 
 font-size:12px;
+letter-spacing:2px;
+
+color:var(--muted);
+
+text-transform:uppercase;
+
+margin-bottom:26px;
+
+}
+
+.codeLabel{
+
+font-size:12px;
+letter-spacing:2px;
+
+color:var(--muted);
+
+text-transform:uppercase;
+
+}
+
+.code{
+
+font-size:28px;
+font-weight:600;
+
+letter-spacing:3px;
+
+margin:10px 0 24px;
+
+}
+
+.row{
+
+display:flex;
+justify-content:space-between;
+
+padding:10px 0;
+
+border-bottom:1px solid var(--line);
+
+font-size:14px;
+
+}
+
+.row span{
 
 color:var(--muted);
 
 }
 
-/* menu */
+.menu{
+
+margin-top:28px;
+text-align:left;
+
+}
+
+.menu h3{
+
+font-family:"Playfair Display",serif;
+
+margin-bottom:14px;
+
+}
 
 .menuPerson{
 
-margin-bottom:14px;
+margin-bottom:16px;
 
 padding-bottom:10px;
 
@@ -225,19 +179,17 @@ display:block;
 margin-bottom:4px;
 }
 
-/* notas */
-
 .notes{
 
-margin-top:20px;
+margin-top:22px;
 
-padding:16px;
+padding:14px;
 
-border-radius:14px;
-
-background:rgba(255,255,255,.04);
+border-radius:12px;
 
 border:1px solid var(--line);
+
+background:rgba(255,255,255,.03);
 
 font-size:13px;
 
@@ -247,53 +199,31 @@ color:var(--muted);
 
 }
 
-/* total */
+.qr{
 
-.totalBox{
-
-text-align:center;
-
-margin-top:16px;
+margin-top:36px;
 
 }
 
-.totalLabel{
+.qr img{
+
+width:170px;
+
+background:white;
+
+padding:12px;
+
+border-radius:12px;
+
+}
+
+.note{
+
+margin-top:12px;
 
 font-size:12px;
-
-letter-spacing:2px;
-
-text-transform:uppercase;
 
 color:var(--muted);
-
-}
-
-.totalPrice{
-
-font-family:"Playfair Display",serif;
-
-font-size:34px;
-
-color:var(--gold);
-
-margin-top:6px;
-
-}
-
-/* footer */
-
-.footer{
-
-margin-top:28px;
-
-font-size:12px;
-
-text-align:center;
-
-color:rgba(244,241,234,.55);
-
-line-height:1.7;
 
 }
 
@@ -303,7 +233,7 @@ line-height:1.7;
 
 <body>
 
-<div class="ticketCard">
+<div class="ticket">
 
 <div class="logo">
 
@@ -313,42 +243,41 @@ line-height:1.7;
 
 <div class="title">Reserva confirmada</div>
 
-<div class="subtitle">ALORA · Experiencia gastronómica</div>
+<div class="meta">Experiencia gastronómica</div>
 
-<div class="ticketDivider"></div>
+<div class="codeLabel">Código de reserva</div>
 
-<div class="infoRow">
+<div class="code" id="ticketCode">
+Cargando...
+</div>
+
+<div class="row">
+<span>Cliente</span>
+<div id="cliente"></div>
+</div>
+
+<div class="row">
 <span>Función</span>
-<strong id="funcion">—</strong>
+<div id="funcion"></div>
 </div>
 
-<div class="infoRow">
+<div class="row">
 <span>Hora</span>
-<strong id="hora">—</strong>
+<div id="hora"></div>
 </div>
 
-<div class="infoRow">
+<div class="row">
 <span>Invitados</span>
-<strong id="guests">—</strong>
+<div id="guests"></div>
 </div>
 
-<div class="ticketDivider"></div>
-
-<div class="qrSection">
-
-<img id="qr" width="180">
-
-<div class="qrLabel">
-Presenta este ticket al llegar
-</div>
-
-</div>
-
-<div class="ticketDivider"></div>
+<div class="menu">
 
 <h3>Selección del menú</h3>
 
 <div id="menu"></div>
+
+</div>
 
 <div id="notesBlock" class="notes" style="display:none">
 
@@ -358,26 +287,13 @@ Presenta este ticket al llegar
 
 </div>
 
-<div class="ticketDivider"></div>
+<div class="qr">
 
-<div class="totalBox">
+<img id="qr">
 
-<div class="totalLabel">
-Total estimado
+<div class="note">
+Presenta este ticket al llegar al restaurante
 </div>
-
-<div class="totalPrice" id="total">
-$0
-</div>
-
-</div>
-
-<div class="footer">
-
-ALORA presenta una propuesta culinaria donde la tradición italiana  
-se encuentra con la identidad puertorriqueña.
-
-Las bebidas se ofrecerán al comenzar el servicio en el restaurante.
 
 </div>
 
@@ -385,46 +301,62 @@ Las bebidas se ofrecerán al comenzar el servicio en el restaurante.
 
 <script>
 
-/* leer id del ticket */
+/* ========================
+LEER ID DEL TICKET
+======================== */
 
 const params = new URLSearchParams(window.location.search);
 
 const ticketId = params.get("id") || "ALR-TEST123";
 
-/* generar QR */
+document.getElementById("ticketCode").textContent = ticketId;
+
+/* ========================
+GENERAR QR
+======================== */
 
 document.getElementById("qr").src =
 "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" +
 encodeURIComponent(ticketId);
 
-/* datos demo */
+/* ========================
+DATOS DEMO (luego backend)
+======================== */
 
 const data = {
+
+cliente:"Carlos Rivera",
 
 funcion:"Función 4 · 9 abril 2026",
 
 hora:"7:30 PM",
 
 guests:[
+
 {
 name:"Carlos",
-aperitivo:"Sopa de tomate",
-principal:"Falso risotto calabaza",
+aperitivo:"Sopa de tomate cremosa",
+principal:"Falso risotto de calabaza",
+proteina:"Medallones de cerdo",
 postre:"Flan de queso"
 },
+
 {
 name:"Ana",
 principal:"Mac and Cheese"
 }
-],
 
-total:70,
+],
 
 notas:"Alergia a nueces · Una persona vegetariana"
 
 };
 
-/* llenar datos */
+/* ========================
+LLENAR INFO
+======================== */
+
+document.getElementById("cliente").textContent = data.cliente;
 
 document.getElementById("funcion").textContent = data.funcion;
 
@@ -432,30 +364,39 @@ document.getElementById("hora").textContent = data.hora;
 
 document.getElementById("guests").textContent = data.guests.length;
 
-document.getElementById("total").textContent = "$"+data.total;
-
-/* menu */
+/* ========================
+RENDER MENU
+======================== */
 
 const menu = document.getElementById("menu");
 
-data.guests.forEach(g=>{
+data.guests.forEach((g,i)=>{
 
 const div = document.createElement("div");
 
-div.className = "menuPerson";
+div.className="menuPerson";
 
-div.innerHTML = `
-<strong>${g.name}</strong>
+div.innerHTML=`
+
+<strong>${g.name || "Invitado "+(i+1)}</strong>
+
 ${g.aperitivo ? "Aperitivo: "+g.aperitivo+"<br>" : ""}
+
 Principal: ${g.principal || "-"}<br>
+
+${g.proteina ? "Proteína: "+g.proteina+"<br>" : ""}
+
 ${g.postre ? "Postre: "+g.postre : ""}
+
 `;
 
 menu.appendChild(div);
 
 });
 
-/* notas */
+/* ========================
+NOTAS
+======================== */
 
 if(data.notas){
 
