@@ -1855,7 +1855,7 @@ Universidad Ana G. Méndez · Recinto de Carolina
     /***********************
      * CONFIG
      ***********************/
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxYKxlGoabGrwie4k3hNNm2O6EQVOPpezZUpoFheNcbk6P32_LHdTMFa7O8CTIworGc/exec";
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbwmuNf08f_-o2ewOX9rYNTMzVIeWfvPpzudPT2fPDmwCznGDYV9vlZSq4k-oIKfeHn9/exec";
     const SHARED_SECRET = "demo123";
 
     const PRECIO_ADULTO = 35;
@@ -1873,48 +1873,22 @@ loader.style.display = "none";
 },600);
 
 }
-//** Actualizar reserva PARAMS**//
-const params = new URLSearchParams(window.location.search);
-const editId = params.get("edit");
-    
   /** BootStrapOptimizador **/
 async function cargarBootstrap(){
-  try{
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
 
-    const res = await fetch(BACKEND_URL,{
-      method:"POST",
-      headers:{ "Content-Type":"text/plain;charset=utf-8" },
-      body:JSON.stringify({
-        action:"bootstrap",
-        secret:SHARED_SECRET
-      }),
-      signal: controller.signal
-    });
+const res = await fetch(BACKEND_URL,{
+method:"POST",
+headers:{ "Content-Type":"text/plain;charset=utf-8" },
+body:JSON.stringify({
+action:"bootstrap",
+secret:SHARED_SECRET
+})
+});
 
-    clearTimeout(timeout);
+const data = await res.json();
 
-    if(!res.ok){
-      throw new Error("Backend no respondió correctamente");
-    }
+return data;
 
-    const data = await res.json();
-    return data;
-
-  }catch(e){
-    console.error("BOOTSTRAP ERROR:", e);
-
-    hideLoader();
-
-    setToast(
-      "err",
-      "No se pudo cargar el menú.",
-      "Recarga la página o intenta nuevamente."
-    );
-
-    return null;
-  }
 }
     
     /** Carousel **/
@@ -2401,8 +2375,7 @@ function addGuest(){
 
       const payload = {
         secret: SHARED_SECRET,
-        action: editId ? "update" : "create",
-        reservationId: editId || null,
+        action: "create",
         cliente: $("cliente").value,
         phone: $("telefono").value,
         email: $("email").value,
@@ -2515,20 +2488,8 @@ btn.textContent = "Confirmar experiencia";
       }
     }
 
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    const loader = document.getElementById("pageLoader");
-    if (loader) {
-      loader.style.opacity = "0";
-      setTimeout(() => {
-        loader.style.display = "none";
-      }, 600);
-    }
-  }, 2500);
-});
-    
    document.addEventListener("DOMContentLoaded", async ()=>{
-setTimeout(hideLoader, 4000);
+
 $("year").textContent = new Date().getFullYear();
 
 /* cargar bootstrap primero */
@@ -2538,15 +2499,7 @@ const boot = await cargarBootstrap();
 console.log("BOOTSTRAP:",boot);
 
 if(!boot || !boot.ok){
-
-hideLoader();
-
-setToast(
-"err",
-"No se pudo cargar el menú.",
-"Recarga la página."
-);
-
+alert("Error cargando menú");
 return;
 }
 
@@ -2568,184 +2521,6 @@ $("hora").disabled = true;
 $("guests").innerHTML = "";
 guestCount = 0;
 addGuest();
-
-/* ======================
-MODO EDITAR RESERVA
-====================== */
-
-if(editId){
-
-try{
-
-const res = await fetch(BACKEND_URL,{
-method:"POST",
-headers:{ "Content-Type":"text/plain;charset=utf-8" },
-body:JSON.stringify({
-action:"get_ticket",
-secret:SHARED_SECRET,
-ticketId:editId
-})
-});
-
-const data = await res.json();
-
-if(!data.ok){
-
-alert("No se pudo cargar la reserva.");
-return;
-
-}
-
-const r = data.reserva;
-
-/* cargar datos cliente */
-
-$("cliente").value = r.cliente;
-$("telefono").value = r.phone;
-$("email").value = r.email || "";
-
-/* función */
-
-$("funcion").value = r.funcion;
-
-document.querySelectorAll(".functionCard")
-.forEach(c=>{
-
-if(c.textContent.includes(r.funcion)){
-c.classList.add("active");
-}else{
-c.classList.remove("active");
-}
-
-});
-
-/* cargar menú y horas */
-
-hydrateMenu(r.funcion);
-
-renderHorasBootstrap(r.funcion);
-
-/* hora */
-
-$("hora").value = r.hora;
-
-/* invitados */
-
-$("guests").innerHTML = "";
-guestCount = 0;
-
-r.guests.forEach(g=>{
-
-addGuest();
-
-const guest = $("guests").lastElementChild;
-
-/* nombre */
-
-guest.querySelector(".name").value = g.name || "";
-
-/* tipo persona */
-
-const tipo = g.aperitivo ? "adulto" : "nino";
-
-guest.querySelector(".tipoPersona").value = tipo;
-guest.querySelector(".tipoPersona").dispatchEvent(new Event("change"));
-
-/* esperar a que los selects carguen */
-
-setTimeout(()=>{
-
-if(tipo === "adulto"){
-
-guest.querySelector(".aperitivo").value = g.aperitivo || "";
-
-guest.querySelector(".principal").value = g.principal || "";
-
-guest.querySelector(".principal")
-.dispatchEvent(new Event("change"));
-
-setTimeout(()=>{
-
-if(g.proteina){
-guest.querySelector(".proteina").value = g.proteina;
-}
-
-},50);
-
-guest.querySelector(".postre").value = g.postre || "";
-
-}else{
-
-guest.querySelector(".principalNino").value = g.principal || "";
-
-}
-
-},80);
-
-});
-
-guest.querySelector(".tipoPersona").value = tipo;
-
-guest.querySelector(".tipoPersona").dispatchEvent(new Event("change"));
-
-if(tipo === "adulto"){
-
-guest.querySelector(".aperitivo").value = g.aperitivo || "";
-guest.querySelector(".principal").value = g.principal || "";
-
-guest.querySelector(".principal")
-.dispatchEvent(new Event("change"));
-
-if(g.proteina){
-
-guest.querySelector(".proteina").value = g.proteina;
-
-}
-
-guest.querySelector(".postre").value = g.postre || "";
-
-}else{
-
-guest.querySelector(".principalNino").value = g.principal || "";
-
-}
-
-});
-
-/* notas */
-
-if(r.notas){
-
-$("notas").value = r.notas;
-
-}
-
-/* descorche */
-
-if(r.descorche){
-
-$("descorche").checked = true;
-
-}
-
-/* recalcular total */
-
-actualizarTotal();
-
-/* cambiar texto botón */
-
-$("submitBtn").textContent = "Guardar cambios";
-
-}catch(e){
-
-console.error(e);
-
-alert("Error cargando la reserva.");
-
-}
-
-}
-     
 /* ocultar loader SOLO cuando todo esté listo */
 
 hideLoader();
@@ -2760,6 +2535,10 @@ $("hora").disabled = true;
 $("guests").innerHTML = "";
 guestCount = 0;
 
+
+
+
+     
 /* cuando cambie función */
 $("funcion").addEventListener("change", async () => {
 
@@ -2810,30 +2589,23 @@ initReveal();
 /* MAP POPUP */
 
 const mapModal = document.getElementById("mapModal");
-const openMapBtn = document.getElementById("openMap");
-const closeMapBtn = document.getElementById("closeMap");
 
-if(openMapBtn && mapModal){
-  openMapBtn.addEventListener("click",(e)=>{
-    e.preventDefault();
-    mapModal.style.display="flex";
-  });
-}
+document.getElementById("openMap").addEventListener("click",(e)=>{
+e.preventDefault();
+mapModal.style.display="flex";
+});
 
-if(closeMapBtn && mapModal){
-  closeMapBtn.addEventListener("click",()=>{
-    mapModal.style.display="none";
-  });
-}
+document.getElementById("closeMap").addEventListener("click",()=>{
+mapModal.style.display="none";
+});
 
-if(mapModal){
-  mapModal.addEventListener("click",(e)=>{
-    if(e.target===mapModal){
-      mapModal.style.display="none";
-    }
-  });
+mapModal.addEventListener("click",(e)=>{
+if(e.target===mapModal){
+mapModal.style.display="none";
 }
-    });
+});
+
+});
   </script>
   
 <div id="mapModal" style="
