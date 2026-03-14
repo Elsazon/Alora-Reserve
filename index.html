@@ -2495,8 +2495,6 @@ btn.textContent = "Confirmar experiencia";
 
    document.addEventListener("DOMContentLoaded", async ()=>{
 
-try{
-
 $("year").textContent = new Date().getFullYear();
 
 /* cargar bootstrap primero */
@@ -2516,6 +2514,7 @@ window.BOOTSTRAP_HORAS = boot.horas;
 fillSelect($("funcion"), boot.funciones);
 
 renderFunctionCarousel(boot.funciones);
+/* seleccionar primera función automáticamente */
 
 /* no seleccionar función automáticamente */
 
@@ -2581,6 +2580,7 @@ c.classList.remove("active");
 /* cargar menú y horas */
 
 hydrateMenu(r.funcion);
+
 renderHorasBootstrap(r.funcion);
 
 /* hora */
@@ -2608,6 +2608,8 @@ const tipo = g.aperitivo ? "adulto" : "nino";
 
 guest.querySelector(".tipoPersona").value = tipo;
 guest.querySelector(".tipoPersona").dispatchEvent(new Event("change"));
+
+/* esperar a que los selects carguen */
 
 setTimeout(()=>{
 
@@ -2640,16 +2642,48 @@ guest.querySelector(".principalNino").value = g.principal || "";
 
 });
 
+guest.querySelector(".tipoPersona").value = tipo;
+
+guest.querySelector(".tipoPersona").dispatchEvent(new Event("change"));
+
+if(tipo === "adulto"){
+
+guest.querySelector(".aperitivo").value = g.aperitivo || "";
+guest.querySelector(".principal").value = g.principal || "";
+
+guest.querySelector(".principal")
+.dispatchEvent(new Event("change"));
+
+if(g.proteina){
+
+guest.querySelector(".proteina").value = g.proteina;
+
+}
+
+guest.querySelector(".postre").value = g.postre || "";
+
+}else{
+
+guest.querySelector(".principalNino").value = g.principal || "";
+
+}
+
+});
+
 /* notas */
 
 if(r.notas){
+
 $("notas").value = r.notas;
+
 }
 
 /* descorche */
 
 if(r.descorche){
+
 $("descorche").checked = true;
+
 }
 
 /* recalcular total */
@@ -2663,14 +2697,28 @@ $("submitBtn").textContent = "Guardar cambios";
 }catch(e){
 
 console.error(e);
+
 alert("Error cargando la reserva.");
 
 }
 
 }
+     
+/* ocultar loader SOLO cuando todo esté listo */
+
+hideLoader();
+
+/* hora bloqueada */
+
+$("hora").innerHTML = "<option>Seleccione función primero</option>";
+$("hora").disabled = true;
+
+/* crear primer guest */
+
+$("guests").innerHTML = "";
+guestCount = 0;
 
 /* cuando cambie función */
-
 $("funcion").addEventListener("change", async () => {
 
 document.querySelectorAll(".functionCard")
@@ -2686,20 +2734,20 @@ c.classList.remove("active");
 
 $("hora").disabled = false;
 
+/* cargar menu y horas */
+
 const funcion = $("funcion").value;
 
 hydrateMenu(funcion);
 renderHorasBootstrap(funcion);
 
-/* resetear personas */
+/* 🔥 resetear personas completamente */
 
 $("guests").innerHTML = "";
 guestCount = 0;
 
 addGuest();
-
 $("menuResetNotice").style.display = "block";
-
 /* refrescar preview menú */
 
 pillList("menuAperitivos", CURRENT_MENU.aperitivos.map(p => p.nombre));
@@ -2710,45 +2758,31 @@ pillList("menuNinos", CURRENT_MENU.ninos.map(p => p.nombre));
 });
 
 /* botones */
-
 $("addGuestBtn").addEventListener("click", addGuest);
 $("descorche").addEventListener("change", actualizarTotal);
 $("submitBtn").addEventListener("click", submitReservation);
 
 /* animaciones */
-
 initReveal();
 
 /* MAP POPUP */
 
 const mapModal = document.getElementById("mapModal");
 
-document.getElementById("openMap")?.addEventListener("click",(e)=>{
+document.getElementById("openMap").addEventListener("click",(e)=>{
 e.preventDefault();
 mapModal.style.display="flex";
 });
 
-document.getElementById("closeMap")?.addEventListener("click",()=>{
+document.getElementById("closeMap").addEventListener("click",()=>{
 mapModal.style.display="none";
 });
 
-mapModal?.addEventListener("click",(e)=>{
+mapModal.addEventListener("click",(e)=>{
 if(e.target===mapModal){
 mapModal.style.display="none";
 }
 });
-
-}catch(e){
-
-console.error(e);
-alert("Error cargando la página.");
-
-}finally{
-
-/* 🔥 loader SIEMPRE se oculta */
-hideLoader();
-
-}
 
 });
   </script>
