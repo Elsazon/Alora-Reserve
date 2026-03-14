@@ -477,7 +477,6 @@ console.error(e);
 
 }
 
-
 /* ======================
 RENDER RESERVA
 ====================== */
@@ -527,8 +526,58 @@ document.getElementById("notesText").textContent = reserva.notas;
 
 }
 }
+/* ======================
+Cambio de Reservacion
+====================== */
+const FUNCION_FECHAS = {
 
+"Función 1":"2026-03-19",
+"Función 2":"2026-03-26",
+"Función 3":"2026-04-09",
+"Función 4":"2026-04-16",
+"Función 5":"2026-04-23",
+"Función 6":"2026-04-30",
+"Función 7":"2026-05-07",
+"Función 8":"2026-05-14"
 
+};
+function editingAllowed(funcion){
+
+const fechaFuncion = new Date(FUNCION_FECHAS[funcion]);
+
+const monday = new Date(fechaFuncion);
+
+const day = monday.getDay();
+
+const diff = monday.getDate() - day + (day === 0 ? -6 : 1);
+
+monday.setDate(diff);
+
+monday.setHours(23,59,0,0);
+
+const now = new Date();
+
+return now <= monday;
+
+}
+  /* ======================
+Activacio o Bloqueo de Boton
+====================== */
+  const editBtn = document.getElementById("editBtn");
+
+if(editingAllowed(data.reserva.funcion)){
+
+editBtn.href = "index.html?edit=" + ticketId;
+
+}else{
+
+editBtn.textContent = "Edición cerrada";
+
+editBtn.style.opacity = ".4";
+
+editBtn.style.pointerEvents = "none";
+
+}
 /* ======================
 INIT
 ====================== */
