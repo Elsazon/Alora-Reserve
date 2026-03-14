@@ -525,6 +525,24 @@ document.getElementById("notesBlock").style.display = "block";
 document.getElementById("notesText").textContent = reserva.notas;
 
 }
+    /* ======================
+Activacio o Bloqueo de Boton
+====================== */
+  const editBtn = document.getElementById("editBtn");
+
+if(editingAllowed(data.reserva.funcion)){
+
+editBtn.href = "index.html?edit=" + ticketId;
+
+}else{
+
+editBtn.textContent = "Edición cerrada";
+
+editBtn.style.opacity = ".4";
+
+editBtn.style.pointerEvents = "none";
+
+}
 }
 /* ======================
 Cambio de Reservacion
@@ -560,24 +578,7 @@ const now = new Date();
 return now <= monday;
 
 }
-  /* ======================
-Activacio o Bloqueo de Boton
-====================== */
-  const editBtn = document.getElementById("editBtn");
 
-if(editingAllowed(data.reserva.funcion)){
-
-editBtn.href = "index.html?edit=" + ticketId;
-
-}else{
-
-editBtn.textContent = "Edición cerrada";
-
-editBtn.style.opacity = ".4";
-
-editBtn.style.pointerEvents = "none";
-
-}
 /* ======================
 INIT
 ====================== */
