@@ -266,6 +266,47 @@ font-size:12px;
 color:var(--muted);
 
 }
+.editBtn{
+
+display:inline-block;
+
+margin-top:10px;
+
+padding:12px 22px;
+
+border-radius:14px;
+
+background:rgba(255,255,255,.05);
+
+border:1px solid rgba(255,255,255,.12);
+
+font-size:13px;
+
+font-weight:500;
+
+cursor:pointer;
+
+transition:.25s;
+
+}
+
+.editBtn:hover{
+
+background:#c26a4a;
+
+color:#111;
+
+}
+
+.editNote{
+
+font-size:12px;
+
+margin-top:10px;
+
+color:rgba(255,255,255,.6);
+
+}
 
 </style>
 
@@ -340,7 +381,19 @@ Cargando...
 <div class="note">
 Presenta este ticket al llegar al restaurante
 </div>
+  
+<div style="margin-top:28px">
 
+<a id="editBtn" class="editBtn">
+Cambiar reserva
+</a>
+
+<div class="editNote">
+Cambios disponibles hasta el lunes previo a la función a las 11:59 PM
+</div>
+
+</div>
+  
 </div>
 
 </div>
