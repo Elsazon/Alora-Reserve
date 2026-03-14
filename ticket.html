@@ -288,6 +288,10 @@ cursor:pointer;
 
 transition:.25s;
 
+text-decoration:none; /* 👈 evita azul */
+
+color:var(--ink); /* 👈 mantiene color del ticket */
+
 }
 
 .editBtn:hover{
@@ -532,7 +536,7 @@ Activacio o Bloqueo de Boton
 
 if(editingAllowed(data.reserva.funcion)){
 
-editBtn.href = "index.html?edit=" + ticketId;
+editBtn.href = "./index.html?edit=" + ticketId;
 
 }else{
 
