@@ -1855,7 +1855,7 @@ Universidad Ana G. Méndez · Recinto de Carolina
     /***********************
      * CONFIG
      ***********************/
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbwUSMY7Iz2GytaRPYA_8i7eimUXjIevuch1fUXGzasUgu9hMPeWWrR-Avaemn-JVohe/exec";
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbwg4mSRyF7cDEi9jdH4FaKGc7FszOPYen8_RdVpxq8s0I7lG11xvFFxbq56PmzfmHNU/exec";
     const SHARED_SECRET = "demo123";
 
     const PRECIO_ADULTO = 35;
@@ -1873,6 +1873,10 @@ loader.style.display = "none";
 },600);
 
 }
+//** Actualizar reserva PARAMS**//
+const params = new URLSearchParams(window.location.search);
+const editId = params.get("edit");
+    
   /** BootStrapOptimizador **/
 async function cargarBootstrap(){
 
@@ -2375,7 +2379,8 @@ function addGuest(){
 
       const payload = {
         secret: SHARED_SECRET,
-        action: "create",
+        action: editId ? "update" : "create",
+        reservationId: editId || null,
         cliente: $("cliente").value,
         phone: $("telefono").value,
         email: $("email").value,
