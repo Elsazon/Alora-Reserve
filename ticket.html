@@ -311,7 +311,31 @@ margin-top:10px;
 color:rgba(255,255,255,.6);
 
 }
+.editBtn{
 
+display:inline-block;
+
+margin-top:10px;
+
+padding:12px 22px;
+
+border-radius:14px;
+
+background:rgba(255,255,255,.05);
+
+border:1px solid rgba(255,255,255,.12);
+
+font-size:13px;
+
+font-weight:500;
+
+cursor:pointer;
+
+transition:.25s;
+
+color:var(--ink);
+
+}
 </style>
 
 </head>
@@ -388,9 +412,9 @@ Presenta este ticket al llegar al restaurante
   
 <div style="margin-top:28px">
 
-<a id="editBtn" class="editBtn" href="#">
+<button id="editBtn" class="editBtn">
 Cambiar reserva
-</a>
+</button>
 
 <div class="editNote">
 Cambios disponibles hasta el lunes previo a la función a las 11:59 PM
@@ -532,11 +556,16 @@ document.getElementById("notesText").textContent = reserva.notas;
     /* ======================
 Activacio o Bloqueo de Boton
 ====================== */
-  const editBtn = document.getElementById("editBtn");
+const editBtn = document.getElementById("editBtn");
 
-if(editingAllowed(data.reserva.funcion)){
+if(editingAllowed(reserva.funcion)){
 
-editBtn.href = "./index.html?edit=" + ticketId;
+editBtn.onclick = () => {
+
+window.location.href =
+"index.html?edit=" + ticketId;
+
+};
 
 }else{
 
@@ -544,7 +573,7 @@ editBtn.textContent = "Edición cerrada";
 
 editBtn.style.opacity = ".4";
 
-editBtn.style.pointerEvents = "none";
+editBtn.disabled = true;
 
 }
 }
