@@ -2526,6 +2526,144 @@ $("hora").disabled = true;
 $("guests").innerHTML = "";
 guestCount = 0;
 addGuest();
+
+/* ======================
+MODO EDITAR RESERVA
+====================== */
+
+if(editId){
+
+try{
+
+const res = await fetch(BACKEND_URL,{
+method:"POST",
+headers:{ "Content-Type":"text/plain;charset=utf-8" },
+body:JSON.stringify({
+action:"get_ticket",
+secret:SHARED_SECRET,
+ticketId:editId
+})
+});
+
+const data = await res.json();
+
+if(!data.ok){
+
+alert("No se pudo cargar la reserva.");
+return;
+
+}
+
+const r = data.reserva;
+
+/* cargar datos cliente */
+
+$("cliente").value = r.cliente;
+$("telefono").value = r.phone;
+$("email").value = r.email || "";
+
+/* función */
+
+$("funcion").value = r.funcion;
+
+document.querySelectorAll(".functionCard")
+.forEach(c=>{
+
+if(c.textContent.includes(r.funcion)){
+c.classList.add("active");
+}else{
+c.classList.remove("active");
+}
+
+});
+
+/* cargar menú y horas */
+
+hydrateMenu(r.funcion);
+
+renderHorasBootstrap(r.funcion);
+
+/* hora */
+
+$("hora").value = r.hora;
+
+/* invitados */
+
+$("guests").innerHTML = "";
+guestCount = 0;
+
+r.guests.forEach(g=>{
+
+addGuest();
+
+const guest = $("guests").lastElementChild;
+
+guest.querySelector(".name").value = g.name || "";
+
+const tipo = g.aperitivo ? "adulto" : "nino";
+
+guest.querySelector(".tipoPersona").value = tipo;
+
+guest.querySelector(".tipoPersona").dispatchEvent(new Event("change"));
+
+if(tipo === "adulto"){
+
+guest.querySelector(".aperitivo").value = g.aperitivo || "";
+guest.querySelector(".principal").value = g.principal || "";
+
+guest.querySelector(".principal")
+.dispatchEvent(new Event("change"));
+
+if(g.proteina){
+
+guest.querySelector(".proteina").value = g.proteina;
+
+}
+
+guest.querySelector(".postre").value = g.postre || "";
+
+}else{
+
+guest.querySelector(".principalNino").value = g.principal || "";
+
+}
+
+});
+
+/* notas */
+
+if(r.notas){
+
+$("notas").value = r.notas;
+
+}
+
+/* descorche */
+
+if(r.descorche){
+
+$("descorche").checked = true;
+
+}
+
+/* recalcular total */
+
+actualizarTotal();
+
+/* cambiar texto botón */
+
+$("submitBtn").textContent = "Guardar cambios";
+
+}catch(e){
+
+console.error(e);
+
+alert("Error cargando la reserva.");
+
+}
+
+}
+     
 /* ocultar loader SOLO cuando todo esté listo */
 
 hideLoader();
