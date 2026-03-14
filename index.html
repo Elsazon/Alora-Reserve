@@ -2598,7 +2598,51 @@ addGuest();
 
 const guest = $("guests").lastElementChild;
 
+/* nombre */
+
 guest.querySelector(".name").value = g.name || "";
+
+/* tipo persona */
+
+const tipo = g.aperitivo ? "adulto" : "nino";
+
+guest.querySelector(".tipoPersona").value = tipo;
+guest.querySelector(".tipoPersona").dispatchEvent(new Event("change"));
+
+/* esperar a que los selects existan */
+
+setTimeout(()=>{
+
+if(tipo === "adulto"){
+
+guest.querySelector(".aperitivo").value = g.aperitivo || "";
+
+guest.querySelector(".principal").value = g.principal || "";
+
+/* activar proteínas */
+
+guest.querySelector(".principal")
+.dispatchEvent(new Event("change"));
+
+setTimeout(()=>{
+
+if(g.proteina){
+guest.querySelector(".proteina").value = g.proteina;
+}
+
+},50);
+
+guest.querySelector(".postre").value = g.postre || "";
+
+}else{
+
+guest.querySelector(".principalNino").value = g.principal || "";
+
+}
+
+},50);
+
+});
 
 const tipo = g.aperitivo ? "adulto" : "nino";
 
