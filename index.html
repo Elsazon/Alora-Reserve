@@ -1880,6 +1880,8 @@ const editId = params.get("edit");
   /** BootStrapOptimizador **/
 async function cargarBootstrap(){
 
+try{
+
 const res = await fetch(BACKEND_URL,{
 method:"POST",
 headers:{ "Content-Type":"text/plain;charset=utf-8" },
@@ -1889,9 +1891,33 @@ secret:SHARED_SECRET
 })
 });
 
+/* timeout protección */
+
+if(!res.ok){
+throw new Error("Backend no respondió correctamente");
+}
+
 const data = await res.json();
 
 return data;
+
+}catch(e){
+
+console.error("BOOTSTRAP ERROR:",e);
+
+/* fallback para que la página cargue */
+
+hideLoader();
+
+setToast(
+"err",
+"No se pudo cargar el menú.",
+"Recarga la página o intenta nuevamente."
+);
+
+return null;
+
+}
 
 }
     
@@ -2504,7 +2530,15 @@ const boot = await cargarBootstrap();
 console.log("BOOTSTRAP:",boot);
 
 if(!boot || !boot.ok){
-alert("Error cargando menú");
+
+hideLoader();
+
+setToast(
+"err",
+"No se pudo cargar el menú.",
+"Recarga la página."
+);
+
 return;
 }
 
