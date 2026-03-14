@@ -2609,7 +2609,7 @@ const tipo = g.aperitivo ? "adulto" : "nino";
 guest.querySelector(".tipoPersona").value = tipo;
 guest.querySelector(".tipoPersona").dispatchEvent(new Event("change"));
 
-/* esperar a que los selects existan */
+/* esperar a que los selects carguen */
 
 setTimeout(()=>{
 
@@ -2618,8 +2618,6 @@ if(tipo === "adulto"){
 guest.querySelector(".aperitivo").value = g.aperitivo || "";
 
 guest.querySelector(".principal").value = g.principal || "";
-
-/* activar proteínas */
 
 guest.querySelector(".principal")
 .dispatchEvent(new Event("change"));
@@ -2640,11 +2638,9 @@ guest.querySelector(".principalNino").value = g.principal || "";
 
 }
 
-},50);
+},80);
 
 });
-
-const tipo = g.aperitivo ? "adulto" : "nino";
 
 guest.querySelector(".tipoPersona").value = tipo;
 
