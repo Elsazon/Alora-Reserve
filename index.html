@@ -1641,7 +1641,7 @@ Menú Infantil
 <div class="drinkCard">
 🥤 1 bebida incluida
 </div>
-
+</div>
 
   <div class="drinkNote">
 
@@ -1733,11 +1733,21 @@ El pago se realiza al llegar al restaurante antes de comenzar el servicio.<br><b
 
           <div class="divider"></div>
           
-          <div class="sectionTitle" style="font-size:18px; margin:0;">Personas</div>
-       
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
 
-          <div id="guests"></div>
-      <div id="menuResetNotice" style="
+<div class="sectionTitle" style="font-size:18px;margin:0">
+Personas
+</div>
+
+<button class="btn btnSecondary" id="addGuestBtn" type="button" style="min-width:auto;padding:8px 14px">
++ Añadir persona
+</button>
+
+</div>
+
+<div id="guests"></div>
+
+<div id="menuResetNotice" style="
 display:none;
 margin-top:12px;
 padding:12px;
@@ -1747,14 +1757,10 @@ background:rgba(241,196,15,.08);
 color:#f4f1ea;
 font-size:13px;
 ">
+
 El menú cambió según la función seleccionada.
 Por favor selecciona nuevamente los platos.
-</div>
 
-          <div class="btnRow">
-<button class="btn btnSecondary" id="addGuestBtn" type="button">
-+ Añadir persona
-</button>
 </div>
 
   <label for="notas" class="formLabel">
