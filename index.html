@@ -1712,11 +1712,36 @@ font-size:13px;
 El menú cambió según la función seleccionada.
 Por favor selecciona nuevamente los platos.
 </div>
-          <div class="btnRow">
-            <button class="btn btnSecondary" id="addGuestBtn" type="button">+ Añadir persona</button>
-            <button class="btn btnPrimary" id="submitBtn" type="button">Confirmar experiencia</button>
-          </div>
 
+          <div class="btnRow">
+<button class="btn btnSecondary" id="addGuestBtn" type="button">
++ Añadir persona
+</button>
+</div>
+
+  <label for="notas" class="formLabel">
+Notas, alergias o solicitudes especiales
+</label>
+
+<textarea
+id="notas"
+name="notas"
+rows="3"
+placeholder="Ejemplo: alergia a nueces, intolerancia a lactosa, vegetariano, acceso para silla de ruedas, celebración especial, etc."
+style="
+width:100%;
+padding:12px;
+border-radius:10px;
+border:1px solid rgba(255,255,255,.15);
+background:rgba(255,255,255,.03);
+color:white;
+resize:vertical;
+font-size:14px;
+line-height:1.5;
+margin-bottom:12px;
+">
+</textarea>
+          
 <div class="serviceOption">
 
 <label class="descorcheCard">
@@ -1743,31 +1768,17 @@ Por favor selecciona nuevamente los platos.
 
 </div>
 
+          <div style="margin-top:18px">
+
+<button class="btn btnPrimary" id="submitBtn" type="button" style="width:100%">
+Confirmar experiencia
+</button>
+
+</div>
           <div id="toast" class="toast"></div>
 
           <div class="divider"></div>
-          <label for="notas" class="formLabel">
-Notas, alergias o solicitudes especiales
-</label>
-
-<textarea
-id="notas"
-name="notas"
-rows="3"
-placeholder="Ejemplo: alergia a nueces, intolerancia a lactosa, vegetariano, acceso para silla de ruedas, celebración especial, etc."
-style="
-width:100%;
-padding:12px;
-border-radius:10px;
-border:1px solid rgba(255,255,255,.15);
-background:rgba(255,255,255,.03);
-color:white;
-resize:vertical;
-font-size:14px;
-line-height:1.5;
-margin-bottom:12px;
-">
-</textarea>
+        
 
 <div style="
 margin:18px 0 26px 0;
