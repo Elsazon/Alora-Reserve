@@ -2561,6 +2561,14 @@ $("telefono").value = reserva.telefono || "";
 $("email").value = reserva.email || "";
 
 $("funcion").value = reserva.funcion;
+
+/* cargar menú y horas */
+
+hydrateMenu(reserva.funcion);
+renderHorasBootstrap(reserva.funcion, reserva.hora);
+
+/* seleccionar hora */
+
 const horaSelect = $("hora");
 
 let existe = false;
@@ -2579,13 +2587,6 @@ horaSelect.appendChild(opt);
 }
 
 horaSelect.value = reserva.hora;
-/* cargar menú y horas primero */
-
-hydrateMenu(reserva.funcion);
-renderHorasBootstrap(reserva.funcion, reserva.hora);
-
-/* esperar un tick para que los selects se llenen */
-
 
 /* limpiar guests */
 
@@ -2601,15 +2602,14 @@ addGuest();
 const guestEl = $("guests").lastElementChild;
 const tipoSelect = guestEl.querySelector(".tipoPersona");
 
-if(!g.aperitivo && !g.postre){
-tipoSelect.value = "nino";
+/* detectar niño */
 
-/* activar menú niño */
+if(!g.aperitivo && !g.postre){
+
+tipoSelect.value = "nino";
 
 guestEl.querySelector(".menuAdulto").style.display = "none";
 guestEl.querySelector(".menuNino").style.display = "block";
-
-/* llenar plato infantil */
 
 guestEl.querySelector(".principalNino").value = g.principal || "";
 
@@ -2618,9 +2618,12 @@ guestEl.querySelector(".principalNino").value = g.principal || "";
 tipoSelect.value = "adulto";
 
 }
+
+/* nombre */
+
 guestEl.querySelector(".name").value = g.name || "";
 
-/* llenar selects */
+/* platos */
 
 if(g.aperitivo){
 guestEl.querySelector(".aperitivo").value = g.aperitivo;
@@ -2645,8 +2648,6 @@ guestEl.querySelector(".proteina").value = g.proteina;
 $("notas").value = reserva.notas || "";
 
 actualizarTotal();
-
-},100);
 
 }
     
