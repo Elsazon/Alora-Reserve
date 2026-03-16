@@ -2554,7 +2554,7 @@ $("telefono").value = reserva.telefono || "";
 $("email").value = reserva.email || "";
 
 $("funcion").value = reserva.funcion;
-
+$("hora").disabled = false;
 /* cargar menú y horas primero */
 
 hydrateMenu(reserva.funcion);
@@ -2663,14 +2663,16 @@ loadReservationIntoForm(data.reserva);
 
 }
      
+if(!editId){
+
 $("hora").innerHTML = "<option>Selecciona una función primero</option>";
 $("hora").disabled = true;
-
-/* crear primer guest vacío */
 
 $("guests").innerHTML = "";
 guestCount = 0;
 addGuest();
+
+}
 /* ocultar loader SOLO cuando todo esté listo */
 
 hideLoader();
@@ -2684,8 +2686,6 @@ $("hora").disabled = true;
 
 $("guests").innerHTML = "";
 guestCount = 0;
-
-
 
 
      
