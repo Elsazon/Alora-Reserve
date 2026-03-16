@@ -2564,7 +2564,9 @@ renderHorasBootstrap(reserva.funcion);
 
 setTimeout(()=>{
 
+setTimeout(()=>{
 $("hora").value = reserva.hora;
+},70);
 
 /* limpiar guests */
 
@@ -2578,7 +2580,25 @@ reserva.guests.forEach(g=>{
 addGuest();
 
 const guestEl = $("guests").lastElementChild;
+const tipoSelect = guestEl.querySelector(".tipoPersona");
 
+if(!g.aperitivo && !g.postre){
+tipoSelect.value = "nino";
+
+/* activar menú niño */
+
+guestEl.querySelector(".menuAdulto").style.display = "none";
+guestEl.querySelector(".menuNino").style.display = "block";
+
+/* llenar plato infantil */
+
+guestEl.querySelector(".principalNino").value = g.principal || "";
+
+}else{
+
+tipoSelect.value = "adulto";
+
+}
 guestEl.querySelector(".name").value = g.name || "";
 
 /* llenar selects */
