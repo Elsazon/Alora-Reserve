@@ -2561,7 +2561,24 @@ $("telefono").value = reserva.telefono || "";
 $("email").value = reserva.email || "";
 
 $("funcion").value = reserva.funcion;
-$("hora").disabled = false;
+const horaSelect = $("hora");
+
+let existe = false;
+
+Array.from(horaSelect.options).forEach(o=>{
+if(o.value === reserva.hora){
+existe = true;
+}
+});
+
+if(!existe){
+const opt = document.createElement("option");
+opt.value = reserva.hora;
+opt.textContent = reserva.hora + " (tu reserva)";
+horaSelect.appendChild(opt);
+}
+
+horaSelect.value = reserva.hora;
 /* cargar menú y horas primero */
 
 hydrateMenu(reserva.funcion);
@@ -2569,11 +2586,6 @@ renderHorasBootstrap(reserva.funcion, reserva.hora);
 
 /* esperar un tick para que los selects se llenen */
 
-setTimeout(()=>{
-
-setTimeout(()=>{
-$("hora").value = reserva.hora;
-},70);
 
 /* limpiar guests */
 
