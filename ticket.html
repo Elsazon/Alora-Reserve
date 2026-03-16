@@ -336,6 +336,65 @@ transition:.25s;
 color:var(--ink);
 
 }
+
+.cancelBtn{
+
+display:inline-block;
+
+margin-top:10px;
+
+padding:12px 22px;
+
+border-radius:14px;
+
+background:rgba(170,60,60,.18);
+
+border:1px solid rgba(210,90,90,.45);
+
+font-size:13px;
+
+font-weight:500;
+
+cursor:pointer;
+
+transition:.25s;
+
+color:#f2c6c6;
+
+}
+
+.cancelBtn:hover{
+
+background:#c26a4a;
+
+color:#111;
+
+border-color:#c26a4a;
+
+}
+  .cancelBadge{
+
+margin-top:16px;
+
+display:inline-block;
+
+padding:6px 14px;
+
+border-radius:20px;
+
+background:rgba(180,70,70,.18);
+
+border:1px solid rgba(220,90,90,.45);
+
+font-size:12px;
+
+letter-spacing:1px;
+
+color:#f2c6c6;
+
+text-transform:uppercase;
+
+}
   #costSection{
 margin-top:30px;
 box-shadow:
@@ -443,8 +502,8 @@ Presenta este ticket al llegar al restaurante
 Cambiar reserva
 </button>
 
-<button id="cancelBtn" class="editBtn" style="margin-left:10px;">
-Cancelar reserva
+<button id="cancelBtn" class="cancelBtn" style="margin-left:10px;">
+✕ Cancelar reserva
 </button>
   
 <div class="editNote">
@@ -720,11 +779,16 @@ if(data.ok){
 
 document.querySelector(".title").textContent = "Reserva cancelada";
 
+const badge = document.createElement("div");
+badge.className = "cancelBadge";
+badge.textContent = "Reserva cancelada";
+
+document.querySelector(".meta").after(badge);
+
 cancelBtn.style.display = "none";
 editBtn.style.display = "none";
 
 alert("Tu reserva fue cancelada correctamente.");
-
 }else{
 
 alert("No se pudo cancelar la reserva.");
