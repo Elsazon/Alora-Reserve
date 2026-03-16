@@ -443,6 +443,10 @@ Presenta este ticket al llegar al restaurante
 Cambiar reserva
 </button>
 
+<button id="cancelBtn" class="editBtn" style="margin-left:10px;">
+Cancelar reserva
+</button>
+  
 <div class="editNote">
 Cambios disponibles hasta el lunes previo a la función a las 11:59 PM
 </div>
@@ -460,7 +464,7 @@ CONFIG
 ====================== */
 
 const BACKEND_URL =
-"https://script.google.com/macros/s/AKfycbw9X7ZCqQxjZpmIeixjxzAYARF6mTGS8nqH0h8YKQkdc__EGJ0ELfdUkGyQjq3_BIo0/exec";
+"https://script.google.com/macros/s/AKfycbzvniYblbQyD0Rleh3qtFLPjztdj6fZxCww4y-sQVHLWnS0w4rdN15mQ4gUTKUVwXFA/exec";
 
 const SHARED_SECRET = "demo123";
 
@@ -681,6 +685,69 @@ editBtn.disabled = true;
 
 }
 }
+
+/* ======================
+Cancelacion
+====================== */
+
+const cancelBtn = document.getElementById("cancelBtn");
+
+if(editingAllowed(reserva.funcion)){
+
+cancelBtn.onclick = async () => {
+
+const confirmCancel = confirm(
+"¿Seguro que deseas cancelar tu reserva?\n\nEsta acción no se puede deshacer."
+);
+
+if(!confirmCancel) return;
+
+try{
+
+const res = await fetch(BACKEND_URL,{
+method:"POST",
+headers:{ "Content-Type":"text/plain;charset=utf-8" },
+body:JSON.stringify({
+action:"cancel",
+secret:SHARED_SECRET,
+ticketId:ticketId
+})
+});
+
+const data = await res.json();
+
+if(data.ok){
+
+document.querySelector(".title").textContent = "Reserva cancelada";
+
+cancelBtn.style.display = "none";
+editBtn.style.display = "none";
+
+alert("Tu reserva fue cancelada correctamente.");
+
+}else{
+
+alert("No se pudo cancelar la reserva.");
+
+}
+
+}catch(e){
+
+console.error(e);
+alert("Error de conexión.");
+
+}
+
+};
+
+}else{
+
+cancelBtn.textContent = "Cancelación cerrada";
+cancelBtn.style.opacity = ".4";
+cancelBtn.disabled = true;
+
+}
+  
 /* ======================
 Cambio de Reservacion
 ====================== */
