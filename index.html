@@ -1913,7 +1913,7 @@ Universidad Ana G. Méndez · Recinto de Carolina
     /***********************
      * CONFIG
      ***********************/
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbx4TO6yeIaSG18wLNf87J0ywdlr6SuVYlV3wY3L9Ha5KEM4mn_DItgesV6zsZ1GnD23/exec";
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz4nfnr60gL0Y08i2Jz2bie5-64jQKI2de8bk_P8Xp8lV2aus-is9IRMy4dwX6j936T/exec";
     const SHARED_SECRET = "demo123";
 
     const PRECIO_ADULTO = 35;
@@ -2439,17 +2439,18 @@ function addGuest(){
       clearToast();
 
       const payload = {
-        secret: SHARED_SECRET,
-        action: "create",
-        cliente: $("cliente").value,
-        phone: $("telefono").value,
-        email: $("email").value,
-        funcion: $("funcion").value,
-        hora: $("hora").value,
-        guests: getGuests(),
-        notas: $("notas").value || "",
-        descorche: $("descorche").checked
-      };
+secret: SHARED_SECRET,
+action: editId ? "update" : "create",
+reservationId: editId || null,
+cliente: $("cliente").value,
+phone: $("telefono").value,
+email: $("email").value,
+funcion: $("funcion").value,
+hora: $("hora").value,
+guests: getGuests(),
+notas: $("notas").value || "",
+descorche: $("descorche").checked
+};
 
       console.log("PAYLOAD:", payload);
       
