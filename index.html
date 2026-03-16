@@ -2586,6 +2586,29 @@ $("notas").value = reserva.notas;
 }
     
    document.addEventListener("DOMContentLoaded", async ()=>{
+     
+$("year").textContent = new Date().getFullYear();
+
+/* cargar bootstrap primero */
+
+const boot = await cargarBootstrap();
+     
+console.log("BOOTSTRAP:",boot);
+
+if(!boot || !boot.ok){
+alert("Error cargando menú");
+return;
+}
+
+window.ALL_MENUS = boot.menus;
+window.BOOTSTRAP_HORAS = boot.horas;
+
+fillSelect($("funcion"), boot.funciones);
+
+renderFunctionCarousel(boot.funciones);
+/* seleccionar primera función automáticamente */
+
+/* no seleccionar función automáticamente */
 
 const params = new URLSearchParams(window.location.search);
 const editId = params.get("edit");
@@ -2612,29 +2635,6 @@ loadReservationIntoForm(data.reserva);
 
 }
      
-$("year").textContent = new Date().getFullYear();
-
-/* cargar bootstrap primero */
-
-const boot = await cargarBootstrap();
-
-console.log("BOOTSTRAP:",boot);
-
-if(!boot || !boot.ok){
-alert("Error cargando menú");
-return;
-}
-
-window.ALL_MENUS = boot.menus;
-window.BOOTSTRAP_HORAS = boot.horas;
-
-fillSelect($("funcion"), boot.funciones);
-
-renderFunctionCarousel(boot.funciones);
-/* seleccionar primera función automáticamente */
-
-/* no seleccionar función automáticamente */
-
 $("hora").innerHTML = "<option>Selecciona una función primero</option>";
 $("hora").disabled = true;
 
