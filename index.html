@@ -2687,6 +2687,9 @@ const editId = params.get("edit");
 
 if(editId){
 
+$("submitBtn").textContent = "Actualizar reserva";
+$("formTitle").textContent = "Editar reserva";
+  
 const res = await fetch(BACKEND_URL,{
 method:"POST",
 headers:{ "Content-Type":"text/plain;charset=utf-8" },
