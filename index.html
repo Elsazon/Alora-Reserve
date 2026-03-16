@@ -2549,9 +2549,9 @@ btn.textContent = "Confirmar experiencia";
 
 function loadReservationIntoForm(reserva){
 
-$("cliente").value = reserva.cliente;
-$("telefono").value = reserva.phone;
-$("email").value = reserva.email;
+$("cliente").value = reserva.cliente || "";
+$("telefono").value = reserva.telefono || "";
+$("email").value = reserva.email || "";
 
 $("funcion").value = reserva.funcion;
 
@@ -2563,6 +2563,8 @@ $("hora").value = reserva.hora;
 $("guests").innerHTML = "";
 guestCount = 0;
 
+if(reserva.guests && reserva.guests.length){
+
 reserva.guests.forEach(g=>{
 
 addGuest();
@@ -2572,16 +2574,22 @@ const guestEl = $("guests").lastElementChild;
 guestEl.querySelector(".name").value = g.name || "";
 
 guestEl.querySelector(".principal").value = g.principal || "";
-
 guestEl.querySelector(".aperitivo").value = g.aperitivo || "";
-
 guestEl.querySelector(".postre").value = g.postre || "";
 
+if(g.proteina){
+guestEl.querySelector(".proteina").value = g.proteina;
+}
+
 });
+
+}
 
 if(reserva.notas){
 $("notas").value = reserva.notas;
 }
+
+actualizarTotal();
 
 }
     
