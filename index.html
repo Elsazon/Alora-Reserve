@@ -2555,15 +2555,23 @@ $("email").value = reserva.email || "";
 
 $("funcion").value = reserva.funcion;
 
+/* cargar menú y horas primero */
+
 hydrateMenu(reserva.funcion);
 renderHorasBootstrap(reserva.funcion);
 
+/* esperar un tick para que los selects se llenen */
+
+setTimeout(()=>{
+
 $("hora").value = reserva.hora;
+
+/* limpiar guests */
 
 $("guests").innerHTML = "";
 guestCount = 0;
 
-if(reserva.guests){
+/* reconstruir invitados */
 
 reserva.guests.forEach(g=>{
 
@@ -2572,6 +2580,8 @@ addGuest();
 const guestEl = $("guests").lastElementChild;
 
 guestEl.querySelector(".name").value = g.name || "";
+
+/* llenar selects */
 
 if(g.aperitivo){
 guestEl.querySelector(".aperitivo").value = g.aperitivo;
@@ -2591,11 +2601,13 @@ guestEl.querySelector(".proteina").value = g.proteina;
 
 });
 
-}
+/* notas */
 
 $("notas").value = reserva.notas || "";
 
 actualizarTotal();
+
+},100);
 
 }
     
