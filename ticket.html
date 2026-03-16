@@ -394,6 +394,28 @@ Cargando...
 
 </div>
 
+  <div id="costSection" style="
+margin-top:26px;
+padding:18px;
+border-radius:14px;
+border:1px solid var(--line);
+background:rgba(255,255,255,.03);
+display:none;
+text-align:left;
+">
+
+<div style="
+font-family:'Playfair Display',serif;
+font-size:18px;
+margin-bottom:12px;
+">
+Resumen de la experiencia
+</div>
+
+<div id="costBreakdown"></div>
+
+</div>
+
 <div id="notesBlock" class="notes" style="display:none">
 
 <strong>Notas del cliente</strong>
@@ -552,6 +574,78 @@ ${g.proteina ? "<br>+ "+g.proteina : ""}
 menuDiv.appendChild(item);
 
 });
+
+/* ======================
+CALCULAR COSTOS
+====================== */
+
+let adultos = 0;
+let ninos = 0;
+
+reserva.guests.forEach(g=>{
+
+if(g.aperitivo || g.postre){
+adultos++;
+}else{
+ninos++;
+}
+
+});
+
+let total = adultos * 35 + ninos * 12.50;
+
+if(reserva.descorche){
+total += 12;
+}
+
+const costSection = document.getElementById("costSection");
+const costBreakdown = document.getElementById("costBreakdown");
+
+costSection.style.display = "block";
+
+costBreakdown.innerHTML = `
+
+<div class="row">
+<span>Adultos (${adultos})</span>
+<div>$${(adultos*35).toFixed(2)}</div>
+</div>
+
+<div class="row">
+<span>Niños (${ninos})</span>
+<div>$${(ninos*12.50).toFixed(2)}</div>
+</div>
+
+${reserva.descorche ? `
+<div class="row">
+<span>🍷 Descorche</span>
+<div>$12.00</div>
+</div>
+` : ``}
+
+<div class="row" style="
+border-top:1px solid var(--line);
+margin-top:10px;
+padding-top:12px;
+font-weight:600;
+">
+
+<span>Total estimado</span>
+<div>$${total.toFixed(2)}</div>
+
+</div>
+
+<div style="
+font-size:12px;
+margin-top:8px;
+color:var(--muted);
+">
+
+El pago se realiza en el restaurante antes de comenzar el servicio.
+
+</div>
+
+`;
+  
 if(reserva.notas){
 
 document.getElementById("notesBlock").style.display = "block";
