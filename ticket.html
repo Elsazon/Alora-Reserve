@@ -574,7 +574,12 @@ ${g.proteina ? "<br>+ "+g.proteina : ""}
 menuDiv.appendChild(item);
 
 });
+if(reserva.notas){
 
+document.getElementById("notesBlock").style.display = "block";
+document.getElementById("notesText").textContent = reserva.notas;
+
+}
 /* ======================
 CALCULAR COSTOS
 ====================== */
@@ -646,12 +651,7 @@ El pago se realiza en el restaurante antes de comenzar el servicio.
 
 `;
   
-if(reserva.notas){
 
-document.getElementById("notesBlock").style.display = "block";
-document.getElementById("notesText").textContent = reserva.notas;
-
-}
     /* ======================
 Activacio o Bloqueo de Boton
 ====================== */
