@@ -1918,7 +1918,8 @@ Universidad Ana G. Méndez · Recinto de Carolina
 
     const PRECIO_ADULTO = 35;
     const PRECIO_NINO = 12.50;
-
+    let editId = null;
+    
 /** Loader **/
     function hideLoader(){
 
@@ -2683,12 +2684,12 @@ renderFunctionCarousel(boot.funciones);
 /* no seleccionar función automáticamente */
 
 const params = new URLSearchParams(window.location.search);
-const editId = params.get("edit");
+editId = params.get("edit");
 
 if(editId){
 
 $("submitBtn").textContent = "Actualizar reserva";
-$("formTitle").textContent = "Editar reserva";
+document.querySelector(".sectionTitle").textContent = "Editar reserva";
   
 const res = await fetch(BACKEND_URL,{
 method:"POST",
