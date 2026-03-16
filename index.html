@@ -2472,7 +2472,7 @@ if(btn.dataset.loading === "1") return;
 
 btn.dataset.loading = "1";
 btn.disabled = true;
-btn.textContent = "Confirmando…";
+btn.textContent = editId ? "Actualizando…" : "Confirmando…";
 
       try{
         const res = await fetch(BACKEND_URL,{
@@ -2485,8 +2485,14 @@ btn.textContent = "Confirmando…";
 
        if(data.ok){
 
-const personas = payload.guests.length
+/* 🔥 si es edición volver al ticket */
 
+if(editId){
+window.location.href = "ticket.html?id=" + editId;
+return;
+}
+
+const personas = payload.guests.length
 let total = 0
 payload.guests.forEach(g=>{
   if(g.aperitivo || g.postre){
@@ -2635,7 +2641,15 @@ guestEl.querySelector(".aperitivo").value = g.aperitivo;
 }
 
 if(g.principal){
-guestEl.querySelector(".principal").value = g.principal;
+
+const principalSelect = guestEl.querySelector(".principal");
+
+principalSelect.value = g.principal;
+
+/* disparar cambio para cargar proteínas */
+
+principalSelect.dispatchEvent(new Event("change"));
+
 }
 
 if(g.postre){
