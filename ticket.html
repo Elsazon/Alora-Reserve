@@ -446,6 +446,11 @@ const params = new URLSearchParams(window.location.search);
 
 const ticketId = params.get("id");
 
+if(!ticketId){
+alert("Ticket inválido");
+throw new Error("ticketId missing");
+}
+  
 const shortCode =
 "ALR-" + ticketId.replace(/-/g,"").slice(-6).toUpperCase();
 
