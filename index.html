@@ -2560,16 +2560,20 @@ $("cliente").value = reserva.cliente || "";
 $("telefono").value = reserva.telefono || "";
 $("email").value = reserva.email || "";
 
+/* seleccionar función */
 $("funcion").value = reserva.funcion;
 
-/* cargar menú y horas */
+/* habilitar hora */
+$("hora").disabled = false;
 
+/* cargar menú y horas */
 hydrateMenu(reserva.funcion);
 renderHorasBootstrap(reserva.funcion, reserva.hora);
 
 /* seleccionar hora */
-
 const horaSelect = $("hora");
+
+setTimeout(()=>{
 
 let existe = false;
 
@@ -2589,7 +2593,6 @@ horaSelect.appendChild(opt);
 horaSelect.value = reserva.hora;
 
 /* limpiar guests */
-
 $("guests").innerHTML = "";
 guestCount = 0;
 
@@ -2648,6 +2651,8 @@ guestEl.querySelector(".proteina").value = g.proteina;
 $("notas").value = reserva.notas || "";
 
 actualizarTotal();
+
+},80);
 
 }
     
