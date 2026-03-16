@@ -2040,7 +2040,7 @@ pillList("menuPostres", CURRENT_MENU.postres.map(p=>p.nombre));
 pillList("menuNinos", CURRENT_MENU.ninos.map(p=>p.nombre));
 
 }
-    function renderHorasBootstrap(funcion){
+    function renderHorasBootstrap(funcion, horaActual = null){
 
 const selHora = $("hora");
 
@@ -2050,12 +2050,19 @@ selHora.innerHTML = "";
 
 horas.forEach(h=>{
 
-if(h.full) return;
+/* permitir la hora actual aunque esté llena */
+
+if(h.full && h.hora !== horaActual) return;
 
 const opt = document.createElement("option");
 
 opt.value = h.hora;
+
+if(h.full && h.hora === horaActual){
+opt.textContent = `${h.hora} (tu reserva)`;
+}else{
 opt.textContent = `${h.hora} (${h.disponibles} disponibles)`;
+}
 
 selHora.appendChild(opt);
 
@@ -2558,7 +2565,7 @@ $("hora").disabled = false;
 /* cargar menú y horas primero */
 
 hydrateMenu(reserva.funcion);
-renderHorasBootstrap(reserva.funcion);
+renderHorasBootstrap(reserva.funcion, reserva.hora);
 
 /* esperar un tick para que los selects se llenen */
 
