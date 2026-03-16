@@ -2545,9 +2545,73 @@ btn.disabled = false;
 btn.textContent = "Confirmar experiencia";
       }
     }
+/* LOAD RESERVATION */
 
+function loadReservationIntoForm(reserva){
+
+$("cliente").value = reserva.cliente;
+$("telefono").value = reserva.phone;
+$("email").value = reserva.email;
+
+$("funcion").value = reserva.funcion;
+
+hydrateMenu(reserva.funcion);
+renderHorasBootstrap(reserva.funcion);
+
+$("hora").value = reserva.hora;
+
+$("guests").innerHTML = "";
+guestCount = 0;
+
+reserva.guests.forEach(g=>{
+
+addGuest();
+
+const guestEl = $("guests").lastElementChild;
+
+guestEl.querySelector(".name").value = g.name || "";
+
+guestEl.querySelector(".principal").value = g.principal || "";
+
+guestEl.querySelector(".aperitivo").value = g.aperitivo || "";
+
+guestEl.querySelector(".postre").value = g.postre || "";
+
+});
+
+if(reserva.notas){
+$("notas").value = reserva.notas;
+}
+
+}
+    
    document.addEventListener("DOMContentLoaded", async ()=>{
 
+const params = new URLSearchParams(window.location.search);
+const editId = params.get("edit");
+
+if(editId){
+
+const res = await fetch(BACKEND_URL,{
+method:"POST",
+headers:{ "Content-Type":"text/plain;charset=utf-8" },
+body:JSON.stringify({
+action:"get_ticket",
+secret:SHARED_SECRET,
+ticketId:editId
+})
+});
+
+const data = await res.json();
+
+if(data.ok){
+
+loadReservationIntoForm(data.reserva);
+
+}
+
+}
+     
 $("year").textContent = new Date().getFullYear();
 
 /* cargar bootstrap primero */
