@@ -2563,7 +2563,7 @@ $("hora").value = reserva.hora;
 $("guests").innerHTML = "";
 guestCount = 0;
 
-if(reserva.guests && reserva.guests.length){
+if(reserva.guests){
 
 reserva.guests.forEach(g=>{
 
@@ -2573,9 +2573,17 @@ const guestEl = $("guests").lastElementChild;
 
 guestEl.querySelector(".name").value = g.name || "";
 
-guestEl.querySelector(".principal").value = g.principal || "";
-guestEl.querySelector(".aperitivo").value = g.aperitivo || "";
-guestEl.querySelector(".postre").value = g.postre || "";
+if(g.aperitivo){
+guestEl.querySelector(".aperitivo").value = g.aperitivo;
+}
+
+if(g.principal){
+guestEl.querySelector(".principal").value = g.principal;
+}
+
+if(g.postre){
+guestEl.querySelector(".postre").value = g.postre;
+}
 
 if(g.proteina){
 guestEl.querySelector(".proteina").value = g.proteina;
@@ -2585,9 +2593,7 @@ guestEl.querySelector(".proteina").value = g.proteina;
 
 }
 
-if(reserva.notas){
-$("notas").value = reserva.notas;
-}
+$("notas").value = reserva.notas || "";
 
 actualizarTotal();
 
