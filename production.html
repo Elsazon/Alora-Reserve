@@ -1,424 +1,445 @@
 <!doctype html>
 <html lang="es">
-
 <head>
-
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>ALORA · Producción</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-<style>
-
-:root{
-
---bg0:#0e1511;
---bg1:#121a16;
-
---ink:#f4f1ea;
---muted:rgba(244,241,234,.65);
-
---terracotta:#c26a4a;
---gold:#bfa15a;
-
---line:rgba(255,255,255,.08);
-
-}
-
-body{
-
-margin:0;
-font-family:Inter;
-
-color:var(--ink);
-
-background:
-radial-gradient(900px 600px at 15% 10%, rgba(194,106,74,.10), transparent 60%),
-radial-gradient(1000px 700px at 85% 20%, rgba(79,81,56,.15), transparent 60%),
-linear-gradient(180deg,var(--bg0),var(--bg1));
-
-min-height:100vh;
-
-display:flex;
-justify-content:center;
-
-}
-
-.container{
-
-width:1200px;
-max-width:95%;
-
-padding:60px 0;
-
-}
-
-.header{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-margin-bottom:40px;
-
-}
-
-.title{
-
-font-family:"Playfair Display",serif;
-font-size:34px;
-
-}
-
-.funcionSelect{
-
-background:rgba(255,255,255,.05);
-border:1px solid var(--line);
-border-radius:12px;
-
-padding:10px 16px;
-
-color:var(--ink);
-
-}
-
-.stats{
-
-display:grid;
-grid-template-columns:1fr 1fr;
-
-gap:30px;
-
-margin-bottom:40px;
-
-}
-
-.statCard{
-
-background:rgba(255,255,255,.04);
-border:1px solid var(--line);
-border-radius:16px;
-
-padding:24px;
-
-}
-
-.statTitle{
-
-font-size:12px;
-letter-spacing:2px;
-color:var(--muted);
-
-text-transform:uppercase;
-
-margin-bottom:8px;
-
-}
-
-.statValue{
-
-font-size:36px;
-font-weight:600;
-
-}
-
-.board{
-
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-
-gap:30px;
-
-}
-
-.column{
-
-background:rgba(255,255,255,.04);
-border:1px solid var(--line);
-border-radius:16px;
-
-padding:24px;
-
-}
-
-.column h2{
-
-font-family:"Playfair Display",serif;
-margin-bottom:16px;
-
-}
-
-.item{
-
-display:flex;
-justify-content:space-between;
-
-padding:8px 0;
-
-border-bottom:1px solid var(--line);
-
-}
-
-.item:last-child{
-border:none;
-}
-
-.topPlates{
-
-margin-top:40px;
-
-background:rgba(255,255,255,.04);
-border:1px solid var(--line);
-border-radius:16px;
-
-padding:24px;
-
-}
-
-.topPlates h2{
-
-font-family:"Playfair Display",serif;
-
-margin-bottom:18px;
-
-}
-
-</style>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ALORA · Producción</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#0e1511;
+      --bg1:#121a16;
+      --ink:#f4f1ea;
+      --muted:rgba(244,241,234,.65);
+      --terracotta:#c26a4a;
+      --gold:#bfa15a;
+      --line:rgba(255,255,255,.08);
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Inter,Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(900px 600px at 15% 10%, rgba(194,106,74,.10), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(79,81,56,.15), transparent 60%),
+        linear-gradient(180deg,var(--bg0),var(--bg1));
+      min-height:100vh;
+    }
+
+    .container{
+      width:min(1180px,94%);
+      margin:0 auto;
+      padding:42px 0 60px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:18px;
+      margin-bottom:28px;
+      flex-wrap:wrap;
+    }
+
+    .titleWrap h1{
+      margin:0;
+      font-family:"Playfair Display",serif;
+      font-size:32px;
+      font-weight:700;
+    }
+
+    .titleWrap p{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+    }
+
+    .control{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .control label{
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:1.2px;
+    }
+
+    .funcionSelect{
+      appearance:none;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 14px;
+      color:var(--ink);
+      font-size:14px;
+      min-width:190px;
+      outline:none;
+    }
+
+    .funcionSelect:focus{
+      border-color:var(--terracotta);
+      box-shadow:0 0 0 1px var(--terracotta);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
+      margin-bottom:24px;
+    }
+
+    .statCard{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:18px 20px;
+      box-shadow:0 20px 50px rgba(0,0,0,.28);
+    }
+
+    .statLabel{
+      font-size:11px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:1.8px;
+      margin-bottom:8px;
+    }
+
+    .statValue{
+      font-size:30px;
+      font-weight:600;
+      color:var(--gold);
+      line-height:1;
+    }
+
+    .gridTop{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-bottom:18px;
+    }
+
+    .gridBottom{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:18px;
+    }
+
+    .panel{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:20px;
+      box-shadow:0 20px 50px rgba(0,0,0,.28);
+    }
+
+    .panel h2{
+      margin:0 0 14px;
+      font-family:"Playfair Display",serif;
+      font-size:22px;
+      font-weight:700;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      padding:10px 0;
+      border-bottom:1px solid var(--line);
+      font-size:15px;
+    }
+
+    .row:last-child{
+      border-bottom:none;
+    }
+
+    .rowName{
+      color:var(--ink);
+    }
+
+    .rowQty{
+      color:var(--gold);
+      font-weight:600;
+      white-space:nowrap;
+    }
+
+    .empty{
+      color:var(--muted);
+      font-size:14px;
+      padding:6px 0 2px;
+    }
+
+    .errorBox{
+      margin-top:16px;
+      padding:14px 16px;
+      border:1px solid rgba(255,92,92,.35);
+      background:rgba(255,92,92,.08);
+      border-radius:14px;
+      color:var(--ink);
+      display:none;
+    }
+
+    @media (max-width:900px){
+      .stats{grid-template-columns:1fr}
+      .gridTop{grid-template-columns:1fr}
+      .gridBottom{grid-template-columns:1fr}
+      .statValue{font-size:26px}
+    }
+  </style>
 </head>
-
 <body>
-
-<div class="container">
-
-<div class="header">
-
-<div class="title">
-ALORA · Producción
-</div>
-
-<select id="funcionSelect" class="funcionSelect"></select>
-
-</div>
-
-<div class="stats">
-
-<div class="statCard">
-
-<div class="statTitle">
-Covers
-</div>
-
-<div id="coversTotal" class="statValue">
-0
-</div>
-
-</div>
-
-<div class="statCard">
-
-<div class="statTitle">
-Proteínas totales
-</div>
-
-<div id="proteinasTotal" class="statValue">
-0
-</div>
-
-</div>
-
-</div>
-
-<div class="board">
-
-<div class="column">
-
-<h2>Proteínas</h2>
-
-<div id="proteinas"></div>
-
-</div>
-
-<div class="column">
-
-<h2>Aperitivos</h2>
-
-<div id="aperitivos"></div>
-
-</div>
-
-<div class="column">
-
-<h2>Postres</h2>
-
-<div id="postres"></div>
-
-</div>
-
-</div>
-
-<div class="column" style="margin-top:30px">
-
-<h2>Principales</h2>
-
-<div id="principales"></div>
-
-</div>
-
-<div class="topPlates">
-
-<h2>Top Platos</h2>
-
-<div id="topPlates"></div>
-
-</div>
-
-</div>
-
-<script>
-
-const BACKEND_URL =
-"https://script.google.com/macros/s/AKfycbz6YGZOzCxTZZcrxs74Dk3TxG3OJ4UteWl_-fsaDeJk1N-K0kmYr7NL96_9XfHx0Eux/exec";
-
-const SHARED_SECRET = "demo123";
-
-/* cargar funciones */
-
-async function loadFunciones(){
-
-const res = await fetch(BACKEND_URL,{
-method:"POST",
-headers:{ "Content-Type":"text/plain;charset=utf-8" },
-body:JSON.stringify({
-action:"funciones",
-secret:SHARED_SECRET
-})
-});
-
-const data = await res.json();
-
-const select = document.getElementById("funcionSelect");
-
-data.funciones.forEach(f=>{
-
-const opt = document.createElement("option");
-
-opt.value = f;
-opt.textContent = f;
-
-select.appendChild(opt);
-
-});
-
-select.onchange = loadProduction;
-
-loadProduction();
-
-}
-
-/* cargar producción */
-
-async function loadProduction(){
-
-const funcion =
-document.getElementById("funcionSelect").value;
-
-const res = await fetch(BACKEND_URL,{
-method:"POST",
-headers:{ "Content-Type":"text/plain;charset=utf-8" },
-body:JSON.stringify({
-action:"production",
-secret:SHARED_SECRET,
-funcion:funcion
-})
-});
-
-const data = await res.json();
-
-renderProduction(data);
-
-}
-
-/* render */
-
-function renderProduction(data){
-
-document.getElementById("coversTotal").textContent =
-data.covers;
-
-renderColumn("proteinas",data.board.proteinas);
-renderColumn("aperitivos",data.board.aperitivos);
-renderColumn("principales",data.board.principales);
-renderColumn("postres",data.board.postres);
-
-renderTopPlates(data.board.principales);
-
-}
-
-/* render columnas */
-
-function renderColumn(container,data){
-
-const el = document.getElementById(container);
-
-el.innerHTML="";
-
-for(const name in data){
-
-const row = document.createElement("div");
-
-row.className="item";
-
-row.innerHTML = `
-<div>${name}</div>
-<div>${data[name]}</div>
-`;
-
-el.appendChild(row);
-
-}
-
-}
-
-/* top platos */
-
-function renderTopPlates(principales){
-
-const sorted = Object.entries(principales)
-.sort((a,b)=>b[1]-a[1])
-.slice(0,5);
-
-const el = document.getElementById("topPlates");
-
-el.innerHTML="";
-
-sorted.forEach(p=>{
-
-const row = document.createElement("div");
-
-row.className="item";
-
-row.innerHTML = `
-<div>${p[0]}</div>
-<div>${p[1]}</div>
-`;
-
-el.appendChild(row);
-
-});
-
-}
-
-/* init */
-
-loadFunciones();
-
-</script>
-
+  <div class="container">
+
+    <div class="topbar">
+      <div class="titleWrap">
+        <h1>ALORA · Producción</h1>
+        <p>Kitchen board por función</p>
+      </div>
+
+      <div class="control">
+        <label for="funcionSelect">Función</label>
+        <select id="funcionSelect" class="funcionSelect"></select>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="statCard">
+        <div class="statLabel">Covers</div>
+        <div class="statValue" id="coversTotal">0</div>
+      </div>
+
+      <div class="statCard">
+        <div class="statLabel">Proteínas totales</div>
+        <div class="statValue" id="proteinasTotal">0</div>
+      </div>
+
+      <div class="statCard">
+        <div class="statLabel">Top plato</div>
+        <div class="statValue" id="topDish">—</div>
+      </div>
+    </div>
+
+    <div class="gridTop">
+      <div class="panel">
+        <h2>Principales</h2>
+        <div id="principales" class="list"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Top Platos</h2>
+        <div id="topPlates" class="list"></div>
+      </div>
+    </div>
+
+    <div class="gridBottom">
+      <div class="panel">
+        <h2>Proteínas</h2>
+        <div id="proteinas" class="list"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Aperitivos</h2>
+        <div id="aperitivos" class="list"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Postres</h2>
+        <div id="postres" class="list"></div>
+      </div>
+    </div>
+
+    <div id="errorBox" class="errorBox"></div>
+
+  </div>
+
+  <script>
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbzbBcpeqZJijRqobAFs4jteYI-0wxcCiCaTDBEou5L9WlsUKhHnMzFf2VH4ClP-DQQS/exec";
+    const SHARED_SECRET = "demo123";
+
+    function showError(msg){
+      const box = document.getElementById("errorBox");
+      box.style.display = "block";
+      box.textContent = msg;
+    }
+
+    function clearError(){
+      const box = document.getElementById("errorBox");
+      box.style.display = "none";
+      box.textContent = "";
+    }
+
+    async function api(body){
+      const res = await fetch(BACKEND_URL,{
+        method:"POST",
+        headers:{ "Content-Type":"text/plain;charset=utf-8" },
+        body:JSON.stringify(body)
+      });
+      return await res.json();
+    }
+
+    async function loadFunciones(){
+      clearError();
+
+      try{
+        const data = await api({
+          action:"funciones",
+          secret:SHARED_SECRET
+        });
+
+        if(!data.ok || !Array.isArray(data.funciones)){
+          showError(data.error || "No se pudieron cargar las funciones.");
+          return;
+        }
+
+        const select = document.getElementById("funcionSelect");
+        select.innerHTML = "";
+
+        data.funciones.forEach(f=>{
+          const opt = document.createElement("option");
+          opt.value = f;
+          opt.textContent = f;
+          select.appendChild(opt);
+        });
+
+        select.addEventListener("change", loadProduction);
+
+        if(data.funciones.length){
+          loadProduction();
+        }else{
+          showError("No hay funciones disponibles.");
+        }
+
+      }catch(e){
+        showError("Error cargando funciones: " + String(e));
+      }
+    }
+
+    async function loadProduction(){
+      clearError();
+
+      const funcion = document.getElementById("funcionSelect").value;
+
+      if(!funcion){
+        showError("Selecciona una función.");
+        return;
+      }
+
+      try{
+        const data = await api({
+          action:"production",
+          secret:SHARED_SECRET,
+          funcion
+        });
+
+        if(!data.ok){
+          showError(data.error || "No se pudo cargar producción.");
+          return;
+        }
+
+        const board = data.board || {
+          aperitivos:{},
+          principales:{},
+          postres:{},
+          proteinas:{}
+        };
+
+        const covers = Number(data.covers || 0);
+
+        document.getElementById("coversTotal").textContent = covers;
+
+        const proteinasTotal = sumObjectValues(board.proteinas);
+        document.getElementById("proteinasTotal").textContent = proteinasTotal;
+
+        renderList("proteinas", board.proteinas);
+        renderList("aperitivos", board.aperitivos);
+        renderList("principales", board.principales);
+        renderList("postres", board.postres);
+        renderTop(board.principales);
+
+      }catch(e){
+        showError("Error cargando producción: " + String(e));
+      }
+    }
+
+    function sumObjectValues(obj){
+      return Object.values(obj || {}).reduce((acc,n)=>acc + Number(n || 0),0);
+    }
+
+    function renderList(containerId, data){
+      const el = document.getElementById(containerId);
+      el.innerHTML = "";
+
+      const entries = Object.entries(data || {}).sort((a,b)=>b[1]-a[1]);
+
+      if(!entries.length){
+        el.innerHTML = '<div class="empty">Sin datos todavía</div>';
+        return;
+      }
+
+      entries.forEach(([name, qty])=>{
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `
+          <div class="rowName">${escapeHtml(name)}</div>
+          <div class="rowQty">${qty}</div>
+        `;
+        el.appendChild(row);
+      });
+    }
+
+    function renderTop(principales){
+      const entries = Object.entries(principales || {}).sort((a,b)=>b[1]-a[1]);
+      const top = entries.slice(0,5);
+
+      const topDishEl = document.getElementById("topDish");
+      topDishEl.textContent = top.length ? top[0][1] : "0";
+
+      const el = document.getElementById("topPlates");
+      el.innerHTML = "";
+
+      if(!top.length){
+        el.innerHTML = '<div class="empty">Sin datos todavía</div>';
+        return;
+      }
+
+      top.forEach(([name, qty])=>{
+        const row = document.createElement("div");
+        row.className = "row";
+        row.innerHTML = `
+          <div class="rowName">${escapeHtml(name)}</div>
+          <div class="rowQty">${qty}</div>
+        `;
+        el.appendChild(row);
+      });
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    loadFunciones();
+  </script>
 </body>
 </html>
