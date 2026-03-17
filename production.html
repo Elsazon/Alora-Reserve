@@ -51,8 +51,8 @@ justify-content:center;
 
 .container{
 
-width:1100px;
-max-width:94%;
+width:1200px;
+max-width:95%;
 
 padding:60px 0;
 
@@ -64,14 +64,14 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 
-margin-bottom:50px;
+margin-bottom:40px;
 
 }
 
 .title{
 
 font-family:"Playfair Display",serif;
-font-size:32px;
+font-size:34px;
 
 }
 
@@ -79,22 +79,51 @@ font-size:32px;
 
 background:rgba(255,255,255,.05);
 border:1px solid var(--line);
-border-radius:10px;
+border-radius:12px;
 
 padding:10px 16px;
 
 color:var(--ink);
 
-font-size:14px;
+}
+
+.stats{
+
+display:grid;
+grid-template-columns:1fr 1fr;
+
+gap:30px;
+
+margin-bottom:40px;
 
 }
 
-.covers{
+.statCard{
+
+background:rgba(255,255,255,.04);
+border:1px solid var(--line);
+border-radius:16px;
+
+padding:24px;
+
+}
+
+.statTitle{
+
+font-size:12px;
+letter-spacing:2px;
+color:var(--muted);
+
+text-transform:uppercase;
+
+margin-bottom:8px;
+
+}
+
+.statValue{
 
 font-size:36px;
 font-weight:600;
-
-margin-bottom:40px;
 
 }
 
@@ -110,9 +139,7 @@ gap:30px;
 .column{
 
 background:rgba(255,255,255,.04);
-
 border:1px solid var(--line);
-
 border-radius:16px;
 
 padding:24px;
@@ -122,8 +149,7 @@ padding:24px;
 .column h2{
 
 font-family:"Playfair Display",serif;
-
-margin-bottom:18px;
+margin-bottom:16px;
 
 }
 
@@ -132,11 +158,9 @@ margin-bottom:18px;
 display:flex;
 justify-content:space-between;
 
-padding:10px 0;
+padding:8px 0;
 
 border-bottom:1px solid var(--line);
-
-font-size:16px;
 
 }
 
@@ -144,8 +168,24 @@ font-size:16px;
 border:none;
 }
 
-.item span{
-color:var(--muted);
+.topPlates{
+
+margin-top:40px;
+
+background:rgba(255,255,255,.04);
+border:1px solid var(--line);
+border-radius:16px;
+
+padding:24px;
+
+}
+
+.topPlates h2{
+
+font-family:"Playfair Display",serif;
+
+margin-bottom:18px;
+
 }
 
 </style>
@@ -166,25 +206,49 @@ ALORA · Producción
 
 </div>
 
-<div id="coversTotal" class="covers">
-0 covers
+<div class="stats">
+
+<div class="statCard">
+
+<div class="statTitle">
+Covers
+</div>
+
+<div id="coversTotal" class="statValue">
+0
+</div>
+
+</div>
+
+<div class="statCard">
+
+<div class="statTitle">
+Proteínas totales
+</div>
+
+<div id="proteinasTotal" class="statValue">
+0
+</div>
+
+</div>
+
 </div>
 
 <div class="board">
 
 <div class="column">
 
-<h2>Aperitivos</h2>
+<h2>Proteínas</h2>
 
-<div id="aperitivos"></div>
+<div id="proteinas"></div>
 
 </div>
 
 <div class="column">
 
-<h2>Principales</h2>
+<h2>Aperitivos</h2>
 
-<div id="principales"></div>
+<div id="aperitivos"></div>
 
 </div>
 
@@ -198,11 +262,25 @@ ALORA · Producción
 
 </div>
 
+<div class="column" style="margin-top:30px">
+
+<h2>Principales</h2>
+
+<div id="principales"></div>
+
+</div>
+
+<div class="topPlates">
+
+<h2>Top Platos</h2>
+
+<div id="topPlates"></div>
+
+</div>
+
 </div>
 
 <script>
-
-/* CONFIG */
 
 const BACKEND_URL =
 "https://script.google.com/macros/s/AKfycbz6YGZOzCxTZZcrxs74Dk3TxG3OJ4UteWl_-fsaDeJk1N-K0kmYr7NL96_9XfHx0Eux/exec";
@@ -226,14 +304,12 @@ const data = await res.json();
 
 const select = document.getElementById("funcionSelect");
 
-select.innerHTML="";
-
 data.funciones.forEach(f=>{
 
-const opt=document.createElement("option");
+const opt = document.createElement("option");
 
-opt.value=f;
-opt.textContent=f;
+opt.value = f;
+opt.textContent = f;
 
 select.appendChild(opt);
 
@@ -256,7 +332,7 @@ const res = await fetch(BACKEND_URL,{
 method:"POST",
 headers:{ "Content-Type":"text/plain;charset=utf-8" },
 body:JSON.stringify({
-action:"production_board",
+action:"production",
 secret:SHARED_SECRET,
 funcion:funcion
 })
@@ -264,28 +340,27 @@ funcion:funcion
 
 const data = await res.json();
 
-renderProduction(data.board);
+renderProduction(data);
 
 }
 
 /* render */
 
-function renderProduction(board){
-
-renderColumn("aperitivos",board.aperitivos);
-renderColumn("principales",board.principales);
-renderColumn("postres",board.postres);
-
-let covers=0;
-
-Object.values(board.principales).forEach(v=>{
-covers+=v;
-});
+function renderProduction(data){
 
 document.getElementById("coversTotal").textContent =
-covers+" covers";
+data.covers;
+
+renderColumn("proteinas",data.board.proteinas);
+renderColumn("aperitivos",data.board.aperitivos);
+renderColumn("principales",data.board.principales);
+renderColumn("postres",data.board.postres);
+
+renderTopPlates(data.board.principales);
 
 }
+
+/* render columnas */
 
 function renderColumn(container,data){
 
@@ -293,20 +368,49 @@ const el = document.getElementById(container);
 
 el.innerHTML="";
 
-for(const plato in data){
+for(const name in data){
 
-const row=document.createElement("div");
+const row = document.createElement("div");
 
 row.className="item";
 
-row.innerHTML=`
-<div>${plato}</div>
-<div>${data[plato]}</div>
+row.innerHTML = `
+<div>${name}</div>
+<div>${data[name]}</div>
 `;
 
 el.appendChild(row);
 
 }
+
+}
+
+/* top platos */
+
+function renderTopPlates(principales){
+
+const sorted = Object.entries(principales)
+.sort((a,b)=>b[1]-a[1])
+.slice(0,5);
+
+const el = document.getElementById("topPlates");
+
+el.innerHTML="";
+
+sorted.forEach(p=>{
+
+const row = document.createElement("div");
+
+row.className="item";
+
+row.innerHTML = `
+<div>${p[0]}</div>
+<div>${p[1]}</div>
+`;
+
+el.appendChild(row);
+
+});
 
 }
 
