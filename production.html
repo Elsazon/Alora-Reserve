@@ -95,7 +95,7 @@
 
     .stats{
       display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
+      grid-template-columns:repeat(2,minmax(0,1fr));
       gap:16px;
       margin-bottom:24px;
     }
@@ -239,10 +239,11 @@ text-transform:uppercase;
       <div class="titleWrap">
         <h1>ALORA · Producción</h1>
         <p>Kitchen board por función</p>
-      </div>
-      <div id="updated" class="updated">
+        <div id="updated" class="updated">
       Actualizado: —
       </div>
+      </div>
+      
 
       <div class="control">
         <select id="funcionSelect" class="funcionSelect"></select>
@@ -401,7 +402,11 @@ text-transform:uppercase;
         renderList("postres", board.postres);
         renderList("basePrincipales", board.basePrincipales);
 
-        
+        document.getElementById("updated").textContent =
+"Actualizado: " + new Date().toLocaleTimeString("es-PR",{
+hour:"numeric",
+minute:"2-digit"
+});
 
       }catch(e){
         showError("Error cargando producción: " + String(e));
@@ -413,53 +418,30 @@ text-transform:uppercase;
     }
 
     function renderList(containerId, data){
-      const entries = Object.entries(data || {}).sort((a,b)=>b[1]-a[1]);
-      const el = document.getElementById(containerId);
-      el.innerHTML = "";
 
-      const entries = Object.entries(data || {}).sort((a,b)=>b[1]-a[1]);
+  const el = document.getElementById(containerId);
+  el.innerHTML = "";
 
-      if(!entries.length){
-        el.innerHTML = '<div class="empty">Sin datos todavía</div>';
-        return;
-      }
+  const entries = Object.entries(data || {}).sort((a,b)=>b[1]-a[1]);
 
-      entries.forEach(([name, qty])=>{
-        const row = document.createElement("div");
-        row.className = "row";
-        row.innerHTML = `
-          <div class="rowName">${escapeHtml(name)}</div>
-          <div class="rowQty">${qty}</div>
-        `;
-        el.appendChild(row);
-      });
-    }
+  if(!entries.length){
+    el.innerHTML = '<div class="empty">Sin datos todavía</div>';
+    return;
+  }
 
-    function renderTop(principales){
-      const entries = Object.entries(principales || {}).sort((a,b)=>b[1]-a[1]);
-      const top = entries.slice(0,5);
+  entries.forEach(([name, qty])=>{
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `
+      <div class="rowName">${escapeHtml(name)}</div>
+      <div class="rowQty">${qty}</div>
+    `;
+    el.appendChild(row);
+  });
 
-      const topDishEl = document.getElementById("topDish");
-      topDishEl.textContent = top.length ? top[0][1] : "0";
+}
 
-      const el = document.getElementById("topPlates");
-      el.innerHTML = "";
-
-      if(!top.length){
-        el.innerHTML = '<div class="empty">Sin datos todavía</div>';
-        return;
-      }
-
-      top.forEach(([name, qty])=>{
-        const row = document.createElement("div");
-        row.className = "row";
-        row.innerHTML = `
-          <div class="rowName">${escapeHtml(name)}</div>
-          <div class="rowQty">${qty}</div>
-        `;
-        el.appendChild(row);
-      });
-    }
+   
 
     function escapeHtml(str){
       return String(str)
@@ -469,11 +451,7 @@ text-transform:uppercase;
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
     }
-    document.getElementById("updated").textContent =
-"Actualizado: " + new Date().toLocaleTimeString("es-PR",{
-hour:"numeric",
-minute:"2-digit"
-});
+    
 
     loadFunciones();
     setInterval(loadProduction,20000);
