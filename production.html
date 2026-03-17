@@ -202,6 +202,34 @@
       .gridBottom{grid-template-columns:1fr}
       .statValue{font-size:26px}
     }
+    .rowQty{
+
+background:#bfa15a;
+color:#111;
+
+padding:4px 10px;
+
+border-radius:8px;
+
+font-weight:600;
+
+min-width:40px;
+text-align:center;
+
+}
+    .updated{
+
+margin-top:6px;
+
+font-size:11px;
+
+color:rgba(244,241,234,.55);
+
+letter-spacing:1px;
+
+text-transform:uppercase;
+
+}
   </style>
 </head>
 <body>
@@ -212,9 +240,11 @@
         <h1>ALORA · Producción</h1>
         <p>Kitchen board por función</p>
       </div>
+      <div id="updated" class="updated">
+      Actualizado: —
+      </div>
 
       <div class="control">
-        <label for="funcionSelect">Función</label>
         <select id="funcionSelect" class="funcionSelect"></select>
       </div>
     </div>
@@ -230,28 +260,21 @@
         <div class="statValue" id="proteinasTotal">0</div>
       </div>
 
-      <div class="statCard">
-        <div class="statLabel">Top plato</div>
-        <div class="statValue" id="topDish">—</div>
-      </div>
-    </div>
+  <div class="gridTop">
 
-    <div class="gridTop">
-      <div class="panel">
-        <h2>Principales</h2>
-        <div id="principales" class="list"></div>
-      </div>
-
-      <div class="panel">
+<div class="panel">
 <h2>Base Principales</h2>
 <div id="basePrincipales" class="list"></div>
 </div>
 
-      <div class="panel">
-        <h2>Top Platos</h2>
-        <div id="topPlates" class="list"></div>
-      </div>
-    </div>
+<div class="panel">
+<h2>Combinaciones</h2>
+<div id="principales" class="list"></div>
+</div>
+
+</div>
+
+     
 
     <div class="gridBottom">
       <div class="panel">
@@ -377,7 +400,7 @@
         renderList("principales", board.principales);
         renderList("postres", board.postres);
         renderList("basePrincipales", board.basePrincipales);
-        renderTop(board.principales);
+
         
 
       }catch(e){
@@ -390,6 +413,7 @@
     }
 
     function renderList(containerId, data){
+      const entries = Object.entries(data || {}).sort((a,b)=>b[1]-a[1]);
       const el = document.getElementById(containerId);
       el.innerHTML = "";
 
@@ -445,8 +469,14 @@
         .replaceAll('"',"&quot;")
         .replaceAll("'","&#039;");
     }
+    document.getElementById("updated").textContent =
+"Actualizado: " + new Date().toLocaleTimeString("es-PR",{
+hour:"numeric",
+minute:"2-digit"
+});
 
     loadFunciones();
+    setInterval(loadProduction,20000);
   </script>
 </body>
 </html>
