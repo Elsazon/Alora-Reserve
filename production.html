@@ -243,6 +243,11 @@
       </div>
 
       <div class="panel">
+<h2>Base Principales</h2>
+<div id="basePrincipales" class="list"></div>
+</div>
+
+      <div class="panel">
         <h2>Top Platos</h2>
         <div id="topPlates" class="list"></div>
       </div>
@@ -270,7 +275,7 @@
   </div>
 
   <script>
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbzbBcpeqZJijRqobAFs4jteYI-0wxcCiCaTDBEou5L9WlsUKhHnMzFf2VH4ClP-DQQS/exec";
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxlr64UiDT_N4nZx-RVU0s7OtJWFVbGmOWLOBBSYeE_ZXkN3-jzC9RTP8EgrSUcZp9-/exec";
     const SHARED_SECRET = "demo123";
 
     function showError(msg){
@@ -371,7 +376,9 @@
         renderList("aperitivos", board.aperitivos);
         renderList("principales", board.principales);
         renderList("postres", board.postres);
+        renderList("basePrincipales", board.basePrincipales);
         renderTop(board.principales);
+        
 
       }catch(e){
         showError("Error cargando producción: " + String(e));
