@@ -1913,7 +1913,7 @@ Universidad Ana G. Méndez · Recinto de Carolina
     /***********************
      * CONFIG
      ***********************/
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbzTcoYle5RGIp94ek5xsnErF9GhSpA7RuaDt8BLdIAGSjPjo0_dPUCNjHMBgWYBAykV/exec";
+    const BACKEND_URL = "hhttps://script.google.com/macros/s/AKfycbyxgEL9fCZHe3HBlcHR2AvVN6gQAgR3nVnuqXSu4qGElW84pOUX91-k5PfLFeHsNcI4/exec";
     const SHARED_SECRET = "demo123";
 
     const PRECIO_ADULTO = 35;
@@ -1932,6 +1932,38 @@ loader.style.display = "none";
 },600);
 
 }
+
+function funcionCerradaFrontend(funcion){
+
+const FUNCION_FECHAS = {
+"Función 1":"2026-03-19",
+"Función 2":"2026-03-26",
+"Función 3":"2026-04-09",
+"Función 4":"2026-04-16",
+"Función 5":"2026-04-23",
+"Función 6":"2026-04-30",
+"Función 7":"2026-05-07",
+"Función 8":"2026-05-14"
+};
+
+const fecha = FUNCION_FECHAS[funcion];
+
+if(!fecha) return false;
+
+const funcionDate = new Date(fecha);
+
+const dia = funcionDate.getDay();
+const diff = dia === 0 ? -6 : 1 - dia;
+
+const lunes = new Date(funcionDate);
+lunes.setDate(funcionDate.getDate() + diff);
+
+lunes.setHours(23,59,59,999);
+
+return new Date() > lunes;
+
+}
+    
   /** BootStrapOptimizador **/
 async function cargarBootstrap(){
 
@@ -2690,9 +2722,12 @@ return;
 window.ALL_MENUS = boot.menus;
 window.BOOTSTRAP_HORAS = boot.horas;
 
-fillSelect($("funcion"), boot.funciones);
+/* 🔒 filtrar funciones cerradas */
+const funcionesDisponibles = boot.funciones.filter(f => !funcionCerradaFrontend(f));
 
-renderFunctionCarousel(boot.funciones);
+fillSelect($("funcion"), funcionesDisponibles);
+
+renderFunctionCarousel(funcionesDisponibles);
 /* seleccionar primera función automáticamente */
 
 /* no seleccionar función automáticamente */
