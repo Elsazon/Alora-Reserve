@@ -521,7 +521,7 @@ const $ = id => document.getElementById(id);
 let HOST_CACHE = {};
 let CURRENT_LIST = [];
 let SELECTED_RESERVA_ID = null;
-let SELECTED_MESA = null;
+let SELECTED_MESA = [];
 let CURRENT_ZONE = "salon";
 
 function fillSelect(el, list){
@@ -725,10 +725,12 @@ function paintMesas(list){
     }
   });
 
-  if(SELECTED_MESA){
-    const selected = document.querySelector(`.tableNode[data-id="${SELECTED_MESA}"]`);
-    if(selected) selected.classList.add("selected");
-  }
+  if(SELECTED_MESAS.length){
+  SELECTED_MESAS.forEach(id=>{
+    const el = document.querySelector(`.tableNode[data-id="${id}"]`);
+    if(el) el.classList.add("selected");
+  });
+}
 }
 
 function renderReservas(list){
@@ -802,7 +804,13 @@ if(estado === "Cancelado") badgeClass = "cancelled";
 }
 
 function selectMesa(id){
-  SELECTED_MESA = id;
+
+  if(SELECTED_MESAS.includes(id)){
+    SELECTED_MESAS = SELECTED_MESAS.filter(m=>m!==id);
+  }else{
+    SELECTED_MESAS.push(id);
+  }
+
   paintMesas(CURRENT_LIST);
 
   if(SELECTED_RESERVA_ID){
@@ -846,16 +854,21 @@ async function arrive(id){
 }
 
 async function assignMesa(id){
-  if(!SELECTED_MESA){
-    alert("Selecciona una mesa primero.");
+
+  if(!SELECTED_MESAS.length){
+    alert("Selecciona al menos una mesa.");
     return;
   }
+
+  const mesaString = SELECTED_MESAS.join(" + ");
 
   await api({
     action:"host_update",
     id:id,
-    mesa:SELECTED_MESA
+    mesa:mesaString
   });
+
+  SELECTED_MESAS = [];
 
   await loadReservas();
 }
