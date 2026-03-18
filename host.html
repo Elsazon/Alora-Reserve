@@ -212,8 +212,9 @@ select:focus,input:focus{
   height:clamp(500px,70vh,700px);
   border:1px solid var(--line);
   border-radius:18px;
-  background:#0e1511;
-  overflow:hidden;
+  background:
+    radial-gradient(circle at left, rgba(255,255,255,.03), transparent 60%),
+    #0e1511;
 }
 
 /* 🔥 mesas */
@@ -522,27 +523,27 @@ function renderMapBase(){
   container.innerHTML = "";
 
   // SALON PRINCIPAL
-  const SALON = [
-  // fila 1
-  {id:"41",x:10,y:12},
-  {id:"31",x:35,y:12},
-  {id:"21",x:60,y:12},
-  {id:"11",x:85,y:12},
+ const SALON = [
+  // fila 1 (más abierta arriba)
+  {id:"41",x:12,y:12},
+  {id:"31",x:38,y:12},
+  {id:"21",x:62,y:12},
+  {id:"11",x:86,y:12},
 
-  // fila 2
-  {id:"42",x:10,y:32},
-  {id:"32",x:35,y:32},
-  {id:"22",x:60,y:32},
-  {id:"12",x:85,y:32},
+  // fila 2 (ligeramente más adentro)
+  {id:"42",x:10,y:30},
+  {id:"32",x:38,y:30},
+  {id:"22",x:62,y:30},
+  {id:"12",x:86,y:30},
 
   // fila 3
-  {id:"43",x:10,y:52},
-  {id:"33",x:35,y:52},
-  {id:"23",x:60,y:52},
-  {id:"13",x:85,y:52},
+  {id:"43",x:10,y:50},
+  {id:"33",x:38,y:50},
+  {id:"23",x:62,y:50},
+  {id:"13",x:86,y:50},
 
-  // mesa suelta (lado)
-  {id:"44",x:10,y:72}
+  // fila 4 (más abajo pegado curva)
+  {id:"44",x:12,y:70}
 ];
 
   // BARRA (ALTAS = circle)
