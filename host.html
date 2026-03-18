@@ -319,6 +319,9 @@ select:focus,input:focus{
   background:var(--gold);
   color:#111;
 }
+  .swatch.libre{ background:#1a211d; }
+.swatch.ocupada{ background:#c26a4a; }
+.swatch.llego{ background:#3fa86a; }
   
 </style>
 </head>
@@ -382,74 +385,40 @@ select:focus,input:focus{
     </div>
 
     <!-- CENTRO -->
-    <div class="panel">
-      <div class="panelHead">
-        <h2>Mapa del salón</h2>
-         <div style="margin-top:10px; display:flex; gap:8px;">
-  <button class="zoneBtn active" onclick="setZone('salon')">Salón</button>
-  <button class="zoneBtn" onclick="setZone('barra')">Barra</button>
-</div>
-        <p>20 mesas · salón principal + mesas bajas + barra</p>
-      </div>
+    <!-- CENTRO -->
+<div class="panel">
+  <div class="panelHead">
+    <h2>Mapa del salón</h2>
 
-      <div class="panelBody">
+    <div style="margin-top:10px; display:flex; gap:8px;">
+      <button class="zoneBtn active" onclick="setZone('salon', event)">Salón</button>
+      <button class="zoneBtn" onclick="setZone('barra', event)">Barra</button>
+    </div>
 
-  <div class="mapContainer">
+    <p>20 mesas · layout real</p>
+  </div>
+
+  <div class="panelBody">
 
     <div class="floor"></div>
 
+    <!-- LEYENDA LIMPIA -->
     <div class="sideLegend">
-      <div class="zoneLabel">Leyenda</div>
-
       <div class="legendItem">
-        <div class="swatch libre"></div>
-        Libre
+        <div class="swatch libre"></div> Libre
       </div>
 
       <div class="legendItem">
-        <div class="swatch ocupada"></div>
-        Asignada
+        <div class="swatch ocupada"></div> Asignada
       </div>
 
       <div class="legendItem">
-        <div class="swatch llego"></div>
-        Llegó
-      </div>
-
-      <div class="smallMuted">
-        Haz clic en una mesa para seleccionarla. Luego abre una reserva y asígnala.
+        <div class="swatch llego"></div> Llegó
       </div>
     </div>
 
   </div>
-
 </div>
-            <div class="zoneLabel">Leyenda</div>
-
-            <div class="legendItem">
-              <div class="swatch libre"></div>
-              Libre
-            </div>
-
-            <div class="legendItem">
-              <div class="swatch ocupada"></div>
-              Asignada
-            </div>
-
-            <div class="legendItem">
-              <div class="swatch llego"></div>
-              Llegó
-            </div>
-
-            <div class="smallMuted">
-              Haz clic en una mesa para seleccionarla. Luego abre una reserva y asígnala.
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
     <!-- DERECHA -->
     <div class="panel">
       <div class="panelHead">
@@ -554,11 +523,27 @@ function renderMapBase(){
 
   // SALON PRINCIPAL
   const SALON = [
-    {id:"41",x:8,y:10},{id:"31",x:35,y:10},{id:"21",x:60,y:10},{id:"11",x:82,y:10},
-    {id:"42",x:8,y:30},{id:"32",x:35,y:30},{id:"22",x:60,y:30},{id:"12",x:82,y:30},
-    {id:"43",x:8,y:50},{id:"33",x:35,y:50},{id:"23",x:60,y:50},{id:"13",x:82,y:50},
-    {id:"44",x:8,y:70}
-  ];
+  // fila 1
+  {id:"41",x:10,y:12},
+  {id:"31",x:35,y:12},
+  {id:"21",x:60,y:12},
+  {id:"11",x:85,y:12},
+
+  // fila 2
+  {id:"42",x:10,y:32},
+  {id:"32",x:35,y:32},
+  {id:"22",x:60,y:32},
+  {id:"12",x:85,y:32},
+
+  // fila 3
+  {id:"43",x:10,y:52},
+  {id:"33",x:35,y:52},
+  {id:"23",x:60,y:52},
+  {id:"13",x:85,y:52},
+
+  // mesa suelta (lado)
+  {id:"44",x:10,y:72}
+];
 
   // BARRA (ALTAS = circle)
   const ALTAS = [
