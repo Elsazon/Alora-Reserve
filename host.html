@@ -215,6 +215,22 @@ select:focus,input:focus{
   border:1px solid var(--line);
   border-radius:18px;
 }
+  .floor::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:100%;
+  pointer-events:none;
+
+  background:
+    linear-gradient(
+      to bottom,
+      transparent 60%,
+      rgba(255,255,255,0.02)
+    );
+}
 
 /* 🔥 mesas */
 .tableNode{
@@ -560,16 +576,28 @@ function renderMapBase(){
   const container = document.querySelector(".floor");
   container.innerHTML = "";
 
-  // pared curva izquierda
+ // 🔥 SALÓN
+if(CURRENT_ZONE === "salon"){
+
   const curve = document.createElement("div");
   curve.className = "wallCurve";
   container.appendChild(curve);
 
-  // barra superior
+  createDoor(86, 84, false); // entrada principal
+  createDoor(2, 40, true);   // lateral izquierda
+
+}
+
+// 🔥 BARRA
+if(CURRENT_ZONE === "barra"){
+
   const bar = document.createElement("div");
   bar.className = "bar";
   bar.innerHTML = "BARRA";
   container.appendChild(bar);
+
+  createDoor(46, 8, false); // acceso barra
+}
 
   // helpers
   function createDoor(x, y, vertical = false){
@@ -625,17 +653,17 @@ function renderMapBase(){
 
   // barra / lounge
   const ALTAS = [
-    {id:"A1",x:78,y:18},
-    {id:"A2",x:78,y:35},
-    {id:"A3",x:12,y:72},
-    {id:"A4",x:28,y:72},
-    {id:"A5",x:44,y:72}
-  ];
+  {id:"A1",x:40,y:20},
+  {id:"A2",x:55,y:20},
+  {id:"A3",x:70,y:20},
+  {id:"A4",x:45,y:40},
+  {id:"A5",x:65,y:40}
+];
 
-  const BAJAS = [
-    {id:"B1",x:18,y:42},
-    {id:"B2",x:48,y:42}
-  ];
+const BAJAS = [
+  {id:"B1",x:45,y:60},
+  {id:"B2",x:65,y:60}
+];
 
   if(CURRENT_ZONE === "salon"){
     SALON.forEach(t=>createTable(t,"square"));
