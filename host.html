@@ -543,16 +543,17 @@ function fillSelect(el, list){
 
 function handleMesaClick(id){
 
-  // buscar si hay reserva en esa mesa
-  const reserva = CURRENT_LIST.find(r => r.mesa === id);
+  const reserva = CURRENT_LIST.find(r=>{
+    if(!r.mesa) return false;
+
+    return r.mesa.split(" + ").includes(id);
+  });
 
   if(reserva){
-    // 🔥 abrir detalle automáticamente
     openReserva(reserva.id);
     return;
   }
 
-  // si no hay reserva → comportamiento normal
   selectMesa(id);
 }
 
@@ -732,6 +733,7 @@ function renderMapBase(){
 }
 
 function paintMesas(list){
+
   document.querySelectorAll(".tableNode").forEach(el=>{
     el.classList.remove("ocupada","llego","selected");
     el.classList.add("libre");
@@ -740,27 +742,29 @@ function paintMesas(list){
   list.forEach(r=>{
     if(!r.mesa) return;
 
-const mesas = r.mesa.split(" + ");
+    const mesas = r.mesa.split(" + ");
 
-mesas.forEach(id=>{
-  const el = document.querySelector(`.tableNode[data-id="${id}"]`);
-  if(!el) return;
+    mesas.forEach(id=>{
+      const el = document.querySelector(`.tableNode[data-id="${id}"]`);
+      if(!el) return;
 
-  el.classList.remove("libre");
+      el.classList.remove("libre");
 
-  if(r.llego){
-    el.classList.add("llego");
-  }else{
-    el.classList.add("ocupada");
-  }
-});
-
-  if(SELECTED_MESAS.length){
-  SELECTED_MESAS.forEach(id=>{
-    const el = document.querySelector(`.tableNode[data-id="${id}"]`);
-    if(el) el.classList.add("selected");
+      if(r.llego){
+        el.classList.add("llego");
+      }else{
+        el.classList.add("ocupada");
+      }
+    });
   });
-}
+
+  // 🔥 selección (fuera del loop)
+  if(SELECTED_MESAS.length){
+    SELECTED_MESAS.forEach(id=>{
+      const el = document.querySelector(`.tableNode[data-id="${id}"]`);
+      if(el) el.classList.add("selected");
+    });
+  }
 }
 
 function renderReservas(list){
@@ -1009,7 +1013,7 @@ function showToast(msg){
 }
 function getMesaActualLabel(r){
   if(r.mesa) return r.mesa;
-  if(SELECTED_MESA) return `sin asignar · mesa seleccionada ${SELECTED_MESA}`;
+  if(SELECTED_MESAS.length) return `sin asignar · mesa seleccionada ${SELECTED_MESAS.length}`;
   return "—";
 }
 
@@ -1018,7 +1022,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
 
   $("funcion").addEventListener("change", async ()=>{
     SELECTED_RESERVA_ID = null;
-    SELECTED_MESA = null;
+    SELECTED_MESAS.length = null;
     await loadReservas();
   });
 
