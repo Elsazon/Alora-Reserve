@@ -381,25 +381,7 @@ select:focus,input:focus{
   
 </style>
 </head>
-<div id="qrModal" style="
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.85);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:999;
-">
 
-  <div style="background:#121a16;padding:20px;border-radius:20px;">
-    <div id="qr-reader" style="width:300px;"></div>
-
-    <button onclick="closeQR()" style="margin-top:10px;">Cerrar</button>
-  </div>
-
-</div>
-
-<script src="https://unpkg.com/html5-qrcode"></script>
 <body>
 <div class="container">
 
@@ -960,5 +942,24 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   await loadReservas();
 });
 </script>
+  <div id="qrModal" style="
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.85);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999;
+">
+
+  <div style="background:#121a16;padding:20px;border-radius:20px;">
+    <div id="qr-reader" style="width:300px;"></div>
+
+    <button onclick="closeQR()" style="margin-top:10px;">Cerrar</button>
+  </div>
+
+</div>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
 </body>
 </html>
