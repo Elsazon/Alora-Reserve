@@ -125,10 +125,6 @@ select,input{
   outline:none;
 }
 
-input::placeholder{
-  color:rgba(244,241,234,.35);
-}
-
 select:focus,input:focus{
   border-color:var(--terracotta);
   box-shadow:0 0 0 1px var(--terracotta);
@@ -153,8 +149,6 @@ select:focus,input:focus{
   font-size:11px;
   color:var(--muted);
   text-transform:uppercase;
-  letter-spacing:1.4px;
-  margin-bottom:8px;
 }
 
 .statValue{
@@ -179,27 +173,15 @@ select:focus,input:focus{
 }
 
 .panelHead{
-  padding:18px 18px 14px;
+  padding:18px;
   border-bottom:1px solid var(--line);
-}
-
-.panelHead h2{
-  margin:0;
-  font-family:"Playfair Display",serif;
-  font-size:24px;
-}
-
-.panelHead p{
-  margin:6px 0 0;
-  color:var(--muted);
-  font-size:13px;
 }
 
 .panelBody{
   padding:16px;
 }
 
-/* reservas */
+/* RESERVAS */
 .resCard{
   background:rgba(255,255,255,.025);
   border:1px solid var(--line);
@@ -207,346 +189,57 @@ select:focus,input:focus{
   padding:14px;
   margin-bottom:10px;
   cursor:pointer;
-  transition:.2s ease;
-}
-
-.resCard:hover{
-  transform:translateY(-1px);
-  border-color:rgba(191,161,90,.28);
 }
 
 .resCard.active{
   border-color:var(--gold);
-  box-shadow:0 0 0 1px rgba(191,161,90,.4);
 }
-
-.resTop{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  align-items:flex-start;
-}
-
-.resName{
-  font-weight:600;
-  font-size:15px;
-}
-
-.resMeta{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:6px;
-  line-height:1.5;
-}
-
-.resActions{
-  display:flex;
-  gap:8px;
-  margin-top:12px;
-}
-
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  border-radius:999px;
-  padding:5px 10px;
-  font-size:11px;
-  font-weight:600;
-  letter-spacing:.3px;
-}
-
-.badge.pending{ background:rgba(210,169,75,.12); color:#e0c27c; }
-.badge.arrived{ background:rgba(63,168,106,.14); color:#82d6a4; }
-.badge.late{ background:rgba(200,91,91,.14); color:#e59d9d; }
 
 .btnMini{
   border:none;
   border-radius:10px;
   padding:8px 10px;
   font-size:12px;
-  font-weight:600;
   cursor:pointer;
-  transition:.2s ease;
 }
 
-.btnArrive{
-  background:var(--green);
-  color:white;
-}
+.btnArrive{ background:var(--green); color:white; }
+.btnView{ background:#22302a; color:white; }
 
-.btnArrive:hover{ filter:brightness(1.06); }
-
-.btnView{
-  background:#22302a;
-  color:var(--ink);
-}
-
-.btnView:hover{ background:#2c3a35; }
-
-/* mapa */
+/* 🔥 MAPA FIXED */
 .mapWrap{
   display:grid;
-  grid-template-columns:1fr 220px;
-  gap:20px;
+  grid-template-columns:1fr 200px;
+  gap:16px;
 }
 
 .floor{
+  position:relative;
+  height:clamp(500px,70vh,700px);
   border:1px solid var(--line);
   border-radius:18px;
   background:#0e1511;
-  padding:18px;
-  position:relative;
-  min-height:620px;
+  overflow:hidden;
 }
 
-.zoneLabel{
-  font-size:11px;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:1.6px;
-  margin-bottom:10px;
-}
-
-
-
-.tableNode{
-  min-height:74px;
-  border-radius:16px;
-  border:1px solid var(--line);
-  background:#1a211d;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  gap:4px;
-  cursor:pointer;
-  transition:.18s ease;
-  text-align:center;
-  padding:8px;
-}
-
-.tableNode:hover{
-  transform:translateY(-1px);
-  border-color:rgba(191,161,90,.34);
-}
-
-.tableNode.selected{
-  outline:2px solid var(--gold);
-  outline-offset:1px;
-}
-
-.tableNode.libre{
-  opacity:.9;
-}
-
-.tableNode.ocupada{
-  background:rgba(194,106,74,.18);
-  border-color:rgba(194,106,74,.48);
-}
-
-.tableNode.llego{
-  background:rgba(63,168,106,.18);
-  border-color:rgba(63,168,106,.5);
-}
-
-.tableId{
-  font-weight:700;
-  font-size:16px;
-}
-
-.tableMeta{
-  font-size:11px;
-  color:var(--muted);
-}
-
-.barWrap{
-  border-top:1px solid var(--line);
-  padding-top:18px;
-}
-
-.sideLegend{
-  border:1px solid var(--line);
-  border-radius:16px;
-  background:#0e1511;
-  padding:16px;
-  height:fit-content;
-}
-
-.legendItem{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:12px;
-  font-size:13px;
-  color:var(--muted);
-}
-
-.swatch{
-  width:18px;
-  height:18px;
-  border-radius:6px;
-  border:1px solid var(--line);
-}
-
-.swatch.libre{ background:#1a211d; }
-.swatch.ocupada{ background:rgba(194,106,74,.35); }
-.swatch.llego{ background:rgba(63,168,106,.35); }
-
-/* detalle */
-.detailEmpty{
-  color:var(--muted);
-  font-size:14px;
-}
-
-.detailTitle{
-  font-family:"Playfair Display",serif;
-  font-size:28px;
-  margin:0 0 8px;
-}
-
-.detailMeta{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.7;
-  margin-bottom:18px;
-}
-
-.detailSection{
-  margin-top:18px;
-  padding-top:16px;
-  border-top:1px solid var(--line);
-}
-
-.detailSection h3{
-  margin:0 0 10px;
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:1.6px;
-  color:var(--muted);
-}
-
-.coverCard{
-  border:1px solid var(--line);
-  background:#0e1511;
-  border-radius:14px;
-  padding:12px;
-  margin-bottom:10px;
-}
-
-.coverName{
-  font-weight:600;
-  margin-bottom:8px;
-}
-
-.coverLine{
-  font-size:13px;
-  color:var(--muted);
-  line-height:1.55;
-}
-
-.noteBox{
-  background:rgba(191,161,90,.08);
-  border:1px solid rgba(191,161,90,.25);
-  color:#d8cfa8;
-  border-radius:12px;
-  padding:12px;
-  font-size:13px;
-  line-height:1.55;
-}
-
-.moneyBox{
-  border:1px solid rgba(191,161,90,.18);
-  background:#0e1511;
-  border-radius:14px;
-  padding:14px;
-}
-
-.moneyLabel{
-  font-size:11px;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:1.4px;
-}
-
-.moneyValue{
-  margin-top:8px;
-  font-size:30px;
-  color:var(--gold);
-  font-weight:700;
-  font-family:"Playfair Display",serif;
-}
-
-.btn{
-  border:none;
-  border-radius:12px;
-  padding:11px 14px;
-  cursor:pointer;
-  font-weight:600;
-  transition:.2s ease;
-}
-
-.btnPrimary{
-  background:var(--gold);
-  color:#111;
-}
-
-.btnPrimary:hover{ filter:brightness(1.04); }
-
-.btnSecondary{
-  background:#22302a;
-  color:var(--ink);
-}
-
-.btnSecondary:hover{ background:#2c3a35; }
-
-.btnFull{
-  width:100%;
-  margin-top:10px;
-}
-
-.smallMuted{
-  color:var(--muted);
-  font-size:12px;
-}
-
-.detailActions{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:10px;
-}
-
-@media (max-width:1200px){
-  .layout{
-    grid-template-columns:1fr;
-  }
-
-  .panel{
-    min-height:auto;
-  }
-
-  .mapWrap{
-    grid-template-columns:1fr;
-  }
-
-  .barGrid{
-    grid-template-columns:repeat(4,1fr);
-  }
-  .floor{
-  position:relative;
-  height:650px;
-}
-
+/* 🔥 mesas */
 .tableNode{
   position:absolute;
   width:70px;
   height:70px;
-  border-radius:14px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:13px;
   font-weight:600;
+  font-size:13px;
+  border:1px solid var(--line);
+  background:#1a211d;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.tableNode:hover{
+  transform:scale(1.05);
 }
 
 .tableNode.circle{
@@ -556,6 +249,57 @@ select:focus,input:focus{
 .tableNode.square{
   border-radius:10px;
 }
+
+.tableNode.libre{
+  opacity:.8;
+}
+
+.tableNode.ocupada{
+  background:rgba(194,106,74,.25);
+}
+
+.tableNode.llego{
+  background:rgba(63,168,106,.25);
+}
+
+.tableNode.selected{
+  outline:2px solid var(--gold);
+}
+
+/* LEYENDA */
+.sideLegend{
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#0e1511;
+  padding:16px;
+}
+
+.legendItem{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.swatch{
+  width:16px;
+  height:16px;
+  border-radius:4px;
+}
+
+.swatch.libre{ background:#1a211d; }
+.swatch.ocupada{ background:#c26a4a; }
+.swatch.llego{ background:#3fa86a; }
+
+/* DETALLE */
+.detailEmpty{
+  color:var(--muted);
+}
+
+@media (max-width:1200px){
+  .layout{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -628,15 +372,7 @@ select:focus,input:focus{
       <div class="panelBody">
         <div class="mapWrap">
 
-          <div class="floor">
-            <div class="zoneLabel">Salón principal</div>
-            <div class="floorGrid" id="salonGrid"></div>
-
-            <div class="barWrap">
-              <div class="zoneLabel">Barra y mesas bajas</div>
-              <div class="barGrid" id="barraGrid"></div>
-            </div>
-          </div>
+          <div class="floor"></div>
 
           <div class="sideLegend">
             <div class="zoneLabel">Leyenda</div>
