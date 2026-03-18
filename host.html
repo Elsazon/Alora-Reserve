@@ -261,14 +261,10 @@ select:focus,input:focus{
 }
 
 /* LEYENDA */
-.floor{
-  position:relative;
-  height:clamp(500px,70vh,700px);
-  border:1px solid var(--line);
-  border-radius:18px;
-  background:#0e1511;
-  overflow:hidden;
-  margin-bottom:14px;
+.mapContainer{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
 }
 
 /* 🔥 leyenda abajo tipo elegante */
@@ -397,9 +393,37 @@ select:focus,input:focus{
       </div>
 
       <div class="panelBody">
-        <div class="floor"></div>
 
-<div class="sideLegend">
+  <div class="mapContainer">
+
+    <div class="floor"></div>
+
+    <div class="sideLegend">
+      <div class="zoneLabel">Leyenda</div>
+
+      <div class="legendItem">
+        <div class="swatch libre"></div>
+        Libre
+      </div>
+
+      <div class="legendItem">
+        <div class="swatch ocupada"></div>
+        Asignada
+      </div>
+
+      <div class="legendItem">
+        <div class="swatch llego"></div>
+        Llegó
+      </div>
+
+      <div class="smallMuted">
+        Haz clic en una mesa para seleccionarla. Luego abre una reserva y asígnala.
+      </div>
+    </div>
+
+  </div>
+
+</div>
             <div class="zoneLabel">Leyenda</div>
 
             <div class="legendItem">
