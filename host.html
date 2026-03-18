@@ -260,21 +260,28 @@ select:focus,input:focus{
 .tableNode.square{
   border-radius:10px;
 }
-
 .tableNode.libre{
-  opacity:.8;
+  background:#1a211d;
+  color:#aaa;
 }
 
 .tableNode.ocupada{
-  background:rgba(194,106,74,.25);
+  background:#c26a4a;
+  color:#111;
+  box-shadow:0 0 15px rgba(194,106,74,.6);
 }
 
 .tableNode.llego{
-  background:rgba(63,168,106,.25);
+  background:#3fa86a;
+  color:#111;
+  box-shadow:0 0 15px rgba(63,168,106,.6);
 }
 
 .tableNode.selected{
-  outline:2px solid var(--gold);
+  outline:3px solid var(--gold);
+  box-shadow:0 0 20px rgba(191,161,90,.7);
+  transform:translate(-50%,-50%) scale(1.08);
+  z-index:5;
 }
 
 /* LEYENDA */
@@ -521,7 +528,7 @@ const $ = id => document.getElementById(id);
 let HOST_CACHE = {};
 let CURRENT_LIST = [];
 let SELECTED_RESERVA_ID = null;
-let SELECTED_MESA = [];
+let SELECTED_MESAS = [];
 let CURRENT_ZONE = "salon";
 
 function fillSelect(el, list){
@@ -534,7 +541,20 @@ function fillSelect(el, list){
   });
 }
 
+function handleMesaClick(id){
 
+  // buscar si hay reserva en esa mesa
+  const reserva = CURRENT_LIST.find(r => r.mesa === id);
+
+  if(reserva){
+    // 🔥 abrir detalle automáticamente
+    openReserva(reserva.id);
+    return;
+  }
+
+  // si no hay reserva → comportamiento normal
+  selectMesa(id);
+}
 
 async function api(body){
   const res = await fetch(BACKEND_URL,{
@@ -653,7 +673,7 @@ function renderMapBase(){
     el.style.left = t.x + "%";
     el.style.top = t.y + "%";
     el.innerHTML = `<div>${t.id}</div>`;
-    el.addEventListener("click", ()=>selectMesa(t.id));
+    el.addEventListener("click", ()=>handleMesaClick(t.id));
     container.appendChild(el);
   }
 
@@ -719,16 +739,21 @@ function paintMesas(list){
 
   list.forEach(r=>{
     if(!r.mesa) return;
-    const el = document.querySelector(`.tableNode[data-id="${r.mesa}"]`);
-    if(!el) return;
 
-    el.classList.remove("libre");
-    if(r.llego){
-      el.classList.add("llego");
-    }else{
-      el.classList.add("ocupada");
-    }
-  });
+const mesas = r.mesa.split(" + ");
+
+mesas.forEach(id=>{
+  const el = document.querySelector(`.tableNode[data-id="${id}"]`);
+  if(!el) return;
+
+  el.classList.remove("libre");
+
+  if(r.llego){
+    el.classList.add("llego");
+  }else{
+    el.classList.add("ocupada");
+  }
+});
 
   if(SELECTED_MESAS.length){
   SELECTED_MESAS.forEach(id=>{
