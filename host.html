@@ -250,7 +250,7 @@ select:focus,input:focus{
 }
 
 .tableNode:hover{
-  transform:scale(1.05);
+  transform:translate(-50%,-50%) scale(1.05);
 }
 
 .tableNode.circle{
@@ -340,24 +340,14 @@ select:focus,input:focus{
 .swatch.ocupada{ background:#c26a4a; }
 .swatch.llego{ background:#3fa86a; }
 
-.wallCurve{
-  position:absolute;
-  left:-24%;
-  top:10%;
-  width:40%;
-  height:92%;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,.05);
-  background:rgba(255,255,255,.02);
-  pointer-events:none;
-}
 
- .bar{
+
+.bar{
   position:absolute;
-  top:6%;
-  left:20%;
-  width:60%;
-  height:24%;
+  top:8%;
+  left:22%;
+  width:56%;
+  height:18%;
   pointer-events:none;
 }
 
@@ -367,9 +357,8 @@ select:focus,input:focus{
   left:0;
   right:0;
   bottom:0;
-  height:18px;
+  height:16px;
   background:#000;
-  border-radius:0;
 }
 
 .bar::after{
@@ -377,11 +366,10 @@ select:focus,input:focus{
   position:absolute;
   left:0;
   bottom:0;
-  width:18px;
-  height:70%;
+  width:16px;
+  height:72%;
   background:#000;
-  border-radius:0;
-  box-shadow: calc(100% - 18px) 0 0 #000;
+  box-shadow: calc(100% - 16px) 0 0 #000;
 }
   .door{
   position:absolute;
@@ -621,11 +609,8 @@ function renderMapBase(){
   function createBar(){
     const bar = document.createElement("div");
     bar.className = "bar";
-    bar.innerHTML = "";
     container.appendChild(bar);
   }
-
-
 
   const SALON = [
     {id:"41",x:14,y:14},
@@ -646,39 +631,29 @@ function renderMapBase(){
     {id:"44",x:16,y:80}
   ];
 
-  // Barra según tu imagen:
-  // 2 altas derecha, 3 altas abajo izquierda, 2 bajas al centro
- const ALTAS = [
-  // derecha (más abajo)
-  {id:"A1",x:84,y:30},
-  {id:"A2",x:84,y:52},
+  const ALTAS = [
+    {id:"A1",x:84,y:30},
+    {id:"A2",x:84,y:52},
 
-  // abajo izquierda (bien alineadas)
-  {id:"A3",x:18,y:78},
-  {id:"A4",x:36,y:78},
-  {id:"A5",x:54,y:78}
-];
+    {id:"A3",x:18,y:78},
+    {id:"A4",x:36,y:78},
+    {id:"A5",x:54,y:78}
+  ];
 
   const BAJAS = [
-  {id:"B1",x:28,y:48},
-  {id:"B2",x:58,y:48}
-];
+    {id:"B1",x:28,y:48},
+    {id:"B2",x:58,y:48}
+  ];
 
   if(CURRENT_ZONE === "salon"){
-    createCurve();
-
-    // puertas salón
-   createDoor(46, 8, false);
-
+    createDoor(46, 8, false);
     SALON.forEach(t=>createTable(t,"square"));
   }
 
   if(CURRENT_ZONE === "barra"){
     createBar();
-
-    // puertas barra según tu dibujo
-    createDoor(2, 38, true);   // izquierda
-    createDoor(60, 88, false); // abajo centro
+    createDoor(2, 38, true);
+    createDoor(60, 88, false);
 
     ALTAS.forEach(t=>createTable(t,"circle"));
     BAJAS.forEach(t=>createTable(t,"square"));
