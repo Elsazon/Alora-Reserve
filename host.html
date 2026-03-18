@@ -206,12 +206,6 @@ select:focus,input:focus{
 .btnArrive{ background:var(--green); color:white; }
 .btnView{ background:#22302a; color:white; }
 
-/* 🔥 MAPA FIXED */
-.mapWrap{
-  display:grid;
-  grid-template-columns:1fr 200px;
-  gap:16px;
-}
 
 .floor{
   position:relative;
@@ -267,29 +261,43 @@ select:focus,input:focus{
 }
 
 /* LEYENDA */
-.sideLegend{
+.floor{
+  position:relative;
+  height:clamp(500px,70vh,700px);
   border:1px solid var(--line);
-  border-radius:16px;
+  border-radius:18px;
   background:#0e1511;
-  padding:16px;
+  overflow:hidden;
+  margin-bottom:14px;
+}
+
+/* 🔥 leyenda abajo tipo elegante */
+.sideLegend{
+  display:flex;
+  gap:16px;
+  align-items:center;
+  flex-wrap:wrap;
+
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(255,255,255,.03);
+
+  padding:12px 16px;
 }
 
 .legendItem{
   display:flex;
   align-items:center;
-  gap:10px;
-  margin-bottom:10px;
+  gap:8px;
+  font-size:12px;
+  color:var(--muted);
 }
 
 .swatch{
-  width:16px;
-  height:16px;
+  width:14px;
+  height:14px;
   border-radius:4px;
 }
-
-.swatch.libre{ background:#1a211d; }
-.swatch.ocupada{ background:#c26a4a; }
-.swatch.llego{ background:#3fa86a; }
 
 /* DETALLE */
 .detailEmpty{
@@ -315,6 +323,7 @@ select:focus,input:focus{
   background:var(--gold);
   color:#111;
 }
+  
 </style>
 </head>
 
@@ -380,15 +389,17 @@ select:focus,input:focus{
     <div class="panel">
       <div class="panelHead">
         <h2>Mapa del salón</h2>
+         <div style="margin-top:10px; display:flex; gap:8px;">
+  <button class="zoneBtn active" onclick="setZone('salon')">Salón</button>
+  <button class="zoneBtn" onclick="setZone('barra')">Barra</button>
+</div>
         <p>20 mesas · salón principal + mesas bajas + barra</p>
       </div>
 
       <div class="panelBody">
-        <div class="mapWrap">
+        <div class="floor"></div>
 
-          <div class="floor"></div>
-
-          <div class="sideLegend">
+<div class="sideLegend">
             <div class="zoneLabel">Leyenda</div>
 
             <div class="legendItem">
@@ -421,10 +432,7 @@ select:focus,input:focus{
         <h2>Detalle</h2>
         <p>Reserva, preorden y notas</p>
       </div>
-      <div style="margin-top:10px; display:flex; gap:8px;">
-  <button class="zoneBtn active" onclick="setZone('salon')">Salón</button>
-  <button class="zoneBtn" onclick="setZone('barra')">Barra</button>
-</div>
+     
 
       <div class="panelBody" id="detalle">
         <div class="detailEmpty">Selecciona una reserva</div>
