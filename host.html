@@ -385,6 +385,20 @@ select:focus,input:focus{
   opacity:.9;
   pointer-events:none;
 }
+  .btnPrimary{
+  background:var(--gold);
+  color:#111;
+}
+
+.btnSecondary{
+  background:#3fa86a;
+  color:#111;
+}
+
+.btnDanger{
+  background:#c85b5b;
+  color:white;
+}
   
 </style>
 </head>
@@ -540,7 +554,62 @@ function fillSelect(el, list){
     el.appendChild(o);
   });
 }
+function getPrimaryAction(r){
 
+  const estado = r.estado || "Pendiente";
+
+  if(estado === "Pendiente"){
+    return {
+      label: "Marcar llegó",
+      action: "arrive",
+      class: "btnSecondary"
+    };
+  }
+
+  if(estado === "Llegó"){
+    return {
+      label: "Sentar cliente",
+      action: "seat",
+      class: "btnPrimary"
+    };
+  }
+
+  if(estado === "Sentado"){
+    return {
+      label: "Cerrar mesa",
+      action: "close",
+      class: "btnDanger"
+    };
+  }
+
+  return null;
+}
+
+async function runPrimaryAction(r){
+
+  const estado = r.estado || "Pendiente";
+
+  if(estado === "Pendiente"){
+    await arrive(r.id);
+  }
+
+  else if(estado === "Llegó"){
+    await api({
+      action:"host_seat",
+      id:r.id
+    });
+  }
+
+  else if(estado === "Sentado"){
+    await api({
+      action:"host_close",
+      id:r.id
+    });
+  }
+
+  await loadReservas();
+}
+  
 function handleMesaClick(id){
 
   const reserva = CURRENT_LIST.find(r=>{
@@ -956,7 +1025,7 @@ function renderDetalle(r){
     $("detalle").innerHTML = `<div class="detailEmpty">Selecciona una reserva</div>`;
     return;
   }
-
+  const primary = getPrimaryAction(r);
   const estado = r.estado || "Pendiente";
 
   let estadoColor = "#aaa";
@@ -994,17 +1063,25 @@ function renderDetalle(r){
     <!-- ACCIONES -->
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
 
-      <button class="btn btnPrimary btnFull" onclick="assignMesa('${r.id}')">
-        ${SELECTED_MESAS.length 
-          ? `Asignar ${SELECTED_MESAS.join(" + ")}`
-          : "Seleccionar mesa"}
-      </button>
+  <!-- BOTÓN PRINCIPAL DINÁMICO -->
+  ${primary ? `
+    <button class="btn ${primary.class} btnFull"
+      onclick='runPrimaryAction(${JSON.stringify(r)})'>
+      ${primary.label}
+    </button>
+  ` : ""}
 
-      <button class="btn btnSecondary btnFull" onclick="arrive('${r.id}')">
-        Marcar llegó
-      </button>
+  <!-- ASIGNAR MESA SOLO SI NO ESTÁ SENTADO -->
+  ${r.estado !== "Sentado" && r.estado !== "Cerrado" ? `
+    <button class="btn btnPrimary btnFull"
+      onclick="assignMesa('${r.id}')">
+      ${SELECTED_MESAS.length 
+        ? `Asignar ${SELECTED_MESAS.join(" + ")}`
+        : "Seleccionar mesa"}
+    </button>
+  ` : ""}
 
-    </div>
+</div>
 
     <!-- PREORDEN -->
     <div class="detailSection">
