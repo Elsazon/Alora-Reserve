@@ -957,41 +957,78 @@ function renderDetalle(r){
     return;
   }
 
-  $("detalle").innerHTML = `
-    <div class="detailTitle">${r.cliente}</div>
+  const estado = r.estado || "Pendiente";
 
-    <div class="detailMeta">
-      ${r.personas} personas<br>
-      📞 ${r.telefono || "Sin teléfono"}<br>
-      Mesas seleccionadas: ${SELECTED_MESAS.join(", ") || "—"}
+  let estadoColor = "#aaa";
+  if(estado === "Llegó") estadoColor = "#3fa86a";
+  if(estado === "Sentado") estadoColor = "#bfa15a";
+  if(estado === "Cancelado") estadoColor = "#c85b5b";
+
+  $("detalle").innerHTML = `
+
+    <!-- HEADER -->
+    <div style="margin-bottom:18px;">
+      <div style="font-size:20px;font-weight:600;">
+        ${r.cliente}
+      </div>
+
+      <div style="
+        margin-top:6px;
+        display:inline-block;
+        padding:4px 10px;
+        border-radius:8px;
+        font-size:12px;
+        background:${estadoColor};
+        color:#111;
+      ">
+        ${estado}
+      </div>
+
+      <div style="margin-top:10px;color:var(--muted);font-size:13px;">
+        👥 ${r.personas} pax<br>
+        📞 ${r.telefono || "Sin teléfono"}<br>
+        🍽️ Mesa: ${r.mesa || "—"}
+      </div>
     </div>
 
-    <div class="detailActions">
+    <!-- ACCIONES -->
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
+
       <button class="btn btnPrimary btnFull" onclick="assignMesa('${r.id}')">
         ${SELECTED_MESAS.length 
-  ? `Asignar mesa ${SELECTED_MESAS.join(" + ")}`
-  : "Selecciona mesa"
-}
+          ? `Asignar ${SELECTED_MESAS.join(" + ")}`
+          : "Seleccionar mesa"}
       </button>
 
       <button class="btn btnSecondary btnFull" onclick="arrive('${r.id}')">
         Marcar llegó
       </button>
+
     </div>
 
+    <!-- PREORDEN -->
     <div class="detailSection">
       <h3>Preorden</h3>
-      ${(r.covers || []).map(c=>`
-        <div class="coverCard">
-          <div class="coverName">${c.nombre}</div>
-          <div class="coverLine">
-            Aperitivo: ${c.aperitivo || "-"}<br>
-            Principal: ${c.principal || "-"}<br>
-            Proteína: ${c.proteina || "-"}<br>
-            Postre: ${c.postre || "-"}
+
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        ${(r.covers || []).map(c=>`
+          <div style="
+            border:1px solid var(--line);
+            border-radius:12px;
+            padding:10px;
+            background:rgba(255,255,255,.02);
+          ">
+            <div style="font-weight:600;">👤 ${c.nombre}</div>
+
+            <div style="font-size:13px;color:var(--muted);margin-top:6px;">
+              🥗 ${c.aperitivo || "-"}<br>
+              🍝 ${c.principal || "-"}<br>
+              🥩 ${c.proteina || "-"}<br>
+              🍰 ${c.postre || "-"}
+            </div>
           </div>
-        </div>
-      `).join("") || `<div class="smallMuted">No hay covers todavía.</div>`}
+        `).join("") || `<div class="smallMuted">No hay covers todavía.</div>`}
+      </div>
     </div>
 
     ${r.notas ? `
