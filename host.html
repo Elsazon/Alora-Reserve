@@ -301,6 +301,20 @@ select:focus,input:focus{
     grid-template-columns:1fr;
   }
 }
+  .zoneBtn{
+  background:#1a211d;
+  border:1px solid var(--line);
+  color:var(--muted);
+  padding:6px 12px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:12px;
+}
+
+.zoneBtn.active{
+  background:var(--gold);
+  color:#111;
+}
 </style>
 </head>
 
@@ -407,6 +421,10 @@ select:focus,input:focus{
         <h2>Detalle</h2>
         <p>Reserva, preorden y notas</p>
       </div>
+      <div style="margin-top:10px; display:flex; gap:8px;">
+  <button class="zoneBtn active" onclick="setZone('salon')">Salón</button>
+  <button class="zoneBtn" onclick="setZone('barra')">Barra</button>
+</div>
 
       <div class="panelBody" id="detalle">
         <div class="detailEmpty">Selecciona una reserva</div>
@@ -442,6 +460,7 @@ let HOST_CACHE = {};
 let CURRENT_LIST = [];
 let SELECTED_RESERVA_ID = null;
 let SELECTED_MESA = null;
+let CURRENT_ZONE = "salon";
 
 function fillSelect(el, list){
   el.innerHTML = "";
@@ -482,6 +501,18 @@ async function api(body){
     })
   });
   return await res.json();
+}
+  function setZone(zone){
+  CURRENT_ZONE = zone;
+
+  document.querySelectorAll(".zoneBtn").forEach(b=>{
+    b.classList.remove("active");
+  });
+
+  event.target.classList.add("active");
+
+  renderMapBase();
+  paintMesas(CURRENT_LIST);
 }
 
 function renderMapBase(){
@@ -528,9 +559,14 @@ function renderMapBase(){
     container.appendChild(el);
   }
 
+  if(CURRENT_ZONE === "salon"){
   SALON.forEach(t=>createTable(t,"square"));
+}
+
+if(CURRENT_ZONE === "barra"){
   ALTAS.forEach(t=>createTable(t,"circle"));
   BAJAS.forEach(t=>createTable(t,"square"));
+}
 
 }
 
