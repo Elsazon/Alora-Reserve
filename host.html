@@ -212,27 +212,15 @@ select:focus,input:focus{
   height:clamp(500px,70vh,700px);
   background:#0e1511;
   overflow:hidden;
-
   border:1px solid var(--line);
   border-radius:18px;
-
-  /* 🔥 FORMA DEL SALÓN */
-  clip-path: polygon(
-    10% 0%, 
-    85% 0%, 
-    85% 75%, 
-    100% 75%, 
-    100% 100%, 
-    0% 100%, 
-    0% 15%
-  );
 }
 
 /* 🔥 mesas */
 .tableNode{
   position:absolute;
-  width:70px;
-  height:70px;
+  width:72px;
+  height:72px;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -242,6 +230,7 @@ select:focus,input:focus{
   background:#1a211d;
   cursor:pointer;
   transition:.2s;
+  transform:translate(-50%,-50%);
 }
 
 .tableNode:hover{
@@ -337,40 +326,39 @@ select:focus,input:focus{
 
 .wallCurve{
   position:absolute;
-  left:-10%;
-  top:0;
-  width:40%;
-  height:100%;
-  background:rgba(255,255,255,0.03);
-
+  left:-22%;
+  top:8%;
+  width:42%;
+  height:92%;
   border-radius:50%;
+  border:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.025);
+  pointer-events:none;
 }
 
   .bar{
   position:absolute;
-  top:0;
-  left:35%;
-  width:30%;
-  height:50px;
-
+  top:6%;
+  left:34%;
+  width:32%;
+  height:42px;
   background:#111;
-  border-bottom:2px solid var(--gold);
-
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,.06);
   display:flex;
   align-items:center;
   justify-content:center;
-
-  font-size:12px;
+  font-size:11px;
+  letter-spacing:1.5px;
   color:var(--muted);
-  letter-spacing:1px;
+  pointer-events:none;
 }
   .door{
   position:absolute;
-  width:50px;
-  height:10px;
-  background:#dcdcdc;
+  background:#d7d7d7;
   border-radius:6px;
   opacity:.9;
+  pointer-events:none;
 }
   
 </style>
@@ -504,10 +492,6 @@ const TABLES_SALON = [
 const TABLES_BARRA = [
   "L1","L2","L3","L4","B1","B2","B3"
 ];
-
-createDoor(88,80,false); // entrada principal
-createDoor(2,40,true);   // lateral curva
-createDoor(45,6,false);  // acceso barra
   
 const $ = id => document.getElementById(id);
 
@@ -527,10 +511,7 @@ function fillSelect(el, list){
   });
 }
 
-const bar = document.createElement("div");
-bar.className = "bar";
-bar.innerHTML = "BARRA";
-container.appendChild(bar);
+
   
 function estadoServicio(horaReserva, llego){
   if(llego) return "arrived";
@@ -562,84 +543,108 @@ async function api(body){
   });
   return await res.json();
 }
-  function setZone(zone){
+  function setZone(zone, e){
   CURRENT_ZONE = zone;
 
   document.querySelectorAll(".zoneBtn").forEach(b=>{
     b.classList.remove("active");
   });
 
-  event.target.classList.add("active");
+  if(e) e.target.classList.add("active");
 
   renderMapBase();
   paintMesas(CURRENT_LIST);
 }
 
 function renderMapBase(){
-
   const container = document.querySelector(".floor");
   container.innerHTML = "";
 
-  // SALON PRINCIPAL
- const SALON = [
-  {id:"41",x:12,y:12},
-  {id:"31",x:35,y:12},
-  {id:"21",x:58,y:12},
-  {id:"11",x:78,y:12},
+  // pared curva izquierda
+  const curve = document.createElement("div");
+  curve.className = "wallCurve";
+  container.appendChild(curve);
 
-  {id:"42",x:12,y:32},
-  {id:"32",x:45,y:32},
-  {id:"22",x:65,y:32},
-  {id:"12",x:85,y:32},
+  // barra superior
+  const bar = document.createElement("div");
+  bar.className = "bar";
+  bar.innerHTML = "BARRA";
+  container.appendChild(bar);
 
-  {id:"43",x:12,y:52},
-  {id:"33",x:45,y:52},
-  {id:"23",x:65,y:52},
-  {id:"13",x:85,y:52},
-
-  {id:"44",x:12,y:72}
-];
-
-  // BARRA (ALTAS = circle)
-  const ALTAS = [
-    {id:"A1",x:80,y:15},
-    {id:"A2",x:80,y:30},
-    {id:"A3",x:15,y:80},
-    {id:"A4",x:30,y:80},
-    {id:"A5",x:45,y:80}
-  ];
-
-  // BAJAS (square)
-  const BAJAS = [
-    {id:"B1",x:30,y:45},
-    {id:"B2",x:55,y:45}
-  ];
-
-  function createTable(t,type="normal"){
+  // helpers
+  function createDoor(x, y, vertical = false){
     const el = document.createElement("div");
-
-    el.className = "tableNode libre " + type;
-    el.dataset.id = t.id;
-
-    el.style.left = t.x + "%";
-    el.style.top = t.y + "%";
-
-    el.innerHTML = `<div>${t.id}</div>`;
-
-    el.addEventListener("click",()=>selectMesa(t.id));
-
+    el.className = "door";
+    if(vertical){
+      el.style.width = "10px";
+      el.style.height = "50px";
+    }else{
+      el.style.width = "50px";
+      el.style.height = "10px";
+    }
+    el.style.left = x + "%";
+    el.style.top = y + "%";
     container.appendChild(el);
   }
 
+  function createTable(t, type = "square"){
+    const el = document.createElement("div");
+    el.className = "tableNode libre " + type;
+    el.dataset.id = t.id;
+    el.style.left = t.x + "%";
+    el.style.top = t.y + "%";
+    el.innerHTML = `<div>${t.id}</div>`;
+    el.addEventListener("click", ()=>selectMesa(t.id));
+    container.appendChild(el);
+  }
+
+  // puertas
+  createDoor(86, 84, false); // principal abajo derecha
+  createDoor(2, 40, true);   // lateral izquierda
+  createDoor(46, 8, false);  // acceso barra
+
+  // salón principal ajustado a tu layout
+  const SALON = [
+    {id:"41",x:12,y:14},
+    {id:"31",x:38,y:18},
+    {id:"21",x:60,y:18},
+    {id:"11",x:80,y:18},
+
+    {id:"42",x:8,y:36},
+    {id:"32",x:38,y:40},
+    {id:"22",x:60,y:40},
+    {id:"12",x:80,y:40},
+
+    {id:"43",x:10,y:58},
+    {id:"33",x:38,y:62},
+    {id:"23",x:60,y:62},
+    {id:"13",x:80,y:62},
+
+    {id:"44",x:16,y:80}
+  ];
+
+  // barra / lounge
+  const ALTAS = [
+    {id:"A1",x:78,y:18},
+    {id:"A2",x:78,y:35},
+    {id:"A3",x:12,y:72},
+    {id:"A4",x:28,y:72},
+    {id:"A5",x:44,y:72}
+  ];
+
+  const BAJAS = [
+    {id:"B1",x:18,y:42},
+    {id:"B2",x:48,y:42}
+  ];
+
   if(CURRENT_ZONE === "salon"){
-  SALON.forEach(t=>createTable(t,"square"));
-}
+    SALON.forEach(t=>createTable(t,"square"));
+  }
 
-if(CURRENT_ZONE === "barra"){
-  ALTAS.forEach(t=>createTable(t,"circle"));
-  BAJAS.forEach(t=>createTable(t,"square"));
-}
-
+  if(CURRENT_ZONE === "barra"){
+    ALTAS.forEach(t=>createTable(t,"circle"));
+    BAJAS.forEach(t=>createTable(t,"square"));
+  }
 }
 
 function paintMesas(list){
