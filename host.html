@@ -308,12 +308,7 @@ select:focus,input:focus{
   margin-bottom:10px;
 }
 
-.floorGrid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:16px 24px;
-  margin-bottom:26px;
-}
+
 
 .tableNode{
   min-height:74px;
@@ -368,12 +363,6 @@ select:focus,input:focus{
 .barWrap{
   border-top:1px solid var(--line);
   padding-top:18px;
-}
-
-.barGrid{
-  display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:12px;
 }
 
 .sideLegend{
@@ -543,6 +532,30 @@ select:focus,input:focus{
   .barGrid{
     grid-template-columns:repeat(4,1fr);
   }
+  .floor{
+  position:relative;
+  height:650px;
+}
+
+.tableNode{
+  position:absolute;
+  width:70px;
+  height:70px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  font-weight:600;
+}
+
+.tableNode.circle{
+  border-radius:50%;
+}
+
+.tableNode.square{
+  border-radius:10px;
+}
 }
 </style>
 </head>
@@ -736,35 +749,53 @@ async function api(body){
 }
 
 function renderMapBase(){
-  const salon = $("salonGrid");
-  const barra = $("barraGrid");
 
-  salon.innerHTML = "";
-  barra.innerHTML = "";
+  const container = document.querySelector(".floor");
+  container.innerHTML = "";
 
-  TABLES_SALON.forEach(id=>{
+  // SALON PRINCIPAL
+  const SALON = [
+    {id:"41",x:8,y:10},{id:"31",x:35,y:10},{id:"21",x:60,y:10},{id:"11",x:82,y:10},
+    {id:"42",x:8,y:30},{id:"32",x:35,y:30},{id:"22",x:60,y:30},{id:"12",x:82,y:30},
+    {id:"43",x:8,y:50},{id:"33",x:35,y:50},{id:"23",x:60,y:50},{id:"13",x:82,y:50},
+    {id:"44",x:8,y:70}
+  ];
+
+  // BARRA (ALTAS = circle)
+  const ALTAS = [
+    {id:"A1",x:80,y:15},
+    {id:"A2",x:80,y:30},
+    {id:"A3",x:15,y:80},
+    {id:"A4",x:30,y:80},
+    {id:"A5",x:45,y:80}
+  ];
+
+  // BAJAS (square)
+  const BAJAS = [
+    {id:"B1",x:30,y:45},
+    {id:"B2",x:55,y:45}
+  ];
+
+  function createTable(t,type="normal"){
     const el = document.createElement("div");
-    el.className = "tableNode libre";
-    el.dataset.id = id;
-    el.innerHTML = `
-      <div class="tableId">${id}</div>
-      <div class="tableMeta">salón</div>
-    `;
-    el.addEventListener("click",()=>selectMesa(id));
-    salon.appendChild(el);
-  });
 
-  TABLES_BARRA.forEach(id=>{
-    const el = document.createElement("div");
-    el.className = "tableNode libre";
-    el.dataset.id = id;
-    el.innerHTML = `
-      <div class="tableId">${id}</div>
-      <div class="tableMeta">${id.startsWith("L") ? "mesa baja" : "barra"}</div>
-    `;
-    el.addEventListener("click",()=>selectMesa(id));
-    barra.appendChild(el);
-  });
+    el.className = "tableNode libre " + type;
+    el.dataset.id = t.id;
+
+    el.style.left = t.x + "%";
+    el.style.top = t.y + "%";
+
+    el.innerHTML = `<div>${t.id}</div>`;
+
+    el.addEventListener("click",()=>selectMesa(t.id));
+
+    container.appendChild(el);
+  }
+
+  SALON.forEach(t=>createTable(t,"square"));
+  ALTAS.forEach(t=>createTable(t,"circle"));
+  BAJAS.forEach(t=>createTable(t,"square"));
+
 }
 
 function paintMesas(list){
