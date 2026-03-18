@@ -1,469 +1,1009 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ALORA · Host Stand</title>
 
-<title>ALORA Service Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+:root{
+  --bg0:#0e1511;
+  --bg1:#121a16;
+  --card:rgba(255,255,255,.04);
+  --line:rgba(255,255,255,.08);
+  --ink:#f4f1ea;
+  --muted:rgba(244,241,234,.62);
+  --gold:#bfa15a;
+  --terracotta:#c26a4a;
+  --green:#3fa86a;
+  --red:#c85b5b;
+  --yellow:#d2a94b;
+  --shadow:0 30px 80px rgba(0,0,0,.45);
+  --radius:20px;
+}
+
+*{box-sizing:border-box}
+
 body{
-background:#0b1210;
-color:#f4f1ea;
-font-family:Inter,system-ui;
-margin:0;
-padding:40px;
+  margin:0;
+  font-family:Inter,system-ui,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(900px 600px at 15% 10%, rgba(194,106,74,.10), transparent 60%),
+    radial-gradient(1000px 700px at 85% 20%, rgba(79,81,56,.15), transparent 60%),
+    linear-gradient(180deg,var(--bg0),var(--bg1));
+  min-height:100vh;
 }
 
 .container{
-max-width:1400px;
-margin:auto;
+  width:min(1500px,95%);
+  margin:0 auto;
+  padding:28px 0 34px;
 }
 
-/* HEADER */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:20px;
+  margin-bottom:22px;
+  flex-wrap:wrap;
+}
 
-.header{
-background:#111916;
-border:1px solid rgba(255,255,255,.05);
-border-radius:16px;
-padding:25px;
-margin-bottom:30px;
-box-shadow:0 10px 30px rgba(0,0,0,.25);
+.brandWrap h1{
+  margin:0;
+  font-family:"Playfair Display",serif;
+  font-size:32px;
+  font-weight:700;
+}
+
+.brandWrap p{
+  margin:8px 0 0;
+  color:var(--muted);
+  font-size:13px;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+}
+
+.statusPill{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  padding:10px 14px;
+  border-radius:999px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.headerCard{
+  border:1px solid var(--line);
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:18px;
+  box-shadow:var(--shadow);
+  margin-bottom:22px;
+}
+
+.headerGrid{
+  display:grid;
+  grid-template-columns:1.2fr auto;
+  gap:20px;
+  align-items:end;
 }
 
 .controls{
-display:flex;
-gap:20px;
-align-items:center;
-margin-top:10px;
+  display:flex;
+  gap:14px;
+  align-items:end;
+  flex-wrap:wrap;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.field label{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1.4px;
+  color:var(--muted);
 }
 
 select,input{
-background:#0e1511;
-border:1px solid rgba(255,255,255,.08);
-color:white;
-padding:10px;
-border-radius:10px;
-font-size:14px;
+  background:#0e1511;
+  border:1px solid var(--line);
+  color:var(--ink);
+  padding:11px 12px;
+  border-radius:12px;
+  font-size:14px;
+  min-width:180px;
+  outline:none;
 }
 
-/* STATS */
+input::placeholder{
+  color:rgba(244,241,234,.35);
+}
+
+select:focus,input:focus{
+  border-color:var(--terracotta);
+  box-shadow:0 0 0 1px var(--terracotta);
+}
 
 .stats{
-margin-top:18px;
-display:flex;
-gap:35px;
-font-size:14px;
-opacity:.9;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
 }
 
-.stats div{
-background:#0e1511;
-padding:8px 14px;
-border-radius:8px;
+.stat{
+  min-width:140px;
+  border:1px solid var(--line);
+  background:#0e1511;
+  border-radius:14px;
+  padding:12px 14px;
 }
 
-/* LAYOUT */
+.statLabel{
+  font-size:11px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1.4px;
+  margin-bottom:8px;
+}
+
+.statValue{
+  font-size:24px;
+  font-weight:600;
+  color:var(--gold);
+}
 
 .layout{
-display:grid;
-grid-template-columns:1fr 420px;
-gap:30px;
+  display:grid;
+  grid-template-columns:320px 1fr 380px;
+  gap:20px;
 }
 
-/* RESERVAS PANEL */
-
-.resList{
-background:#111916;
-border-radius:16px;
-border:1px solid rgba(255,255,255,.05);
-padding:20px;
-box-shadow:0 10px 25px rgba(0,0,0,.25);
+.panel{
+  border:1px solid var(--line);
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  min-height:700px;
+  overflow:hidden;
 }
 
-/* TARJETA RESERVA */
+.panelHead{
+  padding:18px 18px 14px;
+  border-bottom:1px solid var(--line);
+}
 
+.panelHead h2{
+  margin:0;
+  font-family:"Playfair Display",serif;
+  font-size:24px;
+}
+
+.panelHead p{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.panelBody{
+  padding:16px;
+}
+
+/* reservas */
 .resCard{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:14px 16px;
-border-radius:10px;
-margin-bottom:8px;
-transition:.2s;
-background:rgba(255,255,255,.02);
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:10px;
+  cursor:pointer;
+  transition:.2s ease;
 }
 
 .resCard:hover{
-background:#18221c;
-transform:translateY(-1px);
+  transform:translateY(-1px);
+  border-color:rgba(191,161,90,.28);
 }
 
-/* DETALLE */
-
-.detail{
-background:#111916;
-border-radius:16px;
-border:1px solid rgba(255,255,255,.05);
-padding:24px;
-box-shadow:0 10px 25px rgba(0,0,0,.25);
+.resCard.active{
+  border-color:var(--gold);
+  box-shadow:0 0 0 1px rgba(191,161,90,.4);
 }
 
-/* COVERS */
-
-.cover{
-padding:10px 0;
-border-bottom:1px solid rgba(255,255,255,.05);
-font-size:14px;
+.resTop{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
 }
 
-.cover:last-child{
-border-bottom:none;
+.resName{
+  font-weight:600;
+  font-size:15px;
 }
 
-/* NOTAS */
-
-.note{
-margin-top:18px;
-background:#0e1511;
-padding:14px;
-border-radius:10px;
-font-size:14px;
-line-height:1.4;
+.resMeta{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:6px;
+  line-height:1.5;
 }
 
-/* BOTONES */
-
-button{
-border:none;
-padding:8px 14px;
-border-radius:8px;
-cursor:pointer;
-font-weight:600;
-font-size:13px;
-transition:.2s;
+.resActions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
 }
 
-/* botón llegó */
-
-button.arrive{
-background:#3fa86a;
-color:white;
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border-radius:999px;
+  padding:5px 10px;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.3px;
 }
 
-button.arrive:hover{
-background:#4ec07d;
+.badge.pending{ background:rgba(210,169,75,.12); color:#e0c27c; }
+.badge.arrived{ background:rgba(63,168,106,.14); color:#82d6a4; }
+.badge.late{ background:rgba(200,91,91,.14); color:#e59d9d; }
+
+.btnMini{
+  border:none;
+  border-radius:10px;
+  padding:8px 10px;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.2s ease;
 }
 
-/* botón editar */
-
-button.edit{
-background:#2b3531;
-color:#f4f1ea;
+.btnArrive{
+  background:var(--green);
+  color:white;
 }
 
-button.edit:hover{
-background:#3a4641;
-}
-  .titleBar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
+.btnArrive:hover{ filter:brightness(1.06); }
+
+.btnView{
+  background:#22302a;
+  color:var(--ink);
 }
 
-.brand{
-font-size:20px;
-font-weight:700;
-letter-spacing:.5px;
+.btnView:hover{ background:#2c3a35; }
+
+/* mapa */
+.mapWrap{
+  display:grid;
+  grid-template-columns:1fr 220px;
+  gap:20px;
 }
 
-.brand span{
-opacity:.5;
-font-weight:400;
-margin-left:8px;
+.floor{
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#0e1511;
+  padding:18px;
+  position:relative;
+  min-height:620px;
 }
 
-.serviceStatus{
-background:#1a2420;
-padding:6px 12px;
-border-radius:6px;
-font-size:12px;
+.zoneLabel{
+  font-size:11px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1.6px;
+  margin-bottom:10px;
+}
+
+.floorGrid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px 24px;
+  margin-bottom:26px;
+}
+
+.tableNode{
+  min-height:74px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:#1a211d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:4px;
+  cursor:pointer;
+  transition:.18s ease;
+  text-align:center;
+  padding:8px;
+}
+
+.tableNode:hover{
+  transform:translateY(-1px);
+  border-color:rgba(191,161,90,.34);
+}
+
+.tableNode.selected{
+  outline:2px solid var(--gold);
+  outline-offset:1px;
+}
+
+.tableNode.libre{
+  opacity:.9;
+}
+
+.tableNode.ocupada{
+  background:rgba(194,106,74,.18);
+  border-color:rgba(194,106,74,.48);
+}
+
+.tableNode.llego{
+  background:rgba(63,168,106,.18);
+  border-color:rgba(63,168,106,.5);
+}
+
+.tableId{
+  font-weight:700;
+  font-size:16px;
+}
+
+.tableMeta{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.barWrap{
+  border-top:1px solid var(--line);
+  padding-top:18px;
+}
+
+.barGrid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:12px;
+}
+
+.sideLegend{
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#0e1511;
+  padding:16px;
+  height:fit-content;
+}
+
+.legendItem{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.swatch{
+  width:18px;
+  height:18px;
+  border-radius:6px;
+  border:1px solid var(--line);
+}
+
+.swatch.libre{ background:#1a211d; }
+.swatch.ocupada{ background:rgba(194,106,74,.35); }
+.swatch.llego{ background:rgba(63,168,106,.35); }
+
+/* detalle */
+.detailEmpty{
+  color:var(--muted);
+  font-size:14px;
+}
+
+.detailTitle{
+  font-family:"Playfair Display",serif;
+  font-size:28px;
+  margin:0 0 8px;
+}
+
+.detailMeta{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+  margin-bottom:18px;
+}
+
+.detailSection{
+  margin-top:18px;
+  padding-top:16px;
+  border-top:1px solid var(--line);
+}
+
+.detailSection h3{
+  margin:0 0 10px;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:1.6px;
+  color:var(--muted);
+}
+
+.coverCard{
+  border:1px solid var(--line);
+  background:#0e1511;
+  border-radius:14px;
+  padding:12px;
+  margin-bottom:10px;
+}
+
+.coverName{
+  font-weight:600;
+  margin-bottom:8px;
+}
+
+.coverLine{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.55;
+}
+
+.noteBox{
+  background:rgba(191,161,90,.08);
+  border:1px solid rgba(191,161,90,.25);
+  color:#d8cfa8;
+  border-radius:12px;
+  padding:12px;
+  font-size:13px;
+  line-height:1.55;
+}
+
+.moneyBox{
+  border:1px solid rgba(191,161,90,.18);
+  background:#0e1511;
+  border-radius:14px;
+  padding:14px;
+}
+
+.moneyLabel{
+  font-size:11px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1.4px;
+}
+
+.moneyValue{
+  margin-top:8px;
+  font-size:30px;
+  color:var(--gold);
+  font-weight:700;
+  font-family:"Playfair Display",serif;
+}
+
+.btn{
+  border:none;
+  border-radius:12px;
+  padding:11px 14px;
+  cursor:pointer;
+  font-weight:600;
+  transition:.2s ease;
+}
+
+.btnPrimary{
+  background:var(--gold);
+  color:#111;
+}
+
+.btnPrimary:hover{ filter:brightness(1.04); }
+
+.btnSecondary{
+  background:#22302a;
+  color:var(--ink);
+}
+
+.btnSecondary:hover{ background:#2c3a35; }
+
+.btnFull{
+  width:100%;
+  margin-top:10px;
+}
+
+.smallMuted{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.detailActions{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+
+@media (max-width:1200px){
+  .layout{
+    grid-template-columns:1fr;
+  }
+
+  .panel{
+    min-height:auto;
+  }
+
+  .mapWrap{
+    grid-template-columns:1fr;
+  }
+
+  .barGrid{
+    grid-template-columns:repeat(4,1fr);
+  }
 }
 </style>
-
 </head>
 
 <body>
-
 <div class="container">
 
-<div class="titleBar">
+  <div class="topbar">
+    <div class="brandWrap">
+      <h1>ALORA · Host Stand</h1>
+      <p>Service console · salón principal + barra</p>
+    </div>
 
-<div class="brand">
-ALORA
-<span>Service Console</span>
-</div>
+    <div class="statusPill">Servicio activo</div>
+  </div>
 
-<div class="serviceStatus">
-Servicio activo
-</div>
+  <div class="headerCard">
+    <div class="headerGrid">
 
-</div>
+      <div class="controls">
+        <div class="field">
+          <label for="funcion">Función</label>
+          <select id="funcion"></select>
+        </div>
 
-<div class="header">
+        <div class="field">
+          <label for="buscar">Buscar</label>
+          <input id="buscar" placeholder="Cliente o teléfono">
+        </div>
+      </div>
 
-<div class="controls">
+      <div class="stats">
+        <div class="stat">
+          <div class="statLabel">Covers</div>
+          <div class="statValue" id="coversTotal">0</div>
+        </div>
 
-<label>Función</label>
-<select id="funcion"></select>
+        <div class="stat">
+          <div class="statLabel">Llegaron</div>
+          <div class="statValue" id="coversArrived">0</div>
+        </div>
 
-<label>Buscar</label>
-<input id="buscar" placeholder="Cliente">
+        <div class="stat">
+          <div class="statLabel">Pendientes</div>
+          <div class="statValue" id="coversPending">0</div>
+        </div>
+      </div>
 
-</div>
+    </div>
+  </div>
 
-<div class="stats">
+  <div class="layout">
 
-<div>Covers: <span id="coversTotal">0</span></div>
-<div>Llegaron: <span id="coversArrived">0</span></div>
-<div>Pendientes: <span id="coversPending">0</span></div>
+    <!-- IZQUIERDA -->
+    <div class="panel">
+      <div class="panelHead">
+        <h2>Reservas</h2>
+        <p>Selecciona una reserva para ver detalles y asignar mesa</p>
+      </div>
+      <div class="panelBody" id="reservas"></div>
+    </div>
 
-</div>
+    <!-- CENTRO -->
+    <div class="panel">
+      <div class="panelHead">
+        <h2>Mapa del salón</h2>
+        <p>20 mesas · salón principal + mesas bajas + barra</p>
+      </div>
 
-</div>
+      <div class="panelBody">
+        <div class="mapWrap">
 
-<div class="layout">
+          <div class="floor">
+            <div class="zoneLabel">Salón principal</div>
+            <div class="floorGrid" id="salonGrid"></div>
 
-<div class="resList" id="reservas"></div>
+            <div class="barWrap">
+              <div class="zoneLabel">Barra y mesas bajas</div>
+              <div class="barGrid" id="barraGrid"></div>
+            </div>
+          </div>
 
-<div class="detail" id="detalle">
+          <div class="sideLegend">
+            <div class="zoneLabel">Leyenda</div>
 
-Selecciona una reserva
+            <div class="legendItem">
+              <div class="swatch libre"></div>
+              Libre
+            </div>
 
-</div>
+            <div class="legendItem">
+              <div class="swatch ocupada"></div>
+              Asignada
+            </div>
 
-</div>
+            <div class="legendItem">
+              <div class="swatch llego"></div>
+              Llegó
+            </div>
 
+            <div class="smallMuted">
+              Haz clic en una mesa para seleccionarla. Luego abre una reserva y asígnala.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- DERECHA -->
+    <div class="panel">
+      <div class="panelHead">
+        <h2>Detalle</h2>
+        <p>Reserva, preorden y notas</p>
+      </div>
+
+      <div class="panelBody" id="detalle">
+        <div class="detailEmpty">Selecciona una reserva</div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script>
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyxgEL9fCZHe3HBlcHR2AvVN6gQAgR3nVnuqXSu4qGElW84pOUX91-k5PfLFeHsNcI4/exec";
+const SHARED_SECRET = "demo123";
 
-const BACKEND_URL="https://script.google.com/macros/s/AKfycbyoHf9TErrXjTt6bsSix_f9hjzz4ePp_nT-gqkdhcuL4y-gXqZx3CpebsajIp_FvJkO/exec";
-const SHARED_SECRET="demo123";
-
-const FUNCIONES=[
-"Función 1","Función 2","Función 3","Función 4",
-"Función 5","Función 6","Función 7","Función 8"
+const FUNCIONES = [
+  "Función 1","Función 2","Función 3","Función 4",
+  "Función 5","Función 6","Función 7","Función 8"
 ];
 
-const $=id=>document.getElementById(id);
+const TABLES_SALON = [
+  "41","31","21","11",
+  "42","32","22","12",
+  "43","33","23","13",
+  "44"
+];
 
-function estadoServicio(horaReserva,llego){
+const TABLES_BARRA = [
+  "L1","L2","L3","L4","B1","B2","B3"
+];
 
-if(llego) return "arrived";
+const $ = id => document.getElementById(id);
 
-const now = new Date();
-
-const [h,m] = horaReserva.replace(" PM","").replace(" AM","").split(":");
-
-let hour = parseInt(h);
-const min = parseInt(m);
-
-if(horaReserva.includes("PM") && hour !== 12) hour += 12;
-if(horaReserva.includes("AM") && hour === 12) hour = 0;
-
-const reserva = new Date();
-reserva.setHours(hour,min,0,0);
-
-if(now > reserva){
-return "late";
-}
-
-return "pending";
-
-}
-  
 let HOST_CACHE = {};
-  
-function fillSelect(el,list){
+let CURRENT_LIST = [];
+let SELECTED_RESERVA_ID = null;
+let SELECTED_MESA = null;
 
-el.innerHTML="";
-
-list.forEach(v=>{
-const o=document.createElement("option");
-o.value=v;
-o.textContent=v;
-el.appendChild(o);
-});
-
+function fillSelect(el, list){
+  el.innerHTML = "";
+  list.forEach(v=>{
+    const o = document.createElement("option");
+    o.value = v;
+    o.textContent = v;
+    el.appendChild(o);
+  });
 }
 
-async function loadReservas(){
+function estadoServicio(horaReserva, llego){
+  if(llego) return "arrived";
 
-const res=await fetch(BACKEND_URL,{
-method:"POST",
-headers:{"Content-Type":"text/plain;charset=utf-8"},
-body:JSON.stringify({
-action:"host_snapshot",
-funcion:$("funcion").value,
-secret:SHARED_SECRET
-})
-});
+  const now = new Date();
+  const [h,m] = horaReserva.replace(" PM","").replace(" AM","").split(":");
 
-const data=await res.json();
+  let hour = parseInt(h,10);
+  const min = parseInt(m,10);
 
-$("coversTotal").textContent = data.coversTotal;
-$("coversArrived").textContent = data.coversArrived;
-$("coversPending").textContent = data.coversPending;
+  if(horaReserva.includes("PM") && hour !== 12) hour += 12;
+  if(horaReserva.includes("AM") && hour === 12) hour = 0;
 
-renderReservas(data.reservas || []);
+  const reserva = new Date();
+  reserva.setHours(hour, min, 0, 0);
 
+  if(now > reserva) return "late";
+  return "pending";
 }
 
-const data=await res.json();
+async function api(body){
+  const res = await fetch(BACKEND_URL,{
+    method:"POST",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify({
+      ...body,
+      secret:SHARED_SECRET
+    })
+  });
+  return await res.json();
+}
 
-renderReservas(data.reservas||[]);
+function renderMapBase(){
+  const salon = $("salonGrid");
+  const barra = $("barraGrid");
 
+  salon.innerHTML = "";
+  barra.innerHTML = "";
+
+  TABLES_SALON.forEach(id=>{
+    const el = document.createElement("div");
+    el.className = "tableNode libre";
+    el.dataset.id = id;
+    el.innerHTML = `
+      <div class="tableId">${id}</div>
+      <div class="tableMeta">salón</div>
+    `;
+    el.addEventListener("click",()=>selectMesa(id));
+    salon.appendChild(el);
+  });
+
+  TABLES_BARRA.forEach(id=>{
+    const el = document.createElement("div");
+    el.className = "tableNode libre";
+    el.dataset.id = id;
+    el.innerHTML = `
+      <div class="tableId">${id}</div>
+      <div class="tableMeta">${id.startsWith("L") ? "mesa baja" : "barra"}</div>
+    `;
+    el.addEventListener("click",()=>selectMesa(id));
+    barra.appendChild(el);
+  });
+}
+
+function paintMesas(list){
+  document.querySelectorAll(".tableNode").forEach(el=>{
+    el.classList.remove("ocupada","llego","selected");
+    el.classList.add("libre");
+  });
+
+  list.forEach(r=>{
+    if(!r.mesa) return;
+    const el = document.querySelector(`.tableNode[data-id="${r.mesa}"]`);
+    if(!el) return;
+
+    el.classList.remove("libre");
+    if(r.llego){
+      el.classList.add("llego");
+    }else{
+      el.classList.add("ocupada");
+    }
+  });
+
+  if(SELECTED_MESA){
+    const selected = document.querySelector(`.tableNode[data-id="${SELECTED_MESA}"]`);
+    if(selected) selected.classList.add("selected");
+  }
 }
 
 function renderReservas(list){
+  HOST_CACHE = {};
+  CURRENT_LIST = list.slice();
 
-HOST_CACHE = {};
+  const q = $("buscar").value.trim().toLowerCase();
+  const filtered = list.filter(r=>{
+    if(!q) return true;
+    return (
+      (r.cliente || "").toLowerCase().includes(q) ||
+      (r.telefono || "").toLowerCase().includes(q)
+    );
+  });
 
-const container = $("reservas");
-container.innerHTML = "";
+  const container = $("reservas");
+  container.innerHTML = "";
 
-let covers = 0;
+  filtered.forEach(r=>{
+    HOST_CACHE[r.id] = r;
 
-list.forEach(r=>{
+    const estado = estadoServicio(r.hora, r.llego);
+    const badgeClass = estado === "arrived" ? "arrived" : (estado === "late" ? "late" : "pending");
+    const badgeText = estado === "arrived" ? "Llegó" : (estado === "late" ? "Atrasada" : "Pendiente");
 
-covers += r.personas;
+    const card = document.createElement("div");
+    card.className = "resCard" + (SELECTED_RESERVA_ID === r.id ? " active" : "");
 
-/* guardar en cache */
-HOST_CACHE[r.id] = r;
+    card.innerHTML = `
+      <div class="resTop">
+        <div>
+          <div class="resName">${r.cliente}</div>
+          <div class="resMeta">
+            ${r.hora} · ${r.personas} pax<br>
+            ${r.telefono || "Sin teléfono"}<br>
+            Mesa: ${r.mesa || "—"}
+          </div>
+        </div>
 
-const estado = estadoServicio(r.hora,r.llego);
+        <div class="badge ${badgeClass}">${badgeText}</div>
+      </div>
 
-let dot = "🟡";
+      <div class="resActions">
+        <button class="btnMini btnArrive" data-id="${r.id}" data-action="arrive">Llegó</button>
+        <button class="btnMini btnView" data-id="${r.id}" data-action="view">Ver</button>
+      </div>
+    `;
 
-if(estado === "arrived") dot = "🟢";
-if(estado === "late") dot = "🔴";
+    card.addEventListener("click",(e)=>{
+      if(e.target.closest("button")) return;
+      openReserva(r.id);
+    });
 
-const card = document.createElement("div");
-card.className = "resCard";
+    card.querySelector('[data-action="arrive"]').addEventListener("click",(e)=>{
+      e.stopPropagation();
+      arrive(r.id);
+    });
 
-card.innerHTML = `
+    card.querySelector('[data-action="view"]').addEventListener("click",(e)=>{
+      e.stopPropagation();
+      openReserva(r.id);
+    });
 
-<div>
-${dot} <strong>${r.hora}</strong> — ${r.cliente}
-<span style="opacity:.7">${r.personas} pax</span>
-</div>
+    container.appendChild(card);
+  });
+}
 
-<div>
-Mesa ${r.mesa || "—"}
+function selectMesa(id){
+  SELECTED_MESA = id;
+  paintMesas(CURRENT_LIST);
 
-<button class="arrive" onclick="arrive('${r.id}')">Llegó</button>
-<button class="edit" onclick="verDetalle('${r.id}')">Editar</button>
-</div>
+  if(SELECTED_RESERVA_ID){
+    renderDetalle(HOST_CACHE[SELECTED_RESERVA_ID] || null);
+  }
+}
 
-`;
+async function loadReservas(){
+  const data = await api({
+    action:"host_snapshot",
+    funcion:$("funcion").value
+  });
 
-container.appendChild(card);
+  $("coversTotal").textContent = data.coversTotal || 0;
+  $("coversArrived").textContent = data.coversArrived || 0;
+  $("coversPending").textContent = data.coversPending || 0;
 
-});
+  renderMapBase();
+  renderReservas(data.reservas || []);
+  paintMesas(data.reservas || []);
 
-$("coversTotal").textContent = covers;
-
+  if(SELECTED_RESERVA_ID){
+    const found = (data.reservas || []).find(r=>r.id === SELECTED_RESERVA_ID);
+    if(found){
+      await openReserva(found.id, false);
+    }else{
+      SELECTED_RESERVA_ID = null;
+      $("detalle").innerHTML = `<div class="detailEmpty">Selecciona una reserva</div>`;
+    }
+  }
 }
 
 async function arrive(id){
+  await api({
+    action:"host_arrive",
+    id:id,
+    funcion:$("funcion").value
+  });
 
-await fetch(BACKEND_URL,{
-method:"POST",
-headers:{"Content-Type":"text/plain;charset=utf-8"},
-body:JSON.stringify({
-action:"host_arrive",
-id:id,
-secret:SHARED_SECRET
-})
-});
-
-loadReservas();
-
+  await loadReservas();
 }
 
-async function verDetalle(id){
+async function assignMesa(id){
+  if(!SELECTED_MESA){
+    alert("Selecciona una mesa primero.");
+    return;
+  }
 
-let r = HOST_CACHE[id];
+  await api({
+    action:"host_update",
+    id:id,
+    mesa:SELECTED_MESA
+  });
 
-/* si no tiene covers aún → traerlos del backend */
-
-if(!r || !r.covers){
-
-const res = await fetch(BACKEND_URL,{
-method:"POST",
-headers:{ "Content-Type":"text/plain;charset=utf-8" },
-body:JSON.stringify({
-action:"host_get",
-id:id,
-secret:SHARED_SECRET
-})
-});
-
-const data = await res.json();
-
-r = data.reserva;
-
-/* guardarlo en cache */
-
-HOST_CACHE[id] = r;
-
+  await loadReservas();
 }
 
-/* render detalle */
+async function openReserva(id, forceFetch = true){
+  SELECTED_RESERVA_ID = id;
 
-$("detalle").innerHTML=`
+  let r = HOST_CACHE[id];
 
-<h3>${r.cliente}</h3>
+  if(forceFetch || !r || !r.covers){
+    const data = await api({
+      action:"host_get",
+      id:id
+    });
+    r = data.reserva;
+    HOST_CACHE[id] = r;
+  }
 
-Teléfono: ${r.telefono}<br>
-Personas: ${r.personas}
-
-<h4>COVERS</h4>
-
-${r.covers.map(c=>`
-<div class="cover">
-<strong>${c.nombre}</strong><br>
-Aperitivo: ${c.aperitivo || "-"}<br>
-Principal: ${c.principal || "-"}<br>
-Postre: ${c.postre || "-"}<br>
-Proteína: ${c.proteina || "-"}
-</div>
-`).join("")}
-
-${r.notas ? `
-<h4>Notas</h4>
-<div class="note">${r.notas}</div>
-` : ""}
-
-`;
-
+  renderReservas(CURRENT_LIST);
+  renderDetalle(r);
 }
 
-document.addEventListener("DOMContentLoaded",()=>{
+function renderDetalle(r){
+  if(!r){
+    $("detalle").innerHTML = `<div class="detailEmpty">Selecciona una reserva</div>`;
+    return;
+  }
 
-fillSelect($("funcion"),FUNCIONES);
+  $("detalle").innerHTML = `
+    <div class="detailTitle">${r.cliente}</div>
 
-$("funcion").addEventListener("change",loadReservas);
+    <div class="detailMeta">
+      ${r.personas} personas<br>
+      📞 ${r.telefono || "Sin teléfono"}<br>
+      Mesa actual: ${getMesaActualLabel(r)}
+    </div>
 
-loadReservas();
+    <div class="detailActions">
+      <button class="btn btnPrimary btnFull" onclick="assignMesa('${r.id}')">
+        ${SELECTED_MESA ? `Asignar mesa ${SELECTED_MESA}` : "Selecciona una mesa para asignar"}
+      </button>
 
+      <button class="btn btnSecondary btnFull" onclick="arrive('${r.id}')">
+        Marcar llegó
+      </button>
+    </div>
+
+    <div class="detailSection">
+      <h3>Preorden</h3>
+      ${(r.covers || []).map(c=>`
+        <div class="coverCard">
+          <div class="coverName">${c.nombre}</div>
+          <div class="coverLine">
+            Aperitivo: ${c.aperitivo || "-"}<br>
+            Principal: ${c.principal || "-"}<br>
+            Proteína: ${c.proteina || "-"}<br>
+            Postre: ${c.postre || "-"}
+          </div>
+        </div>
+      `).join("") || `<div class="smallMuted">No hay covers todavía.</div>`}
+    </div>
+
+    ${r.notas ? `
+      <div class="detailSection">
+        <h3>Notas</h3>
+        <div class="noteBox">${r.notas}</div>
+      </div>
+    ` : ""}
+  `;
+}
+
+function getMesaActualLabel(r){
+  if(r.mesa) return r.mesa;
+  if(SELECTED_MESA) return `sin asignar · mesa seleccionada ${SELECTED_MESA}`;
+  return "—";
+}
+
+document.addEventListener("DOMContentLoaded", async ()=>{
+  fillSelect($("funcion"), FUNCIONES);
+
+  $("funcion").addEventListener("change", async ()=>{
+    SELECTED_RESERVA_ID = null;
+    SELECTED_MESA = null;
+    await loadReservas();
+  });
+
+  $("buscar").addEventListener("input", ()=>{
+    renderReservas(CURRENT_LIST);
+  });
+
+  await loadReservas();
 });
-
 </script>
-
 </body>
 </html>
