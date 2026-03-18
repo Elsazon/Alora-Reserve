@@ -497,7 +497,7 @@ select:focus,input:focus{
 </div>
 
 <script>
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycby8gF6HHkhF2g0s-HbA7AkA2_gZjuMd1gULJzXhy49OROOnKQitmfdQi9z3S1o-Z_Bm/exec";
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxb3h4JtupylqhRgXWYnyd3xHZW0YMTSNPUHMUC049OJzFsZpPQRUrpdiFD8lvr98mQ/exec";
 const SHARED_SECRET = "demo123";
 
 const FUNCIONES = [
@@ -535,25 +535,6 @@ function fillSelect(el, list){
 }
 
 
-  
-function estadoServicio(horaReserva, llego){
-  if(llego) return "arrived";
-
-  const now = new Date();
-  const [h,m] = horaReserva.replace(" PM","").replace(" AM","").split(":");
-
-  let hour = parseInt(h,10);
-  const min = parseInt(m,10);
-
-  if(horaReserva.includes("PM") && hour !== 12) hour += 12;
-  if(horaReserva.includes("AM") && hour === 12) hour = 0;
-
-  const reserva = new Date();
-  reserva.setHours(hour, min, 0, 0);
-
-  if(now > reserva) return "late";
-  return "pending";
-}
 
 async function api(body){
   const res = await fetch(BACKEND_URL,{
@@ -769,9 +750,14 @@ function renderReservas(list){
   filtered.forEach(r=>{
     HOST_CACHE[r.id] = r;
 
-    const estado = estadoServicio(r.hora, r.llego);
-    const badgeClass = estado === "arrived" ? "arrived" : (estado === "late" ? "late" : "pending");
-    const badgeText = estado === "arrived" ? "Llegó" : (estado === "late" ? "Atrasada" : "Pendiente");
+   const estado = r.estado || "Pendiente";
+let badgeClass = "pending";
+let badgeText = estado;
+
+if(estado === "Llegó") badgeClass = "arrived";
+if(estado === "Sentado") badgeClass = "seated";
+if(estado === "Cerrado") badgeClass = "closed";
+if(estado === "Cancelado") badgeClass = "cancelled";
 
     const card = document.createElement("div");
     card.className = "resCard" + (SELECTED_RESERVA_ID === r.id ? " active" : "");
