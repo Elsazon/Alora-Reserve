@@ -581,6 +581,8 @@ async function api(body){
 let qrScanner = null;
 
 function openQR(){
+  console.log("Opening QR...");
+
   $("qrModal").style.display = "flex";
 
   qrScanner = new Html5Qrcode("qr-reader");
@@ -589,7 +591,10 @@ function openQR(){
     { facingMode: "environment" },
     { fps: 10, qrbox: { width: 250, height: 250 } },
     onScanSuccess
-  );
+  ).catch(err=>{
+    console.error("Camera error:", err);
+    showToast("Error cámara");
+  });
 }
 
 function closeQR(){
@@ -966,6 +971,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
   await loadReservas();
 });
 </script>
+<!-- QR MODAL -->
 <div id="qrModal" style="
 position:fixed;
 inset:0;
@@ -998,7 +1004,6 @@ flex-direction:column;
 
     <div id="qr-reader" style="width:100%;height:100%;"></div>
 
-    <!-- marco estilo cámara -->
     <div style="
     position:absolute;
     inset:0;
@@ -1029,6 +1034,10 @@ flex-direction:column;
   ">
     Cancelar
   </button>
+
+</div>
+
+<!-- TOAST (SEPARADO) -->
 <div id="toast" style="
 position:fixed;
 bottom:30px;
@@ -1044,6 +1053,11 @@ display:none;
 z-index:9999;
 box-shadow:0 10px 40px rgba(0,0,0,.6);
 "></div>
-</div>
+
+<!-- LIBRERÍA QR (CRÍTICO) -->
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+</body>
+</html>
 </body>
 </html>
