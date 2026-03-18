@@ -342,32 +342,48 @@ select:focus,input:focus{
 
 .wallCurve{
   position:absolute;
-  left:-22%;
-  top:8%;
-  width:42%;
+  left:-24%;
+  top:10%;
+  width:40%;
   height:92%;
   border-radius:50%;
-  border:1px solid rgba(255,255,255,.06);
-  background:rgba(255,255,255,.025);
+  border:1px solid rgba(255,255,255,.05);
+  background:rgba(255,255,255,.02);
   pointer-events:none;
 }
 
   .bar{
   position:absolute;
-  top:6%;
-  left:34%;
-  width:32%;
-  height:42px;
-  background:#111;
-  border-radius:8px;
-  border:1px solid rgba(255,255,255,.06);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:11px;
-  letter-spacing:1.5px;
-  color:var(--muted);
+  top:8%;
+  left:22%;
+  width:54%;
+  height:22%;
+  border:0;
+  background:transparent;
   pointer-events:none;
+}
+
+.bar::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:18px;
+  background:#000;
+  border-radius:0;
+}
+
+.bar::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:18px;
+  height:70%;
+  background:#000;
+  border-radius:0;
+  box-shadow: calc(100% - 18px) 0 0 #000;
 }
   .door{
   position:absolute;
@@ -576,33 +592,10 @@ function renderMapBase(){
   const container = document.querySelector(".floor");
   container.innerHTML = "";
 
- // 🔥 SALÓN
-if(CURRENT_ZONE === "salon"){
-
-  const curve = document.createElement("div");
-  curve.className = "wallCurve";
-  container.appendChild(curve);
-
-  createDoor(86, 84, false); // entrada principal
-  createDoor(2, 40, true);   // lateral izquierda
-
-}
-
-// 🔥 BARRA
-if(CURRENT_ZONE === "barra"){
-
-  const bar = document.createElement("div");
-  bar.className = "bar";
-  bar.innerHTML = "BARRA";
-  container.appendChild(bar);
-
-  createDoor(46, 8, false); // acceso barra
-}
-
-  // helpers
   function createDoor(x, y, vertical = false){
     const el = document.createElement("div");
     el.className = "door";
+
     if(vertical){
       el.style.width = "10px";
       el.style.height = "50px";
@@ -610,6 +603,7 @@ if(CURRENT_ZONE === "barra"){
       el.style.width = "50px";
       el.style.height = "10px";
     }
+
     el.style.left = x + "%";
     el.style.top = y + "%";
     container.appendChild(el);
@@ -626,50 +620,71 @@ if(CURRENT_ZONE === "barra"){
     container.appendChild(el);
   }
 
-  // puertas
-  createDoor(86, 84, false); // principal abajo derecha
-  createDoor(2, 40, true);   // lateral izquierda
-  createDoor(46, 8, false);  // acceso barra
+  function createBar(){
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    bar.innerHTML = "";
+    container.appendChild(bar);
+  }
 
-  // salón principal ajustado a tu layout
+  function createCurve(){
+    const curve = document.createElement("div");
+    curve.className = "wallCurve";
+    container.appendChild(curve);
+  }
+
   const SALON = [
-    {id:"41",x:12,y:14},
-    {id:"31",x:38,y:18},
-    {id:"21",x:60,y:18},
-    {id:"11",x:80,y:18},
+    {id:"41",x:14,y:14},
+    {id:"31",x:40,y:18},
+    {id:"21",x:61,y:18},
+    {id:"11",x:81,y:18},
 
-    {id:"42",x:8,y:36},
-    {id:"32",x:38,y:40},
-    {id:"22",x:60,y:40},
-    {id:"12",x:80,y:40},
+    {id:"42",x:10,y:36},
+    {id:"32",x:40,y:40},
+    {id:"22",x:61,y:40},
+    {id:"12",x:81,y:40},
 
-    {id:"43",x:10,y:58},
-    {id:"33",x:38,y:62},
-    {id:"23",x:60,y:62},
-    {id:"13",x:80,y:62},
+    {id:"43",x:12,y:58},
+    {id:"33",x:40,y:62},
+    {id:"23",x:61,y:62},
+    {id:"13",x:81,y:62},
 
     {id:"44",x:16,y:80}
   ];
 
-  // barra / lounge
+  // Barra según tu imagen:
+  // 2 altas derecha, 3 altas abajo izquierda, 2 bajas al centro
   const ALTAS = [
-  {id:"A1",x:40,y:20},
-  {id:"A2",x:55,y:20},
-  {id:"A3",x:70,y:20},
-  {id:"A4",x:45,y:40},
-  {id:"A5",x:65,y:40}
-];
+    {id:"A1",x:84,y:22},
+    {id:"A2",x:84,y:42},
 
-const BAJAS = [
-  {id:"B1",x:45,y:60},
-  {id:"B2",x:65,y:60}
-];
+    {id:"A3",x:16,y:76},
+    {id:"A4",x:33,y:76},
+    {id:"A5",x:50,y:76}
+  ];
+
+  const BAJAS = [
+    {id:"B1",x:24,y:42},
+    {id:"B2",x:55,y:42}
+  ];
 
   if(CURRENT_ZONE === "salon"){
+    createCurve();
+
+    // puertas salón
+    createDoor(2, 38, true);   // izquierda
+    createDoor(84, 86, false); // abajo derecha
+
     SALON.forEach(t=>createTable(t,"square"));
   }
 
   if(CURRENT_ZONE === "barra"){
+    createBar();
+
+    // puertas barra según tu dibujo
+    createDoor(2, 38, true);   // izquierda
+    createDoor(60, 88, false); // abajo centro
+
     ALTAS.forEach(t=>createTable(t,"circle"));
     BAJAS.forEach(t=>createTable(t,"square"));
   }
