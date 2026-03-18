@@ -614,6 +614,11 @@ async function onScanSuccess(decodedText){
     await loadReservas();
     await openReserva(reservationId);
 
+ document.querySelector("#detalle").scrollIntoView({
+  behavior: "smooth",
+  block: "start"
+});
+    
   }else{
     showToast("QR inválido");
   }
@@ -802,7 +807,26 @@ if(estado === "Cancelado") badgeClass = "cancelled";
     container.appendChild(card);
   });
 }
+function sugerirMesas(personas){
 
+  const disponibles = document.querySelectorAll(".tableNode.libre");
+
+  const libres = Array.from(disponibles).map(el=>el.dataset.id);
+
+  if(personas <= 4){
+    return libres[0] ? [libres[0]] : [];
+  }
+
+  if(personas <= 8){
+    return libres.slice(0,2);
+  }
+
+  if(personas <= 12){
+    return libres.slice(0,3);
+  }
+
+  return libres.slice(0,4);
+}
 function selectMesa(id){
 
   if(SELECTED_MESAS.includes(id)){
@@ -889,6 +913,13 @@ async function openReserva(id, forceFetch = true){
 
   renderReservas(CURRENT_LIST);
   renderDetalle(r);
+
+const sugeridas = sugerirMesas(r.personas);
+
+SELECTED_MESAS = sugeridas;
+
+paintMesas(CURRENT_LIST);
+  
 }
 
 function renderDetalle(r){
@@ -903,12 +934,15 @@ function renderDetalle(r){
     <div class="detailMeta">
       ${r.personas} personas<br>
       📞 ${r.telefono || "Sin teléfono"}<br>
-      Mesa actual: ${getMesaActualLabel(r)}
+      Mesas seleccionadas: ${SELECTED_MESAS.join(", ") || "—"}
     </div>
 
     <div class="detailActions">
       <button class="btn btnPrimary btnFull" onclick="assignMesa('${r.id}')">
-        ${SELECTED_MESA ? `Asignar mesa ${SELECTED_MESA}` : "Selecciona una mesa para asignar"}
+        ${SELECTED_MESAS.length 
+  ? `Asignar mesa ${SELECTED_MESAS.join(" + ")}`
+  : "Selecciona mesa"
+}
       </button>
 
       <button class="btn btnSecondary btnFull" onclick="arrive('${r.id}')">
