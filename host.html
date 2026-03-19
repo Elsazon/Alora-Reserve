@@ -556,6 +556,18 @@ const TABLES_SALON = [
   "44"
 ];
 
+  const TABLE_META = {
+  "41":{x:14,y:14}, "31":{x:40,y:18}, "21":{x:61,y:18}, "11":{x:81,y:18},
+  "42":{x:10,y:36}, "32":{x:40,y:40}, "22":{x:61,y:40}, "12":{x:81,y:40},
+  "43":{x:12,y:58}, "33":{x:40,y:62}, "23":{x:61,y:62}, "13":{x:81,y:62},
+  "44":{x:16,y:80},
+
+  "A1":{x:84,y:30}, "A2":{x:84,y:52},
+  "A3":{x:18,y:78}, "A4":{x:36,y:78}, "A5":{x:54,y:78},
+
+  "B1":{x:28,y:48}, "B2":{x:58,y:48}
+};
+
 const TABLES_BARRA = [
   "L1","L2","L3","L4","B1","B2","B3"
 ];
@@ -957,24 +969,92 @@ function renderReservas(list){
 }
 function sugerirMesas(personas){
 
-  const disponibles = document.querySelectorAll(".tableNode.libre");
+  const disponibles = Array.from(
+    document.querySelectorAll(".tableNode.libre")
+  ).map(el=>el.dataset.id);
 
-  const libres = Array.from(disponibles).map(el=>el.dataset.id);
+  if(!disponibles.length) return [];
 
+  // 🔥 helper distancia
+  function distancia(a,b){
+    return Math.hypot(a.x - b.x, a.y - b.y);
+  }
+
+  // 🔥 centro del salón
+  const centro = {x:50,y:50};
+
+  // 🔥 ordenar por cercanía al centro
+  disponibles.sort((a,b)=>{
+    const da = distancia(TABLE_META[a], centro);
+    const db = distancia(TABLE_META[b], centro);
+    return da - db;
+  });
+
+  // 🔥 lógica por tamaño
   if(personas <= 4){
-    return libres[0] ? [libres[0]] : [];
+    return [disponibles[0]];
   }
 
   if(personas <= 8){
-    return libres.slice(0,2);
+    return findBestCluster(disponibles, 2);
   }
 
   if(personas <= 12){
-    return libres.slice(0,3);
+    return findBestCluster(disponibles, 3);
   }
 
-  return libres.slice(0,4);
+  return findBestCluster(disponibles, 4);
 }
+
+  function findBestCluster(mesas, cantidad){
+
+  let best = null;
+  let bestScore = Infinity;
+
+  for(let i=0;i<mesas.length;i++){
+
+    const base = mesas[i];
+    const basePos = TABLE_META[base];
+
+    const group = [base];
+
+    // 🔥 buscar mesas más cercanas
+    const cercanas = mesas
+      .filter(m => m !== base)
+      .map(m => ({
+        id: m,
+        dist: Math.hypot(
+          TABLE_META[m].x - basePos.x,
+          TABLE_META[m].y - basePos.y
+        )
+      }))
+      .sort((a,b)=>a.dist - b.dist);
+
+    for(let j=0;j<cercanas.length && group.length < cantidad;j++){
+      group.push(cercanas[j].id);
+    }
+
+    // 🔥 score del grupo (qué tan compacto es)
+    let score = 0;
+
+    for(let a=0;a<group.length;a++){
+      for(let b=a+1;b<group.length;b++){
+        score += Math.hypot(
+          TABLE_META[group[a]].x - TABLE_META[group[b]].x,
+          TABLE_META[group[a]].y - TABLE_META[group[b]].y
+        );
+      }
+    }
+
+    if(score < bestScore){
+      bestScore = score;
+      best = group;
+    }
+  }
+
+  return best || [];
+}
+  
 function selectMesa(id){
 
   if(!MULTI_MODE){
