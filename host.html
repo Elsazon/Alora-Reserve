@@ -552,7 +552,7 @@ select:focus,input:focus{
 </div>
 
 <script>
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyRWL9iQ0UyjVLV2WuO5N6QFrXMDDDYQkKns6OWNXH2hSXuU8HZ2HmW_3wYbitVL44O/exec";
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz7N5-BpkZZf4yxOr3dnlr2F6JIhVQy2kDAatrc98731x9-cdwD13FvPDxYGPUXYkWm/exec";
 const SHARED_SECRET = "demo123";
 
 const FUNCIONES = [
@@ -1258,10 +1258,12 @@ async function openReserva(id, forceFetch = true){
 
 SELECTED_MESAS = sugerirMesas(r.personas || 1);
 
-  renderReservas(CURRENT_LIST);
-  renderDetalle(r);
-  paintMesas(CURRENT_LIST);
-  setTimeout(()=> loadCuenta(id), 0);
+renderReservas(CURRENT_LIST);
+renderDetalle(r);
+paintMesas(CURRENT_LIST);
+
+setTimeout(loadItemsMenu, 0);
+setTimeout(()=> loadCuenta(id), 0);
 }
 
 function renderDetalle(r){
@@ -1370,7 +1372,9 @@ ${r.estado !== "Cerrado" ? `
 
   ${r.estado !== "Cerrado" ? `
     <div style="display:flex;gap:8px;margin-bottom:10px;">
-      <input id="itemNombre" placeholder="Ej: Coca-Cola">
+      <select id="itemSelect">
+  <option value="">Cargando menú...</option>
+</select>
       <button class="btn btnSecondary" style="width:auto;"
         onclick="addConsumoUI('${r.id}')">
         + Añadir
@@ -1448,13 +1452,13 @@ function showToast(msg){
 }
   async function addConsumoUI(id){
 
-  const input = document.getElementById("itemNombre");
-  const nombre = (input?.value || "").trim();
+  const select = document.getElementById("itemSelect");
+const nombre = select?.value;
 
-  if(!nombre){
-    alert("Escribe un item.");
-    return;
-  }
+if(!nombre){
+  alert("Selecciona un item.");
+  return;
+}
 
   const res = await api({
     action:"add_consumo",
@@ -1468,7 +1472,7 @@ function showToast(msg){
     return;
   }
 
-  input.value = "";
+  select.value = "";
   await loadCuenta(id);
   showToast("Consumo añadido");
 }
@@ -1507,6 +1511,27 @@ async function loadCuenta(id){
   totalEl.textContent = data.total.toFixed(2);
 }
 
+async function loadItemsMenu(){
+
+  const data = await api({
+    action:"get_items_menu"
+  });
+
+  const select = document.getElementById("itemSelect");
+  if(!select || !data.ok) return;
+
+  select.innerHTML = `
+    <option value="">Seleccionar item</option>
+  `;
+
+  data.items.forEach(i=>{
+    const opt = document.createElement("option");
+    opt.value = i.nombre;
+    opt.textContent = `${i.nombre} ($${i.precio})`;
+    select.appendChild(opt);
+  });
+}
+  
 async function checkoutUI(id){
 
   const ok = confirm("¿Cerrar cuenta y enviar recibo por email?");
