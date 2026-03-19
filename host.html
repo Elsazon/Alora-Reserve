@@ -1136,21 +1136,21 @@ function renderDetalle(r){
     </button>
   ` : ""}
 
-  ${r.estado !== "Cerrado" ? `
-    <button class="btn btnPrimary"
-      onclick="assignMesa('${r.id}')">
-      ${SELECTED_MESAS.length 
-        ? `Asignar ${SELECTED_MESAS.join(" + ")}`
-        : "Seleccionar mesa"}
-    </button class="btn btnNeutral">
-  ` : ""}
+ ${r.estado !== "Cerrado" ? `
+  <button class="btn btnNeutral"
+    onclick="assignMesa('${r.id}')">
+    ${SELECTED_MESAS.length 
+      ? `Asignar ${SELECTED_MESAS.join(" + ")}`
+      : "Seleccionar mesa"}
+  </button>
+` : ""}
 
   ${r.mesa ? `
-    <button class="btn btnDanger"
-      onclick="liberarMesa('${r.id}')">
-      Quitar mesa
-    </button class="btn btnSoftDanger">
-  ` : ""}
+  <button class="btn btnSoftDanger"
+    onclick="liberarMesa('${r.id}')">
+    Quitar mesa
+  </button>
+` : ""}
 
 </div>
 
