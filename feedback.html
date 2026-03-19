@@ -9,92 +9,166 @@
 
 <style>
 
+/* BASE */
+
 body{
 background:#0b1210;
 color:#f4f1ea;
 font-family:Inter,system-ui;
 margin:0;
-padding:30px;
+padding:20px;
 }
 
+/* CONTAINER */
+
 .container{
-max-width:600px;
+max-width:620px;
 margin:auto;
 }
 
+/* CARD */
+
 .card{
 background:#111916;
-border-radius:18px;
-padding:28px;
-box-shadow:0 20px 60px rgba(0,0,0,.6);
-border:1px solid rgba(255,255,255,.06);
+border-radius:22px;
+padding:32px;
+box-shadow:0 40px 100px rgba(0,0,0,.7);
+border:1px solid rgba(255,255,255,.05);
+animation:fadeIn .5s ease;
 }
 
-h1{
+/* HEADER */
+
+.header{
 text-align:center;
-margin-bottom:25px;
+margin-bottom:28px;
 }
+
+.logo{
+width:130px;
+margin-bottom:12px;
+opacity:.95;
+}
+
+.title{
+font-size:22px;
+font-weight:600;
+letter-spacing:.5px;
+}
+
+.subtitle{
+font-size:13px;
+opacity:.6;
+margin-top:4px;
+}
+
+/* SECTION */
 
 .section{
-margin-bottom:22px;
+margin-bottom:24px;
 }
 
 .label{
-margin-bottom:8px;
+margin-bottom:10px;
 font-size:14px;
-opacity:.8;
+opacity:.75;
 }
 
-/* ⭐ estrellas */
+/* STARS */
 
 .stars{
 display:flex;
-gap:8px;
+gap:10px;
 }
 
 .star{
-font-size:26px;
+font-size:30px;
 cursor:pointer;
-opacity:.3;
-transition:.2s;
+opacity:.25;
+transition:.25s;
+}
+
+.star:hover{
+transform:scale(1.2);
 }
 
 .star.active{
 opacity:1;
 color:#c26a4a;
-transform:scale(1.1);
+text-shadow:0 0 12px rgba(194,106,74,.5);
 }
+
+/* TEXTAREA */
 
 textarea{
 width:100%;
-padding:12px;
-border-radius:10px;
+padding:14px;
+border-radius:12px;
 border:none;
 background:#0e1511;
 color:white;
 resize:none;
-height:100px;
+height:110px;
+font-size:14px;
 }
+
+/* BUTTON */
 
 button{
 width:100%;
-padding:14px;
+padding:15px;
 border:none;
-border-radius:12px;
+border-radius:14px;
 background:#c26a4a;
 color:#111;
-font-weight:bold;
+font-weight:600;
 cursor:pointer;
-margin-top:10px;
+margin-top:15px;
+font-size:15px;
+transition:.2s;
 }
 
 button:hover{
-opacity:.9;
+transform:translateY(-1px);
+box-shadow:0 12px 25px rgba(194,106,74,.35);
 }
 
-.success{
+/* SUCCESS */
+
+.successCard{
 text-align:center;
-font-size:18px;
+padding:60px 30px;
+}
+
+.successLogo{
+width:150px;
+margin-bottom:18px;
+}
+
+.successTitle{
+font-size:24px;
+margin-bottom:10px;
+}
+
+.successDivider{
+width:60px;
+height:2px;
+background:#c26a4a;
+margin:18px auto;
+opacity:.6;
+}
+
+.successText{
+font-size:14px;
+opacity:.7;
+line-height:1.6;
+}
+
+/* ANIMATION */
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;transform:translateY(0);}
 }
 
 </style>
@@ -105,9 +179,19 @@ font-size:18px;
 
 <div class="container">
 
+<!-- FORM -->
+
 <div class="card" id="form">
 
-<h1>Tu experiencia en ALORA</h1>
+<div class="header">
+
+<img class="logo"
+src="https://raw.githubusercontent.com/Elsazon/Alora-Reserve/main/7E279685-0A21-4575-9890-80E64F81A59E.png">
+
+<div class="title">Tu experiencia en ALORA</div>
+<div class="subtitle">Tu opinión perfecciona cada detalle</div>
+
+</div>
 
 <div class="section" id="q1"></div>
 <div class="section" id="q2"></div>
@@ -117,15 +201,31 @@ font-size:18px;
 
 <div class="section">
 <div class="label">Comentarios adicionales</div>
-<textarea id="comentario"></textarea>
+<textarea id="comentario" placeholder="Comparte tu experiencia..."></textarea>
 </div>
 
-<button onclick="submitFeedback()">Enviar review</button>
+<button onclick="submitFeedback()">Enviar experiencia</button>
 
 </div>
 
-<div id="done" style="display:none" class="success">
-Gracias por tu experiencia ❤️
+<!-- SUCCESS -->
+
+<div id="done" style="display:none" class="card successCard">
+
+<img class="successLogo"
+src="https://raw.githubusercontent.com/Elsazon/Alora-Reserve/main/7E279685-0A21-4575-9890-80E64F81A59E.png">
+
+<div class="successTitle">Gracias por tu visita</div>
+
+<div class="successDivider"></div>
+
+<div class="successText">
+En <strong>ALORA</strong> cada experiencia es única.<br>
+Tu feedback nos ayuda a seguir elevando nuestro servicio.
+<br><br>
+Esperamos recibirte nuevamente.
+</div>
+
 </div>
 
 </div>
