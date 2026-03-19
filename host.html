@@ -621,11 +621,13 @@ async function runPrimaryAction(id){
   }
 
   else if(estado === "Sentado"){
-    await api({
-      action:"host_close",
-      id:id
-    });
-  }
+  await api({
+    action:"host_update",
+    id:id,
+    estado:"Cerrado",
+    mesa:""
+  });
+}
 
   await loadReservas();
 }
@@ -906,7 +908,6 @@ if(estado === "Cancelado") badgeClass = "cancelled";
       </div>
 
       <div class="resActions">
-        <button class="btnMini btnArrive" data-id="${r.id}" data-action="arrive">Llegó</button>
         <button class="btnMini btnView" data-id="${r.id}" data-action="view">Ver</button>
       </div>
     `;
@@ -1080,20 +1081,7 @@ function renderDetalle(r){
       </option>
     `).join("")}
   </select>
-
-</div>
     
-      <div style="
-        margin-top:6px;
-        display:inline-block;
-        padding:4px 10px;
-        border-radius:8px;
-        font-size:12px;
-        background:${estadoColor};
-        color:#111;
-      ">
-        ${estado}
-      </div>
 
       <div style="margin-top:10px;color:var(--muted);font-size:13px;">
         👥 ${r.personas} pax<br>
