@@ -575,15 +575,13 @@ function toggleMultiMode(btn){
   paintMesas(CURRENT_LIST);
 }
 async function updateEstado(id, estado){
-
   await api({
     action:"host_update",
     id:id,
     estado:estado,
-    force:true
+    funcion:$("funcion").value
   });
 
-  // 🔥 FORZAMOS UI UPDATE
   if(HOST_CACHE[id]){
     HOST_CACHE[id].estado = estado;
   }
@@ -611,30 +609,29 @@ function getPrimaryAction(r){
 }
 
 async function runPrimaryAction(id){
-
   const r = HOST_CACHE[id];
-  const estado = r.estado || "Pendiente";
+  const estado = r?.estado || "Pendiente";
 
   if(estado === "Pendiente"){
     await arrive(id);
-  }
-
-  else if(estado === "Llegó"){
+  } else if(estado === "Llegó"){
     await api({
-      action:"host_seat",
-      id:id
+      action:"host_update",
+      id:id,
+      estado:"Sentado",
+      funcion:$("funcion").value
+    });
+  } else if(estado === "Sentado"){
+    await api({
+      action:"host_update",
+      id:id,
+      estado:"Cerrado",
+      mesa:"",
+      funcion:$("funcion").value
     });
   }
 
-  else if(estado === "Sentado"){
-  await api({
-    action:"host_update",
-    id:id,
-    estado:"Cerrado",
-    mesa:""
-  });
-}
-
+  SELECTED_MESAS = [];
   await loadReservas();
 }
   
@@ -887,45 +884,47 @@ function renderReservas(list){
   filtered.forEach(r=>{
     HOST_CACHE[r.id] = r;
 
-   const estado = r.estado || "Pendiente";
-let badgeClass = "pending";
-let badgeText = estado;
+    const estado = r.estado || "Pendiente";
+    let badgeBg = "#3a3a3a";
 
-if(estado === "Llegó") badgeClass = "arrived";
-if(estado === "Sentado") badgeClass = "seated";
-if(estado === "Cerrado") badgeClass = "closed";
-if(estado === "Cancelado") badgeClass = "cancelled";
+    if(estado === "Llegó") badgeBg = "#3fa86a";
+    if(estado === "Sentado") badgeBg = "#bfa15a";
+    if(estado === "Cerrado") badgeBg = "#555";
+    if(estado === "Cancelado") badgeBg = "#c85b5b";
 
     const card = document.createElement("div");
     card.className = "resCard" + (SELECTED_RESERVA_ID === r.id ? " active" : "");
 
     card.innerHTML = `
-      <div class="resTop">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;">
         <div>
-          <div class="resName">${r.cliente}</div>
-          <div class="resMeta">
+          <div style="font-weight:600;font-size:15px;">${r.cliente}</div>
+          <div style="margin-top:6px;font-size:13px;color:var(--muted);line-height:1.5;">
             ${r.hora} · ${r.personas} pax<br>
             ${r.telefono || "Sin teléfono"}<br>
             Mesa: ${r.mesa || "—"}
           </div>
         </div>
 
-        <div class="badge ${badgeClass}">${badgeText}</div>
+        <div style="
+          background:${badgeBg};
+          color:#111;
+          font-size:11px;
+          padding:6px 10px;
+          border-radius:999px;
+          font-weight:600;
+          white-space:nowrap;
+        ">
+          ${estado}
+        </div>
       </div>
 
-    <div style="margin-top:8px;font-size:12px;color:var(--muted);">
-  Tap para abrir
-</div>
+      <div style="margin-top:10px;font-size:12px;color:var(--muted);">
+        Tap para abrir
+      </div>
     `;
 
-    card.addEventListener("click",(e)=>{
-      if(e.target.closest("button")) return;
-      openReserva(r.id);
-    });
-
-
-    card.querySelector('[data-action="view"]').addEventListener("click",(e)=>{
-      e.stopPropagation();
+    card.addEventListener("click", ()=>{
       openReserva(r.id);
     });
 
@@ -1008,7 +1007,6 @@ async function arrive(id){
 }
 
 async function assignMesa(id){
-
   if(!SELECTED_MESAS.length){
     alert("Selecciona al menos una mesa.");
     return;
@@ -1019,11 +1017,11 @@ async function assignMesa(id){
   await api({
     action:"host_update",
     id:id,
-    mesa:mesaString
+    mesa:mesaString,
+    funcion:$("funcion").value
   });
 
   SELECTED_MESAS = [];
-
   await loadReservas();
 }
 
@@ -1041,17 +1039,13 @@ async function openReserva(id, forceFetch = true){
     HOST_CACHE[id] = r;
   }
 
+  if(SELECTED_MESAS.length === 0){
+    SELECTED_MESAS = sugerirMesas(r.personas || 1);
+  }
+
   renderReservas(CURRENT_LIST);
   renderDetalle(r);
-
-const sugeridas = sugerirMesas(r.personas || 1);
-
-if(SELECTED_MESAS.length === 0){
-  SELECTED_MESAS = sugerirMesas(r.personas);
-}
-
-paintMesas(CURRENT_LIST);
-  
+  paintMesas(CURRENT_LIST);
 }
 
 function renderDetalle(r){
