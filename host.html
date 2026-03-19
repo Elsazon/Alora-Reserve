@@ -552,7 +552,7 @@ select:focus,input:focus{
 </div>
 
 <script>
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycbwnuJPyw0_iCH-bEWudjgP_dzYi4N8iYllHOWak2Kh4YBX-mwlY9j4hV4Oj0Vg5C0TY/exec";
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbzKhy31dJBTzbGJFk0B2Jrld0btMIoFgaJbZP1NUkIesuBH0tCz6OX06T0BYMOgv6zg/exec";
 const SHARED_SECRET = "demo123";
 
 const FUNCIONES = [
@@ -1261,6 +1261,7 @@ SELECTED_MESAS = sugerirMesas(r.personas || 1);
   renderReservas(CURRENT_LIST);
   renderDetalle(r);
   paintMesas(CURRENT_LIST);
+  setTimeout(()=> loadCuenta(id), 0);
 }
 
 function renderDetalle(r){
@@ -1364,6 +1365,37 @@ ${r.estado !== "Cerrado" ? `
       </div>
     </div>
 
+<div class="detailSection">
+  <h3>Consumo</h3>
+
+  ${r.estado !== "Cerrado" ? `
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <input id="itemNombre" placeholder="Ej: Coca-Cola">
+      <button class="btn btnSecondary" style="width:auto;"
+        onclick="addConsumoUI('${r.id}')">
+        + Añadir
+      </button>
+    </div>
+  ` : ""}
+
+  <div id="cuentaList">
+    <div class="detailEmpty">Cargando cuenta...</div>
+  </div>
+
+  <div style="margin-top:12px;font-weight:700;">
+    Total: $<span id="cuentaTotal">0.00</span>
+  </div>
+
+  ${r.estado !== "Cerrado" ? `
+    <div style="margin-top:12px;">
+      <button class="btn btnDanger"
+        onclick="checkoutUI('${r.id}')">
+        💳 Checkout
+      </button>
+    </div>
+  ` : ""}
+</div>
+
     ${r.notas ? `
       <div class="detailSection">
         <h3>Notas</h3>
@@ -1413,6 +1445,85 @@ function showToast(msg){
   });
 
   showToast("Mesa liberada");
+}
+  async function addConsumoUI(id){
+
+  const input = document.getElementById("itemNombre");
+  const nombre = (input?.value || "").trim();
+
+  if(!nombre){
+    alert("Escribe un item.");
+    return;
+  }
+
+  const res = await api({
+    action:"add_consumo",
+    reservationId:id,
+    nombre,
+    funcion:$("funcion").value
+  });
+
+  if(!res.ok){
+    alert(res.error || "No se pudo añadir el consumo.");
+    return;
+  }
+
+  input.value = "";
+  await loadCuenta(id);
+  showToast("Consumo añadido");
+}
+
+async function loadCuenta(id){
+
+  const data = await api({
+    action:"get_cuenta",
+    id:id
+  });
+
+  const list = document.getElementById("cuentaList");
+  const totalEl = document.getElementById("cuentaTotal");
+
+  if(!list || !totalEl || !data.ok) return;
+
+  const prefixLine = `
+    <div style="font-size:13px;margin-bottom:6px;">
+      Experiencia Prefix (${data.resumen.personas} × $${data.resumen.prefixUnitario}) — $${data.resumen.prefixSubtotal.toFixed(2)}
+    </div>
+  `;
+
+  const descorcheLine = data.resumen.descorche
+    ? `<div style="font-size:13px;margin-bottom:6px;">Descorche — $${data.resumen.descorche.toFixed(2)}</div>`
+    : "";
+
+  const extras = (data.items || []).length
+    ? data.items.map(i=>`
+        <div style="font-size:13px;margin-bottom:6px;">
+          ${i.nombre} — $${i.precio.toFixed(2)}
+        </div>
+      `).join("")
+    : `<div class="detailEmpty">No hay extras añadidos.</div>`;
+
+  list.innerHTML = prefixLine + descorcheLine + extras;
+  totalEl.textContent = data.total.toFixed(2);
+}
+
+async function checkoutUI(id){
+
+  const ok = confirm("¿Cerrar cuenta y enviar recibo por email?");
+  if(!ok) return;
+
+  const res = await api({
+    action:"checkout",
+    id:id
+  });
+
+  if(!res.ok){
+    alert(res.error || "No se pudo hacer checkout.");
+    return;
+  }
+
+  showToast(`Cuenta cerrada · $${(res.total || 0).toFixed(2)}`);
+  await loadReservas();
 }
 function getMesaActualLabel(r){
   if(r.mesa) return r.mesa;
