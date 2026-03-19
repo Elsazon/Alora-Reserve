@@ -609,30 +609,37 @@ function getPrimaryAction(r){
 }
 
 async function runPrimaryAction(id){
+
   const r = HOST_CACHE[id];
   const estado = r?.estado || "Pendiente";
 
-  if(estado === "Pendiente"){
-    await arrive(id);
-  } else if(estado === "Llegó"){
-    await api({
-      action:"host_update",
-      id:id,
-      estado:"Sentado",
-      funcion:$("funcion").value
-    });
-  } else if(estado === "Sentado"){
-    await api({
-      action:"host_update",
-      id:id,
-      estado:"Cerrado",
-      mesa:"",
-      funcion:$("funcion").value
-    });
+  let newEstado = estado;
+
+  if(estado === "Pendiente") newEstado = "Llegó";
+  else if(estado === "Llegó") newEstado = "Sentado";
+  else if(estado === "Sentado") newEstado = "Cerrado";
+
+  // 🔥 1. UI INMEDIATO
+  if(HOST_CACHE[id]){
+    HOST_CACHE[id].estado = newEstado;
+
+    if(newEstado === "Cerrado"){
+      HOST_CACHE[id].mesa = "";
+    }
   }
 
-  SELECTED_MESAS = [];
-  await loadReservas();
+  renderReservas(CURRENT_LIST);
+  renderDetalle(HOST_CACHE[id]);
+  paintMesas(CURRENT_LIST);
+
+  // 🔥 2. BACKEND (sin bloquear)
+  api({
+    action:"host_update",
+    id:id,
+    estado:newEstado,
+    funcion:$("funcion").value
+  });
+
 }
   
 function handleMesaClick(id){
@@ -1085,7 +1092,9 @@ function renderDetalle(r){
       <div style="margin-top:10px;color:var(--muted);font-size:13px;">
         👥 ${r.personas} pax<br>
         📞 ${r.telefono || "Sin teléfono"}<br>
-        🍽️ Mesa: ${r.mesa || "—"}
+        🍽️ Mesa: ${r.mesa 
+  ? `Cambiar a ${SELECTED_MESAS.join(" + ")}`
+  : "Asignar mesa"}
       </div>
     </div>
 
@@ -1098,7 +1107,7 @@ function renderDetalle(r){
         </button>
       ` : ""}
 
-      ${r.estado !== "Sentado" && r.estado !== "Cerrado" ? `
+      ${r.estado !== "Cerrado" ? `
         <button class="btn btnPrimary"
           onclick="assignMesa('${r.id}')">
           ${SELECTED_MESAS.length 
