@@ -742,10 +742,10 @@ function openQR(){
     }
   },
   onScanSuccess
-);.catch(err=>{
-    console.error("Camera error:", err);
-    showToast("Error cámara");
-  });
+).catch(err=>{
+  console.error("Camera error:", err);
+  showToast("Error cámara");
+});
 }
 
 function closeQR(){
@@ -773,36 +773,29 @@ async function onScanSuccess(decodedText){
     funcion:$("funcion").value
   });
 
-const r = HOST_CACHE[reservationId];
-
-if(r){
-  r.estado = "Llegó";
-}
-  
   if(res.ok){
 
     closeQR();
 
     showToast(`✔ ${res.cliente} llegó`);
 
+    // 🔥 actualizar cache local (SIN FETCH)
+    const r = HOST_CACHE[reservationId];
 
+    if(r){
+      r.estado = "Llegó";
+    }
 
-    CURRENT_LIST = data.reservas || [];
+    // 🔥 re-render rápido
     renderReservas(CURRENT_LIST);
-    renderMapBase();
     paintMesas(CURRENT_LIST);
 
-    // 🔥 2. abrir reserva SIN fetch extra
-    const found = CURRENT_LIST.find(r => r.id === reservationId);
-
-    if(found){
+    if(r){
       SELECTED_RESERVA_ID = reservationId;
 
-      // 🔥 sugerencia automática
-      SELECTED_MESAS = sugerirMesas(found.personas || 1);
+      SELECTED_MESAS = sugerirMesas(r.personas || 1);
 
-      renderReservas(CURRENT_LIST);
-      renderDetalle(found);
+      renderDetalle(r);
       paintMesas(CURRENT_LIST);
 
       document.querySelector("#detalle").scrollIntoView({
