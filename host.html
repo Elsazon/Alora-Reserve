@@ -1075,9 +1075,7 @@ async function openReserva(id, forceFetch = true){
     HOST_CACHE[id] = r;
   }
 
-  if(SELECTED_MESAS.length === 0){
-    SELECTED_MESAS = sugerirMesas(r.personas || 1);
-  }
+SELECTED_MESAS = sugerirMesas(r.personas || 1);
 
   renderReservas(CURRENT_LIST);
   renderDetalle(r);
