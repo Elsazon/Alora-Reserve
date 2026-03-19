@@ -1172,14 +1172,38 @@ function showToast(msg){
     t.style.display = "none";
   }, 2000);
 }
-  async function liberarMesa(id){
-  await api({
+ async function liberarMesa(id){
+
+  const r = HOST_CACHE[id];
+  const prevEstado = r?.estado || "Pendiente";
+
+  // 🔥 decidir nuevo estado inteligentemente
+  let newEstado = "Pendiente";
+
+  if(prevEstado === "Sentado"){
+    newEstado = "Llegó";
+  }
+
+  // 🔥 UI inmediato
+  if(HOST_CACHE[id]){
+    HOST_CACHE[id].mesa = "";
+    HOST_CACHE[id].estado = newEstado;
+  }
+
+  renderReservas(CURRENT_LIST);
+  renderDetalle(HOST_CACHE[id]);
+  paintMesas(CURRENT_LIST);
+
+  // 🔥 backend async
+  api({
     action:"host_update",
     id:id,
-    mesa:""
+    mesa:"",
+    estado:newEstado,
+    funcion:$("funcion").value
   });
 
-  await loadReservas();
+  showToast("Mesa liberada");
 }
 function getMesaActualLabel(r){
   if(r.mesa) return r.mesa;
