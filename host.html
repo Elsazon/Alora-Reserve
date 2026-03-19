@@ -482,10 +482,11 @@ select:focus,input:focus{
     <div style="margin-top:10px; display:flex; gap:8px;">
       <button class="zoneBtn active" onclick="setZone('salon', event)">Salón</button>
       <button class="zoneBtn" onclick="setZone('barra', event)">Barra</button>
+      <button class="zoneBtn" onclick="toggleMultiMode(this)">
+      Unir mesas
+      </button>
     </div>
-    <button class="zoneBtn" onclick="toggleMultiMode(this)">
-  Unir mesas
-</button>
+    
 
     <p>20 mesas · layout real</p>
   </div>
@@ -606,25 +607,26 @@ function getPrimaryAction(r){
   return null;
 }
 
-async function runPrimaryAction(r){
+async function runPrimaryAction(id){
 
+  const r = HOST_CACHE[id];
   const estado = r.estado || "Pendiente";
 
   if(estado === "Pendiente"){
-    await arrive(r.id);
+    await arrive(id);
   }
 
   else if(estado === "Llegó"){
     await api({
       action:"host_seat",
-      id:r.id
+      id:id
     });
   }
 
   else if(estado === "Sentado"){
     await api({
       action:"host_close",
-      id:r.id
+      id:id
     });
   }
 
@@ -953,7 +955,7 @@ function sugerirMesas(personas){
 function selectMesa(id){
 
   if(!MULTI_MODE){
-    SELECTED_MESAS = [id]; // 🔥 SOLO UNA
+    SELECTED_MESAS = [id];
   }else{
     if(SELECTED_MESAS.includes(id)){
       SELECTED_MESAS = SELECTED_MESAS.filter(m=>m!==id);
@@ -965,9 +967,10 @@ function selectMesa(id){
   paintMesas(CURRENT_LIST);
 
   if(SELECTED_RESERVA_ID){
-    renderDetalle(HOST_CACHE[SELECTED_RESERVA_ID] || null);
+    renderDetalle(HOST_CACHE[SELECTED_RESERVA_ID]);
   }
 }
+
 
 async function loadReservas(){
   const data = await api({
@@ -1043,7 +1046,9 @@ async function openReserva(id, forceFetch = true){
 
 const sugeridas = sugerirMesas(r.personas);
 
-SELECTED_MESAS = sugeridas;
+if(SELECTED_MESAS.length === 0){
+  SELECTED_MESAS = sugerirMesas(r.personas);
+}
 
 paintMesas(CURRENT_LIST);
   
@@ -1070,17 +1075,6 @@ function renderDetalle(r){
         ${r.cliente}
       </div>
 
-     <div style="display:flex;gap:10px;align-items:center;margin-top:10px;">
-
-  <div style="
-    padding:6px 12px;
-    border-radius:999px;
-    background:${estadoColor};
-    color:#111;
-    font-size:12px;
-  ">
-    ${estado}
-  </div>
 
   <select onchange="updateEstado('${r.id}', this.value)">
     ${["Pendiente","Llegó","Sentado","Cerrado","Cancelado"].map(e=>`
@@ -1117,7 +1111,7 @@ function renderDetalle(r){
   <!-- BOTÓN PRINCIPAL DINÁMICO -->
   ${primary ? `
     <button class="btn ${primary.class} btnFull"
-      onclick='runPrimaryAction(${JSON.stringify(r)})'>
+      onclick="runPrimaryAction('${r.id}')"
       ${primary.label}
     </button>
   ` : ""}
@@ -1196,7 +1190,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
 
   $("funcion").addEventListener("change", async ()=>{
     SELECTED_RESERVA_ID = null;
-    SELECTED_MESAS.length = [];
+    SELECTED_MESAS = [];
     await loadReservas();
   });
 
