@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<title>ALORA Cocina</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:white;
+padding:20px;
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+font-size:14px;
+}
+
+th,td{
+border:1px solid #000;
+padding:6px;
+text-align:left;
+}
+
+th{
+background:#eee;
+}
+
+.mesa{
+width:60px;
+height:30px;
+border-bottom:2px solid black;
+}
+
+.print{
+position:fixed;
+top:10px;
+right:10px;
+padding:10px;
+background:black;
+color:white;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<button class="print" onclick="window.print()">🖨 Print</button>
+
+<h1>ALORA - HOJA DE PRODUCCIÓN</h1>
+
+<table>
+
+<thead>
+<tr>
+<th>Mesa</th>
+<th>Reservación</th>
+<th>Persona</th>
+<th>Aperitivo</th>
+<th>Principal</th>
+<th>Proteína</th>
+<th>Postre</th>
+<th>Notas</th>
+<th>Hora</th>
+</tr>
+</thead>
+
+<tbody id="body"></tbody>
+
+</table>
+
+<script>
+
+const BACKEND_URL="https://script.google.com/macros/s/AKfycbyuTjS_DHcjdyKCpV1gZMsidTHyu6QaCX24dIy6_wFAS-9lZP9c3CpXtn3geUemB-PW/exec";
+const FUNCION="Función 1";
+
+async function load(){
+
+const res = await fetch(BACKEND_URL,{
+method:"POST",
+headers:{"Content-Type":"text/plain"},
+body:JSON.stringify({
+action:"kitchen_list",
+funcion:FUNCION,
+secret:"demo123"
+})
+});
+
+const data = await res.json();
+
+render(data.rows);
+
+}
+
+function render(rows){
+
+const tbody = document.getElementById("body");
+
+tbody.innerHTML = rows.map(r=>`
+<tr>
+<td><div class="mesa"></div></td>
+<td>${r.reserva}</td>
+<td>${r.persona}</td>
+<td>${r.aperitivo}</td>
+<td>${r.principal}</td>
+<td>${r.proteina}</td>
+<td>${r.postre}</td>
+<td>${r.notas}</td>
+<td>${r.hora}</td>
+</tr>
+`).join("");
+
+}
+
+load();
+
+</script>
+
+</body>
+</html>
