@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>ALORA Feedback</title>
+
+<style>
+
+body{
+background:#0b1210;
+color:#f4f1ea;
+font-family:Inter,system-ui;
+margin:0;
+padding:30px;
+}
+
+.container{
+max-width:600px;
+margin:auto;
+}
+
+.card{
+background:#111916;
+border-radius:18px;
+padding:28px;
+box-shadow:0 20px 60px rgba(0,0,0,.6);
+border:1px solid rgba(255,255,255,.06);
+}
+
+h1{
+text-align:center;
+margin-bottom:25px;
+}
+
+.section{
+margin-bottom:22px;
+}
+
+.label{
+margin-bottom:8px;
+font-size:14px;
+opacity:.8;
+}
+
+/* ⭐ estrellas */
+
+.stars{
+display:flex;
+gap:8px;
+}
+
+.star{
+font-size:26px;
+cursor:pointer;
+opacity:.3;
+transition:.2s;
+}
+
+.star.active{
+opacity:1;
+color:#c26a4a;
+transform:scale(1.1);
+}
+
+textarea{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:none;
+background:#0e1511;
+color:white;
+resize:none;
+height:100px;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#c26a4a;
+color:#111;
+font-weight:bold;
+cursor:pointer;
+margin-top:10px;
+}
+
+button:hover{
+opacity:.9;
+}
+
+.success{
+text-align:center;
+font-size:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card" id="form">
+
+<h1>Tu experiencia en ALORA</h1>
+
+<div class="section" id="q1"></div>
+<div class="section" id="q2"></div>
+<div class="section" id="q3"></div>
+<div class="section" id="q4"></div>
+<div class="section" id="q5"></div>
+
+<div class="section">
+<div class="label">Comentarios adicionales</div>
+<textarea id="comentario"></textarea>
+</div>
+
+<button onclick="submitFeedback()">Enviar review</button>
+
+</div>
+
+<div id="done" style="display:none" class="success">
+Gracias por tu experiencia ❤️
+</div>
+
+</div>
+
+<script>
+
+const BACKEND_URL="https://script.google.com/macros/s/AKfycbxuBlXmlgLsZAuYJcDF7k5loq9jKO9YWICpKwJzH9Ld1-jy4mCdULLLeFskCyoXd1XJ/exec";
+const SHARED_SECRET="demo123";
+
+const preguntas = [
+"Comida",
+"Servicio",
+"Tiempo",
+"Ambiente",
+"General"
+];
+
+const ratings = {};
+
+function render(){
+
+preguntas.forEach((p,i)=>{
+
+const id = "q"+(i+1);
+
+const div = document.getElementById(id);
+
+div.innerHTML = `
+<div class="label">${p}</div>
+<div class="stars">
+${[1,2,3,4,5].map(n=>`
+<span class="star" onclick="rate('${p}',${n})">★</span>
+`).join("")}
+</div>
+`;
+
+});
+
+}
+
+function rate(cat,val){
+
+ratings[cat] = val;
+
+const stars = document.querySelectorAll(`#q${preguntas.indexOf(cat)+1} .star`);
+
+stars.forEach((s,i)=>{
+s.classList.toggle("active", i < val);
+});
+
+}
+
+async function submitFeedback(){
+
+await fetch(BACKEND_URL,{
+method:"POST",
+headers:{"Content-Type":"text/plain;charset=utf-8"},
+body:JSON.stringify({
+action:"feedback_create",
+comida:ratings["Comida"],
+servicio:ratings["Servicio"],
+tiempo:ratings["Tiempo"],
+ambiente:ratings["Ambiente"],
+general:ratings["General"],
+comentario:document.getElementById("comentario").value,
+secret:SHARED_SECRET
+})
+});
+
+document.getElementById("form").style.display="none";
+document.getElementById("done").style.display="block";
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>
