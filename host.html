@@ -831,11 +831,15 @@ function paintMesas(list){
 
       el.classList.remove("libre");
 
-      if(r.llego){
-        el.classList.add("llego");
-      }else{
-        el.classList.add("ocupada");
-      }
+      if(r.estado === "Llegó"){
+  el.classList.add("llego");
+}
+else if(r.estado === "Sentado"){
+  el.classList.add("ocupada");
+}
+else{
+  el.classList.add("libre");
+}
     });
   });
 
@@ -1153,6 +1157,15 @@ function showToast(msg){
   setTimeout(()=>{
     t.style.display = "none";
   }, 2000);
+}
+  async function liberarMesa(id){
+  await api({
+    action:"host_update",
+    id:id,
+    mesa:""
+  });
+
+  await loadReservas();
 }
 function getMesaActualLabel(r){
   if(r.mesa) return r.mesa;
