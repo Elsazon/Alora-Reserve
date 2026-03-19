@@ -731,10 +731,18 @@ function openQR(){
   qrScanner = new Html5Qrcode("qr-reader");
 
   qrScanner.start(
-    { facingMode: "environment" },
-    { fps: 10, qrbox: { width: 250, height: 250 } },
-    onScanSuccess
-  ).catch(err=>{
+  { facingMode: "environment" },
+  {
+    fps: 15,
+    qrbox: function(w, h){
+      return {
+        width: w * 0.8,
+        height: h * 0.8
+      };
+    }
+  },
+  onScanSuccess
+);.catch(err=>{
     console.error("Camera error:", err);
     showToast("Error cámara");
   });
@@ -765,17 +773,19 @@ async function onScanSuccess(decodedText){
     funcion:$("funcion").value
   });
 
+const r = HOST_CACHE[reservationId];
+
+if(r){
+  r.estado = "Llegó";
+}
+  
   if(res.ok){
 
     closeQR();
 
     showToast(`✔ ${res.cliente} llegó`);
 
-    // 🔥 1. recargar lista
-    const data = await api({
-      action:"host_snapshot",
-      funcion:$("funcion").value
-    });
+
 
     CURRENT_LIST = data.reservas || [];
     renderReservas(CURRENT_LIST);
