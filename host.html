@@ -525,7 +525,7 @@ select:focus,input:focus{
 </div>
 
 <script>
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxfgHjKOWXCq5GTb32ypAsr3n7_AqZuwGW8BFi8xP_Q9TtDeFqm2V8iiE_CTHyWC_Wk/exec";
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbwnuJPyw0_iCH-bEWudjgP_dzYi4N8iYllHOWak2Kh4YBX-mwlY9j4hV4Oj0Vg5C0TY/exec";
 const SHARED_SECRET = "demo123";
 
 const FUNCIONES = [
@@ -913,9 +913,9 @@ if(estado === "Cancelado") badgeClass = "cancelled";
         <div class="badge ${badgeClass}">${badgeText}</div>
       </div>
 
-      <div class="resActions">
-        <button class="btnMini btnView" data-id="${r.id}" data-action="view">Ver</button>
-      </div>
+    <div style="margin-top:8px;font-size:12px;color:var(--muted);">
+  Tap para abrir
+</div>
     `;
 
     card.addEventListener("click",(e)=>{
@@ -1055,35 +1055,38 @@ paintMesas(CURRENT_LIST);
 }
 
 function renderDetalle(r){
+
   if(!r){
     $("detalle").innerHTML = `<div class="detailEmpty">Selecciona una reserva</div>`;
     return;
   }
+
   const primary = getPrimaryAction(r);
   const estado = r.estado || "Pendiente";
 
   let estadoColor = "#aaa";
   if(estado === "Llegó") estadoColor = "#3fa86a";
   if(estado === "Sentado") estadoColor = "#bfa15a";
-  if(estado === "Cancelado") estadoColor = "#c85b5b";
+  if(estado === "Cerrado") estadoColor = "#555";
 
   $("detalle").innerHTML = `
 
-    <!-- HEADER -->
     <div style="margin-bottom:18px;">
       <div style="font-size:20px;font-weight:600;">
         ${r.cliente}
       </div>
 
-
-  <select onchange="updateEstado('${r.id}', this.value)">
-    ${["Pendiente","Llegó","Sentado","Cerrado","Cancelado"].map(e=>`
-      <option value="${e}" ${r.estado===e?"selected":""}>
-        ${e}
-      </option>
-    `).join("")}
-  </select>
-    
+      <div style="
+        margin-top:6px;
+        display:inline-block;
+        padding:6px 12px;
+        border-radius:8px;
+        font-size:12px;
+        background:${estadoColor};
+        color:#111;
+      ">
+        ${estado}
+      </div>
 
       <div style="margin-top:10px;color:var(--muted);font-size:13px;">
         👥 ${r.personas} pax<br>
@@ -1092,31 +1095,26 @@ function renderDetalle(r){
       </div>
     </div>
 
-    <!-- ACCIONES -->
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
 
-  <!-- BOTÓN PRINCIPAL DINÁMICO -->
-    ${primary ? `
-  <button class="btn ${primary.class} btnFull"
-    onclick="runPrimaryAction('${r.id}')">
-    ${primary.label}
-  </button>
-` : ""}
+      ${primary ? `
+        <button class="btn ${primary.class}"
+          onclick="runPrimaryAction('${r.id}')">
+          ${primary.label}
+        </button>
+      ` : ""}
 
+      ${r.estado !== "Sentado" && r.estado !== "Cerrado" ? `
+        <button class="btn btnPrimary"
+          onclick="assignMesa('${r.id}')">
+          ${SELECTED_MESAS.length 
+            ? `Asignar ${SELECTED_MESAS.join(" + ")}`
+            : "Seleccionar mesa"}
+        </button>
+      ` : ""}
 
-  <!-- ASIGNAR MESA SOLO SI NO ESTÁ SENTADO -->
-  ${r.estado !== "Sentado" && r.estado !== "Cerrado" ? `
-    <button class="btn btnPrimary btnFull"
-      onclick="assignMesa('${r.id}')">
-      ${SELECTED_MESAS.length 
-        ? `Asignar ${SELECTED_MESAS.join(" + ")}`
-        : "Seleccionar mesa"}
-    </button>
-  ` : ""}
+    </div>
 
-</div>
-
-    <!-- PREORDEN -->
     <div class="detailSection">
       <h3>Preorden</h3>
 
