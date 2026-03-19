@@ -1135,6 +1135,38 @@ async function assignMesa(id){
     return;
   }
 
+  async function assignSuggested(id){
+
+  const r = HOST_CACHE[id];
+  if(!r) return;
+
+  const sugeridas = sugerirMesas(r.personas || 1);
+
+  if(!sugeridas.length){
+    showToast("No hay mesas disponibles");
+    return;
+  }
+
+  // 🔥 UI inmediato
+  if(HOST_CACHE[id]){
+    HOST_CACHE[id].mesa = sugeridas.join(" + ");
+  }
+
+  renderReservas(CURRENT_LIST);
+  renderDetalle(HOST_CACHE[id]);
+  paintMesas(CURRENT_LIST);
+
+  // 🔥 backend async
+  api({
+    action:"host_update",
+    id:id,
+    mesa:sugeridas.join(" + "),
+    funcion:$("funcion").value
+  });
+
+  showToast(`Mesa ${sugeridas.join(" + ")} asignada`);
+}
+
   const mesaString = SELECTED_MESAS.join(" + ");
 
   // 🔥 1. UI INMEDIATO
@@ -1231,6 +1263,13 @@ function renderDetalle(r){
       ${primary.label}
     </button>
   ` : ""}
+
+${r.estado !== "Cerrado" ? `
+  <button class="btn btnSecondary"
+    onclick="assignSuggested('${r.id}')">
+    Smart seat ✨
+  </button>
+` : ""}
 
  ${r.estado !== "Cerrado" ? `
   <button class="btn btnNeutral"
