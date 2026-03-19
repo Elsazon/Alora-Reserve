@@ -1111,25 +1111,32 @@ function renderDetalle(r){
       </div>
     </div>
 
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
+   <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
 
-      ${primary ? `
-        <button class="btn ${primary.class}"
-          onclick="runPrimaryAction('${r.id}')">
-          ${primary.label}
-        </button>
-      ` : ""}
+  ${primary ? `
+    <button class="btn ${primary.class}"
+      onclick="runPrimaryAction('${r.id}')">
+      ${primary.label}
+    </button>
+  ` : ""}
 
-      ${r.estado !== "Cerrado" ? `
-        <button class="btn btnPrimary"
-          onclick="assignMesa('${r.id}')">
-          ${SELECTED_MESAS.length 
-            ? `Asignar ${SELECTED_MESAS.join(" + ")}`
-            : "Seleccionar mesa"}
-        </button>
-      ` : ""}
+  ${r.estado !== "Cerrado" ? `
+    <button class="btn btnPrimary"
+      onclick="assignMesa('${r.id}')">
+      ${SELECTED_MESAS.length 
+        ? `Asignar ${SELECTED_MESAS.join(" + ")}`
+        : "Seleccionar mesa"}
+    </button>
+  ` : ""}
 
-    </div>
+  ${r.mesa ? `
+    <button class="btn btnDanger"
+      onclick="liberarMesa('${r.id}')">
+      Quitar mesa
+    </button>
+  ` : ""}
+
+</div>
 
     <div class="detailSection">
       <h3>Preorden</h3>
