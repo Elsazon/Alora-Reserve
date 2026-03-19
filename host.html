@@ -380,7 +380,7 @@ select:focus,input:focus{
   opacity:.9;
   pointer-events:none;
 }
-  .btnPrimary{
+.btnPrimary{
   background:var(--gold);
   color:#111;
 }
@@ -393,6 +393,22 @@ select:focus,input:focus{
 .btnDanger{
   background:#c85b5b;
   color:white;
+}
+
+/* 🔥 NUEVOS */
+.btnNeutral{
+  background:#2a3430;
+  color:#f4f1ea;
+}
+
+.btnSoftDanger{
+  background:#7a3e3e;
+  color:white;
+}
+
+.btnReopen{
+  background:#4f8f6a;
+  color:#111;
 }
   .detailSection{
   border-top:1px solid var(--line);
@@ -606,7 +622,7 @@ function getPrimaryAction(r){
   }
 
   if(estado === "Cerrado"){
-    return { label:"Reabrir mesa", class:"btnSecondary" };
+    return { label:"Reabrir mesa", class:"btnReopen" };
   }
 
   return null;
@@ -1126,14 +1142,14 @@ function renderDetalle(r){
       ${SELECTED_MESAS.length 
         ? `Asignar ${SELECTED_MESAS.join(" + ")}`
         : "Seleccionar mesa"}
-    </button>
+    </button class="btn btnNeutral">
   ` : ""}
 
   ${r.mesa ? `
     <button class="btn btnDanger"
       onclick="liberarMesa('${r.id}')">
       Quitar mesa
-    </button>
+    </button class="btn btnSoftDanger">
   ` : ""}
 
 </div>
