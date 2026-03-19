@@ -262,26 +262,21 @@ select:focus,input:focus{
 }
 .tableNode.libre{
   background:#1a211d;
-  color:#aaa;
-}
-
-.tableNode.ocupada{
-  background:#c26a4a;
-  color:#111;
-  box-shadow:0 0 15px rgba(194,106,74,.6);
+  opacity:.4;
 }
 
 .tableNode.llego{
   background:#3fa86a;
-  color:#111;
-  box-shadow:0 0 15px rgba(63,168,106,.6);
+  box-shadow:0 0 20px rgba(63,168,106,.8);
+}
+
+.tableNode.ocupada{
+  background:#c26a4a;
+  box-shadow:0 0 20px rgba(194,106,74,.8);
 }
 
 .tableNode.selected{
-  outline:3px solid var(--gold);
-  box-shadow:0 0 20px rgba(191,161,90,.7);
-  transform:translate(-50%,-50%) scale(1.08);
-  z-index:5;
+  outline:2px solid var(--gold);
 }
 
 /* LEYENDA */
@@ -399,7 +394,19 @@ select:focus,input:focus{
   background:#c85b5b;
   color:white;
 }
-  
+  .detailSection{
+  border-top:1px solid var(--line);
+  padding-top:14px;
+  margin-top:14px;
+}
+
+.detailSection h3{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  color:var(--muted);
+  margin-bottom:10px;
+}
 </style>
 </head>
 
@@ -476,6 +483,9 @@ select:focus,input:focus{
       <button class="zoneBtn active" onclick="setZone('salon', event)">Salón</button>
       <button class="zoneBtn" onclick="setZone('barra', event)">Barra</button>
     </div>
+    <button class="zoneBtn" onclick="toggleMultiMode(this)">
+  Unir mesas
+</button>
 
     <p>20 mesas · layout real</p>
   </div>
@@ -485,19 +495,6 @@ select:focus,input:focus{
     <div class="floor"></div>
 
     <!-- LEYENDA LIMPIA -->
-    <div class="sideLegend">
-      <div class="legendItem">
-        <div class="swatch libre"></div> Libre
-      </div>
-
-      <div class="legendItem">
-        <div class="swatch ocupada"></div> Asignada
-      </div>
-
-      <div class="legendItem">
-        <div class="swatch llego"></div> Llegó
-      </div>
-    </div>
 
   </div>
 </div>
@@ -518,7 +515,7 @@ select:focus,input:focus{
 </div>
 
 <script>
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxb3h4JtupylqhRgXWYnyd3xHZW0YMTSNPUHMUC049OJzFsZpPQRUrpdiFD8lvr98mQ/exec";
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxfgHjKOWXCq5GTb32ypAsr3n7_AqZuwGW8BFi8xP_Q9TtDeFqm2V8iiE_CTHyWC_Wk/exec";
 const SHARED_SECRET = "demo123";
 
 const FUNCIONES = [
@@ -544,7 +541,8 @@ let CURRENT_LIST = [];
 let SELECTED_RESERVA_ID = null;
 let SELECTED_MESAS = [];
 let CURRENT_ZONE = "salon";
-
+let MULTI_MODE = false;
+  
 function fillSelect(el, list){
   el.innerHTML = "";
   list.forEach(v=>{
@@ -554,7 +552,18 @@ function fillSelect(el, list){
     el.appendChild(o);
   });
 }
+  
+function toggleMultiMode(btn){
+  MULTI_MODE = !MULTI_MODE;
 
+  btn.classList.toggle("active");
+
+  if(!MULTI_MODE){
+    SELECTED_MESAS = SELECTED_MESAS.slice(0,1);
+  }
+
+  paintMesas(CURRENT_LIST);
+}
 async function updateEstado(id, estado){
 
   await api({
@@ -943,10 +952,14 @@ function sugerirMesas(personas){
 }
 function selectMesa(id){
 
-  if(SELECTED_MESAS.includes(id)){
-    SELECTED_MESAS = SELECTED_MESAS.filter(m=>m!==id);
+  if(!MULTI_MODE){
+    SELECTED_MESAS = [id]; // 🔥 SOLO UNA
   }else{
-    SELECTED_MESAS.push(id);
+    if(SELECTED_MESAS.includes(id)){
+      SELECTED_MESAS = SELECTED_MESAS.filter(m=>m!==id);
+    }else{
+      SELECTED_MESAS.push(id);
+    }
   }
 
   paintMesas(CURRENT_LIST);
@@ -1057,21 +1070,26 @@ function renderDetalle(r){
         ${r.cliente}
       </div>
 
-      <div style="margin-top:12px;">
-  <label style="font-size:11px;color:var(--muted);">
-    Estado manual
-  </label>
+     <div style="display:flex;gap:10px;align-items:center;margin-top:10px;">
 
-  <select 
-    onchange="updateEstado('${r.id}', this.value)"
-    style="width:100%;margin-top:6px;"
-  >
+  <div style="
+    padding:6px 12px;
+    border-radius:999px;
+    background:${estadoColor};
+    color:#111;
+    font-size:12px;
+  ">
+    ${estado}
+  </div>
+
+  <select onchange="updateEstado('${r.id}', this.value)">
     ${["Pendiente","Llegó","Sentado","Cerrado","Cancelado"].map(e=>`
       <option value="${e}" ${r.estado===e?"selected":""}>
         ${e}
       </option>
     `).join("")}
   </select>
+
 </div>
     
       <div style="
@@ -1178,7 +1196,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
 
   $("funcion").addEventListener("change", async ()=>{
     SELECTED_RESERVA_ID = null;
-    SELECTED_MESAS.length = null;
+    SELECTED_MESAS.length = [];
     await loadReservas();
   });
 
