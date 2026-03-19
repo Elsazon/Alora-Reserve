@@ -432,6 +432,17 @@ select:focus,input:focus{
   width:100%;
   font-weight:600;
 }
+  .tableNode.suggested{
+  outline:2px solid var(--gold);
+  box-shadow:0 0 25px rgba(191,161,90,.6);
+  animation:pulseGold 1.5s infinite;
+}
+
+@keyframes pulseGold{
+  0%{ box-shadow:0 0 10px rgba(191,161,90,.4); }
+  50%{ box-shadow:0 0 30px rgba(191,161,90,.9); }
+  100%{ box-shadow:0 0 10px rgba(191,161,90,.4); }
+}
 </style>
 </head>
 
@@ -865,9 +876,9 @@ function renderMapBase(){
 function paintMesas(list){
 
   document.querySelectorAll(".tableNode").forEach(el=>{
-    el.classList.remove("ocupada","llego","selected");
-    el.classList.add("libre");
-  });
+  el.classList.remove("ocupada","llego","selected","suggested");
+  el.classList.add("libre");
+});
 
   list.forEach(r=>{
     if(!r.mesa) return;
@@ -899,6 +910,13 @@ else{
       if(el) el.classList.add("selected");
     });
   }
+  // 🔥 highlight sugerencia
+SELECTED_MESAS.forEach(id=>{
+  const el = document.querySelector(`.tableNode[data-id="${id}"]`);
+  if(el){
+    el.classList.add("suggested");
+  }
+});
 }
 
 function renderReservas(list){
