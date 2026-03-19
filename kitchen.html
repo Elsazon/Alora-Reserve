@@ -3,40 +3,49 @@
 <head>
 
 <meta charset="UTF-8">
-<title>ALORA Cocina</title>
+<title>ALORA Expo Line</title>
 
 <style>
 
 body{
-font-family:Arial;
-background:white;
+font-family:Inter,Arial;
+background:#fff;
 padding:20px;
 }
 
 h1{
 text-align:center;
-margin-bottom:20px;
+margin-bottom:10px;
 }
 
-table{
-width:100%;
-border-collapse:collapse;
-font-size:14px;
+.block{
+margin-bottom:30px;
+page-break-inside:avoid;
 }
 
-th,td{
-border:1px solid #000;
-padding:6px;
-text-align:left;
+.block h2{
+border-bottom:2px solid black;
+padding-bottom:5px;
+margin-bottom:10px;
 }
 
-th{
-background:#eee;
+.row{
+display:grid;
+grid-template-columns:60px 140px 140px 1fr 1fr 120px 1fr;
+gap:8px;
+padding:6px 0;
+border-bottom:1px dashed #ccc;
+font-size:13px;
+align-items:center;
+}
+
+.header{
+font-weight:bold;
+border-bottom:2px solid black;
 }
 
 .mesa{
-width:60px;
-height:30px;
+height:28px;
 border-bottom:2px solid black;
 }
 
@@ -58,31 +67,13 @@ cursor:pointer;
 
 <button class="print" onclick="window.print()">🖨 Print</button>
 
-<h1>ALORA - HOJA DE PRODUCCIÓN</h1>
+<h1>ALORA · EXPO LINE</h1>
 
-<table>
-
-<thead>
-<tr>
-<th>Mesa</th>
-<th>Reservación</th>
-<th>Persona</th>
-<th>Aperitivo</th>
-<th>Principal</th>
-<th>Proteína</th>
-<th>Postre</th>
-<th>Notas</th>
-<th>Hora</th>
-</tr>
-</thead>
-
-<tbody id="body"></tbody>
-
-</table>
+<div id="content"></div>
 
 <script>
 
-const BACKEND_URL="https://script.google.com/macros/s/AKfycbyuTjS_DHcjdyKCpV1gZMsidTHyu6QaCX24dIy6_wFAS-9lZP9c3CpXtn3geUemB-PW/exec";
+const BACKEND_URL="https://script.google.com/macros/s/AKfycbw3Fva80PuWWX6w0lPZ4KMF6j7ytDfeW2s4qMw4T3y7Oj310uJLaGH1rfor_kR4S22d/exec";
 const FUNCION="Función 1";
 
 async function load(){
@@ -103,23 +94,58 @@ render(data.rows);
 
 }
 
+function groupByHora(rows){
+
+const map = {};
+
+rows.forEach(r=>{
+if(!map[r.hora]) map[r.hora]=[];
+map[r.hora].push(r);
+});
+
+return map;
+
+}
+
 function render(rows){
 
-const tbody = document.getElementById("body");
+const grouped = groupByHora(rows);
 
-tbody.innerHTML = rows.map(r=>`
-<tr>
-<td><div class="mesa"></div></td>
-<td>${r.reserva}</td>
-<td>${r.persona}</td>
-<td>${r.aperitivo}</td>
-<td>${r.principal}</td>
-<td>${r.proteina}</td>
-<td>${r.postre}</td>
-<td>${r.notas}</td>
-<td>${r.hora}</td>
-</tr>
-`).join("");
+const html = Object.keys(grouped).map(hora=>{
+
+return `
+<div class="block">
+
+<h2>${hora}</h2>
+
+<div class="row header">
+<div>Mesa</div>
+<div>Reservación</div>
+<div>Persona</div>
+<div>Aperitivo</div>
+<div>Principal</div>
+<div>Proteína</div>
+<div>Postre / Notas</div>
+</div>
+
+${grouped[hora].map(r=>`
+<div class="row">
+<div><div class="mesa"></div></div>
+<div>${r.reserva}</div>
+<div>${r.persona}</div>
+<div>${r.aperitivo}</div>
+<div>${r.principal}</div>
+<div>${r.proteina}</div>
+<div>${r.postre || ""} ${r.notas ? "• "+r.notas : ""}</div>
+</div>
+`).join("")}
+
+</div>
+`;
+
+}).join("");
+
+document.getElementById("content").innerHTML = html;
 
 }
 
