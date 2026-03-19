@@ -407,6 +407,15 @@ select:focus,input:focus{
   color:var(--muted);
   margin-bottom:10px;
 }
+  .btn{
+  border:none;
+  padding:12px;
+  border-radius:12px;
+  font-size:14px;
+  cursor:pointer;
+  width:100%;
+  font-weight:600;
+}
 </style>
 </head>
 
@@ -568,7 +577,7 @@ function toggleMultiMode(btn){
 async function updateEstado(id, estado){
 
   await api({
-    action:"host_update_estado",
+    action:"host_update",
     id:id,
     estado:estado
   });
@@ -581,27 +590,15 @@ function getPrimaryAction(r){
   const estado = r.estado || "Pendiente";
 
   if(estado === "Pendiente"){
-    return {
-      label: "Marcar llegó",
-      action: "arrive",
-      class: "btnSecondary"
-    };
+    return { label:"Marcar llegó", class:"btnSecondary" };
   }
 
   if(estado === "Llegó"){
-    return {
-      label: "Sentar cliente",
-      action: "seat",
-      class: "btnPrimary"
-    };
+    return { label:"Sentar cliente", class:"btnPrimary" };
   }
 
   if(estado === "Sentado"){
-    return {
-      label: "Cerrar mesa",
-      action: "close",
-      class: "btnDanger"
-    };
+    return { label:"Cerrar mesa", class:"btnDanger" };
   }
 
   return null;
@@ -1109,12 +1106,11 @@ function renderDetalle(r){
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
 
   <!-- BOTÓN PRINCIPAL DINÁMICO -->
-  ${primary ? `
     <button class="btn ${primary.class} btnFull"
-      onclick="runPrimaryAction('${r.id}')"
-      ${primary.label}
-    </button>
-  ` : ""}
+  onclick="runPrimaryAction('${r.id}')">
+  ${primary.label}
+</button>
+
 
   <!-- ASIGNAR MESA SOLO SI NO ESTÁ SENTADO -->
   ${r.estado !== "Sentado" && r.estado !== "Cerrado" ? `
