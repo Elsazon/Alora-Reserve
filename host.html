@@ -579,8 +579,14 @@ async function updateEstado(id, estado){
   await api({
     action:"host_update",
     id:id,
-    estado:estado
+    estado:estado,
+    force:true
   });
+
+  // 🔥 FORZAMOS UI UPDATE
+  if(HOST_CACHE[id]){
+    HOST_CACHE[id].estado = estado;
+  }
 
   await loadReservas();
 }
@@ -917,10 +923,6 @@ if(estado === "Cancelado") badgeClass = "cancelled";
       openReserva(r.id);
     });
 
-    card.querySelector('[data-action="arrive"]').addEventListener("click",(e)=>{
-      e.stopPropagation();
-      arrive(r.id);
-    });
 
     card.querySelector('[data-action="view"]').addEventListener("click",(e)=>{
       e.stopPropagation();
@@ -1042,7 +1044,7 @@ async function openReserva(id, forceFetch = true){
   renderReservas(CURRENT_LIST);
   renderDetalle(r);
 
-const sugeridas = sugerirMesas(r.personas);
+const sugeridas = sugerirMesas(r.personas || 1);
 
 if(SELECTED_MESAS.length === 0){
   SELECTED_MESAS = sugerirMesas(r.personas);
@@ -1094,10 +1096,12 @@ function renderDetalle(r){
     <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
 
   <!-- BOTÓN PRINCIPAL DINÁMICO -->
-    <button class="btn ${primary.class} btnFull"
-  onclick="runPrimaryAction('${r.id}')">
-  ${primary.label}
-</button>
+    ${primary ? `
+  <button class="btn ${primary.class} btnFull"
+    onclick="runPrimaryAction('${r.id}')">
+    ${primary.label}
+  </button>
+` : ""}
 
 
   <!-- ASIGNAR MESA SOLO SI NO ESTÁ SENTADO -->
