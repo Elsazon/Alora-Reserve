@@ -132,7 +132,7 @@ Gracias por tu experiencia ❤️
 
 <script>
 
-const BACKEND_URL="https://script.google.com/macros/s/AKfycbxuBlXmlgLsZAuYJcDF7k5loq9jKO9YWICpKwJzH9Ld1-jy4mCdULLLeFskCyoXd1XJ/exec";
+const BACKEND_URL="https://script.google.com/macros/s/AKfycbwT52bhxlUgoipQpKp_HsjAPHTozX22WvAAV0keouz_hkroDVQdFeSJGHgez-SGyQyu/exec";
 const SHARED_SECRET="demo123";
 
 const preguntas = [
@@ -180,7 +180,9 @@ s.classList.toggle("active", i < val);
 
 async function submitFeedback(){
 
-await fetch(BACKEND_URL,{
+try{
+
+const res = await fetch(BACKEND_URL,{
 method:"POST",
 headers:{"Content-Type":"text/plain;charset=utf-8"},
 body:JSON.stringify({
@@ -195,8 +197,21 @@ secret:SHARED_SECRET
 })
 });
 
+const data = await res.json();
+
+if(!data.ok){
+alert("Error: " + data.error);
+return;
+}
+
 document.getElementById("form").style.display="none";
 document.getElementById("done").style.display="block";
+
+}catch(err){
+
+alert("Network error");
+
+}
 
 }
 
