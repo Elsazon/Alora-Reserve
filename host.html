@@ -1128,12 +1128,39 @@ async function arrive(id){
   await loadReservas();
 }
 
-async function assignMesa(id){
+  async function assignMesa(id){
 
   if(!SELECTED_MESAS.length){
     alert("Selecciona al menos una mesa.");
     return;
   }
+
+  const mesaString = SELECTED_MESAS.join(" + ");
+
+  // 🔥 UI inmediato
+  if(HOST_CACHE[id]){
+    HOST_CACHE[id].mesa = mesaString;
+    HOST_CACHE[id].estado = "Sentado";
+  }
+
+  renderReservas(CURRENT_LIST);
+  renderDetalle(HOST_CACHE[id]);
+  paintMesas(CURRENT_LIST);
+
+  // limpiar selección
+  SELECTED_MESAS = [];
+
+  // 🔥 backend async
+  api({
+    action:"host_update",
+    id:id,
+    mesa:mesaString,
+    estado:"Sentado",
+    funcion:$("funcion").value
+  });
+
+  showToast(`Mesa ${mesaString} asignada`);
+}
 
   async function assignSuggested(id){
 
@@ -1147,48 +1174,31 @@ async function assignMesa(id){
     return;
   }
 
+  const mesaString = sugeridas.join(" + ");
+
   // 🔥 UI inmediato
   if(HOST_CACHE[id]){
-    HOST_CACHE[id].mesa = sugeridas.join(" + ");
+    HOST_CACHE[id].mesa = mesaString;
+    HOST_CACHE[id].estado = "Sentado";
   }
 
   renderReservas(CURRENT_LIST);
   renderDetalle(HOST_CACHE[id]);
   paintMesas(CURRENT_LIST);
+
+  // limpiar selección
+  SELECTED_MESAS = [];
 
   // 🔥 backend async
   api({
     action:"host_update",
     id:id,
-    mesa:sugeridas.join(" + "),
-    funcion:$("funcion").value
-  });
-
-  showToast(`Mesa ${sugeridas.join(" + ")} asignada`);
-}
-
-  const mesaString = SELECTED_MESAS.join(" + ");
-
-  // 🔥 1. UI INMEDIATO
-  if(HOST_CACHE[id]){
-    HOST_CACHE[id].mesa = mesaString;
-    HOST_CACHE[id].estado = "Sentado"; // si aplica
-  }
-
-  renderReservas(CURRENT_LIST);
-  renderDetalle(HOST_CACHE[id]);
-  paintMesas(CURRENT_LIST);
-
-  SELECTED_MESAS = [];
-
-  // 🔥 2. BACKEND (SIN ESPERAR)
-  api({
-    action:"host_update",
-    id:id,
     mesa:mesaString,
+    estado:"Sentado",
     funcion:$("funcion").value
   });
 
+  showToast(`Mesa ${mesaString} asignada`);
 }
 
 async function openReserva(id, forceFetch = true){
