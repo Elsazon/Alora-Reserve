@@ -58,6 +58,14 @@ background:black;
 color:white;
 cursor:pointer;
 }
+  .row{
+border-bottom:1px dashed #ccc;
+}
+
+.block{
+border:2px solid #000;
+padding:10px;
+}
 
 </style>
 
@@ -109,9 +117,24 @@ return map;
 
 function render(rows){
 
-const grouped = groupByHora(rows);
+const groupedByHora = {};
 
-const html = Object.keys(grouped).map(hora=>{
+rows.forEach(r=>{
+if(!groupedByHora[r.hora]) groupedByHora[r.hora]=[];
+groupedByHora[r.hora].push(r);
+});
+
+const html = Object.keys(groupedByHora).map(hora=>{
+
+const rowsHora = groupedByHora[hora];
+
+/* 🔥 agrupar por reservación */
+const groupedByReserva = {};
+
+rowsHora.forEach(r=>{
+if(!groupedByReserva[r.reserva]) groupedByReserva[r.reserva]=[];
+groupedByReserva[r.reserva].push(r);
+});
 
 return `
 <div class="block">
@@ -128,17 +151,27 @@ return `
 <div>Postre / Notas</div>
 </div>
 
-${grouped[hora].map(r=>`
+${Object.keys(groupedByReserva).map(reserva=>{
+
+const grupo = groupedByReserva[reserva];
+
+return grupo.map((r,i)=>`
 <div class="row">
-<div><div class="mesa"></div></div>
-<div>${r.reserva}</div>
+
+<div>${i===0 ? '<div class="mesa"></div>' : ''}</div>
+
+<div>${i===0 ? reserva : ''}</div>
+
 <div>${r.persona}</div>
 <div>${r.aperitivo}</div>
 <div>${r.principal}</div>
 <div>${r.proteina}</div>
 <div>${r.postre || ""} ${r.notas ? "• "+r.notas : ""}</div>
+
 </div>
-`).join("")}
+`).join("");
+
+}).join("")}
 
 </div>
 `;
