@@ -769,18 +769,38 @@ async function onScanSuccess(decodedText){
 
     closeQR();
 
-    SELECTED_RESERVA_ID = reservationId;
-
     showToast(`✔ ${res.cliente} llegó`);
 
-    await loadReservas();
-    await openReserva(reservationId);
+    // 🔥 1. recargar lista
+    const data = await api({
+      action:"host_snapshot",
+      funcion:$("funcion").value
+    });
 
- document.querySelector("#detalle").scrollIntoView({
-  behavior: "smooth",
-  block: "start"
-});
-    
+    CURRENT_LIST = data.reservas || [];
+    renderReservas(CURRENT_LIST);
+    renderMapBase();
+    paintMesas(CURRENT_LIST);
+
+    // 🔥 2. abrir reserva SIN fetch extra
+    const found = CURRENT_LIST.find(r => r.id === reservationId);
+
+    if(found){
+      SELECTED_RESERVA_ID = reservationId;
+
+      // 🔥 sugerencia automática
+      SELECTED_MESAS = sugerirMesas(found.personas || 1);
+
+      renderReservas(CURRENT_LIST);
+      renderDetalle(found);
+      paintMesas(CURRENT_LIST);
+
+      document.querySelector("#detalle").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
   }else{
     showToast("QR inválido");
   }
