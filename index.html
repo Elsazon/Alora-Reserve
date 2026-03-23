@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ALORA | Fusión Boritaly</title>
-
+<script src="./config.js"></script>
   <!-- Tipografías (gratis) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1913,8 +1913,8 @@ Universidad Ana G. Méndez · Recinto de Carolina
     /***********************
      * CONFIG
      ***********************/
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyxgEL9fCZHe3HBlcHR2AvVN6gQAgR3nVnuqXSu4qGElW84pOUX91-k5PfLFeHsNcI4/exec";
-    const SHARED_SECRET = "demo123";
+   // const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyxgEL9fCZHe3HBlcHR2AvVN6gQAgR3nVnuqXSu4qGElW84pOUX91-k5PfLFeHsNcI4/exec";
+  //const SHARED_SECRET = "demo123";
 
     const PRECIO_ADULTO = 35;
     const PRECIO_NINO = 12.50;
@@ -1967,7 +1967,7 @@ return new Date() > lunes;
   /** BootStrapOptimizador **/
 async function cargarBootstrap(){
 
-const res = await fetch(BACKEND_URL,{
+const res = await fetch(CONFIG.BACKEND_URL,{
 method:"POST",
 headers:{ "Content-Type":"text/plain;charset=utf-8" },
 body:JSON.stringify({
@@ -2472,7 +2472,7 @@ function addGuest(){
       clearToast();
 
       const payload = {
-secret: SHARED_SECRET,
+secret: CONFIG.SECRET,
 action: editId ? "update" : "create",
 reservationId: editId || null,
 cliente: $("cliente").value,
@@ -2507,7 +2507,7 @@ btn.disabled = true;
 btn.textContent = editId ? "Actualizando…" : "Confirmando…";
 
       try{
-        const res = await fetch(BACKEND_URL,{
+        const res = await fetch(CONFIG.BACKEND_URL,{
           method:"POST",
           headers:{ "Content-Type":"text/plain;charset=utf-8" },
           body: JSON.stringify(payload)
@@ -2740,12 +2740,12 @@ if(editId){
 $("submitBtn").textContent = "Actualizar reserva";
 document.querySelector(".sectionTitle").textContent = "Editar reserva";
   
-const res = await fetch(BACKEND_URL,{
+const res = await fetch(CONFIG.BACKEND_URL,{
 method:"POST",
 headers:{ "Content-Type":"text/plain;charset=utf-8" },
 body:JSON.stringify({
 action:"get_ticket",
-secret:SHARED_SECRET,
+secret: CONFIG.SECRET,
 ticketId:editId
 })
 });
