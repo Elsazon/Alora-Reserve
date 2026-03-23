@@ -1191,6 +1191,7 @@ async function arrive(id){
   // limpiar selección
   SELECTED_MESAS = [];
 
+    showToast("Asignando mesa...");
   // 🔥 backend async
   api({
     action:"host_update",
@@ -1303,9 +1304,11 @@ function renderDetalle(r){
       <div style="margin-top:10px;color:var(--muted);font-size:13px;">
         👥 ${r.personas} pax<br>
         📞 ${r.telefono || "Sin teléfono"}<br>
-        🍽️ Mesa: ${r.mesa 
-  ? `Cambiar a ${SELECTED_MESAS.join(" + ")}`
-  : "Asignar mesa"}
+        🍽️ Mesa: ${
+  SELECTED_MESAS.length
+    ? `Cambiar a ${SELECTED_MESAS.join(" + ")}`
+    : (r.mesa || "—")
+}
       </div>
     </div>
 
@@ -1499,16 +1502,49 @@ async function loadCuenta(id){
     ? `<div style="font-size:13px;margin-bottom:6px;">Descorche — $${data.resumen.descorche.toFixed(2)}</div>`
     : "";
 
-  const extras = (data.items || []).length
-    ? data.items.map(i=>`
-        <div style="font-size:13px;margin-bottom:6px;">
-          ${i.nombre} — $${i.precio.toFixed(2)}
-        </div>
-      `).join("")
+const extras = (data.items || []).length
+  ? data.items.map(i=>`
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:13px;
+      margin-bottom:6px;
+    ">
+      <span>${i.nombre} — $${i.precio.toFixed(2)}</span>
+
+      <button onclick="deleteConsumo('${i.id}','${id}')"
+        style="
+          background:#7a3e3e;
+          border:none;
+          color:white;
+          padding:4px 8px;
+          border-radius:6px;
+          cursor:pointer;
+          font-size:11px;
+        ">
+        ✕
+      </button>
+    </div>
+  `).join("")
     : `<div class="detailEmpty">No hay extras añadidos.</div>`;
 
   list.innerHTML = prefixLine + descorcheLine + extras;
   totalEl.textContent = data.total.toFixed(2);
+}
+  async function deleteConsumo(itemId, reservationId){
+
+  const res = await api({
+    action:"delete_consumo",
+    itemId:itemId
+  });
+
+  if(res.ok){
+    await loadCuenta(reservationId);
+    showToast("Item eliminado");
+  }else{
+    alert("Error eliminando item");
+  }
 }
 
 async function loadItemsMenu(){
@@ -1537,10 +1573,12 @@ async function checkoutUI(id){
   const ok = confirm("¿Cerrar cuenta y enviar recibo por email?");
   if(!ok) return;
 
+  showToast("Procesando cuenta...");
   const res = await api({
-    action:"checkout",
-    id:id
-  });
+  action:"checkout",
+  id:id,
+  funcion:$("funcion").value
+});
 
   if(!res.ok){
     alert(res.error || "No se pudo hacer checkout.");
@@ -1549,6 +1587,7 @@ async function checkoutUI(id){
 
   showToast(`Cuenta cerrada · $${(res.total || 0).toFixed(2)}`);
   await loadReservas();
+  window.open(`ticket.html?id=${id}`, "_blank");
 }
 function getMesaActualLabel(r){
   if(r.mesa) return r.mesa;
@@ -1658,7 +1697,6 @@ box-shadow:0 10px 40px rgba(0,0,0,.6);
 <!-- LIBRERÍA QR (CRÍTICO) -->
 <script src="https://unpkg.com/html5-qrcode"></script>
 
-</body>
-</html>
+
 </body>
 </html>
