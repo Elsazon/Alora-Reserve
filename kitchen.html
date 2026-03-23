@@ -4,7 +4,7 @@
 
 <meta charset="UTF-8">
 <title>ALORA Expo Line</title>
-
+<script src="./config.js"></script>
 <style>
 
 body{
@@ -81,12 +81,12 @@ padding:10px;
 
 <script>
 
-const BACKEND_URL="https://script.google.com/macros/s/AKfycbw3Fva80PuWWX6w0lPZ4KMF6j7ytDfeW2s4qMw4T3y7Oj310uJLaGH1rfor_kR4S22d/exec";
+//const BACKEND_URL="https://script.google.com/macros/s/AKfycbw3Fva80PuWWX6w0lPZ4KMF6j7ytDfeW2s4qMw4T3y7Oj310uJLaGH1rfor_kR4S22d/exec";
 const FUNCION="Función 1";
 
 async function load(){
 
-const res = await fetch(BACKEND_URL,{
+const res = await fetch(CONFIG.BACKEND_URL,{
 method:"POST",
 headers:{"Content-Type":"text/plain"},
 body:JSON.stringify({
