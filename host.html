@@ -949,14 +949,6 @@ else{
     });
   });
 
-  // 🔥 selección (fuera del loop)
-  if(SELECTED_MESAS.length){
-    SELECTED_MESAS.forEach(id=>{
-      const el = document.querySelector(`.tableNode[data-id="${id}"]`);
-      if(el) el.classList.add("selected");
-    });
-  }
-  // 🔥 highlight sugerencia
 SELECTED_MESAS.forEach(id=>{
   const el = document.querySelector(`.tableNode[data-id="${id}"]`);
   if(el){
@@ -987,9 +979,7 @@ function renderReservas(list){
     const estado = r.estado || "Pendiente";
     let badgeBg = "#3a3a3a";
 
-    if(r.grupo){
-  card.style.borderColor = "#bfa15a";
-}
+    
     if(estado === "Llegó") badgeBg = "#3fa86a";
     if(estado === "Sentado") badgeBg = "#bfa15a";
     if(estado === "Cerrado") badgeBg = "#555";
@@ -998,7 +988,16 @@ function renderReservas(list){
     const card = document.createElement("div");
     card.className = "resCard" + (SELECTED_RESERVA_ID === r.id ? " active" : "");
 
-    const grupo = r.grupo;
+    if(r.grupo){
+  card.style.borderColor = "#bfa15a";
+    }
+   if(SELECTED_RESERVAS.includes(r.id)){
+  card.style.background = "rgba(191,161,90,.15)";
+  card.style.borderColor = "#bfa15a";
+}
+    
+    card.innerHTML = `
+       const grupo = r.grupo;
 
 ${grupo ? `
   <div style="
@@ -1009,8 +1008,6 @@ ${grupo ? `
     🔗 ${grupo}
   </div>
 ` : ""}
-    
-    card.innerHTML = `
       <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;">
         <div>
           <div style="font-weight:600;font-size:15px;">${r.cliente}</div>
@@ -1077,6 +1074,8 @@ ${grupo ? `
   if(res.ok){
     showToast("Reservas unidas");
     SELECTED_RESERVAS = [];
+SELECTED_RESERVA_ID = null;
+SELECTED_MESAS = [];
     await loadReservas();
   }
 }
@@ -1262,6 +1261,9 @@ if(grupo){
     HOST_CACHE[id].estado = "Sentado";
   }
 
+   const grupo = r.grupo;
+
+ // 🔥 backend async
   api({
     action:"host_update",
     id:id,
@@ -1269,8 +1271,6 @@ if(grupo){
     estado:"Sentado",
     funcion:$("funcion").value
   });
-
-}
 
   renderReservas(CURRENT_LIST);
   renderDetalle(HOST_CACHE[id]);
@@ -1280,14 +1280,7 @@ if(grupo){
   SELECTED_MESAS = [];
 
     showToast("Asignando mesa...");
-  // 🔥 backend async
-  api({
-    action:"host_update",
-    id:id,
-    mesa:mesaString,
-    estado:"Sentado",
-    funcion:$("funcion").value
-  });
+ 
 
   showToast(`Mesa ${mesaString} asignada`);
 }
