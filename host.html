@@ -678,24 +678,48 @@ async function runPrimaryAction(id){
   if(estado === "Pendiente") newEstado = "Llegó";
   else if(estado === "Llegó") newEstado = "Sentado";
   else if(estado === "Sentado") newEstado = "Cerrado";
-  else if(estado === "Cerrado") newEstado = "Sentado"; // 🔥 reopen
+  else if(estado === "Cerrado") newEstado = "Sentado";
 
-  // 🔥 UI inmediato
-  if(HOST_CACHE[id]){
-    HOST_CACHE[id].estado = newEstado;
+  const grupo = r?.grupo;
+
+  if(grupo){
+
+    Object.values(HOST_CACHE).forEach(x=>{
+
+      if(x.grupo === grupo){
+
+        x.estado = newEstado;
+
+        api({
+          action:"host_update",
+          id:x.id,
+          estado:newEstado,
+          funcion:$("funcion").value
+        });
+
+      }
+
+    });
+
+  }else{
+
+    if(HOST_CACHE[id]){
+      HOST_CACHE[id].estado = newEstado;
+    }
+
+    api({
+      action:"host_update",
+      id:id,
+      estado:newEstado,
+      funcion:$("funcion").value
+    });
+
   }
 
+  // 🔥 UI refresh
   renderReservas(CURRENT_LIST);
   renderDetalle(HOST_CACHE[id]);
   paintMesas(CURRENT_LIST);
-
-  // 🔥 backend async
-  api({
-    action:"host_update",
-    id:id,
-    estado:newEstado,
-    funcion:$("funcion").value
-  });
 
 }
   
@@ -1331,7 +1355,15 @@ async function openReserva(id, forceFetch = true){
     r = data.reserva;
     HOST_CACHE[id] = r;
   }
+const grupo = r.grupo;
 
+if(grupo){
+  SELECTED_RESERVAS = Object.values(HOST_CACHE)
+    .filter(x => x.grupo === grupo)
+    .map(x => x.id);
+}else{
+  SELECTED_RESERVAS = [id];
+}
 SELECTED_MESAS = sugerirMesas(r.personas || 1);
 
 renderReservas(CURRENT_LIST);
@@ -1347,6 +1379,9 @@ function renderDetalle(r){
   if(!r){
     $("detalle").innerHTML = `<div class="detailEmpty">Selecciona una reserva</div>`;
     return;
+  }
+  if(SELECTED_RESERVAS.includes(r.id)){
+  card.style.background = "rgba(191,161,90,.15)";
   }
 
   const primary = getPrimaryAction(r);
