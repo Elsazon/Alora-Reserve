@@ -333,7 +333,7 @@ text-transform:uppercase;
       try{
         const data = await api({
           action:"funciones",
-          secret:SHARED_SECRET
+          
         });
 
         if(!data.ok || !Array.isArray(data.funciones)){
@@ -377,7 +377,6 @@ text-transform:uppercase;
       try{
         const data = await api({
           action:"production",
-          secret:SHARED_SECRET,
           funcion
         });
 
@@ -404,7 +403,7 @@ text-transform:uppercase;
         renderList("aperitivos", board.aperitivos);
         renderList("principales", board.principales);
         renderList("postres", board.postres);
-        renderList("basePrincipales", board.basePrincipales);
+        renderList("basePrincipales", board.basePrincipales || {});
 
         document.getElementById("updated").textContent =
 "Actualizado: " + new Date().toLocaleTimeString("es-PR",{
