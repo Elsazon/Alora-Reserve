@@ -1046,7 +1046,13 @@ card.style.paddingLeft = "10px";
 `;
 
     card.addEventListener("click", ()=>{
-  openReserva(r.id);
+
+  if(MULTI_MODE){
+    toggleReservaSeleccion(r.id);
+  }else{
+    openReserva(r.id);
+  }
+
 });
 
     container.appendChild(card);
