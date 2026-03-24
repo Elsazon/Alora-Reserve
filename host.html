@@ -989,52 +989,52 @@ function renderReservas(list){
     card.className = "resCard" + (SELECTED_RESERVA_ID === r.id ? " active" : "");
 
     if(r.grupo){
-  card.style.borderColor = "#bfa15a";
-    }
+  card.style.borderLeft = "3px solid #bfa15a";
+card.style.paddingLeft = "10px";
+}
    if(SELECTED_RESERVAS.includes(r.id)){
   card.style.background = "rgba(191,161,90,.15)";
   card.style.borderColor = "#bfa15a";
 }
     
-    card.innerHTML = `
-       const grupo = r.grupo;
+  card.innerHTML = `
+  ${r.grupo ? `
+    <div style="
+      font-size:11px;
+      color:#bfa15a;
+      margin-bottom:6px;
+    ">
+      🔗 ${r.grupo}
+    </div>
+  ` : ""}
 
-${grupo ? `
-  <div style="
-    font-size:11px;
-    color:#bfa15a;
-    margin-top:4px;
-  ">
-    🔗 ${grupo}
+  <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;">
+    <div>
+      <div style="font-weight:600;font-size:15px;">${r.cliente}</div>
+      <div style="margin-top:6px;font-size:13px;color:var(--muted);line-height:1.5;">
+        ${r.hora} · ${r.personas} pax<br>
+        ${r.telefono || "Sin teléfono"}<br>
+        Mesa: ${r.mesa || "—"}
+      </div>
+    </div>
+
+    <div style="
+      background:${badgeBg};
+      color:#111;
+      font-size:11px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:600;
+      white-space:nowrap;
+    ">
+      ${estado}
+    </div>
   </div>
-` : ""}
-      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;">
-        <div>
-          <div style="font-weight:600;font-size:15px;">${r.cliente}</div>
-          <div style="margin-top:6px;font-size:13px;color:var(--muted);line-height:1.5;">
-            ${r.hora} · ${r.personas} pax<br>
-            ${r.telefono || "Sin teléfono"}<br>
-            Mesa: ${r.mesa || "—"}
-          </div>
-        </div>
 
-        <div style="
-          background:${badgeBg};
-          color:#111;
-          font-size:11px;
-          padding:6px 10px;
-          border-radius:999px;
-          font-weight:600;
-          white-space:nowrap;
-        ">
-          ${estado}
-        </div>
-      </div>
-
-      <div style="margin-top:10px;font-size:12px;color:var(--muted);">
-        Tap para abrir
-      </div>
-    `;
+  <div style="margin-top:10px;font-size:12px;color:var(--muted);">
+    Tap para abrir
+  </div>
+`;
 
     card.addEventListener("click", ()=>{
 
@@ -1230,61 +1230,55 @@ async function arrive(id){
   }
 
   const mesaString = SELECTED_MESAS.join(" + ");
-
   const grupo = HOST_CACHE[id]?.grupo;
 
-if(grupo){
+  if(grupo){
 
-  Object.values(HOST_CACHE).forEach(r=>{
+    Object.values(HOST_CACHE).forEach(r=>{
 
-    if(r.grupo === grupo){
+      if(r.grupo === grupo){
 
-      r.mesa = mesaString;
-      r.estado = "Sentado";
+        r.mesa = mesaString;
+        r.estado = "Sentado";
 
-      api({
-        action:"host_update",
-        id:r.id,
-        mesa:mesaString,
-        estado:"Sentado",
-        funcion:$("funcion").value
-      });
+        api({
+          action:"host_update",
+          id:r.id,
+          mesa:mesaString,
+          estado:"Sentado",
+          funcion:$("funcion").value
+        });
 
+      }
+
+    });
+
+  }else{
+
+    if(HOST_CACHE[id]){
+      HOST_CACHE[id].mesa = mesaString;
+      HOST_CACHE[id].estado = "Sentado";
     }
 
-  });
+    api({
+      action:"host_update",
+      id:id,
+      mesa:mesaString,
+      estado:"Sentado",
+      funcion:$("funcion").value
+    });
 
-}else{
-
-  if(HOST_CACHE[id]){
-    HOST_CACHE[id].mesa = mesaString;
-    HOST_CACHE[id].estado = "Sentado";
   }
 
-   const grupo = r.grupo;
-
- // 🔥 backend async
-  api({
-    action:"host_update",
-    id:id,
-    mesa:mesaString,
-    estado:"Sentado",
-    funcion:$("funcion").value
-  });
-
+  // 🔥 UI SIEMPRE
   renderReservas(CURRENT_LIST);
   renderDetalle(HOST_CACHE[id]);
   paintMesas(CURRENT_LIST);
 
-  // limpiar selección
   SELECTED_MESAS = [];
-
-    showToast("Asignando mesa...");
- 
 
   showToast(`Mesa ${mesaString} asignada`);
 }
-
   async function assignSuggested(id){
 
   const r = HOST_CACHE[id];
