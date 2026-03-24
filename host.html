@@ -521,7 +521,9 @@ select:focus,input:focus{
       <button class="zoneBtn" onclick="toggleMultiMode(this)">
       Unir mesas
       </button>
-      
+      <button class="zoneBtn" onclick="createGroupFromHost()" class="btnMini btnPrimary">
+  Crear grupo
+</button>
     </div>
     
 
@@ -602,6 +604,7 @@ let HOST_CACHE = {};
 let CURRENT_LIST = [];
 let SELECTED_RESERVA_ID = null;
 let SELECTED_MESAS = [];
+let SELECTED_RESERVAS = [];
 let CURRENT_ZONE = "salon";
 let MULTI_MODE = false;
 let CUENTA_CACHE = {};
@@ -1078,6 +1081,35 @@ SELECTED_RESERVA_ID = null;
 SELECTED_MESAS = [];
     await loadReservas();
   }
+}
+  async function createGroupFromHost(){
+
+  if(SELECTED_RESERVAS.length < 2){
+    alert("Selecciona al menos 2 reservaciones");
+    return;
+  }
+
+  const res = await api({
+    action:"create_group_host",
+    ids:SELECTED_RESERVAS,
+    funcion:$("funcion").value
+  });
+
+  if(res.ok){
+
+    showToast("Grupo creado");
+
+    // limpiar estado
+    SELECTED_RESERVAS = [];
+    SELECTED_RESERVA_ID = null;
+    SELECTED_MESAS = [];
+
+    await loadReservas();
+
+  }else{
+    alert(res.error || "Error creando grupo");
+  }
+
 }
 function sugerirMesas(personas){
 
