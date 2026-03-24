@@ -521,7 +521,7 @@ select:focus,input:focus{
       <button class="zoneBtn" onclick="toggleMultiMode(this)">
       Unir mesas
       </button>
-      <button class="zoneBtn" onclick="createGroupFromHost()" class="btnMini btnPrimary">
+      <button class="zoneBtn btnPrimary" onclick="createGroupFromHost()">
   Crear grupo
 </button>
     </div>
@@ -1004,6 +1004,12 @@ if(groupKey === ACTIVE_GROUP){
     if(r.grupo){
   card.style.borderLeft = "3px solid #bfa15a";
 card.style.paddingLeft = "10px";
+}
+    // 🔥 MULTI SELECT VISUAL
+if(SELECTED_RESERVAS.includes(r.id)){
+  card.style.background = "rgba(191,161,90,.15)";
+  card.style.boxShadow = "0 0 20px rgba(191,161,90,.5)";
+  card.style.borderColor = "#bfa15a";
 }
     
   card.innerHTML = `
