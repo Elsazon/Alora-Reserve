@@ -521,6 +521,9 @@ select:focus,input:focus{
       <button class="zoneBtn" onclick="toggleMultiMode(this)">
       Unir mesas
       </button>
+      <button onclick="mergeSelected()" class="btnMini">
+  Unir reservaciones
+</button>
     </div>
     
 
@@ -604,6 +607,7 @@ let SELECTED_MESAS = [];
 let CURRENT_ZONE = "salon";
 let MULTI_MODE = false;
 let CUENTA_CACHE = {};
+let SELECTED_RESERVAS = [];
   
 function fillSelect(el, list){
   el.innerHTML = "";
@@ -983,6 +987,9 @@ function renderReservas(list){
     const estado = r.estado || "Pendiente";
     let badgeBg = "#3a3a3a";
 
+    if(r.grupo){
+  card.style.borderColor = "#bfa15a";
+}
     if(estado === "Llegó") badgeBg = "#3fa86a";
     if(estado === "Sentado") badgeBg = "#bfa15a";
     if(estado === "Cerrado") badgeBg = "#555";
@@ -991,6 +998,18 @@ function renderReservas(list){
     const card = document.createElement("div");
     card.className = "resCard" + (SELECTED_RESERVA_ID === r.id ? " active" : "");
 
+    const grupo = r.grupo;
+
+${grupo ? `
+  <div style="
+    font-size:11px;
+    color:#bfa15a;
+    margin-top:4px;
+  ">
+    🔗 ${grupo}
+  </div>
+` : ""}
+    
     card.innerHTML = `
       <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;">
         <div>
@@ -1021,11 +1040,45 @@ function renderReservas(list){
     `;
 
     card.addEventListener("click", ()=>{
-      openReserva(r.id);
-    });
+
+  if(MULTI_MODE){
+    toggleReservaSeleccion(r.id);
+  }else{
+    openReserva(r.id);
+  }
+
+});
 
     container.appendChild(card);
   });
+}
+  function toggleReservaSeleccion(id){
+
+  if(SELECTED_RESERVAS.includes(id)){
+    SELECTED_RESERVAS = SELECTED_RESERVAS.filter(x=>x!==id);
+  }else{
+    SELECTED_RESERVAS.push(id);
+  }
+
+  renderReservas(CURRENT_LIST);
+}
+  async function mergeSelected(){
+
+  if(SELECTED_RESERVAS.length < 2){
+    alert("Selecciona al menos 2 reservaciones");
+    return;
+  }
+
+  const res = await api({
+    action:"merge_reservations",
+    ids:SELECTED_RESERVAS
+  });
+
+  if(res.ok){
+    showToast("Reservas unidas");
+    SELECTED_RESERVAS = [];
+    await loadReservas();
+  }
 }
 function sugerirMesas(personas){
 
@@ -1179,11 +1232,45 @@ async function arrive(id){
 
   const mesaString = SELECTED_MESAS.join(" + ");
 
-  // 🔥 UI inmediato
+  const grupo = HOST_CACHE[id]?.grupo;
+
+if(grupo){
+
+  Object.values(HOST_CACHE).forEach(r=>{
+
+    if(r.grupo === grupo){
+
+      r.mesa = mesaString;
+      r.estado = "Sentado";
+
+      api({
+        action:"host_update",
+        id:r.id,
+        mesa:mesaString,
+        estado:"Sentado",
+        funcion:$("funcion").value
+      });
+
+    }
+
+  });
+
+}else{
+
   if(HOST_CACHE[id]){
     HOST_CACHE[id].mesa = mesaString;
     HOST_CACHE[id].estado = "Sentado";
   }
+
+  api({
+    action:"host_update",
+    id:id,
+    mesa:mesaString,
+    estado:"Sentado",
+    funcion:$("funcion").value
+  });
+
+}
 
   renderReservas(CURRENT_LIST);
   renderDetalle(HOST_CACHE[id]);
