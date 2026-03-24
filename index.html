@@ -1947,7 +1947,6 @@ const FUNCION_FECHAS = {
 };
 
 const fecha = FUNCION_FECHAS[funcion];
-
 if(!fecha) return false;
 
 const funcionDate = new Date(fecha);
@@ -1958,6 +1957,16 @@ const diff = dia === 0 ? -6 : 1 - dia;
 const lunes = new Date(funcionDate);
 lunes.setDate(funcionDate.getDate() + diff);
 
+/* 🔥 MISMO OVERRIDE */
+if(funcion === "Función 2"){
+
+const cierreEspecial = new Date("2026-03-24T08:00:00");
+
+return new Date() > cierreEspecial;
+
+}
+
+/* default */
 lunes.setHours(23,59,59,999);
 
 return new Date() > lunes;
