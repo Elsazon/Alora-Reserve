@@ -521,9 +521,7 @@ select:focus,input:focus{
       <button class="zoneBtn" onclick="toggleMultiMode(this)">
       Unir mesas
       </button>
-      <button onclick="mergeSelected()" class="btnMini">
-  Unir reservaciones
-</button>
+      
     </div>
     
 
@@ -1004,10 +1002,6 @@ if(groupKey === ACTIVE_GROUP){
   card.style.borderLeft = "3px solid #bfa15a";
 card.style.paddingLeft = "10px";
 }
-   if(SELECTED_RESERVAS.includes(r.id)){
-  card.style.background = "rgba(191,161,90,.15)";
-  card.style.borderColor = "#bfa15a";
-}
     
   card.innerHTML = `
   ${r.grupo ? `
@@ -1049,13 +1043,7 @@ card.style.paddingLeft = "10px";
 `;
 
     card.addEventListener("click", ()=>{
-
-  if(MULTI_MODE){
-    toggleReservaSeleccion(r.id);
-  }else{
-    openReserva(r.id);
-  }
-
+  openReserva(r.id);
 });
 
     container.appendChild(card);
