@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ALORA · Producción</title>
-
+<script src="./config.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -299,8 +299,8 @@ text-transform:uppercase;
   </div>
 
   <script>
-    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyxgEL9fCZHe3HBlcHR2AvVN6gQAgR3nVnuqXSu4qGElW84pOUX91-k5PfLFeHsNcI4/exec";
-    const SHARED_SECRET = "demo123";
+    //const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyxgEL9fCZHe3HBlcHR2AvVN6gQAgR3nVnuqXSu4qGElW84pOUX91-k5PfLFeHsNcI4/exec";
+    //const SHARED_SECRET = "demo123";
 
     function showError(msg){
       const box = document.getElementById("errorBox");
@@ -314,14 +314,18 @@ text-transform:uppercase;
       box.textContent = "";
     }
 
-    async function api(body){
-      const res = await fetch(BACKEND_URL,{
-        method:"POST",
-        headers:{ "Content-Type":"text/plain;charset=utf-8" },
-        body:JSON.stringify(body)
-      });
-      return await res.json();
-    }
+   async function api(body){
+  const res = await fetch(CONFIG.BACKEND_URL,{
+    method:"POST",
+    headers:{ "Content-Type":"text/plain;charset=utf-8" },
+    body:JSON.stringify({
+      ...body,
+      secret: CONFIG.SECRET
+    })
+  });
+
+  return await res.json();
+}
 
     async function loadFunciones(){
       clearError();
