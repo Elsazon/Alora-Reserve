@@ -1026,6 +1026,8 @@ SELECTED_MESAS.forEach(id=>{
 function renderReservas(list){
   HOST_CACHE = {};
   CURRENT_LIST = list.slice();
+  
+  const q = $("buscar").value.trim().toLowerCase();
 
   const pendientesCount = list.filter(r=>{
   const e = r.estado || "Pendiente";
@@ -1047,7 +1049,6 @@ if(q){
   });
 }
   
-  const q = $("buscar").value.trim().toLowerCase();
 const filtered = list.filter(r=>{
 
   const estado = r.estado || "Pendiente";
