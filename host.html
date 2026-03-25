@@ -1794,6 +1794,7 @@ async function loadCuentaGrupo(){
   const container = document.getElementById("cuentaList");
 
   let html = "";
+  let totalGrupo = 0; // 🔥 NUEVO
 
   for(const r of grupo){
 
@@ -1803,6 +1804,8 @@ async function loadCuentaGrupo(){
     });
 
     if(!data.ok) continue;
+
+    totalGrupo += data.total || 0; // 🔥 SUMA
 
     html += `
       <div style="
@@ -1839,6 +1842,12 @@ async function loadCuentaGrupo(){
   }
 
   container.innerHTML = html || `<div class="detailEmpty">Sin consumo</div>`;
+
+  // 🔥 ACTUALIZAR TOTAL VISUAL
+  const totalEl = document.getElementById("cuentaTotal");
+  if(totalEl){
+    totalEl.textContent = totalGrupo.toFixed(2);
+  }
 }
   function handleReservaChange(e){
   const selectedText =
