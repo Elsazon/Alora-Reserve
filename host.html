@@ -1619,34 +1619,58 @@ ${r.estado !== "Cerrado" ? `
     </div>
 
 <div class="detailSection">
- <h3>Consumo · ${r.cliente}</h3>
- <div style="
+
+<h3>Consumo</h3>
+<div style="
+font-size:13px;
+margin-bottom:6px;
+">
+Añadiendo a:
+<strong id="reservaActivaLabel">${r.cliente}</strong>
+</div>
+<div style="
 font-size:12px;
 color:var(--muted);
 margin-bottom:10px;
 ">
-Este consumo pertenece solo a esta reservación
+Selecciona a qué reservación del grupo añadir consumo
 </div>
 
-  ${r.estado !== "Cerrado" ? `
-    <div style="display:flex;gap:8px;margin-bottom:10px;">
-      <select id="itemSelect">
-  <option value="">Cargando menú...</option>
+<!-- 🔥 SELECTOR DE RESERVA -->
+<select 
+  id="reservaSelect" 
+  style="width:100%;margin-bottom:10px;"
+  onchange="handleReservaChange(event)"
+>
+  ${grupoReservas.map(gr=>`
+    <option value="${gr.id}" ${gr.id === r.id ? "selected" : ""}>
+      ${gr.cliente} (${gr.personas} pax)
+    </option>
+  `).join("")}
 </select>
-      <button class="btn btnSecondary" style="width:auto;"
-        onclick="addConsumoUI('${r.id}')">
-        + Añadir a ${r.cliente}
-      </button>
-    </div>
-  ` : ""}
 
-  <div id="cuentaList">
-    <div class="detailEmpty">Cargando cuenta...</div>
-  </div>
+${r.estado !== "Cerrado" ? `
+  <div style="display:flex;gap:8px;margin-bottom:10px;">
+    <select id="itemSelect">
+      <option value="">Cargando menú...</option>
+    </select>
 
-  <div style="margin-top:12px;font-weight:700;">
-    Total: $<span id="cuentaTotal">0.00</span>
+    <button class="btn btnSecondary" style="width:auto;"
+      onclick="addConsumoFromSelector()">
+      + Añadir
+    </button>
   </div>
+` : ""}
+
+<div id="cuentaList">
+  <div class="detailEmpty">Cargando cuenta...</div>
+</div>
+
+<div style="margin-top:12px;font-weight:700;">
+  Total grupo: $<span id="cuentaTotal">0.00</span>
+</div>
+
+</div>
 
   ${r.estado !== "Cerrado" ? `
     <div style="margin-top:12px;">
@@ -1708,7 +1732,35 @@ function showToast(msg){
 
   showToast("Mesa liberada");
 }
-  
+  async function addConsumoFromSelector(){
+
+  const reservaId = document.getElementById("reservaSelect").value;
+  const item = document.getElementById("itemSelect").value;
+
+  if(!item){
+    alert("Selecciona un item.");
+    return;
+  }
+
+  const res = await api({
+    action:"add_consumo",
+    reservationId:reservaId,
+    nombre:item,
+    funcion:$("funcion").value
+  });
+
+  if(!res.ok){
+    alert(res.error || "Error añadiendo consumo");
+    return;
+  }
+
+  document.getElementById("itemSelect").value = "";
+
+  showToast("Consumo añadido");
+
+  // 🔥 IMPORTANTE: recargar grupo completo
+  loadCuentaGrupo();
+}
   async function addConsumoUI(id){
 
   const select = document.getElementById("itemSelect");
@@ -1788,6 +1840,16 @@ async function loadCuentaGrupo(){
 
   container.innerHTML = html || `<div class="detailEmpty">Sin consumo</div>`;
 }
+  function handleReservaChange(e){
+  const selectedText =
+    e.target.options[e.target.selectedIndex].text;
+
+  const label = document.getElementById("reservaActivaLabel");
+
+  if(label){
+    label.textContent = selectedText;
+  }
+}
   async function deleteConsumo(itemId, reservationId){
 
   const res = await api({
@@ -1866,6 +1928,7 @@ document.addEventListener("DOMContentLoaded", async ()=>{
 
   await loadReservas();
 });
+
 </script>
 <!-- QR MODAL -->
 <div id="qrModal" style="
