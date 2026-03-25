@@ -1398,17 +1398,7 @@ function renderDetalle(r){
   if(estado === "Sentado") estadoColor = "#bfa15a";
   if(estado === "Cerrado") estadoColor = "#555";
 
-  $("detalle").innerHTML = `
-
-    <div style="margin-bottom:18px;">
-      <div style="font-size:20px;font-weight:600;">
-  ${grupoReservas.length > 1 
-    ? `Grupo (${grupoReservas.length} reservas)`
-    : r.cliente}
-</div>
-
-<div style="font-size:13px;color:var(--muted);margin-top:4px;">
-  ${grupoReservas.map(res=>`
+const grupoHTML = grupoReservas.map(res=>`
   <div style="
     border:1px solid var(--line);
     border-radius:12px;
@@ -1428,8 +1418,20 @@ function renderDetalle(r){
       </div>
     `).join("")}
   </div>
-`).join("")}
+`).join("");
+  
+  $("detalle").innerHTML = `
+
+    <div style="margin-bottom:18px;">
+      <div style="font-size:20px;font-weight:600;">
+${grupoReservas.length > 1 ? `
+  <div class="detailSection">
+    <h3>Grupo</h3>
+    ${grupoHTML}
+  </div>
+` : ""}
 </div>
+
 
       <div style="
         margin-top:6px;
@@ -1492,13 +1494,13 @@ ${r.estado !== "Cerrado" ? `
       <h3>Preorden</h3>
 
       <div style="display:flex;flex-direction:column;gap:10px;">
-        ${covers.map(c=>
-          <div style="
-            border:1px solid var(--line);
-            border-radius:12px;
-            padding:10px;
-            background:rgba(255,255,255,.02);
-          ">
+      ${covers.map(c=>`
+  <div style="
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:10px;
+    background:rgba(255,255,255,.02);
+  ">
             <div style="font-weight:600;">👤 ${c.nombre}</div>
 
             <div style="font-size:13px;color:var(--muted);margin-top:6px;">
