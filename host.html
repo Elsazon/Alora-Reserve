@@ -1094,6 +1094,16 @@ SELECTED_MESAS = [];
     await loadReservas();
   }
 }
+  function getReservasGrupo(){
+
+  if(!ACTIVE_GROUP) return [];
+
+  return Object.values(HOST_CACHE).filter(r=>{
+    const key = r.grupo || r.id;
+    return key === ACTIVE_GROUP;
+  });
+
+}
   async function createGroupFromHost(){
 
   if(SELECTED_RESERVAS.length < 2){
@@ -1373,7 +1383,12 @@ function renderDetalle(r){
     $("detalle").innerHTML = `<div class="detailEmpty">Selecciona una reserva</div>`;
     return;
   }
- 
+
+  const grupoReservas = getReservasGrupo();
+
+  const totalPersonas = grupoReservas.reduce((sum,x)=>sum + (x.personas || 0),0);
+
+  const covers = grupoReservas.flatMap(x=>x.covers || []);
 
   const primary = getPrimaryAction(r);
   const estado = r.estado || "Pendiente";
@@ -1387,8 +1402,34 @@ function renderDetalle(r){
 
     <div style="margin-bottom:18px;">
       <div style="font-size:20px;font-weight:600;">
-        ${r.cliente}
+  ${grupoReservas.length > 1 
+    ? `Grupo (${grupoReservas.length} reservas)`
+    : r.cliente}
+</div>
+
+<div style="font-size:13px;color:var(--muted);margin-top:4px;">
+  ${grupoReservas.map(res=>`
+  <div style="
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:10px;
+    margin-bottom:10px;
+  ">
+    <div style="font-weight:600;color:#bfa15a;">
+      ${res.cliente}
+    </div>
+
+    ${(res.covers || []).map(c=>`
+      <div style="font-size:13px;margin-top:6px;">
+        👤 ${c.nombre}<br>
+        🥗 ${c.aperitivo || "-"}<br>
+        🍝 ${c.principal || "-"}<br>
+        🍰 ${c.postre || "-"}
       </div>
+    `).join("")}
+  </div>
+`).join("")}
+</div>
 
       <div style="
         margin-top:6px;
@@ -1403,7 +1444,7 @@ function renderDetalle(r){
       </div>
 
       <div style="margin-top:10px;color:var(--muted);font-size:13px;">
-        👥 ${r.personas} pax<br>
+        👥 ${totalPersonas} pax<br>
         📞 ${r.telefono || "Sin teléfono"}<br>
         🍽️ Mesa: ${
   SELECTED_MESAS.length
@@ -1451,7 +1492,7 @@ ${r.estado !== "Cerrado" ? `
       <h3>Preorden</h3>
 
       <div style="display:flex;flex-direction:column;gap:10px;">
-        ${(r.covers || []).map(c=>`
+        ${covers.map(c=>
           <div style="
             border:1px solid var(--line);
             border-radius:12px;
