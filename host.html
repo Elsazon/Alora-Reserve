@@ -1036,21 +1036,34 @@ const sentadosCount = list.filter(r=>r.estado === "Sentado").length;
 
 $("tabPendientes").textContent = `Activos (${pendientesCount})`;
 $("tabSentados").textContent = `Sentados (${sentadosCount})`;
+
+if(q){
+  document.querySelectorAll(".tabBtn").forEach(b=>{
+    b.style.opacity = 0.5;
+  });
+}else{
+  document.querySelectorAll(".tabBtn").forEach(b=>{
+    b.style.opacity = 1;
+  });
+}
   
   const q = $("buscar").value.trim().toLowerCase();
-  const filtered = list.filter(r=>{
+const filtered = list.filter(r=>{
 
   const estado = r.estado || "Pendiente";
 
-  // 🔍 SEARCH SIEMPRE GLOBAL
+  // 🔍 MATCH SEARCH
   const matchSearch = !q || (
     (r.cliente || "").toLowerCase().includes(q) ||
     (r.telefono || "").toLowerCase().includes(q)
   );
 
-  if(!matchSearch) return false;
+  // 🔥 SI HAY SEARCH → IGNORA TAB
+  if(q){
+    return matchSearch;
+  }
 
-  // 🔥 FILTRO POR TAB
+  // 🔥 SI NO HAY SEARCH → USA TAB
   if(CURRENT_TAB === "pendientes"){
     return estado !== "Sentado" && estado !== "Cerrado";
   }
@@ -1461,7 +1474,7 @@ renderDetalle(r);
 paintMesas(CURRENT_LIST);
 
 setTimeout(loadItemsMenu, 0);
-setTimeout(()=> loadCuenta(id), 0);
+setTimeout(loadCuentaGrupo, 0);
 }
 
 function renderDetalle(r){
@@ -1606,7 +1619,14 @@ ${r.estado !== "Cerrado" ? `
     </div>
 
 <div class="detailSection">
-  <h3>Consumo</h3>
+ <h3>Consumo · ${r.cliente}</h3>
+ <div style="
+font-size:12px;
+color:var(--muted);
+margin-bottom:10px;
+">
+Este consumo pertenece solo a esta reservación
+</div>
 
   ${r.estado !== "Cerrado" ? `
     <div style="display:flex;gap:8px;margin-bottom:10px;">
@@ -1615,7 +1635,7 @@ ${r.estado !== "Cerrado" ? `
 </select>
       <button class="btn btnSecondary" style="width:auto;"
         onclick="addConsumoUI('${r.id}')">
-        + Añadir
+        + Añadir a ${r.cliente}
       </button>
     </div>
   ` : ""}
@@ -1688,6 +1708,7 @@ function showToast(msg){
 
   showToast("Mesa liberada");
 }
+  
   async function addConsumoUI(id){
 
   const select = document.getElementById("itemSelect");
@@ -1715,57 +1736,57 @@ if(!nombre){
   showToast("Consumo añadido");
 }
 
-async function loadCuenta(id){
+async function loadCuentaGrupo(){
 
-  const data = await api({
-    action:"get_cuenta",
-    id:id
-  });
+  const grupo = getReservasGrupo();
+  const container = document.getElementById("cuentaList");
 
-  const list = document.getElementById("cuentaList");
-  const totalEl = document.getElementById("cuentaTotal");
+  let html = "";
 
-  if(!list || !totalEl || !data.ok) return;
+  for(const r of grupo){
 
-  const prefixLine = `
-    <div style="font-size:13px;margin-bottom:6px;">
-      Experiencia Prefix (${data.resumen.personas} × $${data.resumen.prefixUnitario}) — $${data.resumen.prefixSubtotal.toFixed(2)}
-    </div>
-  `;
+    const data = await api({
+      action:"get_cuenta",
+      id:r.id
+    });
 
-  const descorcheLine = data.resumen.descorche
-    ? `<div style="font-size:13px;margin-bottom:6px;">Descorche — $${data.resumen.descorche.toFixed(2)}</div>`
-    : "";
+    if(!data.ok) continue;
 
-const extras = (data.items || []).length
-  ? data.items.map(i=>`
-    <div style="
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      font-size:13px;
-      margin-bottom:6px;
-    ">
-      <span>${i.nombre} — $${i.precio.toFixed(2)}</span>
+    html += `
+      <div style="
+        border:1px solid var(--line);
+        border-radius:12px;
+        padding:12px;
+        margin-bottom:12px;
+        background:rgba(255,255,255,.02);
+      ">
 
-      <button onclick="deleteConsumo('${i.id}','${id}')"
-        style="
-          background:#7a3e3e;
-          border:none;
-          color:white;
-          padding:4px 8px;
-          border-radius:6px;
-          cursor:pointer;
-          font-size:11px;
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          margin-bottom:8px;
         ">
-        ✕
-      </button>
-    </div>
-  `).join("")
-    : `<div class="detailEmpty">No hay extras añadidos.</div>`;
+          <strong>${r.cliente}</strong>
+          <span>$${data.total.toFixed(2)}</span>
+        </div>
 
-  list.innerHTML = prefixLine + descorcheLine + extras;
-  totalEl.textContent = data.total.toFixed(2);
+        ${(data.items || []).map(i=>`
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            font-size:13px;
+            margin-bottom:4px;
+          ">
+            <span>${i.nombre}</span>
+            <span>$${i.precio.toFixed(2)}</span>
+          </div>
+        `).join("")}
+
+      </div>
+    `;
+  }
+
+  container.innerHTML = html || `<div class="detailEmpty">Sin consumo</div>`;
 }
   async function deleteConsumo(itemId, reservationId){
 
