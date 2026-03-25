@@ -1676,23 +1676,27 @@ Checkout individual por reservación
 
 </div>
 
-  ${r.estado !== "Cerrado" ? `
-    <div style="margin-top:12px;">
-     <div style="display:flex;flex-direction:column;gap:8px;">
+ ${r.estado !== "Cerrado" ? `
+  <div style="margin-top:12px;">
+    
+    <div style="display:flex;flex-direction:column;gap:8px;">
 
-  <button class="btn btnDanger"
-    onclick="checkoutFromSelector()">
-    💳 Checkout reserva
-  </button>
+      <button class="btn btnDanger"
+        onclick="checkoutFromSelector()">
+        💳 Checkout reserva
+      </button>
 
-  ${grupoReservas.length > 1 ? `
-    <button class="btn btnPrimary"
-      onclick="checkoutGrupo()">
-      💰 Checkout grupo completo
-    </button>
-  ` : ""}
+      ${grupoReservas.length > 1 ? `
+        <button class="btn btnPrimary"
+          onclick="checkoutGrupo()">
+          💰 Checkout grupo completo
+        </button>
+      ` : ""}
 
-</div>
+    </div>
+
+  </div>
+` : ""}
     
 
     ${r.notas ? `
