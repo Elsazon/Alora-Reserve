@@ -668,10 +668,14 @@ let CURRENT_TAB = "pendientes";
   });
 
   if(tab === "pendientes"){
-    $("tabPendientes").classList.add("active");
-  }else{
-    $("tabSentados").classList.add("active");
-  }
+  $("tabPendientes").classList.add("active");
+}
+else if(tab === "sentados"){
+  $("tabSentados").classList.add("active");
+}
+else if(tab === "cerrados"){
+  $("tabCerrados").classList.add("active");
+}
 
   renderReservas(CURRENT_LIST);
 }
@@ -1089,6 +1093,11 @@ const filtered = list.filter(r=>{
   return true;
 });
 
+if(estado === "Cerrado" || estado === "Cancelado"){
+  card.style.opacity = 0.5;
+  card.style.filter = "grayscale(0.3)";
+}
+  
   const container = $("reservas");
   container.innerHTML = "";
 
