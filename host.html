@@ -444,7 +444,22 @@ select:focus,input:focus{
   box-shadow:0 0 25px rgba(191,161,90,.6);
   animation:pulseGold 1.5s infinite;
 }
+.tabBtn{
+  flex:1;
+  border:none;
+  padding:10px;
+  border-radius:10px;
+  background:transparent;
+  color:var(--muted);
+  cursor:pointer;
+  font-size:13px;
+  font-weight:500;
+}
 
+.tabBtn.active{
+  background:var(--gold);
+  color:#111;
+}
 @keyframes pulseGold{
   0%{ box-shadow:0 0 10px rgba(191,161,90,.4); }
   50%{ box-shadow:0 0 30px rgba(191,161,90,.9); }
@@ -513,6 +528,27 @@ select:focus,input:focus{
         <h2>Reservas</h2>
         <p>Selecciona una reserva para ver detalles y asignar mesa</p>
       </div>
+      <div style="
+display:flex;
+gap:6px;
+margin-bottom:14px;
+background:rgba(255,255,255,.04);
+padding:4px;
+border-radius:12px;
+border:1px solid var(--line);
+">
+
+  <button id="tabPendientes" class="tabBtn active"
+    onclick="setTab('pendientes')">
+    Activos
+  </button>
+
+  <button id="tabSentados" class="tabBtn"
+    onclick="setTab('sentados')">
+    Sentados
+  </button>
+
+</div>
       <div class="panelBody" id="reservas"></div>
     </div>
 
@@ -616,7 +652,24 @@ let CURRENT_ZONE = "salon";
 let MULTI_MODE = false;
 let CUENTA_CACHE = {};
 let ACTIVE_GROUP = null;
-  
+let CURRENT_TAB = "pendientes";
+
+  function setTab(tab){
+
+  CURRENT_TAB = tab;
+
+  document.querySelectorAll(".tabBtn").forEach(b=>{
+    b.classList.remove("active");
+  });
+
+  if(tab === "pendientes"){
+    $("tabPendientes").classList.add("active");
+  }else{
+    $("tabSentados").classList.add("active");
+  }
+
+  renderReservas(CURRENT_LIST);
+}
 function fillSelect(el, list){
   el.innerHTML = "";
   list.forEach(v=>{
@@ -974,14 +1027,40 @@ function renderReservas(list){
   HOST_CACHE = {};
   CURRENT_LIST = list.slice();
 
+  const pendientesCount = list.filter(r=>{
+  const e = r.estado || "Pendiente";
+  return e !== "Sentado" && e !== "Cerrado";
+}).length;
+
+const sentadosCount = list.filter(r=>r.estado === "Sentado").length;
+
+$("tabPendientes").textContent = `Activos (${pendientesCount})`;
+$("tabSentados").textContent = `Sentados (${sentadosCount})`;
+  
   const q = $("buscar").value.trim().toLowerCase();
   const filtered = list.filter(r=>{
-    if(!q) return true;
-    return (
-      (r.cliente || "").toLowerCase().includes(q) ||
-      (r.telefono || "").toLowerCase().includes(q)
-    );
-  });
+
+  const estado = r.estado || "Pendiente";
+
+  // 🔍 SEARCH SIEMPRE GLOBAL
+  const matchSearch = !q || (
+    (r.cliente || "").toLowerCase().includes(q) ||
+    (r.telefono || "").toLowerCase().includes(q)
+  );
+
+  if(!matchSearch) return false;
+
+  // 🔥 FILTRO POR TAB
+  if(CURRENT_TAB === "pendientes"){
+    return estado !== "Sentado" && estado !== "Cerrado";
+  }
+
+  if(CURRENT_TAB === "sentados"){
+    return estado === "Sentado";
+  }
+
+  return true;
+});
 
   const container = $("reservas");
   container.innerHTML = "";
