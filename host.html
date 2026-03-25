@@ -1093,10 +1093,7 @@ const filtered = list.filter(r=>{
   return true;
 });
 
-if(estado === "Cerrado" || estado === "Cancelado"){
-  card.style.opacity = 0.5;
-  card.style.filter = "grayscale(0.3)";
-}
+
   
   const container = $("reservas");
   container.innerHTML = "";
@@ -1115,6 +1112,12 @@ if(estado === "Cerrado" || estado === "Cancelado"){
 
    const card = document.createElement("div");
 
+if(estado === "Cerrado" || estado === "Cancelado"){
+  card.style.opacity = 0.45;
+  card.style.filter = "grayscale(0.4)";
+  card.style.pointerEvents = "auto"; // sigue clickable
+}
+    
 const groupKey = r.grupo || r.id;
 
 if(groupKey === ACTIVE_GROUP){
