@@ -1678,13 +1678,22 @@ Checkout individual por reservación
 
   ${r.estado !== "Cerrado" ? `
     <div style="margin-top:12px;">
-      <button class="btn btnDanger"
-        onclick="checkoutFromSelector()">
-        💳 Checkout
-      </button>
-    </div>
+     <div style="display:flex;flex-direction:column;gap:8px;">
+
+  <button class="btn btnDanger"
+    onclick="checkoutFromSelector()">
+    💳 Checkout reserva
+  </button>
+
+  ${grupoReservas.length > 1 ? `
+    <button class="btn btnPrimary"
+      onclick="checkoutGrupo()">
+      💰 Checkout grupo completo
+    </button>
   ` : ""}
+
 </div>
+    
 
     ${r.notas ? `
       <div class="detailSection">
@@ -1936,7 +1945,42 @@ async function loadItemsMenu(){
     select.appendChild(opt);
   });
 }
-  
+  async function checkoutGrupo(){
+
+  const grupo = getReservasGrupo();
+
+  if(!grupo.length){
+    alert("No hay grupo activo");
+    return;
+  }
+
+  const ok = confirm("¿Cerrar TODAS las cuentas del grupo?");
+  if(!ok) return;
+
+  showToast("Procesando grupo...");
+
+  let totalGrupo = 0;
+
+  for(const r of grupo){
+
+    const res = await api({
+      action:"checkout",
+      id:r.id,
+      funcion:$("funcion").value
+    });
+
+    if(res.ok){
+      totalGrupo += res.total || 0;
+    }
+  }
+
+  showToast(`Grupo cerrado · $${totalGrupo.toFixed(2)}`);
+
+  await loadReservas();
+
+  // 🔥 opcional: abrir ticket del primero
+  window.open(`ticket.html?id=${grupo[0].id}`, "_blank");
+}
 async function checkoutUI(id){
 
   const ok = confirm("¿Cerrar cuenta y enviar recibo por email?");
