@@ -1667,6 +1667,9 @@ ${r.estado !== "Cerrado" ? `
   <div class="detailEmpty">Cargando cuenta...</div>
 </div>
 
+<div style="font-size:12px;color:var(--muted);margin-top:6px;">
+Checkout individual por reservación
+</div>
 <div style="margin-top:12px;font-weight:700;">
   Total grupo: $<span id="cuentaTotal">0.00</span>
 </div>
@@ -1676,7 +1679,7 @@ ${r.estado !== "Cerrado" ? `
   ${r.estado !== "Cerrado" ? `
     <div style="margin-top:12px;">
       <button class="btn btnDanger"
-        onclick="checkoutUI('${r.id}')">
+        onclick="checkoutFromSelector()">
         💳 Checkout
       </button>
     </div>
@@ -1732,6 +1735,44 @@ function showToast(msg){
   });
 
   showToast("Mesa liberada");
+}
+  async function checkoutFromSelector(){
+
+  const select = document.getElementById("reservaSelect");
+
+  if(!select){
+    alert("No hay reserva seleccionada");
+    return;
+  }
+
+  const reservationId = select.value;
+
+  if(!reservationId){
+    alert("Selecciona una reserva");
+    return;
+  }
+
+  const ok = confirm("¿Cerrar cuenta de esta reservación?");
+  if(!ok) return;
+
+  showToast("Procesando cuenta...");
+
+  const res = await api({
+    action:"checkout",
+    id:reservationId,
+    funcion:$("funcion").value
+  });
+
+  if(!res.ok){
+    alert(res.error || "No se pudo hacer checkout.");
+    return;
+  }
+
+  showToast(`Cuenta cerrada · $${(res.total || 0).toFixed(2)}`);
+
+  await loadReservas();
+
+  window.open(`ticket.html?id=${reservationId}`, "_blank");
 }
   async function addConsumoFromSelector(){
 
