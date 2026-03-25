@@ -274,6 +274,13 @@ select:focus,input:focus{
   background:#c26a4a;
   box-shadow:0 0 20px rgba(194,106,74,.8);
 }
+  .tableNode.ocupada::after{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  border-radius:inherit;
+  border:1px solid rgba(191,161,90,.4);
+}
 
 .tableNode.selected{
   outline:2px solid var(--gold);
@@ -1289,6 +1296,7 @@ async function arrive(id){
 
     const groupKey = r.grupo || r.id;
 
+    if(!ACTIVE_GROUP) return;
     if(groupKey === ACTIVE_GROUP){
 
       r.mesa = mesaString;
@@ -1390,6 +1398,10 @@ function renderDetalle(r){
 
   const covers = grupoReservas.flatMap(x=>x.covers || []);
 
+  const tiempo = r.sentadoAt
+  ? Math.floor((Date.now() - r.sentadoAt)/60000)
+  : null;
+  
   const primary = getPrimaryAction(r);
   const estado = r.estado || "Pendiente";
 
@@ -1400,61 +1412,61 @@ function renderDetalle(r){
 
 const grupoHTML = grupoReservas.map(res=>`
   <div style="
-    border:1px solid var(--line);
-    border-radius:12px;
-    padding:10px;
-    margin-bottom:10px;
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    margin-bottom:6px;
   ">
-    <div style="font-weight:600;color:#bfa15a;">
-      ${res.cliente}
-    </div>
-
-    ${(res.covers || []).map(c=>`
-      <div style="font-size:13px;margin-top:6px;">
-        👤 ${c.nombre}<br>
-        🥗 ${c.aperitivo || "-"}<br>
-        🍝 ${c.principal || "-"}<br>
-        🍰 ${c.postre || "-"}
-      </div>
-    `).join("")}
+    <span>${res.cliente}</span>
+    <span style="color:var(--muted);">
+      ${res.personas} pax
+    </span>
   </div>
 `).join("");
   
   $("detalle").innerHTML = `
 
     <div style="margin-bottom:18px;">
-      <div style="font-size:20px;font-weight:600;">
-${grupoReservas.length > 1 ? `
-  <div class="detailSection">
-    <h3>Grupo</h3>
-    ${grupoHTML}
+      
+
+  <div style="font-size:20px;font-weight:600;">
+    ${r.cliente}
+  </div>
+  ${tiempo ? `
+  <div style="margin-top:8px;color:#bfa15a;font-size:13px;">
+    ⏱️ ${tiempo} min sentados
   </div>
 ` : ""}
-</div>
-
-
-      <div style="
-        margin-top:6px;
-        display:inline-block;
-        padding:6px 12px;
-        border-radius:8px;
-        font-size:12px;
-        background:${estadoColor};
-        color:#111;
-      ">
-        ${estado}
-      </div>
-
-      <div style="margin-top:10px;color:var(--muted);font-size:13px;">
-        👥 ${totalPersonas} pax<br>
-        📞 ${r.telefono || "Sin teléfono"}<br>
-        🍽️ Mesa: ${
-  SELECTED_MESAS.length
-    ? `Cambiar a ${SELECTED_MESAS.join(" + ")}`
-    : (r.mesa || "—")
-}
-      </div>
+  ${grupoReservas.length > 1 ? `
+    <div class="detailSection">
+      <h3>Grupo</h3>
+      ${grupoHTML}
     </div>
+  ` : ""}
+
+  <div style="
+    margin-top:10px;
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:8px;
+    font-size:12px;
+    background:${estadoColor};
+    color:#111;
+  ">
+    ${estado}
+  </div>
+
+  <div style="margin-top:10px;color:var(--muted);font-size:13px;">
+    👥 ${totalPersonas} pax<br>
+    📞 ${r.telefono || "Sin teléfono"}<br>
+    🍽️ Mesa: ${
+      SELECTED_MESAS.length
+        ? `Cambiar a ${SELECTED_MESAS.join(" + ")}`
+        : (r.mesa || "—")
+    }
+  </div>
+
+</div>
 
    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
 
