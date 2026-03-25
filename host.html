@@ -548,6 +548,11 @@ border:1px solid var(--line);
     Sentados
   </button>
 
+<button id="tabCerrados" class="tabBtn"
+  onclick="setTab('cerrados')">
+  Historial
+</button>
+        
 </div>
       <div class="panelBody" id="reservas"></div>
     </div>
@@ -1035,7 +1040,12 @@ function renderReservas(list){
 }).length;
 
 const sentadosCount = list.filter(r=>r.estado === "Sentado").length;
+const historialCount = list.filter(r=>{
+  const e = r.estado || "Pendiente";
+  return e === "Cerrado" || e === "Cancelado";
+}).length;
 
+$("tabCerrados").textContent = `Historial (${historialCount})`;
 $("tabPendientes").textContent = `Activos (${pendientesCount})`;
 $("tabSentados").textContent = `Sentados (${sentadosCount})`;
 
@@ -1072,6 +1082,9 @@ const filtered = list.filter(r=>{
   if(CURRENT_TAB === "sentados"){
     return estado === "Sentado";
   }
+  if(CURRENT_TAB === "cerrados"){
+  return estado === "Cerrado" || estado === "Cancelado";
+}
 
   return true;
 });
