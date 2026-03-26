@@ -603,9 +603,7 @@ border-radius:12px;
       <button class="zoneBtn" id="groupModeBtn" onclick="toggleGroupMode(this)">
   Agrupar reservas
 </button>
-      <button class="zoneBtn btnPrimary" onclick="createGroupFromHost()">
-  Crear grupo
-</button>
+      
     </div>
     
 
@@ -1207,6 +1205,19 @@ if(SELECTED_RESERVAS.includes(r.id)){
   card.style.background = "rgba(191,161,90,.15)";
   card.style.boxShadow = "0 0 20px rgba(191,161,90,.5)";
   card.style.borderColor = "#bfa15a";
+  
+  // 🔥 AÑADE ESTO AQUÍ
+  card.style.transform = "scale(1.02)";
+
+  card.innerHTML += `
+    <div style="
+      margin-top:8px;
+      font-size:11px;
+      color:#bfa15a;
+    ">
+      ✓ Seleccionado
+    </div>
+  `;
 }
     
   card.innerHTML = `
@@ -1250,41 +1261,30 @@ if(SELECTED_RESERVAS.includes(r.id)){
 
     card.addEventListener("click", ()=>{
 
+  // 🔥 MODO GRUPO MANDA
   if(GROUP_MODE){
     toggleReservaSeleccion(r.id);
     updateGroupToolbar();
     return;
   }
 
-  if(MULTI_MODE){
-    toggleReservaSeleccion(r.id);
-  }else{
-    openReserva(r.id);
-  }
+  // 🔥 NORMAL
+  openReserva(r.id);
 
 });
 
     container.appendChild(card);
   });
 }
-  function toggleReservaSeleccion(id){
+function toggleReservaSeleccion(id){
 
-  if(SELECTED_RESERVAS.includes(r.id)){
-  card.style.background = "rgba(191,161,90,.2)";
-  card.style.boxShadow = "0 0 25px rgba(191,161,90,.7)";
-  card.style.borderColor = "#bfa15a";
+  if(SELECTED_RESERVAS.includes(id)){
+    SELECTED_RESERVAS = SELECTED_RESERVAS.filter(x=>x!==id);
+  }else{
+    SELECTED_RESERVAS.push(id);
+  }
 
-  card.innerHTML += `
-    <div style="
-      margin-top:8px;
-      font-size:11px;
-      color:#bfa15a;
-    ">
-      ✓ Seleccionado
-    </div>
-  `;
-}
-
+  // 🔥 IMPORTANTE
   renderReservas(CURRENT_LIST);
 }
   async function mergeSelected(){
