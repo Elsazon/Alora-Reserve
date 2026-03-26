@@ -554,6 +554,37 @@ border:1px solid var(--line);
 </button>
         
 </div>
+      <div id="groupToolbar" style="
+display:none;
+position:sticky;
+top:0;
+z-index:5;
+margin-bottom:10px;
+background:#121a16;
+border:1px solid rgba(255,255,255,.1);
+padding:10px;
+border-radius:12px;
+">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+
+    <div style="font-size:13px;">
+      <strong id="groupCount">0</strong> seleccionadas
+    </div>
+
+    <div style="display:flex;gap:8px;">
+      <button class="btnMini" onclick="cancelGroupMode()">
+        Cancelar
+      </button>
+
+      <button class="btnMini btnPrimary" onclick="confirmCreateGroup()">
+        Crear grupo
+      </button>
+    </div>
+
+  </div>
+
+</div>
       <div class="panelBody" id="reservas"></div>
     </div>
 
@@ -569,6 +600,9 @@ border:1px solid var(--line);
       <button class="zoneBtn" onclick="toggleMultiMode(this)">
       Unir mesas
       </button>
+      <button class="zoneBtn" id="groupModeBtn" onclick="toggleGroupMode(this)">
+  Agrupar reservas
+</button>
       <button class="zoneBtn btnPrimary" onclick="createGroupFromHost()">
   Crear grupo
 </button>
@@ -658,6 +692,7 @@ let MULTI_MODE = false;
 let CUENTA_CACHE = {};
 let ACTIVE_GROUP = null;
 let CURRENT_TAB = "pendientes";
+let GROUP_MODE = false;
 
   function setTab(tab){
 
@@ -688,7 +723,44 @@ function fillSelect(el, list){
     el.appendChild(o);
   });
 }
-  
+  function toggleGroupMode(btn){
+
+  GROUP_MODE = !GROUP_MODE;
+
+  // 🔥 reset mesa mode si estaba activo
+  MULTI_MODE = false;
+
+  SELECTED_RESERVAS = [];
+
+  btn.classList.toggle("active");
+
+  updateGroupToolbar();
+
+  renderReservas(CURRENT_LIST);
+}
+  function cancelGroupMode(){
+
+  GROUP_MODE = false;
+  SELECTED_RESERVAS = [];
+
+  document.getElementById("groupModeBtn").classList.remove("active");
+
+  updateGroupToolbar();
+
+  renderReservas(CURRENT_LIST);
+}
+  function updateGroupToolbar(){
+
+  const bar = document.getElementById("groupToolbar");
+
+  if(GROUP_MODE){
+    bar.style.display = "block";
+  }else{
+    bar.style.display = "none";
+  }
+
+  document.getElementById("groupCount").textContent = SELECTED_RESERVAS.length;
+}
 function toggleMultiMode(btn){
   MULTI_MODE = !MULTI_MODE;
 
@@ -1178,6 +1250,12 @@ if(SELECTED_RESERVAS.includes(r.id)){
 
     card.addEventListener("click", ()=>{
 
+  if(GROUP_MODE){
+    toggleReservaSeleccion(r.id);
+    updateGroupToolbar();
+    return;
+  }
+
   if(MULTI_MODE){
     toggleReservaSeleccion(r.id);
   }else{
@@ -1191,11 +1269,21 @@ if(SELECTED_RESERVAS.includes(r.id)){
 }
   function toggleReservaSeleccion(id){
 
-  if(SELECTED_RESERVAS.includes(id)){
-    SELECTED_RESERVAS = SELECTED_RESERVAS.filter(x=>x!==id);
-  }else{
-    SELECTED_RESERVAS.push(id);
-  }
+  if(SELECTED_RESERVAS.includes(r.id)){
+  card.style.background = "rgba(191,161,90,.2)";
+  card.style.boxShadow = "0 0 25px rgba(191,161,90,.7)";
+  card.style.borderColor = "#bfa15a";
+
+  card.innerHTML += `
+    <div style="
+      margin-top:8px;
+      font-size:11px;
+      color:#bfa15a;
+    ">
+      ✓ Seleccionado
+    </div>
+  `;
+}
 
   renderReservas(CURRENT_LIST);
 }
@@ -1229,12 +1317,14 @@ SELECTED_MESAS = [];
   });
 
 }
-  async function createGroupFromHost(){
+ async function confirmCreateGroup(){
 
   if(SELECTED_RESERVAS.length < 2){
     alert("Selecciona al menos 2 reservaciones");
     return;
   }
+
+  showToast("Creando grupo...");
 
   const res = await api({
     action:"create_group_host",
@@ -1244,19 +1334,30 @@ SELECTED_MESAS = [];
 
   if(res.ok){
 
+    // 🔥 UPDATE LOCAL INMEDIATO (CLAVE)
+    SELECTED_RESERVAS.forEach(id=>{
+      if(HOST_CACHE[id]){
+        HOST_CACHE[id].grupo = res.groupId || "GRUPO";
+      }
+    });
+
     showToast("Grupo creado");
 
-    // limpiar estado
+    GROUP_MODE = false;
     SELECTED_RESERVAS = [];
-    SELECTED_RESERVA_ID = null;
-    SELECTED_MESAS = [];
 
-    await loadReservas();
+    document.getElementById("groupModeBtn").classList.remove("active");
+
+    updateGroupToolbar();
+
+    renderReservas(CURRENT_LIST);
+
+    // 🔥 refresh suave después
+    setTimeout(loadReservas, 800);
 
   }else{
     alert(res.error || "Error creando grupo");
   }
-
 }
 function sugerirMesas(personas){
 
