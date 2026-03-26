@@ -851,14 +851,22 @@ else if(estado === "Confirmado") newEstado = "Llegó";
   
 function handleMesaClick(id){
 
-  const reserva = CURRENT_LIST.find(r=>{
+  const reservas = CURRENT_LIST.filter(r=>{
     if(!r.mesa) return false;
-
     return r.mesa.split(" + ").includes(id);
   });
 
-  if(reserva){
-    openReserva(reserva.id);
+  if(reservas.length){
+
+    // 🔥 si hay grupo → abrir TODO el grupo
+    const grupoId = reservas[0].grupo || reservas[0].id;
+
+    const target = reservas.find(r=>{
+      return (r.grupo || r.id) === grupoId;
+    }) || reservas[0];
+
+    openReserva(target.id, false); // 🔥 NO FETCH
+
     return;
   }
 
@@ -1603,7 +1611,7 @@ async function arrive(id){
   showToast(`Mesa ${mesaString} asignada`);
 }
 
-async function openReserva(id, forceFetch = true){
+async function openReserva(id, forceFetch = false){
   SELECTED_RESERVA_ID = id;
 
   let r = HOST_CACHE[id];
