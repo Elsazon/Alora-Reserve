@@ -9,7 +9,7 @@
 <style>
 
 body{
-background:radial-gradient(circle at top,#0f1814,#0b1210);
+background:radial-gradient(circle at top,#0e1613,#0b1210);
 color:#f4f1ea;
 font-family:Inter;
 margin:0;
@@ -24,6 +24,12 @@ margin:auto;
 h1{
 font-weight:500;
 letter-spacing:.5px;
+margin-bottom:6px;
+}
+
+.sub{
+font-size:13px;
+opacity:.6;
 margin-bottom:20px;
 }
 
@@ -33,9 +39,9 @@ margin-bottom:20px;
 background:linear-gradient(145deg,#121a16,#0e1511);
 border-radius:20px;
 padding:24px;
-border:1px solid rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.05);
 margin-bottom:18px;
-box-shadow:0 20px 60px rgba(0,0,0,.6);
+box-shadow:0 30px 80px rgba(0,0,0,.7);
 }
 
 /* METRICS */
@@ -49,24 +55,25 @@ flex-wrap:wrap;
 .metric{
 flex:1;
 min-width:140px;
-background:rgba(255,255,255,.03);
+background:rgba(255,255,255,.02);
 padding:16px;
 border-radius:14px;
 text-align:center;
-border:1px solid rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.04);
 }
 
 .metric h2{
 margin:0;
-font-size:28px;
-color:#d4b06a;
+font-size:30px;
+color:#bfa15a;
 font-weight:600;
 }
 
 .metric small{
-opacity:.6;
-font-size:12px;
-letter-spacing:.5px;
+opacity:.5;
+font-size:11px;
+letter-spacing:.6px;
+text-transform:uppercase;
 }
 
 /* SWITCH */
@@ -81,14 +88,14 @@ align-items:center;
 .btn{
 padding:10px 16px;
 border-radius:12px;
-background:#1a211d;
-border:1px solid rgba(255,255,255,.08);
+background:#151c18;
+border:1px solid rgba(255,255,255,.06);
 cursor:pointer;
 font-size:13px;
 }
 
 .btn.active{
-background:#d4b06a;
+background:#bfa15a;
 color:#111;
 font-weight:600;
 }
@@ -96,8 +103,8 @@ font-weight:600;
 /* BARS */
 
 .bar{
-height:12px;
-background:#1a211d;
+height:10px;
+background:#161d19;
 border-radius:20px;
 overflow:hidden;
 margin-top:6px;
@@ -105,14 +112,14 @@ margin-top:6px;
 
 .fill{
 height:100%;
-background:linear-gradient(90deg,#c26a4a,#d4b06a);
+background:linear-gradient(90deg,#a65a3a,#bfa15a);
 border-radius:20px;
 }
 
 /* COMMENTS */
 
 .comment{
-border-top:1px solid rgba(255,255,255,.05);
+border-top:1px solid rgba(255,255,255,.04);
 padding-top:12px;
 margin-top:12px;
 font-size:13px;
@@ -121,8 +128,9 @@ opacity:.85;
 }
 
 .comment strong{
-color:#d4b06a;
+color:#bfa15a;
 }
+
 </style>
 
 </head>
@@ -132,6 +140,7 @@ color:#d4b06a;
 <div class="container">
 
 <h1>Feedback Insights</h1>
+<div id="subInfo" class="sub"></div>
 
 <div class="switch">
 <button class="btn active" onclick="setMode('ALL',this)">Overall</button>
@@ -191,6 +200,8 @@ load();
 
 async function load(){
 
+try{
+
 const res = await fetch(BACKEND_URL,{
 method:"POST",
 body:JSON.stringify({
@@ -204,17 +215,35 @@ const data = await res.json();
 
 render(data);
 
+}catch(err){
+
+document.getElementById("content").innerHTML =
+"Error cargando data";
+
+}
+
 }
 
 function render(d){
+
+if(!d.ok){
+document.getElementById("content").innerHTML = "Error backend";
+return;
+}
 
 if(d.empty){
 document.getElementById("content").innerHTML = "Sin data";
 return;
 }
 
-const avg = d.avg;
+/* 🔥 CONTADOR */
 
+const label = CURRENT === "ALL" ? "Todas las funciones" : CURRENT;
+
+document.getElementById("subInfo").innerHTML =
+`${d.total || 0} respuestas · ${label}`;
+
+const avg = d.avg;
 const dist = d.dist;
 
 document.getElementById("content").innerHTML = `
@@ -225,7 +254,7 @@ document.getElementById("content").innerHTML = `
 
 <div class="metric">
 <h2>${avg.general.toFixed(1)}</h2>
-<small>Experiencia General</small>
+<small>General</small>
 </div>
 
 <div class="metric">
@@ -254,7 +283,7 @@ document.getElementById("content").innerHTML = `
 
 <div class="card">
 
-<h3 style="margin-bottom:12px">Distribución de experiencia</h3>
+<h3 style="margin-bottom:12px">Distribución</h3>
 
 ${dist.map((v,i)=>{
 
