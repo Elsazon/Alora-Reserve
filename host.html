@@ -1341,47 +1341,46 @@ SELECTED_MESAS = [];
   });
 
 }
- async function confirmCreateGroup(){
+async function confirmCreateGroup(){
 
   if(SELECTED_RESERVAS.length < 2){
     alert("Selecciona al menos 2 reservaciones");
     return;
   }
 
-  showToast("Creando grupo...");
+  const ids = [...SELECTED_RESERVAS];
 
-  const res = await api({
+  const tempGroupId = "G-" + Date.now();
+
+  // 🔥 UI INMEDIATO (SIN ESPERAR BACKEND)
+  ids.forEach(id=>{
+    if(HOST_CACHE[id]){
+      HOST_CACHE[id].grupo = tempGroupId;
+    }
+  });
+
+  ACTIVE_GROUP = tempGroupId;
+
+  renderReservas(CURRENT_LIST);
+  paintMesas(CURRENT_LIST);
+
+  showToast("Grupo creado");
+
+  // reset UI
+  GROUP_MODE = false;
+  SELECTED_RESERVAS = [];
+  document.getElementById("groupModeBtn").classList.remove("active");
+  updateGroupToolbar();
+
+  // 🔥 BACKEND DESPUÉS (NO BLOQUEA)
+  api({
     action:"create_group_host",
-    ids:SELECTED_RESERVAS,
+    ids:ids,
     funcion:$("funcion").value
   });
 
-  if(res.ok){
-
-    // 🔥 UPDATE LOCAL INMEDIATO (CLAVE)
-    SELECTED_RESERVAS.forEach(id=>{
-      if(HOST_CACHE[id]){
-        HOST_CACHE[id].grupo = res.groupId || res.grupo || "GRUPO";
-      }
-    });
-
-    showToast("Grupo creado");
-
-    GROUP_MODE = false;
-    SELECTED_RESERVAS = [];
-
-    document.getElementById("groupModeBtn").classList.remove("active");
-
-    updateGroupToolbar();
-
-    renderReservas(CURRENT_LIST);
-
-    // 🔥 refresh suave después
-    setTimeout(loadReservas, 800);
-
-  }else{
-    alert(res.error || "Error creando grupo");
-  }
+  // 🔥 sync suave
+  setTimeout(loadReservas, 800);
 }
 function sugerirMesas(personas){
 
