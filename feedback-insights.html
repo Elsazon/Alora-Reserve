@@ -32,15 +32,13 @@ radial-gradient(1000px 700px at 85% 20%, rgba(79,81,56,.15), transparent 60%),
 linear-gradient(180deg,var(--bg0),var(--bg1));
 
 display:flex;
-align-items:center;
 justify-content:center;
+align-items:center;
 min-height:100vh;
 }
 
-/* CARD PRINCIPAL */
-
 .wrapper{
-width:700px;
+width:600px;
 max-width:92%;
 
 background:rgba(255,255,255,.05);
@@ -49,8 +47,8 @@ border-radius:28px;
 padding:40px;
 
 box-shadow:0 40px 120px rgba(0,0,0,.7);
-
 backdrop-filter:blur(8px);
+text-align:center;
 }
 
 /* HEADER */
@@ -58,24 +56,21 @@ backdrop-filter:blur(8px);
 .title{
 font-family:"Playfair Display",serif;
 font-size:28px;
-text-align:center;
-margin-bottom:6px;
 }
 
 .sub{
-text-align:center;
 font-size:12px;
 letter-spacing:2px;
 color:var(--muted);
+margin-top:6px;
 text-transform:uppercase;
-margin-bottom:20px;
 }
 
 .divider{
 width:70px;
 height:1px;
 background:var(--gold);
-margin:14px auto 24px;
+margin:18px auto;
 opacity:.6;
 }
 
@@ -85,7 +80,7 @@ opacity:.6;
 display:flex;
 justify-content:center;
 gap:10px;
-margin-bottom:20px;
+margin-bottom:18px;
 }
 
 .btn{
@@ -93,8 +88,8 @@ padding:10px 18px;
 border-radius:14px;
 background:rgba(255,255,255,.05);
 border:1px solid rgba(255,255,255,.12);
-font-size:13px;
 cursor:pointer;
+font-size:13px;
 transition:.25s;
 }
 
@@ -104,21 +99,54 @@ background:var(--terracotta);
 color:#111;
 }
 
-/* DONUT */
+/* DROPDOWN CUSTOM */
 
-.chart{
-display:flex;
-flex-direction:column;
-align-items:center;
-margin-bottom:20px;
+.dropdown{
+position:relative;
+display:inline-block;
 }
 
+.dropdownBtn{
+padding:10px 18px;
+border-radius:14px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.12);
+cursor:pointer;
+font-size:13px;
+}
+
+.dropdownMenu{
+position:absolute;
+top:120%;
+left:0;
+width:100%;
+background:#121a16;
+border:1px solid var(--line);
+border-radius:12px;
+overflow:hidden;
+display:none;
+z-index:10;
+}
+
+.dropdownItem{
+padding:10px;
+cursor:pointer;
+font-size:13px;
+border-bottom:1px solid var(--line);
+}
+
+.dropdownItem:hover{
+background:rgba(255,255,255,.05);
+}
+
+/* DONUT */
+
 .donut{
-width:170px;
-height:170px;
+width:160px;
+height:160px;
 border-radius:50%;
-margin-bottom:14px;
-transition:1s ease;
+margin:20px auto;
+transition:1s;
 }
 
 .score{
@@ -132,8 +160,8 @@ color:var(--gold);
 .metrics{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:12px;
-margin-top:10px;
+gap:10px;
+margin-top:20px;
 }
 
 .metric{
@@ -141,50 +169,12 @@ padding:12px;
 border-radius:12px;
 border:1px solid var(--line);
 background:rgba(255,255,255,.03);
-font-size:13px;
 display:flex;
 justify-content:space-between;
+font-size:13px;
 }
 
 .metric strong{
-color:var(--gold);
-}
-
-/* DISTRIBUCION */
-
-.section{
-margin-top:24px;
-}
-
-.section h3{
-font-family:"Playfair Display",serif;
-margin-bottom:12px;
-}
-
-.bar{
-height:8px;
-background:#1a211d;
-border-radius:10px;
-overflow:hidden;
-margin-top:4px;
-}
-
-.fill{
-height:100%;
-background:linear-gradient(90deg,var(--terracotta),var(--gold));
-}
-
-/* COMMENTS */
-
-.comment{
-border-top:1px solid var(--line);
-padding-top:10px;
-margin-top:10px;
-font-size:13px;
-opacity:.85;
-}
-
-.comment strong{
 color:var(--gold);
 }
 
@@ -203,8 +193,12 @@ color:var(--gold);
 
 <div class="switch">
 <button class="btn active" onclick="setMode('ALL',this)">Overall</button>
-<button class="btn" onclick="loadFunciones()">Por función</button>
-<select id="funcionSelect" onchange="changeFuncion(this.value)" style="display:none"></select>
+
+<div class="dropdown">
+<div class="dropdownBtn" onclick="toggleDropdown()">Por función</div>
+<div id="menu" class="dropdownMenu"></div>
+</div>
+
 </div>
 
 <div id="content">Cargando...</div>
@@ -218,15 +212,11 @@ const SECRET = "demo123";
 
 let CURRENT = "ALL";
 
-function setMode(mode,btn){
-CURRENT = mode;
+/* DROPDOWN */
 
-document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
-btn.classList.add("active");
-
-document.getElementById("funcionSelect").style.display = "none";
-
-load();
+function toggleDropdown(){
+const menu = document.getElementById("menu");
+menu.style.display = menu.style.display === "block" ? "none" : "block";
 }
 
 async function loadFunciones(){
@@ -238,27 +228,37 @@ body:JSON.stringify({action:"funciones",secret:SECRET})
 
 const data = await res.json();
 
-const select = document.getElementById("funcionSelect");
-select.innerHTML = "";
+const menu = document.getElementById("menu");
+menu.innerHTML = "";
 
 data.funciones.forEach(f=>{
-const opt = document.createElement("option");
-opt.value = f;
-opt.textContent = f;
-select.appendChild(opt);
+const div = document.createElement("div");
+div.className = "dropdownItem";
+div.textContent = f;
+div.onclick = ()=>{
+CURRENT = f;
+menu.style.display="none";
+load();
+};
+menu.appendChild(div);
 });
 
-select.style.display = "block";
 }
 
-function changeFuncion(f){
-CURRENT = f;
+/* MODE */
+
+function setMode(mode,btn){
+CURRENT = mode;
+
+document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+
 load();
 }
 
-async function load(){
+/* LOAD */
 
-document.getElementById("content").innerHTML = "Cargando...";
+async function load(){
 
 const res = await fetch(BACKEND_URL,{
 method:"POST",
@@ -270,30 +270,26 @@ secret:SECRET
 });
 
 const data = await res.json();
-
 render(data);
+
 }
+
+/* RENDER */
 
 function render(d){
 
-if(!d.ok){
-document.getElementById("content").innerHTML = "Error";
-return;
-}
-
-if(d.empty){
+if(!d.ok || d.empty){
 document.getElementById("content").innerHTML = "Sin data";
 return;
 }
 
-const label = CURRENT === "ALL" ? "Todas las funciones" : CURRENT;
+const total = d.total || 1;
 
 document.getElementById("subInfo").innerHTML =
-`${d.total} respuestas · ${label}`;
+`${d.total} respuestas · ${CURRENT==="ALL"?"General":CURRENT}`;
 
 const avg = d.avg;
 const dist = d.dist;
-const total = d.total;
 
 /* DONUT */
 
@@ -312,17 +308,14 @@ const angle = (v/total)*360;
 const start = acc;
 acc += angle;
 return `${colors[i]} ${start}deg ${acc}deg`;
-}).join("");
+}).join(",");
+
+/* HTML */
 
 document.getElementById("content").innerHTML = `
 
-<div class="chart">
-
 <div class="donut" id="donut"></div>
-
 <div class="score">${avg.general.toFixed(1)}</div>
-
-</div>
 
 <div class="metrics">
 
@@ -330,39 +323,6 @@ document.getElementById("content").innerHTML = `
 <div class="metric">Servicio <strong>${avg.servicio.toFixed(1)}</strong></div>
 <div class="metric">Tiempo <strong>${avg.tiempo.toFixed(1)}</strong></div>
 <div class="metric">Ambiente <strong>${avg.ambiente.toFixed(1)}</strong></div>
-
-</div>
-
-<div class="section">
-
-<h3>Distribución</h3>
-
-${dist.map((v,i)=>{
-
-const percent = (v/total)*100;
-
-return `
-<div>
-${i+1}★ (${v})
-<div class="bar">
-<div class="fill" style="width:${percent}%"></div>
-</div>
-</div>
-`;
-
-}).reverse().join("")}
-
-</div>
-
-<div class="section">
-
-<h3>Comentarios</h3>
-
-${d.comentarios.map(c=>`
-<div class="comment">
-<strong>${c.rating}★</strong> — ${c.texto}
-</div>
-`).join("")}
 
 </div>
 `;
@@ -374,7 +334,10 @@ document.getElementById("donut").style.background =
 
 }
 
+/* INIT */
+
 load();
+loadFunciones();
 
 </script>
 
