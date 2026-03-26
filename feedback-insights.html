@@ -38,7 +38,7 @@ min-height:100vh;
 }
 
 .wrapper{
-width:600px;
+width:650px;
 max-width:92%;
 
 background:rgba(255,255,255,.05);
@@ -48,7 +48,6 @@ padding:40px;
 
 box-shadow:0 40px 120px rgba(0,0,0,.7);
 backdrop-filter:blur(8px);
-text-align:center;
 }
 
 /* HEADER */
@@ -56,14 +55,16 @@ text-align:center;
 .title{
 font-family:"Playfair Display",serif;
 font-size:28px;
+text-align:center;
 }
 
 .sub{
+text-align:center;
 font-size:12px;
 letter-spacing:2px;
 color:var(--muted);
-margin-top:6px;
 text-transform:uppercase;
+margin-top:6px;
 }
 
 .divider{
@@ -80,7 +81,7 @@ opacity:.6;
 display:flex;
 justify-content:center;
 gap:10px;
-margin-bottom:18px;
+margin-bottom:20px;
 }
 
 .btn{
@@ -99,11 +100,10 @@ background:var(--terracotta);
 color:#111;
 }
 
-/* DROPDOWN CUSTOM */
+/* DROPDOWN */
 
 .dropdown{
 position:relative;
-display:inline-block;
 }
 
 .dropdownBtn{
@@ -112,27 +112,25 @@ border-radius:14px;
 background:rgba(255,255,255,.05);
 border:1px solid rgba(255,255,255,.12);
 cursor:pointer;
-font-size:13px;
 }
 
 .dropdownMenu{
 position:absolute;
 top:120%;
 left:0;
-width:100%;
 background:#121a16;
 border:1px solid var(--line);
 border-radius:12px;
-overflow:hidden;
 display:none;
+overflow:hidden;
 z-index:10;
 }
 
 .dropdownItem{
-padding:10px;
+padding:10px 14px;
 cursor:pointer;
-font-size:13px;
 border-bottom:1px solid var(--line);
+font-size:13px;
 }
 
 .dropdownItem:hover{
@@ -141,11 +139,16 @@ background:rgba(255,255,255,.05);
 
 /* DONUT */
 
+.chart{
+text-align:center;
+margin-bottom:20px;
+}
+
 .donut{
-width:160px;
-height:160px;
+width:170px;
+height:170px;
 border-radius:50%;
-margin:20px auto;
+margin:10px auto;
 transition:1s;
 }
 
@@ -161,7 +164,7 @@ color:var(--gold);
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:10px;
-margin-top:20px;
+margin-top:10px;
 }
 
 .metric{
@@ -175,6 +178,39 @@ font-size:13px;
 }
 
 .metric strong{
+color:var(--gold);
+}
+
+/* DISTRIBUCION */
+
+.section{
+margin-top:24px;
+}
+
+.bar{
+height:8px;
+background:#1a211d;
+border-radius:10px;
+overflow:hidden;
+margin-top:4px;
+}
+
+.fill{
+height:100%;
+background:linear-gradient(90deg,var(--terracotta),var(--gold));
+}
+
+/* COMMENTS */
+
+.comment{
+border-top:1px solid var(--line);
+padding-top:10px;
+margin-top:10px;
+font-size:13px;
+opacity:.85;
+}
+
+.comment strong{
 color:var(--gold);
 }
 
@@ -215,8 +251,8 @@ let CURRENT = "ALL";
 /* DROPDOWN */
 
 function toggleDropdown(){
-const menu = document.getElementById("menu");
-menu.style.display = menu.style.display === "block" ? "none" : "block";
+const m = document.getElementById("menu");
+m.style.display = m.style.display==="block"?"none":"block";
 }
 
 async function loadFunciones(){
@@ -233,26 +269,23 @@ menu.innerHTML = "";
 
 data.funciones.forEach(f=>{
 const div = document.createElement("div");
-div.className = "dropdownItem";
-div.textContent = f;
-div.onclick = ()=>{
-CURRENT = f;
+div.className="dropdownItem";
+div.textContent=f;
+div.onclick=()=>{
+CURRENT=f;
 menu.style.display="none";
 load();
 };
 menu.appendChild(div);
 });
-
 }
 
 /* MODE */
 
 function setMode(mode,btn){
-CURRENT = mode;
-
+CURRENT=mode;
 document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
 btn.classList.add("active");
-
 load();
 }
 
@@ -271,7 +304,6 @@ secret:SECRET
 
 const data = await res.json();
 render(data);
-
 }
 
 /* RENDER */
@@ -279,7 +311,7 @@ render(data);
 function render(d){
 
 if(!d.ok || d.empty){
-document.getElementById("content").innerHTML = "Sin data";
+document.getElementById("content").innerHTML="Sin data";
 return;
 }
 
@@ -288,34 +320,32 @@ const total = d.total || 1;
 document.getElementById("subInfo").innerHTML =
 `${d.total} respuestas · ${CURRENT==="ALL"?"General":CURRENT}`;
 
-const avg = d.avg;
-const dist = d.dist;
+const avg=d.avg;
+const dist=d.dist;
 
 /* DONUT */
 
-let acc = 0;
+let acc=0;
 
-const colors = [
-"#3a1f1a",
-"#6a3a2a",
-"#a65a3a",
-"#c89b5a",
-"#bfa15a"
-];
+const colors=["#3a1f1a","#6a3a2a","#a65a3a","#c89b5a","#bfa15a"];
 
-let gradient = dist.map((v,i)=>{
-const angle = (v/total)*360;
-const start = acc;
-acc += angle;
+let gradient=dist.map((v,i)=>{
+const angle=(v/total)*360;
+const start=acc;
+acc+=angle;
 return `${colors[i]} ${start}deg ${acc}deg`;
 }).join(",");
 
 /* HTML */
 
-document.getElementById("content").innerHTML = `
+document.getElementById("content").innerHTML=`
+
+<div class="chart">
 
 <div class="donut" id="donut"></div>
 <div class="score">${avg.general.toFixed(1)}</div>
+
+</div>
 
 <div class="metrics">
 
@@ -325,10 +355,43 @@ document.getElementById("content").innerHTML = `
 <div class="metric">Ambiente <strong>${avg.ambiente.toFixed(1)}</strong></div>
 
 </div>
+
+<div class="section">
+
+<h3>Distribución</h3>
+
+${dist.map((v,i)=>{
+
+const percent=(v/total)*100;
+
+return `
+<div>
+${i+1}★ (${v})
+<div class="bar">
+<div class="fill" style="width:${percent}%"></div>
+</div>
+</div>
+`;
+
+}).reverse().join("")}
+
+</div>
+
+<div class="section">
+
+<h3>Comentarios</h3>
+
+${d.comentarios.map(c=>`
+<div class="comment">
+<strong>${c.rating}★</strong> — ${c.texto}
+</div>
+`).join("")}
+
+</div>
 `;
 
 setTimeout(()=>{
-document.getElementById("donut").style.background =
+document.getElementById("donut").style.background=
 `conic-gradient(${gradient})`;
 },100);
 
