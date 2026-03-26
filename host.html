@@ -789,9 +789,13 @@ function getPrimaryAction(r){
 
   const estado = r.estado || "Pendiente";
 
-  if(estado === "Pendiente"){
-    return { label:"Marcar llegó", class:"btnSecondary" };
-  }
+ if(estado === "Pendiente"){
+  return { label:"Confirmar reserva", class:"btnNeutral" };
+}
+
+if(estado === "Confirmado"){
+  return { label:"Marcar llegó", class:"btnSecondary" };
+}
 
   if(estado === "Llegó"){
     return { label:"Sentar cliente", class:"btnPrimary" };
@@ -815,7 +819,8 @@ async function runPrimaryAction(id){
 
   let newEstado = estado;
 
-  if(estado === "Pendiente") newEstado = "Llegó";
+ if(estado === "Pendiente") newEstado = "Confirmado";
+else if(estado === "Confirmado") newEstado = "Llegó";
   else if(estado === "Llegó") newEstado = "Sentado";
   else if(estado === "Sentado") newEstado = "Cerrado";
   else if(estado === "Cerrado") newEstado = "Sentado";
@@ -1110,7 +1115,12 @@ function renderReservas(list){
 
   const pendientesCount = list.filter(r=>{
   const e = r.estado || "Pendiente";
-  return e !== "Sentado" && e !== "Cerrado";
+
+  return (
+    e === "Pendiente" ||
+    e === "Confirmado" ||
+    e === "Llegó"
+  );
 }).length;
 
 const sentadosCount = list.filter(r=>r.estado === "Sentado").length;
@@ -1149,9 +1159,13 @@ const filtered = list.filter(r=>{
   }
 
   // 🔥 SI NO HAY SEARCH → USA TAB
-  if(CURRENT_TAB === "pendientes"){
-    return estado !== "Sentado" && estado !== "Cerrado";
-  }
+if(CURRENT_TAB === "pendientes"){
+  return (
+    estado === "Pendiente" ||
+    estado === "Confirmado" ||
+    estado === "Llegó"
+  );
+}
 
   if(CURRENT_TAB === "sentados"){
     return estado === "Sentado";
@@ -1179,6 +1193,7 @@ const filtered = list.filter(r=>{
     if(estado === "Sentado") badgeBg = "#bfa15a";
     if(estado === "Cerrado") badgeBg = "#555";
     if(estado === "Cancelado") badgeBg = "#c85b5b";
+    if(estado === "Confirmado") badgeBg = "#4f8f6a";
 
    const card = document.createElement("div");
 
@@ -1228,8 +1243,17 @@ if(SELECTED_RESERVAS.includes(r.id)){
       margin-bottom:6px;
     ">
       🔗 ${r.grupo}
+      ${SELECTED_RESERVAS.includes(r.id) ? `
+  <div style="
+    margin-top:8px;
+    font-size:11px;
+    color:#bfa15a;
+  ">
+    ✓ Seleccionado
+  </div>
+` : ""}
     </div>
-  ` : ""}
+` : ""}
 
   <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;">
     <div>
@@ -1337,7 +1361,7 @@ SELECTED_MESAS = [];
     // 🔥 UPDATE LOCAL INMEDIATO (CLAVE)
     SELECTED_RESERVAS.forEach(id=>{
       if(HOST_CACHE[id]){
-        HOST_CACHE[id].grupo = res.groupId || "GRUPO";
+        HOST_CACHE[id].grupo = res.groupId || res.grupo || "GRUPO";
       }
     });
 
@@ -1657,11 +1681,38 @@ const grupoHTML = grupoReservas.map(res=>`
   </div>
 ` : ""}
   ${grupoReservas.length > 1 ? `
-    <div class="detailSection">
-      <h3>Grupo</h3>
-      ${grupoHTML}
-    </div>
-  ` : ""}
+  <div class="detailSection">
+    <h3>Grupo</h3>
+
+    ${grupoReservas.map(res=>`
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:8px;
+        font-size:13px;
+        margin-bottom:8px;
+      ">
+        <div>
+          <div>${res.cliente}</div>
+          <div style="font-size:11px;color:var(--muted);">
+            ${res.personas} pax
+          </div>
+        </div>
+
+        <button class="btnMini btnSoftDanger"
+          onclick="removeFromGroup('${res.id}')">
+          Quitar
+        </button>
+      </div>
+    `).join("")}
+
+    <button class="btn btnDanger" style="margin-top:10px;"
+      onclick="dissolveGroup()">
+      Disolver grupo
+    </button>
+  </div>
+` : ""}
 
   <div style="
     margin-top:10px;
@@ -2007,16 +2058,26 @@ async function loadCuentaGrupo(){
         </div>
 
         ${(data.items || []).map(i=>`
-          <div style="
-            display:flex;
-            justify-content:space-between;
-            font-size:13px;
-            margin-bottom:4px;
-          ">
-            <span>${i.nombre}</span>
-            <span>$${i.precio.toFixed(2)}</span>
-          </div>
-        `).join("")}
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    margin-bottom:6px;
+    gap:8px;
+  ">
+    <span>${i.nombre}</span>
+
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span>$${i.precio.toFixed(2)}</span>
+
+      <button class="btnMini btnSoftDanger"
+        onclick="deleteConsumo('${i.id}','${r.id}')">
+        ✕
+      </button>
+    </div>
+  </div>
+`).join("")}
 
       </div>
     `;
@@ -2040,19 +2101,23 @@ async function loadCuentaGrupo(){
     label.textContent = selectedText;
   }
 }
-  async function deleteConsumo(itemId, reservationId){
+ async function deleteConsumo(itemId, reservationId){
+
+  const ok = confirm("¿Eliminar este item?");
+  if(!ok) return;
 
   const res = await api({
     action:"delete_consumo",
     itemId:itemId
   });
 
-  if(res.ok){
-    await loadCuenta(reservationId);
-    showToast("Item eliminado");
-  }else{
-    alert("Error eliminando item");
+  if(!res.ok){
+    alert(res.error || "Error eliminando item");
+    return;
   }
+
+  showToast("Item eliminado");
+  await loadCuentaGrupo();
 }
 
 async function loadItemsMenu(){
@@ -2074,6 +2139,56 @@ async function loadItemsMenu(){
     opt.textContent = `${i.nombre} ($${i.precio})`;
     select.appendChild(opt);
   });
+}
+  async function dissolveGroup(){
+
+  if(!ACTIVE_GROUP){
+    alert("No hay grupo activo");
+    return;
+  }
+
+  const ok = confirm("¿Disolver todo el grupo?");
+  if(!ok) return;
+
+  const res = await api({
+    action:"dissolve_group",
+    groupId:ACTIVE_GROUP,
+    funcion:$("funcion").value
+  });
+
+  if(!res.ok){
+    alert(res.error || "No se pudo disolver el grupo");
+    return;
+  }
+
+  showToast("Grupo disuelto");
+
+  ACTIVE_GROUP = null;
+  await loadReservas();
+}
+  async function removeFromGroup(id){
+
+  const ok = confirm("¿Sacar esta reservación del grupo?");
+  if(!ok) return;
+
+  const res = await api({
+    action:"remove_from_group",
+    id:id,
+    funcion:$("funcion").value
+  });
+
+  if(!res.ok){
+    alert(res.error || "No se pudo separar la reservación");
+    return;
+  }
+
+  showToast("Reservación separada");
+
+  if(SELECTED_RESERVA_ID === id){
+    ACTIVE_GROUP = null;
+  }
+
+  await loadReservas();
 }
   async function checkoutGrupo(){
 
