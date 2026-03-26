@@ -3,211 +3,189 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>ALORA · Insights</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
---bg:#0b1210;
---bg2:#0e1613;
---card:#121a16;
---card2:#0e1511;
+--bg0:#0e1511;
+--bg1:#121a16;
+--ink:#f4f1ea;
+--muted:rgba(244,241,234,.65);
+--terracotta:#c26a4a;
 --gold:#bfa15a;
---gold-soft:#d6c28a;
---accent:#a65a3a;
---text:#f4f1ea;
+--line:rgba(255,255,255,.08);
 }
 
 body{
-background:radial-gradient(circle at top,var(--bg2),var(--bg));
-color:var(--text);
+margin:0;
 font-family:Inter;
-margin:0;
-padding:26px;
-animation:fadeIn .6s ease;
+color:var(--ink);
+
+background:
+radial-gradient(900px 600px at 15% 10%, rgba(194,106,74,.10), transparent 60%),
+radial-gradient(1000px 700px at 85% 20%, rgba(79,81,56,.15), transparent 60%),
+linear-gradient(180deg,var(--bg0),var(--bg1));
+
+display:flex;
+align-items:center;
+justify-content:center;
+min-height:100vh;
 }
 
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(10px)}
-to{opacity:1;transform:translateY(0)}
+/* CARD PRINCIPAL */
+
+.wrapper{
+width:700px;
+max-width:92%;
+
+background:rgba(255,255,255,.05);
+border:1px solid var(--line);
+border-radius:28px;
+padding:40px;
+
+box-shadow:0 40px 120px rgba(0,0,0,.7);
+
+backdrop-filter:blur(8px);
 }
 
-.container{
-max-width:1000px;
-margin:auto;
-}
+/* HEADER */
 
-h1{
-margin:0;
-font-weight:500;
-letter-spacing:.6px;
+.title{
+font-family:"Playfair Display",serif;
+font-size:28px;
+text-align:center;
+margin-bottom:6px;
 }
 
 .sub{
-font-size:13px;
-opacity:.55;
-margin-top:6px;
+text-align:center;
+font-size:12px;
+letter-spacing:2px;
+color:var(--muted);
+text-transform:uppercase;
 margin-bottom:20px;
+}
+
+.divider{
+width:70px;
+height:1px;
+background:var(--gold);
+margin:14px auto 24px;
+opacity:.6;
 }
 
 /* SWITCH */
 
 .switch{
 display:flex;
+justify-content:center;
 gap:10px;
 margin-bottom:20px;
-align-items:center;
 }
 
 .btn{
-padding:10px 16px;
-border-radius:12px;
-background:#151c18;
-border:1px solid rgba(255,255,255,.06);
-cursor:pointer;
-font-size:13px;
-transition:.2s;
-}
-
-.btn:hover{
-transform:translateY(-1px);
-}
-
-.btn.active{
-background:var(--gold);
-color:#111;
-font-weight:600;
-}
-
-/* CARD */
-
-.card{
-background:linear-gradient(145deg,var(--card),var(--card2));
-border-radius:22px;
-padding:24px;
-border:1px solid rgba(255,255,255,.05);
-margin-bottom:18px;
-box-shadow:0 30px 80px rgba(0,0,0,.7);
-animation:fadeIn .5s ease;
-}
-
-/* METRICS */
-
-.row{
-display:flex;
-gap:16px;
-flex-wrap:wrap;
-}
-
-.metric{
-flex:1;
-min-width:140px;
-background:rgba(255,255,255,.02);
-padding:16px;
+padding:10px 18px;
 border-radius:14px;
-text-align:center;
-border:1px solid rgba(255,255,255,.04);
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.12);
+font-size:13px;
+cursor:pointer;
+transition:.25s;
 }
 
-.metric h2{
-margin:0;
-font-size:30px;
-color:var(--gold);
-}
-
-.metric small{
-opacity:.5;
-font-size:11px;
-letter-spacing:.6px;
-text-transform:uppercase;
+.btn.active,
+.btn:hover{
+background:var(--terracotta);
+color:#111;
 }
 
 /* DONUT */
 
 .chart{
 display:flex;
-justify-content:center;
-margin:20px 0;
+flex-direction:column;
+align-items:center;
+margin-bottom:20px;
 }
 
 .donut{
-width:190px;
-height:190px;
+width:170px;
+height:170px;
 border-radius:50%;
-position:relative;
+margin-bottom:14px;
 transition:1s ease;
 }
 
-.donut::after{
-content:"";
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-width:120px;
-height:120px;
-background:var(--card2);
-border-radius:50%;
-}
-
-.donut-center{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-text-align:center;
-}
-
-.donut-center h2{
-margin:0;
-font-size:28px;
+.score{
+font-family:"Playfair Display",serif;
+font-size:36px;
 color:var(--gold);
 }
 
-.donut-center span{
-font-size:11px;
-opacity:.5;
+/* METRICS */
+
+.metrics{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:10px;
 }
 
-/* BARS */
+.metric{
+padding:12px;
+border-radius:12px;
+border:1px solid var(--line);
+background:rgba(255,255,255,.03);
+font-size:13px;
+display:flex;
+justify-content:space-between;
+}
+
+.metric strong{
+color:var(--gold);
+}
+
+/* DISTRIBUCION */
+
+.section{
+margin-top:24px;
+}
+
+.section h3{
+font-family:"Playfair Display",serif;
+margin-bottom:12px;
+}
 
 .bar{
-height:10px;
-background:#161d19;
-border-radius:20px;
+height:8px;
+background:#1a211d;
+border-radius:10px;
 overflow:hidden;
-margin-top:6px;
+margin-top:4px;
 }
 
 .fill{
 height:100%;
-background:linear-gradient(90deg,var(--accent),var(--gold));
-border-radius:20px;
-transition:1s ease;
+background:linear-gradient(90deg,var(--terracotta),var(--gold));
 }
 
 /* COMMENTS */
 
 .comment{
-border-top:1px solid rgba(255,255,255,.04);
-padding-top:12px;
-margin-top:12px;
+border-top:1px solid var(--line);
+padding-top:10px;
+margin-top:10px;
 font-size:13px;
-line-height:1.5;
 opacity:.85;
 }
 
 .comment strong{
 color:var(--gold);
-}
-
-/* LOADING */
-
-.loading{
-opacity:.4;
-text-align:center;
-padding:40px;
 }
 
 </style>
@@ -216,10 +194,12 @@ padding:40px;
 
 <body>
 
-<div class="container">
+<div class="wrapper">
 
-<h1>Feedback Insights</h1>
+<div class="title">Feedback Insights</div>
 <div id="subInfo" class="sub"></div>
+
+<div class="divider"></div>
 
 <div class="switch">
 <button class="btn active" onclick="setMode('ALL',this)">Overall</button>
@@ -227,7 +207,7 @@ padding:40px;
 <select id="funcionSelect" onchange="changeFuncion(this.value)" style="display:none"></select>
 </div>
 
-<div id="content" class="loading">Cargando insights...</div>
+<div id="content">Cargando...</div>
 
 </div>
 
@@ -269,7 +249,6 @@ select.appendChild(opt);
 });
 
 select.style.display = "block";
-
 }
 
 function changeFuncion(f){
@@ -279,8 +258,7 @@ load();
 
 async function load(){
 
-document.getElementById("content").innerHTML =
-"<div class='loading'>Cargando insights...</div>";
+document.getElementById("content").innerHTML = "Cargando...";
 
 const res = await fetch(BACKEND_URL,{
 method:"POST",
@@ -294,18 +272,17 @@ secret:SECRET
 const data = await res.json();
 
 render(data);
-
 }
 
 function render(d){
 
 if(!d.ok){
-document.getElementById("content").innerHTML = "Error backend";
+document.getElementById("content").innerHTML = "Error";
 return;
 }
 
 if(d.empty){
-document.getElementById("content").innerHTML = "Sin data aún";
+document.getElementById("content").innerHTML = "Sin data";
 return;
 }
 
@@ -335,54 +312,38 @@ const angle = (v/total)*360;
 const start = acc;
 acc += angle;
 return `${colors[i]} ${start}deg ${acc}deg`;
-}).join(",");
-
-/* HTML */
+}).join("");
 
 document.getElementById("content").innerHTML = `
-
-<div class="card">
 
 <div class="chart">
 
 <div class="donut" id="donut"></div>
 
-<div class="donut-center">
-<h2>${avg.general.toFixed(1)}</h2>
-<span>Score</span>
-</div>
+<div class="score">${avg.general.toFixed(1)}</div>
 
 </div>
 
-</div>
+<div class="metrics">
 
-<div class="card">
-
-<div class="row">
-
-<div class="metric"><h2>${avg.comida.toFixed(1)}</h2><small>Comida</small></div>
-<div class="metric"><h2>${avg.servicio.toFixed(1)}</h2><small>Servicio</small></div>
-<div class="metric"><h2>${avg.tiempo.toFixed(1)}</h2><small>Tiempo</small></div>
-<div class="metric"><h2>${avg.ambiente.toFixed(1)}</h2><small>Ambiente</small></div>
+<div class="metric">Comida <strong>${avg.comida.toFixed(1)}</strong></div>
+<div class="metric">Servicio <strong>${avg.servicio.toFixed(1)}</strong></div>
+<div class="metric">Tiempo <strong>${avg.tiempo.toFixed(1)}</strong></div>
+<div class="metric">Ambiente <strong>${avg.ambiente.toFixed(1)}</strong></div>
 
 </div>
 
-</div>
-
-<div class="card">
+<div class="section">
 
 <h3>Distribución</h3>
 
 ${dist.map((v,i)=>{
 
-const percent = (v / total) * 100;
+const percent = (v/total)*100;
 
 return `
-<div style="margin-bottom:10px">
-<div style="display:flex;justify-content:space-between;font-size:13px">
-<span>${i+1}★</span>
-<span>${v}</span>
-</div>
+<div>
+${i+1}★ (${v})
 <div class="bar">
 <div class="fill" style="width:${percent}%"></div>
 </div>
@@ -393,7 +354,7 @@ return `
 
 </div>
 
-<div class="card">
+<div class="section">
 
 <h3>Comentarios</h3>
 
@@ -406,12 +367,10 @@ ${d.comentarios.map(c=>`
 </div>
 `;
 
-/* ANIMAR DONUT */
-
 setTimeout(()=>{
 document.getElementById("donut").style.background =
 `conic-gradient(${gradient})`;
-},200);
+},100);
 
 }
 
