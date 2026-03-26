@@ -9,82 +9,120 @@
 <style>
 
 body{
-background:#0b1210;
+background:radial-gradient(circle at top,#0f1814,#0b1210);
 color:#f4f1ea;
 font-family:Inter;
 margin:0;
-padding:20px;
+padding:24px;
 }
 
 .container{
-max-width:900px;
+max-width:950px;
 margin:auto;
 }
 
-.card{
-background:#111916;
-border-radius:20px;
-padding:20px;
-border:1px solid rgba(255,255,255,.06);
-margin-bottom:16px;
+h1{
+font-weight:500;
+letter-spacing:.5px;
+margin-bottom:20px;
 }
+
+/* CARDS */
+
+.card{
+background:linear-gradient(145deg,#121a16,#0e1511);
+border-radius:20px;
+padding:24px;
+border:1px solid rgba(255,255,255,.06);
+margin-bottom:18px;
+box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+
+/* METRICS */
 
 .row{
 display:flex;
-gap:12px;
+gap:16px;
 flex-wrap:wrap;
 }
 
 .metric{
 flex:1;
-min-width:120px;
+min-width:140px;
+background:rgba(255,255,255,.03);
+padding:16px;
+border-radius:14px;
+text-align:center;
+border:1px solid rgba(255,255,255,.05);
 }
 
 .metric h2{
 margin:0;
-color:#bfa15a;
+font-size:28px;
+color:#d4b06a;
+font-weight:600;
 }
+
+.metric small{
+opacity:.6;
+font-size:12px;
+letter-spacing:.5px;
+}
+
+/* SWITCH */
 
 .switch{
 display:flex;
-gap:8px;
-margin-bottom:16px;
+gap:10px;
+margin-bottom:18px;
+align-items:center;
 }
 
 .btn{
-padding:10px 14px;
-border-radius:10px;
+padding:10px 16px;
+border-radius:12px;
 background:#1a211d;
 border:1px solid rgba(255,255,255,.08);
 cursor:pointer;
+font-size:13px;
 }
 
 .btn.active{
-background:#bfa15a;
+background:#d4b06a;
 color:#111;
+font-weight:600;
 }
 
+/* BARS */
+
 .bar{
-height:10px;
+height:12px;
 background:#1a211d;
-border-radius:10px;
+border-radius:20px;
 overflow:hidden;
 margin-top:6px;
 }
 
 .fill{
 height:100%;
-background:#c26a4a;
+background:linear-gradient(90deg,#c26a4a,#d4b06a);
+border-radius:20px;
 }
+
+/* COMMENTS */
 
 .comment{
-border-top:1px solid rgba(255,255,255,.06);
-padding-top:10px;
-margin-top:10px;
+border-top:1px solid rgba(255,255,255,.05);
+padding-top:12px;
+margin-top:12px;
 font-size:13px;
-opacity:.8;
+line-height:1.5;
+opacity:.85;
 }
 
+.comment strong{
+color:#d4b06a;
+}
 </style>
 
 </head>
@@ -182,25 +220,52 @@ const dist = d.dist;
 document.getElementById("content").innerHTML = `
 
 <div class="card">
+
 <div class="row">
-<div class="metric"><h2>${avg.general.toFixed(1)}</h2><small>General</small></div>
-<div class="metric"><h2>${avg.comida.toFixed(1)}</h2><small>Comida</small></div>
-<div class="metric"><h2>${avg.servicio.toFixed(1)}</h2><small>Servicio</small></div>
-<div class="metric"><h2>${avg.tiempo.toFixed(1)}</h2><small>Tiempo</small></div>
-<div class="metric"><h2>${avg.ambiente.toFixed(1)}</h2><small>Ambiente</small></div>
+
+<div class="metric">
+<h2>${avg.general.toFixed(1)}</h2>
+<small>Experiencia General</small>
 </div>
+
+<div class="metric">
+<h2>${avg.comida.toFixed(1)}</h2>
+<small>Comida</small>
+</div>
+
+<div class="metric">
+<h2>${avg.servicio.toFixed(1)}</h2>
+<small>Servicio</small>
+</div>
+
+<div class="metric">
+<h2>${avg.tiempo.toFixed(1)}</h2>
+<small>Tiempo</small>
+</div>
+
+<div class="metric">
+<h2>${avg.ambiente.toFixed(1)}</h2>
+<small>Ambiente</small>
+</div>
+
+</div>
+
 </div>
 
 <div class="card">
-<h3>Distribución</h3>
+
+<h3 style="margin-bottom:12px">Distribución de experiencia</h3>
 
 ${dist.map((v,i)=>{
 
 const percent = (v / d.total) * 100;
 
 return `
-<div>
-${i+1}★ (${v})
+<div style="margin-bottom:10px">
+<div style="display:flex;justify-content:space-between;font-size:13px">
+<span>${i+1}★</span>
+<span>${v}</span>
+</div>
 <div class="bar">
 <div class="fill" style="width:${percent}%"></div>
 </div>
@@ -212,16 +277,18 @@ ${i+1}★ (${v})
 </div>
 
 <div class="card">
-<h3>Comentarios</h3>
 
-${d.comentarios.map(c=>`
+<h3>Comentarios recientes</h3>
+
+${d.comentarios.length === 0 ? 
+"<div style='opacity:.5'>Sin comentarios aún</div>" :
+d.comentarios.map(c=>`
 <div class="comment">
-⭐ ${c.rating} — ${c.texto}
+<strong>${c.rating}★</strong> — ${c.texto}
 </div>
 `).join("")}
 
 </div>
-
 `;
 
 }
