@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ALORA · Feedback Insights</title>
+
+<style>
+
+body{
+background:#0b1210;
+color:#f4f1ea;
+font-family:Inter;
+margin:0;
+padding:20px;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+}
+
+.card{
+background:#111916;
+border-radius:20px;
+padding:20px;
+border:1px solid rgba(255,255,255,.06);
+margin-bottom:16px;
+}
+
+.row{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.metric{
+flex:1;
+min-width:120px;
+}
+
+.metric h2{
+margin:0;
+color:#bfa15a;
+}
+
+.switch{
+display:flex;
+gap:8px;
+margin-bottom:16px;
+}
+
+.btn{
+padding:10px 14px;
+border-radius:10px;
+background:#1a211d;
+border:1px solid rgba(255,255,255,.08);
+cursor:pointer;
+}
+
+.btn.active{
+background:#bfa15a;
+color:#111;
+}
+
+.bar{
+height:10px;
+background:#1a211d;
+border-radius:10px;
+overflow:hidden;
+margin-top:6px;
+}
+
+.fill{
+height:100%;
+background:#c26a4a;
+}
+
+.comment{
+border-top:1px solid rgba(255,255,255,.06);
+padding-top:10px;
+margin-top:10px;
+font-size:13px;
+opacity:.8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Feedback Insights</h1>
+
+<div class="switch">
+<button class="btn active" onclick="setMode('ALL',this)">Overall</button>
+<button class="btn" onclick="loadFunciones()">Por función</button>
+<select id="funcionSelect" onchange="changeFuncion(this.value)" style="display:none"></select>
+</div>
+
+<div id="content"></div>
+
+</div>
+
+<script>
+
+//const BACKEND_URL = "TU_URL";
+//const SECRET = "demo123";
+
+let CURRENT = "ALL";
+
+function setMode(mode,btn){
+CURRENT = mode;
+
+document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+
+document.getElementById("funcionSelect").style.display = "none";
+
+load();
+}
+
+async function loadFunciones(){
+
+const res = await fetch(BACKEND_URL,{
+method:"POST",
+body:JSON.stringify({action:"funciones",secret:SECRET})
+});
+
+const data = await res.json();
+
+const select = document.getElementById("funcionSelect");
+select.innerHTML = "";
+
+data.funciones.forEach(f=>{
+const opt = document.createElement("option");
+opt.value = f;
+opt.textContent = f;
+select.appendChild(opt);
+});
+
+select.style.display = "block";
+
+}
+
+function changeFuncion(f){
+CURRENT = f;
+load();
+}
+
+async function load(){
+
+const res = await fetch(BACKEND_URL,{
+method:"POST",
+body:JSON.stringify({
+action:"feedback_insights",
+funcion:CURRENT,
+secret:SECRET
+})
+});
+
+const data = await res.json();
+
+render(data);
+
+}
+
+function render(d){
+
+if(d.empty){
+document.getElementById("content").innerHTML = "Sin data";
+return;
+}
+
+const avg = d.avg;
+
+const dist = d.dist;
+
+document.getElementById("content").innerHTML = `
+
+<div class="card">
+<div class="row">
+<div class="metric"><h2>${avg.general.toFixed(1)}</h2><small>General</small></div>
+<div class="metric"><h2>${avg.comida.toFixed(1)}</h2><small>Comida</small></div>
+<div class="metric"><h2>${avg.servicio.toFixed(1)}</h2><small>Servicio</small></div>
+<div class="metric"><h2>${avg.tiempo.toFixed(1)}</h2><small>Tiempo</small></div>
+<div class="metric"><h2>${avg.ambiente.toFixed(1)}</h2><small>Ambiente</small></div>
+</div>
+</div>
+
+<div class="card">
+<h3>Distribución</h3>
+
+${dist.map((v,i)=>{
+
+const percent = (v / d.total) * 100;
+
+return `
+<div>
+${i+1}★ (${v})
+<div class="bar">
+<div class="fill" style="width:${percent}%"></div>
+</div>
+</div>
+`;
+
+}).reverse().join("")}
+
+</div>
+
+<div class="card">
+<h3>Comentarios</h3>
+
+${d.comentarios.map(c=>`
+<div class="comment">
+⭐ ${c.rating} — ${c.texto}
+</div>
+`).join("")}
+
+</div>
+
+`;
+
+}
+
+load();
+
+</script>
+
+</body>
+</html>
