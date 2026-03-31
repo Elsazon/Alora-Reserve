@@ -2891,7 +2891,23 @@ if(e.target===mapModal){
 mapModal.style.display="none";
 }
 });
+/* ===== AUTO SCROLL HINT ===== */
 
+setTimeout(()=>{
+
+const el = document.querySelector(".functionCarousel");
+
+if(!el) return;
+
+/* pequeño empujón */
+el.scrollLeft = 40;
+
+/* vuelve */
+setTimeout(()=>{
+el.scrollLeft = 0;
+},600);
+
+},800);
 });
   </script>
   
