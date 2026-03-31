@@ -244,6 +244,7 @@ const preguntas = [
 ];
 
 const ratings = {};
+  let submitting = false;
 
 function render(){
 
@@ -280,6 +281,15 @@ s.classList.toggle("active", i < val);
 
 async function submitFeedback(){
 
+// 🔒 BLOQUEO GLOBAL
+if(submitting) return;
+submitting = true;
+
+// 🔒 BLOQUEAR BOTÓN
+const btn = document.querySelector("button");
+btn.disabled = true;
+btn.textContent = "Enviando...";
+
 try{
 
 const res = await fetch(BACKEND_URL,{
@@ -301,15 +311,27 @@ const data = await res.json();
 
 if(!data.ok){
 alert("Error: " + data.error);
+
+// 🔓 desbloquear si falla
+submitting = false;
+btn.disabled = false;
+btn.textContent = "Enviar experiencia";
+
 return;
 }
 
+// ✅ éxito → no se desbloquea (ya no importa)
 document.getElementById("form").style.display="none";
 document.getElementById("done").style.display="block";
 
 }catch(err){
 
 alert("Network error");
+
+// 🔓 desbloquear si falla
+submitting = false;
+btn.disabled = false;
+btn.textContent = "Enviar experiencia";
 
 }
 
