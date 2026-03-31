@@ -1798,7 +1798,7 @@ margin-bottom:12px;
 <div class="descorcheText">
 <div class="descorcheTitle">Descorche de vino</div>
 <div class="descorcheSubtitle">Trae tu propia botella a la mesa</div>
-<div class="descorchePrice">+$12 por mesa</div>
+<div class="descorchePrice">+$12 por botella</div>
 </div>
 
 <input type="checkbox" id="descorche">
@@ -2151,8 +2151,13 @@ function fillSelect(selectEl, options){
 
   options.forEach(v=>{
     const o = document.createElement("option");
+
     o.value = v;
-    o.textContent = v;
+
+    // 👇 AQUI AÑADIMOS FECHA
+    const fecha = FUNCION_FECHAS[v] || "";
+    o.textContent = fecha ? `${v} · ${fecha}` : v;
+
     selectEl.appendChild(o);
   });
 
