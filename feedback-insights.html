@@ -38,14 +38,12 @@ min-height:100vh;
 }
 
 .wrapper{
-width:650px;
+width:680px;
 max-width:92%;
-
 background:rgba(255,255,255,.05);
 border:1px solid var(--line);
 border-radius:28px;
 padding:40px;
-
 box-shadow:0 40px 120px rgba(0,0,0,.7);
 backdrop-filter:blur(8px);
 }
@@ -54,7 +52,7 @@ backdrop-filter:blur(8px);
 
 .title{
 font-family:"Playfair Display",serif;
-font-size:28px;
+font-size:30px;
 text-align:center;
 }
 
@@ -124,6 +122,7 @@ border-radius:12px;
 display:none;
 overflow:hidden;
 z-index:10;
+min-width:180px;
 }
 
 .dropdownItem{
@@ -141,7 +140,7 @@ background:rgba(255,255,255,.05);
 
 .chart{
 text-align:center;
-margin-bottom:20px;
+margin-bottom:10px;
 }
 
 .donut{
@@ -154,8 +153,27 @@ transition:1s;
 
 .score{
 font-family:"Playfair Display",serif;
-font-size:36px;
+font-size:38px;
 color:var(--gold);
+}
+
+.scoreLabel{
+font-size:12px;
+opacity:.6;
+margin-top:4px;
+}
+
+/* INSIGHT */
+
+.insight{
+margin-top:14px;
+padding:14px;
+border-radius:14px;
+background:rgba(255,255,255,.03);
+border:1px solid var(--line);
+font-size:13px;
+line-height:1.6;
+text-align:center;
 }
 
 /* METRICS */
@@ -164,7 +182,7 @@ color:var(--gold);
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:10px;
-margin-top:10px;
+margin-top:14px;
 }
 
 .metric{
@@ -179,6 +197,15 @@ font-size:13px;
 
 .metric strong{
 color:var(--gold);
+}
+
+/* TOP ISSUE */
+
+.topIssue{
+margin-top:10px;
+text-align:center;
+font-size:13px;
+color:var(--terracotta);
 }
 
 /* DISTRIBUCION */
@@ -214,6 +241,12 @@ opacity:.85;
 color:var(--gold);
 }
 
+.empty{
+text-align:center;
+opacity:.6;
+padding:40px;
+}
+
 </style>
 
 </head>
@@ -234,7 +267,6 @@ color:var(--gold);
 <div class="dropdownBtn" onclick="toggleDropdown()">Por función</div>
 <div id="menu" class="dropdownMenu"></div>
 </div>
-
 </div>
 
 <div id="content">Cargando...</div>
@@ -311,14 +343,18 @@ render(data);
 function render(d){
 
 if(!d.ok || d.empty){
-document.getElementById("content").innerHTML="Sin data";
+document.getElementById("content").innerHTML=`
+<div class="empty">
+No hay feedback disponible aún para esta selección.
+</div>
+`;
 return;
 }
 
 const total = d.total || 1;
 
 document.getElementById("subInfo").innerHTML =
-`${d.total} respuestas · ${CURRENT==="ALL"?"General":CURRENT}`;
+`${d.total} evaluaciones registradas · ${CURRENT==="ALL"?"Vista general":CURRENT}`;
 
 const avg=d.avg;
 const dist=d.dist;
@@ -326,7 +362,6 @@ const dist=d.dist;
 /* DONUT */
 
 let acc=0;
-
 const colors=["#3a1f1a","#6a3a2a","#a65a3a","#c89b5a","#bfa15a"];
 
 let gradient=dist.map((v,i)=>{
@@ -336,6 +371,41 @@ acc+=angle;
 return `${colors[i]} ${start}deg ${acc}deg`;
 }).join(",");
 
+/* COLOR SCORE */
+
+const scoreColor =
+avg.general >= 4.5 ? "#bfa15a" :
+avg.general >= 4 ? "#c89b5a" :
+avg.general >= 3 ? "#a65a3a" :
+"#6a3a2a";
+
+/* INSIGHT */
+
+let insight = "";
+
+if(avg.general >= 4.5){
+insight = "Excelente experiencia. Mantener estándar actual.";
+}else if(avg.servicio < 4){
+insight = "El servicio está impactando la experiencia.";
+}else if(avg.tiempo < 4){
+insight = "El tiempo de servicio necesita optimización.";
+}else if(avg.comida < 4){
+insight = "La comida no está cumpliendo expectativas.";
+}else{
+insight = "Experiencia sólida con oportunidades de mejora.";
+}
+
+/* TOP ISSUE */
+
+const areas = [
+{name:"Comida", val:avg.comida},
+{name:"Servicio", val:avg.servicio},
+{name:"Tiempo", val:avg.tiempo},
+{name:"Ambiente", val:avg.ambiente}
+];
+
+areas.sort((a,b)=>a.val-b.val);
+
 /* HTML */
 
 document.getElementById("content").innerHTML=`
@@ -343,7 +413,18 @@ document.getElementById("content").innerHTML=`
 <div class="chart">
 
 <div class="donut" id="donut"></div>
-<div class="score">${avg.general.toFixed(1)}</div>
+
+<div class="score" style="color:${scoreColor}">
+${avg.general.toFixed(1)}
+</div>
+
+<div class="scoreLabel">
+Experiencia general
+</div>
+
+<div class="insight">
+${insight}
+</div>
 
 </div>
 
@@ -354,6 +435,10 @@ document.getElementById("content").innerHTML=`
 <div class="metric">Tiempo <strong>${avg.tiempo.toFixed(1)}</strong></div>
 <div class="metric">Ambiente <strong>${avg.ambiente.toFixed(1)}</strong></div>
 
+</div>
+
+<div class="topIssue">
+Área a mejorar: ${areas[0].name}
 </div>
 
 <div class="section">
@@ -381,7 +466,9 @@ ${i+1}★ (${v})
 
 <h3>Comentarios</h3>
 
-${d.comentarios.map(c=>`
+${d.comentarios.length === 0
+? `<div class="empty">Sin comentarios aún</div>`
+: d.comentarios.map(c=>`
 <div class="comment">
 <strong>${c.rating}★</strong> — ${c.texto}
 </div>
