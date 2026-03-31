@@ -1392,6 +1392,40 @@ position:relative;
 z-index:1;
 
 }
+    .carouselArrow{
+position:absolute;
+right:10px;
+top:50%;
+transform:translateY(-50%);
+font-size:20px;
+
+color:rgba(255,255,255,.7);
+
+background:rgba(0,0,0,.4);
+border:1px solid rgba(255,255,255,.1);
+
+width:36px;
+height:36px;
+border-radius:50%;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+pointer-events:none;
+
+animation:arrowMove 1.5s infinite;
+}
+
+/* animación */
+@keyframes arrowMove{
+0%{transform:translateY(-50%) translateX(0); opacity:.5;}
+50%{transform:translateY(-50%) translateX(6px); opacity:1;}
+100%{transform:translateY(-50%) translateX(0); opacity:.5;}
+}
+    .functionCarousel{
+position:relative;
+}
   </style>
 </head>
 
@@ -1475,7 +1509,7 @@ Reservar experiencia</a>
       <div class="sectionCard reveal">
         <!-- FUNCTION CAROUSEL -->
 <div class="functionCarousel">
-
+<div class="carouselArrow">→</div>
   <div class="functionTrack" id="functionTrack">
 
     <!-- se llenará con JS -->
@@ -2908,6 +2942,18 @@ el.scrollLeft = 0;
 },600);
 
 },800);
+
+/* ===== HIDE ARROW ON SCROLL ===== */
+
+const arrow = document.querySelector(".carouselArrow");
+const carousel = document.querySelector(".functionCarousel");
+
+if(carousel && arrow){
+  carousel.addEventListener("scroll", ()=>{
+    arrow.style.opacity = "0";
+  });
+}
+     
 });
   </script>
   
