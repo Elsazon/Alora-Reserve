@@ -1493,9 +1493,15 @@ Reservar experiencia</a>
           </div>
 
           <div class="menuCol">
-            <h3>Platos principales</h3>
-            <div id="menuPrincipales"></div>
-          </div>
+  <h3>Platos principales</h3>
+  <div id="menuPrincipales"></div>
+
+  <!-- 🔥 NUEVA SECCIÓN -->
+  <div style="margin-top:14px;">
+    <h3 style="font-size:11px; opacity:.7;">Proteínas disponibles</h3>
+    <div id="menuProteinas"></div>
+  </div>
+</div>
 
           <div class="menuCol">
             <h3>Postres</h3>
@@ -2081,6 +2087,25 @@ pillList("menuPrincipales", CURRENT_MENU.principales.map(p=>p.nombre));
 pillList("menuPostres", CURRENT_MENU.postres.map(p=>p.nombre));
 pillList("menuNinos", CURRENT_MENU.ninos.map(p=>p.nombre));
 
+// 🔥 EXTRAER PROTEÍNAS ÚNICAS
+const proteinasSet = new Set();
+
+CURRENT_MENU.principales.forEach(p=>{
+  if(p.tieneProteina && Array.isArray(p.proteinas)){
+    p.proteinas.forEach(pr=>{
+      if(pr && pr.trim() !== ""){
+        proteinasSet.add(pr);
+      }
+    });
+  }
+});
+
+// convertir a array
+const proteinas = Array.from(proteinasSet);
+
+// renderizar como pills
+pillList("menuProteinas", proteinas);
+      
 }
     function renderHorasBootstrap(funcion, horaActual = null){
 
