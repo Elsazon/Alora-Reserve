@@ -1,494 +1,1021 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>ALORA · Insights</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="./config.js"></script>
 
 <style>
-
+/* ─── TOKENS ─────────────────────────────────────────────── */
 :root{
---bg0:#0e1511;
---bg1:#121a16;
---ink:#f4f1ea;
---muted:rgba(244,241,234,.65);
---terracotta:#c26a4a;
---gold:#bfa15a;
---line:rgba(255,255,255,.08);
+  --bg:       #0b110e;
+  --surface:  #111916;
+  --card:     rgba(255,255,255,.045);
+  --line:     rgba(255,255,255,.07);
+  --ink:      #f2ede4;
+  --muted:    rgba(242,237,228,.55);
+  --gold:     #c9a84c;
+  --terra:    #c26a4a;
+  --green:    #4caf7d;
+  --radius:   20px;
+  --shadow:   0 32px 80px rgba(0,0,0,.65);
 }
+
+/* ─── RESET ──────────────────────────────────────────────── */
+*{ box-sizing:border-box; margin:0; padding:0; }
 
 body{
-margin:0;
-font-family:Inter;
-color:var(--ink);
-
-background:
-radial-gradient(900px 600px at 15% 10%, rgba(194,106,74,.10), transparent 60%),
-radial-gradient(1000px 700px at 85% 20%, rgba(79,81,56,.15), transparent 60%),
-linear-gradient(180deg,var(--bg0),var(--bg1));
-
-display:flex;
-justify-content:center;
-align-items:center;
-min-height:100vh;
+  font-family:"DM Sans", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 32px 16px 60px;
 }
 
-.wrapper{
-width:680px;
-max-width:92%;
-background:rgba(255,255,255,.05);
-border:1px solid var(--line);
-border-radius:28px;
-padding:40px;
-box-shadow:0 40px 120px rgba(0,0,0,.7);
-backdrop-filter:blur(8px);
+/* ─── WRAPPER ────────────────────────────────────────────── */
+.wrap{
+  max-width: 780px;
+  margin: 0 auto;
 }
 
-/* HEADER */
-
-.title{
-font-family:"Playfair Display",serif;
-font-size:30px;
-text-align:center;
+/* ─── HEADER ─────────────────────────────────────────────── */
+.header{
+  text-align: center;
+  margin-bottom: 32px;
 }
 
-.sub{
-text-align:center;
-font-size:12px;
-letter-spacing:2px;
-color:var(--muted);
-text-transform:uppercase;
-margin-top:6px;
+.header h1{
+  font-family: "Playfair Display", serif;
+  font-size: clamp(26px, 4vw, 36px);
+  font-weight: 700;
+  letter-spacing: .3px;
+  margin-bottom: 6px;
 }
 
-.divider{
-width:70px;
-height:1px;
-background:var(--gold);
-margin:18px auto;
-opacity:.6;
+.header p{
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
 }
 
-/* SWITCH */
-
-.switch{
-display:flex;
-justify-content:center;
-gap:10px;
-margin-bottom:20px;
+.goldLine{
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  margin: 14px auto;
+  opacity: .5;
 }
 
-.btn{
-padding:10px 18px;
-border-radius:14px;
-background:rgba(255,255,255,.05);
-border:1px solid rgba(255,255,255,.12);
-cursor:pointer;
-font-size:13px;
-transition:.25s;
+/* ─── SHARED FILTER ──────────────────────────────────────── */
+.filterBar{
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
 }
 
-.btn.active,
-.btn:hover{
-background:var(--terracotta);
-color:#111;
+.fBtn{
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: .2s ease;
+  white-space: nowrap;
 }
 
-/* DROPDOWN */
+.fBtn:hover{ border-color: var(--terra); color: var(--ink); }
 
-.dropdown{
-position:relative;
+.fBtn.active{
+  background: var(--terra);
+  border-color: var(--terra);
+  color: #111;
+  font-weight: 600;
 }
 
-.dropdownBtn{
-padding:10px 18px;
-border-radius:14px;
-background:rgba(255,255,255,.05);
-border:1px solid rgba(255,255,255,.12);
-cursor:pointer;
+/* ─── COUNTERS STRIP ─────────────────────────────────────── */
+.countersStrip{
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 28px;
+  scrollbar-width: none;
+}
+.countersStrip::-webkit-scrollbar{ display:none; }
+
+.counterChip{
+  flex: 0 0 auto;
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 14px;
+  padding: 10px 14px;
+  text-align: center;
+  min-width: 110px;
 }
 
-.dropdownMenu{
-position:absolute;
-top:120%;
-left:0;
-background:#121a16;
-border:1px solid var(--line);
-border-radius:12px;
-display:none;
-overflow:hidden;
-z-index:10;
-min-width:180px;
+.counterChip.highlighted{
+  border-color: var(--gold);
+  background: rgba(201,168,76,.08);
 }
 
-.dropdownItem{
-padding:10px 14px;
-cursor:pointer;
-border-bottom:1px solid var(--line);
-font-size:13px;
+.counterChip .cLabel{
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 4px;
 }
 
-.dropdownItem:hover{
-background:rgba(255,255,255,.05);
+.counterChip .cNum{
+  font-family: "Playfair Display", serif;
+  font-size: 22px;
+  color: var(--gold);
+  font-weight: 700;
 }
 
-/* DONUT */
+.counterChip .cSub{
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
 
-.chart{
-text-align:center;
-margin-bottom:10px;
+/* ─── CAROUSEL SHELL ─────────────────────────────────────── */
+.carouselWrap{
+  position: relative;
+}
+
+/* NAV TABS */
+.carouselTabs{
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.cTab{
+  flex: 1;
+  padding: 12px 10px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: .2s ease;
+  border-right: 1px solid var(--line);
+}
+
+.cTab:last-child{ border-right: none; }
+
+.cTab:hover{ color: var(--ink); background: rgba(255,255,255,.03); }
+
+.cTab.active{
+  background: var(--terra);
+  color: #111;
+  font-weight: 600;
+}
+
+/* SLIDES */
+.slides{
+  position: relative;
+  overflow: hidden;
+}
+
+.slide{
+  display: none;
+  animation: fadeSlide .3s ease both;
+}
+
+.slide.active{ display: block; }
+
+@keyframes fadeSlide{
+  from{ opacity:0; transform:translateY(8px); }
+  to{   opacity:1; transform:translateY(0);   }
+}
+
+/* ─── SHARED CARD ────────────────────────────────────────── */
+.card{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+
+/* ─── SLIDE 1 — OVERVIEW ─────────────────────────────────── */
+.donutWrap{
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .donut{
-width:170px;
-height:170px;
-border-radius:50%;
-margin:10px auto;
-transition:1s;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin: 0 auto 14px;
+  transition: background 1s ease;
+  box-shadow: 0 0 40px rgba(201,168,76,.15);
 }
 
-.score{
-font-family:"Playfair Display",serif;
-font-size:38px;
-color:var(--gold);
+.bigScore{
+  font-family: "Playfair Display", serif;
+  font-size: 42px;
+  color: var(--gold);
 }
 
 .scoreLabel{
-font-size:12px;
-opacity:.6;
-margin-top:4px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 4px;
 }
 
-/* INSIGHT */
-
-.insight{
-margin-top:14px;
-padding:14px;
-border-radius:14px;
-background:rgba(255,255,255,.03);
-border:1px solid var(--line);
-font-size:13px;
-line-height:1.6;
-text-align:center;
+.insightBox{
+  margin-top: 14px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.6;
 }
 
-/* METRICS */
-
-.metrics{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:14px;
+.metricsGrid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
 }
 
-.metric{
-padding:12px;
-border-radius:12px;
-border:1px solid var(--line);
-background:rgba(255,255,255,.03);
-display:flex;
-justify-content:space-between;
-font-size:13px;
+.metricRow{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.025);
+  font-size: 13px;
 }
 
-.metric strong{
-color:var(--gold);
-}
-
-/* TOP ISSUE */
+.metricRow strong{ color: var(--gold); font-size: 15px; }
 
 .topIssue{
-margin-top:10px;
-text-align:center;
-font-size:13px;
-color:var(--terracotta);
+  margin-top: 12px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--terra);
+  letter-spacing: .5px;
 }
 
-/* DISTRIBUCION */
+/* Distribution bars */
+.distSection{ margin-top: 20px; }
 
-.section{
-margin-top:24px;
+.distSection h3{
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px;
 }
 
-.bar{
-height:8px;
-background:#1a211d;
-border-radius:10px;
-overflow:hidden;
-margin-top:4px;
+.barRow{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 12px;
 }
 
-.fill{
-height:100%;
-background:linear-gradient(90deg,var(--terracotta),var(--gold));
+.barLabel{ width: 24px; color: var(--muted); text-align: right; }
+
+.barTrack{
+  flex: 1;
+  height: 7px;
+  background: rgba(255,255,255,.07);
+  border-radius: 999px;
+  overflow: hidden;
 }
 
-/* COMMENTS */
-
-.comment{
-border-top:1px solid var(--line);
-padding-top:10px;
-margin-top:10px;
-font-size:13px;
-opacity:.85;
+.barFill{
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--terra), var(--gold));
+  transition: width .8s ease;
 }
 
-.comment strong{
-color:var(--gold);
+.barCount{ width: 28px; color: var(--muted); font-size: 11px; }
+
+/* ─── SLIDE 2 — COMMENTS ─────────────────────────────────── */
+.commentCount{
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
 }
 
-.empty{
-text-align:center;
-opacity:.6;
-padding:40px;
+.funcGroup{
+  margin-bottom: 28px;
 }
 
+.funcGroupHeader{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.funcBadge{
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  background: rgba(201,168,76,.08);
+  white-space: nowrap;
+}
+
+.funcGroupLine{
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.commentCard{
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.025);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  transition: border-color .2s;
+}
+
+.commentCard:hover{ border-color: rgba(255,255,255,.14); }
+
+.commentTop{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 10px;
+}
+
+.stars{ color: var(--gold); font-size: 13px; letter-spacing: 1px; }
+
+.commentText{
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.65;
+}
+
+.noComments{
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  padding: 40px 0;
+}
+
+/* ─── SLIDE 3 — RATINGS TABLE ────────────────────────────── */
+.tableGroup{
+  margin-bottom: 32px;
+}
+
+.tableGroupHeader{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.tableGroupTitle{
+  font-family: "Playfair Display", serif;
+  font-size: 17px;
+}
+
+.tableGroupCount{
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.ratingTable{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.ratingTable th{
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+
+.ratingTable td{
+  padding: 9px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  vertical-align: top;
+}
+
+.ratingTable tr:last-child td{ border-bottom: none; }
+
+.ratingTable tr:hover td{ background: rgba(255,255,255,.025); }
+
+.scoreCell{
+  font-weight: 600;
+  text-align: center;
+}
+
+.scoreCell.high{ color: var(--green); }
+.scoreCell.mid{  color: var(--gold);  }
+.scoreCell.low{  color: var(--terra); }
+
+.commentCell{
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  max-width: 200px;
+}
+
+/* Subtotal row */
+.subtotalRow td{
+  background: rgba(201,168,76,.06) !important;
+  border-top: 1px solid rgba(201,168,76,.2);
+  border-bottom: none !important;
+  font-weight: 600;
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: .5px;
+}
+
+/* ─── LOADING / EMPTY ────────────────────────────────────── */
+.loading{
+  text-align: center;
+  color: var(--muted);
+  padding: 60px 0;
+  font-size: 14px;
+}
+
+.loaderDot{
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  margin: 0 3px;
+  animation: bounce .9s infinite ease-in-out;
+}
+.loaderDot:nth-child(2){ animation-delay: .15s; }
+.loaderDot:nth-child(3){ animation-delay: .3s;  }
+
+@keyframes bounce{
+  0%,80%,100%{ transform:translateY(0);   opacity:.4; }
+  40%{         transform:translateY(-6px); opacity:1;  }
+}
+
+/* ─── SCROLLABLE AREAS ───────────────────────────────────── */
+.scrollArea{
+  max-height: 580px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.1) transparent;
+}
+
+.scrollArea::-webkit-scrollbar{ width: 4px; }
+.scrollArea::-webkit-scrollbar-thumb{ background: rgba(255,255,255,.1); border-radius: 4px; }
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width:520px){
+  .metricsGrid{ grid-template-columns: 1fr; }
+  .ratingTable th:nth-child(n+3):nth-child(-n+6),
+  .ratingTable td:nth-child(n+3):nth-child(-n+6){ display:none; }
+  .cTab{ font-size: 11px; padding: 10px 6px; }
+}
 </style>
 
 </head>
 
 <body>
+<div class="wrap">
 
-<div class="wrapper">
+  <!-- HEADER -->
 
-<div class="title">Feedback Insights</div>
-<div id="subInfo" class="sub"></div>
+  <div class="header">
+    <h1>Feedback Insights</h1>
+    <div class="goldLine"></div>
+    <p id="headerSub">Cargando datos…</p>
+  </div>
 
-<div class="divider"></div>
+  <!-- SHARED FILTER -->
 
-<div class="switch">
-<button class="btn active" onclick="setMode('ALL',this)">Overall</button>
+  <div class="filterBar" id="filterBar">
+    <button class="fBtn active" data-funcion="ALL" onclick="setFilter('ALL',this)">
+      Todas las funciones
+    </button>
+    <!-- función buttons injected by JS -->
+  </div>
 
-<div class="dropdown">
-<div class="dropdownBtn" onclick="toggleDropdown()">Por función</div>
-<div id="menu" class="dropdownMenu"></div>
+  <!-- COUNTERS STRIP -->
+
+  <div class="countersStrip" id="countersStrip">
+    <div class="loading">
+      <span class="loaderDot"></span>
+      <span class="loaderDot"></span>
+      <span class="loaderDot"></span>
+    </div>
+  </div>
+
+  <!-- CAROUSEL TABS -->
+
+  <div class="carouselTabs">
+    <button class="cTab active" onclick="setSlide(0,this)">📊 Resumen</button>
+    <button class="cTab"        onclick="setSlide(1,this)">💬 Comentarios</button>
+    <button class="cTab"        onclick="setSlide(2,this)">📋 Evaluaciones</button>
+  </div>
+
+  <!-- SLIDES -->
+
+  <div class="slides">
+
+```
+<!-- SLIDE 0 — OVERVIEW -->
+<div class="slide active" id="slide0">
+  <div id="overviewContent">
+    <div class="loading">
+      <span class="loaderDot"></span>
+      <span class="loaderDot"></span>
+      <span class="loaderDot"></span>
+    </div>
+  </div>
 </div>
+
+<!-- SLIDE 1 — COMMENTS -->
+<div class="slide" id="slide1">
+  <div class="card">
+    <div id="commentCount" class="commentCount"></div>
+    <div class="scrollArea" id="commentsContent">
+      <div class="loading">
+        <span class="loaderDot"></span>
+        <span class="loaderDot"></span>
+        <span class="loaderDot"></span>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div id="content">Cargando...</div>
-
+<!-- SLIDE 2 — RATINGS TABLE -->
+<div class="slide" id="slide2">
+  <div class="card">
+    <div class="scrollArea" id="tableContent">
+      <div class="loading">
+        <span class="loaderDot"></span>
+        <span class="loaderDot"></span>
+        <span class="loaderDot"></span>
+      </div>
+    </div>
+  </div>
 </div>
+```
+
+  </div><!-- /slides -->
+
+</div><!-- /wrap -->
 
 <script>
+// ─── STATE ────────────────────────────────────────────────
+let RAW_DATA      = null;   // full response from backend
+let CURRENT_FUNC  = "ALL";  // active filter
+let CURRENT_SLIDE = 0;
 
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycbw9wyNvl1Lx9msUYaRgJ48VbnUJWKYsh-AqfkJhZpxaVnK9UE7zCloYmawBxXgz0Yzv/exec";
-const SECRET = "demo123";
-
-let CURRENT = "ALL";
-
-/* DROPDOWN */
-
-function toggleDropdown(){
-const m = document.getElementById("menu");
-m.style.display = m.style.display==="block"?"none":"block";
+// ─── CAROUSEL ─────────────────────────────────────────────
+function setSlide(idx, btn){
+  CURRENT_SLIDE = idx;
+  document.querySelectorAll(".cTab").forEach((b,i)=>{
+    b.classList.toggle("active", i === idx);
+  });
+  document.querySelectorAll(".slide").forEach((s,i)=>{
+    s.classList.toggle("active", i === idx);
+  });
 }
 
-async function loadFunciones(){
-
-const res = await fetch(BACKEND_URL,{
-method:"POST",
-body:JSON.stringify({action:"funciones",secret:SECRET})
-});
-
-const data = await res.json();
-
-const menu = document.getElementById("menu");
-menu.innerHTML = "";
-
-data.funciones.forEach(f=>{
-const div = document.createElement("div");
-div.className="dropdownItem";
-div.textContent=f;
-div.onclick=()=>{
-CURRENT=f;
-menu.style.display="none";
-load();
-};
-menu.appendChild(div);
-});
+// ─── FILTER ───────────────────────────────────────────────
+function setFilter(funcion, btn){
+  CURRENT_FUNC = funcion;
+  document.querySelectorAll(".fBtn").forEach(b=>{
+    b.classList.toggle("active", b.dataset.funcion === funcion);
+  });
+  if(RAW_DATA) renderAll(RAW_DATA);
 }
 
-/* MODE */
-
-function setMode(mode,btn){
-CURRENT=mode;
-document.querySelectorAll(".btn").forEach(b=>b.classList.remove("active"));
-btn.classList.add("active");
-load();
-}
-
-/* LOAD */
-
+// ─── API ──────────────────────────────────────────────────
 async function load(){
+  try{
+    const res = await fetch(CONFIG.BACKEND_URL,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body: JSON.stringify({
+        action:  "feedback_insights",
+        funcion: "ALL",          // always fetch ALL — filter client-side
+        secret:  CONFIG.SECRET
+      })
+    });
+    const data = await res.json();
 
-const res = await fetch(BACKEND_URL,{
-method:"POST",
-body:JSON.stringify({
-action:"feedback_insights",
-funcion:CURRENT,
-secret:SECRET
-})
-});
+    if(!data.ok || data.empty){
+      showEmpty();
+      return;
+    }
 
-const data = await res.json();
-render(data);
+    RAW_DATA = data;
+    buildFilterButtons(data);
+    buildCounters(data);
+    renderAll(data);
+
+  }catch(e){
+    document.getElementById("overviewContent").innerHTML =
+      `<div class="loading" style="color:#c85b5b">Error cargando datos. Verifica la conexión.</div>`;
+  }
 }
 
-/* RENDER */
+// ─── BUILD FILTER BUTTONS ──────────────────────────────────
+function buildFilterButtons(data){
+  const bar = document.getElementById("filterBar");
 
-function render(d){
+  // Collect funciones from allRatings (preserves order)
+  const seen = new Set();
+  const funciones = [];
+  (data.allRatings || []).forEach(r=>{
+    if(!seen.has(r.funcion)){
+      seen.add(r.funcion);
+      funciones.push(r.funcion);
+    }
+  });
 
-if(!d.ok || d.empty){
-document.getElementById("content").innerHTML=`
-<div class="empty">
-No hay feedback disponible aún para esta selección.
-</div>
-`;
-return;
+  // Sort naturally
+  funciones.sort((a,b)=> a.localeCompare(b, undefined, {numeric:true}));
+
+  funciones.forEach(f=>{
+    const count = data.countByFuncion[f] || 0;
+    const btn = document.createElement("button");
+    btn.className = "fBtn";
+    btn.dataset.funcion = f;
+    btn.innerHTML = `${f} <span style="opacity:.6">(${count})</span>`;
+    btn.onclick = ()=> setFilter(f, btn);
+    bar.appendChild(btn);
+  });
 }
 
-const total = d.total || 1;
+// ─── BUILD COUNTERS ────────────────────────────────────────
+function buildCounters(data){
+  const strip = document.getElementById("countersStrip");
+  strip.innerHTML = "";
 
-document.getElementById("subInfo").innerHTML =
-`${d.total} evaluaciones registradas · ${CURRENT==="ALL"?"Vista general":CURRENT}`;
+  const counts = data.countByFuncion || {};
+  const total  = data.total || 0;
 
-const avg=d.avg;
-const dist=d.dist;
+  // Total chip
+  const totalChip = makeChip("Total", total, "evaluaciones", true);
+  strip.appendChild(totalChip);
 
-/* DONUT */
+  // Per-función chips (sorted)
+  const funcs = Object.keys(counts).sort((a,b)=>
+    a.localeCompare(b, undefined, {numeric:true})
+  );
 
-let acc=0;
-const colors=["#3a1f1a","#6a3a2a","#a65a3a","#c89b5a","#bfa15a"];
-
-let gradient=dist.map((v,i)=>{
-const angle=(v/total)*360;
-const start=acc;
-acc+=angle;
-return `${colors[i]} ${start}deg ${acc}deg`;
-}).join(",");
-
-/* COLOR SCORE */
-
-const scoreColor =
-avg.general >= 4.5 ? "#bfa15a" :
-avg.general >= 4 ? "#c89b5a" :
-avg.general >= 3 ? "#a65a3a" :
-"#6a3a2a";
-
-/* INSIGHT */
-
-let insight = "";
-
-if(avg.general >= 4.5){
-insight = "Excelente experiencia. Mantener estándar actual.";
-}else if(avg.servicio < 4){
-insight = "El servicio está impactando la experiencia.";
-}else if(avg.tiempo < 4){
-insight = "El tiempo de servicio necesita optimización.";
-}else if(avg.comida < 4){
-insight = "La comida no está cumpliendo expectativas.";
-}else{
-insight = "Experiencia sólida con oportunidades de mejora.";
+  funcs.forEach(f=>{
+    strip.appendChild(makeChip(f, counts[f], "evaluaciones", false));
+  });
 }
 
-/* TOP ISSUE */
-
-const areas = [
-{name:"Comida", val:avg.comida},
-{name:"Servicio", val:avg.servicio},
-{name:"Tiempo", val:avg.tiempo},
-{name:"Ambiente", val:avg.ambiente}
-];
-
-areas.sort((a,b)=>a.val-b.val);
-
-/* HTML */
-
-document.getElementById("content").innerHTML=`
-
-<div class="chart">
-
-<div class="donut" id="donut"></div>
-
-<div class="score" style="color:${scoreColor}">
-${avg.general.toFixed(1)}
-</div>
-
-<div class="scoreLabel">
-Experiencia general
-</div>
-
-<div class="insight">
-${insight}
-</div>
-
-</div>
-
-<div class="metrics">
-
-<div class="metric">Comida <strong>${avg.comida.toFixed(1)}</strong></div>
-<div class="metric">Servicio <strong>${avg.servicio.toFixed(1)}</strong></div>
-<div class="metric">Tiempo <strong>${avg.tiempo.toFixed(1)}</strong></div>
-<div class="metric">Ambiente <strong>${avg.ambiente.toFixed(1)}</strong></div>
-
-</div>
-
-<div class="topIssue">
-Área a mejorar: ${areas[0].name}
-</div>
-
-<div class="section">
-
-<h3>Distribución</h3>
-
-${dist.map((v,i)=>{
-
-const percent=(v/total)*100;
-
-return `
-<div>
-${i+1}★ (${v})
-<div class="bar">
-<div class="fill" style="width:${percent}%"></div>
-</div>
-</div>
-`;
-
-}).reverse().join("")}
-
-</div>
-
-<div class="section">
-
-<h3>Comentarios</h3>
-
-${d.comentarios.length === 0
-? `<div class="empty">Sin comentarios aún</div>`
-: d.comentarios.map(c=>`
-<div class="comment">
-<strong>${c.rating}★</strong> — ${c.texto}
-</div>
-`).join("")}
-
-</div>
-`;
-
-setTimeout(()=>{
-document.getElementById("donut").style.background=
-`conic-gradient(${gradient})`;
-},100);
-
+function makeChip(label, num, sub, highlight){
+  const chip = document.createElement("div");
+  chip.className = "counterChip" + (highlight ? " highlighted" : "");
+  chip.innerHTML = `
+    <div class="cLabel">${label}</div>
+    <div class="cNum">${num}</div>
+    <div class="cSub">${sub}</div>
+  `;
+  return chip;
 }
 
-/* INIT */
+// ─── FILTER HELPERS ───────────────────────────────────────
+function filteredRatings(data){
+  if(CURRENT_FUNC === "ALL") return data.allRatings || [];
+  return (data.allRatings || []).filter(r=> r.funcion === CURRENT_FUNC);
+}
 
+function filteredComments(data){
+  if(CURRENT_FUNC === "ALL") return data.comentarios || [];
+  return (data.comentarios || []).filter(c=> c.funcion === CURRENT_FUNC);
+}
+
+// ─── RENDER ALL SLIDES ────────────────────────────────────
+function renderAll(data){
+  const ratings  = filteredRatings(data);
+  const comments = filteredComments(data);
+  const total    = ratings.length;
+
+  // Header sub
+  document.getElementById("headerSub").textContent =
+    `${total} evaluaciones · ${CURRENT_FUNC === "ALL" ? "Vista general" : CURRENT_FUNC}`;
+
+  // Highlight active counter chip
+  document.querySelectorAll(".counterChip").forEach(c=>{
+    const label = c.querySelector(".cLabel").textContent;
+    c.classList.toggle(
+      "highlighted",
+      CURRENT_FUNC === "ALL" ? label === "Total" : label === CURRENT_FUNC
+    );
+  });
+
+  renderOverview(data, ratings, total);
+  renderComments(comments);
+  renderTable(data, ratings);
+}
+
+// ─── SLIDE 0 — OVERVIEW ───────────────────────────────────
+function renderOverview(data, ratings, total){
+  if(!total){
+    document.getElementById("overviewContent").innerHTML =
+      `<div class="noComments">Sin evaluaciones para esta selección</div>`;
+    return;
+  }
+
+  // Compute averages from filtered ratings
+  const sum = {comida:0,servicio:0,tiempo:0,ambiente:0,general:0};
+  const dist = [0,0,0,0,0];
+
+  ratings.forEach(r=>{
+    sum.comida   += r.comida;
+    sum.servicio += r.servicio;
+    sum.tiempo   += r.tiempo;
+    sum.ambiente += r.ambiente;
+    sum.general  += r.general;
+    if(r.general > 0) dist[r.general-1]++;
+  });
+
+  const avg = {
+    comida:   sum.comida/total,
+    servicio: sum.servicio/total,
+    tiempo:   sum.tiempo/total,
+    ambiente: sum.ambiente/total,
+    general:  sum.general/total
+  };
+
+  // Donut gradient
+  let acc = 0;
+  const colors = ["#3a1f1a","#6a3a2a","#a65a3a","#c89b5a","#c9a84c"];
+  const gradient = dist.map((v,i)=>{
+    const angle = (v/total)*360;
+    const s = acc; acc += angle;
+    return `${colors[i]} ${s}deg ${acc}deg`;
+  }).join(",");
+
+  // Insight
+  const areas = [
+    {name:"Comida",   val:avg.comida},
+    {name:"Servicio", val:avg.servicio},
+    {name:"Tiempo",   val:avg.tiempo},
+    {name:"Ambiente", val:avg.ambiente}
+  ].sort((a,b)=>a.val-b.val);
+
+  let insight = avg.general >= 4.5
+    ? "Excelente experiencia. Mantener estándar actual."
+    : avg.servicio < 4  ? "El servicio está impactando la experiencia."
+    : avg.tiempo   < 4  ? "El tiempo de servicio necesita optimización."
+    : avg.comida   < 4  ? "La comida no está cumpliendo expectativas."
+    : "Experiencia sólida con oportunidades de mejora.";
+
+  const scoreColor = avg.general>=4.5?"#c9a84c":avg.general>=4?"#c89b5a":avg.general>=3?"#a65a3a":"#6a3a2a";
+
+  document.getElementById("overviewContent").innerHTML = `
+    <div class="card">
+      <div class="donutWrap">
+        <div class="donut" id="donutEl"></div>
+        <div class="bigScore" style="color:${scoreColor}">${avg.general.toFixed(1)}</div>
+        <div class="scoreLabel">Experiencia general</div>
+        <div class="insightBox">${insight}</div>
+      </div>
+
+      <div class="metricsGrid">
+        <div class="metricRow">Comida    <strong>${avg.comida.toFixed(1)}</strong></div>
+        <div class="metricRow">Servicio  <strong>${avg.servicio.toFixed(1)}</strong></div>
+        <div class="metricRow">Tiempo    <strong>${avg.tiempo.toFixed(1)}</strong></div>
+        <div class="metricRow">Ambiente  <strong>${avg.ambiente.toFixed(1)}</strong></div>
+      </div>
+
+      <div class="topIssue">Área a mejorar: ${areas[0].name}</div>
+
+      <div class="distSection">
+        <h3>Distribución</h3>
+        ${dist.slice().reverse().map((v,i)=>{
+          const star = 5-i;
+          const pct  = total ? (v/total*100).toFixed(0) : 0;
+          return `
+            <div class="barRow">
+              <div class="barLabel">${star}★</div>
+              <div class="barTrack">
+                <div class="barFill" style="width:${pct}%"></div>
+              </div>
+              <div class="barCount">${v}</div>
+            </div>`;
+        }).join("")}
+      </div>
+    </div>
+  `;
+
+  // Animate donut after render
+  setTimeout(()=>{
+    const el = document.getElementById("donutEl");
+    if(el) el.style.background = `conic-gradient(${gradient})`;
+  },100);
+}
+
+// ─── SLIDE 1 — COMMENTS ───────────────────────────────────
+function renderComments(comments){
+  const countEl   = document.getElementById("commentCount");
+  const contentEl = document.getElementById("commentsContent");
+
+  countEl.textContent = `${comments.length} comentario${comments.length!==1?"s":""} encontrado${comments.length!==1?"s":""}`;
+
+  if(!comments.length){
+    contentEl.innerHTML = `<div class="noComments">Sin comentarios para esta selección</div>`;
+    return;
+  }
+
+  // Group by función
+  const groups = {};
+  comments.forEach(c=>{
+    if(!groups[c.funcion]) groups[c.funcion] = [];
+    groups[c.funcion].push(c);
+  });
+
+  const funcOrder = Object.keys(groups).sort((a,b)=>
+    a.localeCompare(b,undefined,{numeric:true})
+  );
+
+  contentEl.innerHTML = funcOrder.map(f=>{
+    const items = groups[f];
+    return `
+      <div class="funcGroup">
+        <div class="funcGroupHeader">
+          <div class="funcBadge">${f}</div>
+          <div class="funcGroupLine"></div>
+          <div style="font-size:11px;color:var(--muted);white-space:nowrap">${items.length} comentario${items.length!==1?"s":""}</div>
+        </div>
+
+        ${items.map(c=>`
+          <div class="commentCard">
+            <div class="commentTop">
+              <div class="stars">${"★".repeat(c.rating)}${"☆".repeat(5-c.rating)}</div>
+            </div>
+            <div class="commentText">${escHtml(c.texto)}</div>
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }).join("");
+}
+
+// ─── SLIDE 2 — RATINGS TABLE ──────────────────────────────
+function renderTable(data, ratings){
+  const contentEl = document.getElementById("tableContent");
+
+  if(!ratings.length){
+    contentEl.innerHTML = `<div class="noComments">Sin evaluaciones para esta selección</div>`;
+    return;
+  }
+
+  // Group by función
+  const groups = {};
+  ratings.forEach(r=>{
+    if(!groups[r.funcion]) groups[r.funcion] = [];
+    groups[r.funcion].push(r);
+  });
+
+  const funcOrder = Object.keys(groups).sort((a,b)=>
+    a.localeCompare(b,undefined,{numeric:true})
+  );
+
+  contentEl.innerHTML = funcOrder.map(f=>{
+    const rows  = groups[f];
+    const count = rows.length;
+
+    // Subtotal averages
+    const sub = {comida:0,servicio:0,tiempo:0,ambiente:0,general:0};
+    rows.forEach(r=>{
+      sub.comida   += r.comida;
+      sub.servicio += r.servicio;
+      sub.tiempo   += r.tiempo;
+      sub.ambiente += r.ambiente;
+      sub.general  += r.general;
+    });
+    Object.keys(sub).forEach(k=> sub[k] = (sub[k]/count).toFixed(1));
+
+    return `
+      <div class="tableGroup">
+        <div class="tableGroupHeader">
+          <div class="tableGroupTitle">${f}</div>
+          <div class="tableGroupCount">${count} evaluación${count!==1?"es":""}</div>
+        </div>
+
+        <table class="ratingTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Comida</th>
+              <th>Servicio</th>
+              <th>Tiempo</th>
+              <th>Ambiente</th>
+              <th>General</th>
+              <th>Comentario</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map((r,i)=>`
+              <tr>
+                <td style="color:var(--muted);font-size:11px">${i+1}</td>
+                <td class="scoreCell ${scoreClass(r.comida)}">${r.comida || "—"}</td>
+                <td class="scoreCell ${scoreClass(r.servicio)}">${r.servicio || "—"}</td>
+                <td class="scoreCell ${scoreClass(r.tiempo)}">${r.tiempo || "—"}</td>
+                <td class="scoreCell ${scoreClass(r.ambiente)}">${r.ambiente || "—"}</td>
+                <td class="scoreCell ${scoreClass(r.general)}">${r.general || "—"}</td>
+                <td class="commentCell">${r.comentario ? escHtml(r.comentario) : "—"}</td>
+              </tr>
+            `).join("")}
+
+            <!-- SUBTOTAL ROW -->
+            <tr class="subtotalRow">
+              <td>Prom.</td>
+              <td class="scoreCell">${sub.comida}</td>
+              <td class="scoreCell">${sub.servicio}</td>
+              <td class="scoreCell">${sub.tiempo}</td>
+              <td class="scoreCell">${sub.ambiente}</td>
+              <td class="scoreCell">${sub.general}</td>
+              <td style="font-size:11px;color:var(--muted)">Promedio ${f}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+  }).join("");
+}
+
+// ─── HELPERS ──────────────────────────────────────────────
+function scoreClass(v){
+  if(!v) return "";
+  if(v >= 4.5) return "high";
+  if(v >= 3)   return "mid";
+  return "low";
+}
+
+function escHtml(str){
+  return String(str)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;");
+}
+
+function showEmpty(){
+  document.getElementById("headerSub").textContent = "Sin evaluaciones disponibles";
+  document.getElementById("overviewContent").innerHTML =
+    `<div class="noComments">No hay feedback registrado todavía.</div>`;
+  document.getElementById("commentsContent").innerHTML =
+    `<div class="noComments">Sin comentarios.</div>`;
+  document.getElementById("tableContent").innerHTML =
+    `<div class="noComments">Sin evaluaciones.</div>`;
+  document.getElementById("countersStrip").innerHTML = "";
+}
+
+// ─── INIT ─────────────────────────────────────────────────
 load();
-loadFunciones();
-
 </script>
 
 </body>
