@@ -72,36 +72,7 @@ body{
   opacity: .5;
 }
 
-/* ─── SHARED FILTER ──────────────────────────────────────── */
-.filterBar{
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 28px;
-}
-
-.fBtn{
-  padding: 9px 16px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  color: var(--muted);
-  font-size: 12px;
-  font-family: inherit;
-  cursor: pointer;
-  transition: .2s ease;
-  white-space: nowrap;
-}
-
-.fBtn:hover{ border-color: var(--terra); color: var(--ink); }
-
-.fBtn.active{
-  background: var(--terra);
-  border-color: var(--terra);
-  color: #111;
-  font-weight: 600;
-}
+/* filterBar removed — chips are the only filter */
 
 /* ─── COUNTERS STRIP ─────────────────────────────────────── */
 .countersStrip{
@@ -122,11 +93,22 @@ body{
   padding: 10px 14px;
   text-align: center;
   min-width: 110px;
+  cursor: pointer;
+  transition: border-color .2s ease, background .2s ease, transform .15s ease;
+  user-select: none;
 }
 
-.counterChip.highlighted{
+.counterChip:hover{
+  border-color: rgba(201,168,76,.4);
+  background: rgba(201,168,76,.05);
+  transform: translateY(-2px);
+}
+
+.counterChip.active{
   border-color: var(--gold);
-  background: rgba(201,168,76,.08);
+  background: rgba(201,168,76,.12);
+  box-shadow: 0 8px 24px rgba(201,168,76,.15);
+  transform: translateY(-2px);
 }
 
 .counterChip .cLabel{
@@ -532,16 +514,7 @@ body{
     <p id="headerSub">Cargando datos…</p>
   </div>
 
-  <!-- SHARED FILTER -->
-
-  <div class="filterBar" id="filterBar">
-    <button class="fBtn active" data-funcion="ALL" onclick="setFilter('ALL',this)">
-      Todas las funciones
-    </button>
-    <!-- función buttons injected by JS -->
-  </div>
-
-  <!-- COUNTERS STRIP -->
+  <!-- COUNTERS STRIP — click to filter -->
 
   <div class="countersStrip" id="countersStrip">
     <div class="loading">
@@ -625,10 +598,10 @@ function setSlide(idx, btn){
 }
 
 // ─── FILTER ───────────────────────────────────────────────
-function setFilter(funcion, btn){
+function setFilter(funcion, chip){
   CURRENT_FUNC = funcion;
-  document.querySelectorAll(".fBtn").forEach(b=>{
-    b.classList.toggle("active", b.dataset.funcion === funcion);
+  document.querySelectorAll(".counterChip").forEach(c=>{
+    c.classList.toggle("active", c.dataset.funcion === String(funcion));
   });
   if(RAW_DATA) renderAll(RAW_DATA);
 }
@@ -653,7 +626,6 @@ async function load(){
     }
 
     RAW_DATA = data;
-    buildFilterButtons(data);
     buildCounters(data);
     renderAll(data);
 
@@ -661,34 +633,6 @@ async function load(){
     document.getElementById("overviewContent").innerHTML =
       `<div class="loading" style="color:#c85b5b">Error cargando datos. Verifica la conexión.</div>`;
   }
-}
-
-// ─── BUILD FILTER BUTTONS ──────────────────────────────────
-function buildFilterButtons(data){
-  const bar = document.getElementById("filterBar");
-
-  // Collect funciones from allRatings (preserves order)
-  const seen = new Set();
-  const funciones = [];
-  (data.allRatings || []).forEach(r=>{
-    if(!seen.has(r.funcion)){
-      seen.add(r.funcion);
-      funciones.push(r.funcion);
-    }
-  });
-
-  // Sort naturally
-  funciones.sort((a,b)=> a.localeCompare(b, undefined, {numeric:true}));
-
-  funciones.forEach(f=>{
-    const count = data.countByFuncion[f] || 0;
-    const btn = document.createElement("button");
-    btn.className = "fBtn";
-    btn.dataset.funcion = f;
-    btn.innerHTML = `${f} <span style="opacity:.6">(${count})</span>`;
-    btn.onclick = ()=> setFilter(f, btn);
-    bar.appendChild(btn);
-  });
 }
 
 // ─── BUILD COUNTERS ────────────────────────────────────────
@@ -699,8 +643,9 @@ function buildCounters(data){
   const counts = data.countByFuncion || {};
   const total  = data.total || 0;
 
-  // Total chip
-  const totalChip = makeChip("Total", total, "evaluaciones", true);
+  // Total chip — "ALL" filter
+  const totalChip = makeChip("Todas", total, "evaluaciones", "ALL");
+  totalChip.classList.add("active");
   strip.appendChild(totalChip);
 
   // Per-función chips (sorted)
@@ -709,18 +654,20 @@ function buildCounters(data){
   );
 
   funcs.forEach(f=>{
-    strip.appendChild(makeChip(f, counts[f], "evaluaciones", false));
+    strip.appendChild(makeChip(f, counts[f], "evaluaciones", f));
   });
 }
 
-function makeChip(label, num, sub, highlight){
+function makeChip(label, num, sub, funcion){
   const chip = document.createElement("div");
-  chip.className = "counterChip" + (highlight ? " highlighted" : "");
+  chip.className = "counterChip";
+  chip.dataset.funcion = funcion;
   chip.innerHTML = `
     <div class="cLabel">${label}</div>
     <div class="cNum">${num}</div>
     <div class="cSub">${sub}</div>
   `;
+  chip.addEventListener("click", ()=> setFilter(funcion, chip));
   return chip;
 }
 
