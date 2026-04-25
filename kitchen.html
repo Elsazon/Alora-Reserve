@@ -416,83 +416,221 @@ tbody td{
   to{ transform: rotate(360deg); }
 }
 
-/* ─── PRINT ──────────────────────────────────────────────── */
+/* ─── PRINT — FULL B&W SAFE ──────────────────────────────── */
 @media print{
 
   @page{
-    margin: 16mm 14mm;
+    margin: 14mm 12mm;
     size: A4 portrait;
   }
 
-  body{
-    background: white;
-    font-size: 11px;
+  /* ── GLOBAL RESET FOR PRINT ── */
+  *{
+    color: black !important;
+    background: white !important;
+    border-color: #999 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
+  body{
+    font-size: 10.5px;
+    line-height: 1.4;
+  }
+
+  /* ── TOPBAR ── */
   .topbar{
     position: static;
-    background: white;
-    color: black;
-    border-bottom: 2px solid black;
-    box-shadow: none;
-    padding: 10px 0 10px 0;
+    border-bottom: 2.5px solid black !important;
+    padding: 8px 0 10px;
   }
 
-  .topbarControls{ display: none; }
+  /* hide all controls — only brand + timestamp show */
+  .topbarControls{ display: none !important; }
 
-  .brand{ color: black; font-size: 16px; }
-  .brandSub{ color: #555; }
-  .timestamp{ color: #555; }
+  .brand{
+    font-size: 15px;
+    font-weight: 700;
+  }
 
-  .content{ padding: 16px 0 0; }
+  .brandSub{
+    font-size: 9px;
+    color: #444 !important;
+  }
 
+  .timestamp{
+    font-size: 9px;
+    color: #444 !important;
+  }
+
+  /* ── CONTENT ── */
+  .content{
+    padding: 12px 0 0;
+  }
+
+  /* ── SUMMARY CHIPS ── */
   .summaryBar{
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: 6px;
+    margin-bottom: 12px;
   }
 
   .summaryChip{
-    border: 1px solid #ccc;
-    padding: 6px 10px;
+    border: 1px solid #888 !important;
+    padding: 5px 10px;
+    min-width: 90px;
   }
 
-  .chipValue{ font-size: 18px; }
+  .chipLabel{
+    font-size: 8px;
+    color: #555 !important;
+    letter-spacing: 1px;
+  }
 
+  /* remove gold color — use bold black instead */
+  .chipValue{
+    font-size: 17px;
+    color: black !important;
+    font-weight: 700;
+  }
+
+  /* ── HOUR BLOCKS ── */
   .hourBlock{
-    border: 1px solid #bbb;
-    margin-bottom: 20px;
+    border: 1.5px solid black !important;
+    margin-bottom: 18px;
     page-break-inside: avoid;
-    box-shadow: none;
+    break-inside: avoid;
   }
 
+  /* header: white bg, black text, thick bottom border */
   .hourHeader{
-    background: #1a1a18 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    padding: 8px 14px;
+    background: white !important;
+    border-bottom: 2px solid black !important;
+    padding: 7px 12px;
   }
 
+  .hourLabel{
+    font-size: 14px;
+    font-weight: 700;
+    color: black !important;
+  }
+
+  /* capacity badges — text only, no color background */
   .hourBadge{
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    background: white !important;
+    border: 1px solid #666 !important;
+    color: black !important;
+    font-size: 9px;
+    padding: 3px 8px;
   }
 
+  /* LLENO badge — bold border to stand out in B&W */
+  .hourBadge.full{
+    border: 1.5px solid black !important;
+    font-weight: 700;
+  }
+
+  .hourBadge.warn{
+    border: 1px solid #444 !important;
+    font-weight: 600;
+  }
+
+  /* ── TABLE ── */
   thead th{
-    background: #f0ede6 !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    padding: 6px 10px;
+    background: #e8e8e8 !important;
+    color: black !important;
+    border-bottom: 1.5px solid black !important;
+    padding: 5px 10px;
+    font-size: 8px;
+    letter-spacing: 1.5px;
   }
 
-  tbody td{ padding: 7px 10px; }
+  tbody td{
+    padding: 6px 10px;
+    color: black !important;
+    border-bottom: 1px solid #ccc !important;
+  }
+
+  /* reservation group first row — stronger separator */
+  .groupFirstRow td{
+    border-top: 1.5px solid #666 !important;
+  }
+
+  .groupFirstRow:first-child td{
+    border-top: none !important;
+  }
+
+  /* reservation name */
+  .resCell{
+    font-weight: 700;
+    color: black !important;
+  }
+
+  .resId{
+    color: #555 !important;
+    font-size: 8px;
+  }
+
+  /* empty cells */
+  .courseCell.empty{
+    color: #aaa !important;
+  }
+
+  /* proteína — replace colored pill with bracketed text */
+  .proteinaBadge{
+    background: white !important;
+    border: none !important;
+    border-radius: 0 !important;
+    color: black !important;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 0 !important;
+    margin-left: 4px !important;
+  }
+
+  /* add brackets around proteína in print */
+  .proteinaBadge::before{ content: "["; }
+  .proteinaBadge::after{  content: "]"; }
+
+  /* ── NOTAS CALLOUT ── */
+  .notasRow td{
+    padding: 4px 10px 8px;
+  }
 
   .notasCallout{
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+    background: white !important;
+    border-left: 3px solid black !important;
+    border-radius: 0 !important;
+    color: black !important;
+    padding: 5px 10px;
+    font-size: 10px;
+    font-weight: 600;
   }
 
-  .groupFirstRow td{
-    border-top: 1px solid #bbb;
+  /* replace emoji icon with plain text marker */
+  .notasIcon{
+    display: none;
+  }
+
+  .notasCallout::before{
+    content: "⚠ NOTA: ";
+    font-weight: 700;
+    margin-right: 4px;
+    flex-shrink: 0;
+  }
+
+  /* ── DIVIDER ROWS ── */
+  .dividerRow td{
+    background: #f0f0f0 !important;
+    height: 4px;
+    border-bottom: 1px solid #ccc !important;
+  }
+
+  /* ── HIDE SCREEN-ONLY ELEMENTS ── */
+  .stateBox,
+  .spinner{
+    display: none !important;
   }
 }
 
