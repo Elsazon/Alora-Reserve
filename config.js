@@ -1,5 +1,5 @@
 // config.js
 const CONFIG = {
-  BACKEND_URL: "https://script.google.com/macros/s/AKfycbw446mkOX3r59lfPysWd5PiQBssIHBzZywa8KGOO_F_O2R498UJcPhqoT5DM9Z16HKW/exec",
+  BACKEND_URL: "https://script.google.com/macros/s/AKfycbzT_MG1C7VdhBarPZ5er3NmJH3kO20qG-GuGGzkDzbpSmhJwBZlWQbV0FrZwPjofFqG/exec",
   SECRET: "demo123"
 };
