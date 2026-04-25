@@ -499,8 +499,18 @@ tbody td{
   .hourBlock{
     border: 1.5px solid black !important;
     margin-bottom: 18px;
-    page-break-inside: avoid;
-    break-inside: avoid;
+    /* allow content to flow — avoid was silently cutting blocks */
+    page-break-inside: auto;
+    break-inside: auto;
+    /* each hora starts on its own page for kitchen clarity */
+    page-break-before: always;
+    break-before: always;
+  }
+
+  /* first block never forces a blank first page */
+  .hourBlock:first-of-type{
+    page-break-before: auto;
+    break-before: auto;
   }
 
   /* header: white bg, black text, thick bottom border */
@@ -550,6 +560,14 @@ tbody td{
     padding: 6px 10px;
     color: black !important;
     border-bottom: 1px solid #ccc !important;
+    /* allow rows to break across pages */
+    page-break-inside: auto;
+    break-inside: auto;
+  }
+
+  /* tableWrap must not clip overflow in print */
+  .tableWrap{
+    overflow: visible !important;
   }
 
   /* reservation group first row — stronger separator */
