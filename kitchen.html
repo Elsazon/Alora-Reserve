@@ -1,189 +1,863 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 
 <meta charset="UTF-8">
-<title>ALORA Expo Line</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ALORA · Expo Line</title>
 <script src="./config.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
+/* ─── TOKENS ────────────────────────────────────────────── */
+:root{
+  --bg:       #f5f2eb;
+  --surface:  #ffffff;
+  --ink:      #1a1a18;
+  --muted:    #6b6b62;
+  --line:     #d8d4c8;
+  --gold:     #b8922a;
+  --terra:    #c26a4a;
+  --green:    #3a7d5a;
+  --red:      #c0392b;
+  --radius:   10px;
+}
+
+/* ─── RESET ─────────────────────────────────────────────── */
+*{ box-sizing:border-box; margin:0; padding:0; }
 
 body{
-font-family:Inter,Arial;
-background:#fff;
-padding:20px;
+  font-family:"DM Sans", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 13px;
 }
 
-h1{
-text-align:center;
-margin-bottom:10px;
+/* ─── TOPBAR ────────────────────────────────────────────── */
+.topbar{
+  background: var(--ink);
+  color: #f5f2eb;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,0,0,.25);
 }
 
-.block{
-margin-bottom:30px;
-page-break-inside:avoid;
+.topbarLeft{
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-.block h2{
-border-bottom:2px solid black;
-padding-bottom:5px;
-margin-bottom:10px;
+.brand{
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  color: #f5f2eb;
+  white-space: nowrap;
 }
 
-.row{
-display:grid;
-grid-template-columns:60px 140px 140px 1fr 1fr 120px 1fr;
-gap:8px;
-padding:6px 0;
-border-bottom:1px dashed #ccc;
-font-size:13px;
-align-items:center;
+.brandSub{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  color: rgba(245,242,235,.5);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 2px;
 }
 
-.header{
-font-weight:bold;
-border-bottom:2px solid black;
+.topbarControls{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.mesa{
-height:28px;
-border-bottom:2px solid black;
+.selectWrap{
+  position: relative;
 }
 
-.print{
-position:fixed;
-top:10px;
-right:10px;
-padding:10px;
-background:black;
-color:white;
-cursor:pointer;
-}
-  .row{
-border-bottom:1px dashed #ccc;
-}
-
-.block{
-border:2px solid #000;
-padding:10px;
+.funcionSelect{
+  appearance: none;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 8px;
+  padding: 8px 32px 8px 12px;
+  color: #f5f2eb;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  min-width: 180px;
+  outline: none;
+  cursor: pointer;
 }
 
+.funcionSelect:focus{
+  border-color: var(--gold);
+}
+
+.funcionSelect option{
+  background: #1a1a18;
+  color: #f5f2eb;
+}
+
+.selectArrow{
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 10px;
+  color: rgba(245,242,235,.5);
+}
+
+.topbarBtn{
+  border: 1px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.08);
+  color: #f5f2eb;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: .2s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.topbarBtn:hover{
+  background: rgba(255,255,255,.15);
+  border-color: rgba(255,255,255,.35);
+}
+
+.printBtn{
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #1a1a18;
+  font-weight: 600;
+}
+
+.printBtn:hover{
+  background: #a37d22;
+  border-color: #a37d22;
+}
+
+.timestamp{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  color: rgba(245,242,235,.45);
+  letter-spacing: .5px;
+  white-space: nowrap;
+}
+
+/* ─── CONTENT ────────────────────────────────────────────── */
+.content{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+}
+
+/* ─── SUMMARY BAR ────────────────────────────────────────── */
+.summaryBar{
+  display: flex;
+  gap: 12px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.summaryChip{
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 110px;
+}
+
+.chipLabel{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.chipValue{
+  font-family: "Playfair Display", serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.chipValue.gold{ color: var(--gold); }
+
+/* ─── HOUR BLOCK ─────────────────────────────────────────── */
+.hourBlock{
+  margin-bottom: 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+
+.hourHeader{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: var(--ink);
+  color: #f5f2eb;
+  gap: 16px;
+}
+
+.hourLabel{
+  font-family: "Playfair Display", serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: .3px;
+}
+
+.hourMeta{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hourBadge{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.1);
+  color: rgba(245,242,235,.8);
+  letter-spacing: .5px;
+}
+
+.hourBadge.warn{
+  background: rgba(184,146,42,.25);
+  color: #e8c86a;
+}
+
+.hourBadge.full{
+  background: rgba(192,57,43,.25);
+  color: #f08a7a;
+}
+
+/* ─── TABLE ──────────────────────────────────────────────── */
+.tableWrap{
+  overflow-x: auto;
+}
+
+table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th{
+  padding: 9px 14px;
+  text-align: left;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  background: #faf8f4;
+  white-space: nowrap;
+}
+
+tbody td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  line-height: 1.4;
+}
+
+/* reservation group separator */
+.groupFirstRow td{
+  border-top: 2px solid var(--line);
+}
+
+.groupFirstRow:first-child td{
+  border-top: none;
+}
+
+/* reservation label cell */
+.resCell{
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.resId{
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: .5px;
+  margin-top: 2px;
+}
+
+/* person name */
+.personCell{
+  font-size: 13px;
+  color: var(--ink);
+}
+
+/* course cells */
+.courseCell{
+  font-size: 12px;
+  color: var(--ink);
+}
+
+.courseCell.empty{
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* proteína inline badge */
+.proteinaBadge{
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(184,146,42,.12);
+  border: 1px solid rgba(184,146,42,.3);
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .3px;
+  white-space: nowrap;
+}
+
+/* notas callout row */
+.notasRow td{
+  padding: 6px 14px 10px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.notasCallout{
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 7px;
+  background: rgba(194,106,74,.07);
+  border-left: 3px solid var(--terra);
+  font-size: 12px;
+  color: var(--terra);
+  line-height: 1.5;
+}
+
+.notasIcon{
+  font-size: 13px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* reservation divider row */
+.dividerRow td{
+  padding: 0;
+  height: 6px;
+  background: #faf8f4;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ─── LOADING / ERROR / EMPTY ────────────────────────────── */
+.stateBox{
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+
+.stateBox .icon{
+  font-size: 36px;
+  margin-bottom: 14px;
+}
+
+.stateBox h3{
+  font-family: "Playfair Display", serif;
+  font-size: 20px;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.stateBox p{
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.spinner{
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--line);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin{
+  to{ transform: rotate(360deg); }
+}
+
+/* ─── PRINT ──────────────────────────────────────────────── */
+@media print{
+
+  @page{
+    margin: 16mm 14mm;
+    size: A4 portrait;
+  }
+
+  body{
+    background: white;
+    font-size: 11px;
+  }
+
+  .topbar{
+    position: static;
+    background: white;
+    color: black;
+    border-bottom: 2px solid black;
+    box-shadow: none;
+    padding: 10px 0 10px 0;
+  }
+
+  .topbarControls{ display: none; }
+
+  .brand{ color: black; font-size: 16px; }
+  .brandSub{ color: #555; }
+  .timestamp{ color: #555; }
+
+  .content{ padding: 16px 0 0; }
+
+  .summaryBar{
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .summaryChip{
+    border: 1px solid #ccc;
+    padding: 6px 10px;
+  }
+
+  .chipValue{ font-size: 18px; }
+
+  .hourBlock{
+    border: 1px solid #bbb;
+    margin-bottom: 20px;
+    page-break-inside: avoid;
+    box-shadow: none;
+  }
+
+  .hourHeader{
+    background: #1a1a18 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: 8px 14px;
+  }
+
+  .hourBadge{
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  thead th{
+    background: #f0ede6 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: 6px 10px;
+  }
+
+  tbody td{ padding: 7px 10px; }
+
+  .notasCallout{
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .groupFirstRow td{
+    border-top: 1px solid #bbb;
+  }
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width: 700px){
+  .topbar{ padding: 12px 14px; }
+  .content{ padding: 16px 12px 40px; }
+  .summaryChip{ min-width: 90px; }
+}
 </style>
 
 </head>
 
 <body>
 
-<button class="print" onclick="window.print()">🖨 Print</button>
+<!-- TOPBAR -->
 
-<h1>ALORA · EXPO LINE</h1>
+<div class="topbar">
 
-<div id="content"></div>
+  <div class="topbarLeft">
+    <div>
+      <div class="brand">ALORA · Expo Line</div>
+      <div class="brandSub">Kitchen production sheet</div>
+    </div>
+  </div>
+
+  <div class="topbarControls">
+
+```
+<div class="selectWrap">
+  <select id="funcionSelect" class="funcionSelect">
+    <option value="">Cargando funciones…</option>
+  </select>
+  <span class="selectArrow">▾</span>
+</div>
+
+<button class="topbarBtn" onclick="load()">
+  ↺ Refresh
+</button>
+
+<button class="topbarBtn printBtn" onclick="window.print()">
+  🖨 Print
+</button>
+
+<div class="timestamp" id="timestamp">—</div>
+```
+
+  </div>
+
+</div>
+
+<!-- CONTENT -->
+
+<div class="content">
+
+  <!-- SUMMARY CHIPS -->
+
+  <div class="summaryBar" id="summaryBar" style="display:none"></div>
+
+  <!-- MAIN OUTPUT -->
+
+  <div id="content">
+    <div class="stateBox">
+      <div class="spinner"></div>
+      <h3>Cargando funciones…</h3>
+      <p>Conectando con el sistema de reservaciones</p>
+    </div>
+  </div>
+
+</div>
 
 <script>
+// ─── STATE ────────────────────────────────────────────────
+const LIMITE_POR_HORA = 20;
 
-//const BACKEND_URL="https://script.google.com/macros/s/AKfycbw3Fva80PuWWX6w0lPZ4KMF6j7ytDfeW2s4qMw4T3y7Oj310uJLaGH1rfor_kR4S22d/exec";
-const FUNCION="Función 5";
+// ─── HELPERS ──────────────────────────────────────────────
+function esc(str){
+  return String(str || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
+}
 
+function updateTimestamp(){
+  document.getElementById("timestamp").textContent =
+    "Actualizado " + new Date().toLocaleTimeString("es-PR",{
+      hour:"numeric",
+      minute:"2-digit",
+      second:"2-digit"
+    });
+}
+
+function showLoading(){
+  document.getElementById("summaryBar").style.display = "none";
+  document.getElementById("content").innerHTML = `
+    <div class="stateBox">
+      <div class="spinner"></div>
+      <h3>Cargando expo line…</h3>
+      <p>Obteniendo reservaciones y preórdenes</p>
+    </div>
+  `;
+}
+
+function showError(msg){
+  document.getElementById("summaryBar").style.display = "none";
+  document.getElementById("content").innerHTML = `
+    <div class="stateBox">
+      <div class="icon">⚠️</div>
+      <h3>Error cargando datos</h3>
+      <p>${esc(msg)}</p>
+    </div>
+  `;
+}
+
+// ─── API ──────────────────────────────────────────────────
+async function api(body){
+  const res = await fetch(CONFIG.BACKEND_URL,{
+    method: "POST",
+    headers: {"Content-Type":"text/plain;charset=utf-8"},
+    body: JSON.stringify({
+      ...body,
+      secret: CONFIG.SECRET
+    })
+  });
+  return await res.json();
+}
+
+// ─── LOAD FUNCIONES ───────────────────────────────────────
+async function loadFunciones(){
+  try{
+    const data = await api({ action:"funciones" });
+
+    if(!data.ok || !data.funciones?.length){
+      showError("No se encontraron funciones activas.");
+      return;
+    }
+
+    const select = document.getElementById("funcionSelect");
+    select.innerHTML = "";
+
+    data.funciones.forEach(f=>{
+      const opt = document.createElement("option");
+      opt.value = f;
+      opt.textContent = f;
+      select.appendChild(opt);
+    });
+
+    select.addEventListener("change", load);
+
+    // auto-load first
+    load();
+
+  }catch(e){
+    showError("No se pudo conectar con el backend: " + e.message);
+  }
+}
+
+// ─── LOAD KITCHEN DATA ────────────────────────────────────
 async function load(){
+  const funcion = document.getElementById("funcionSelect").value;
+  if(!funcion) return;
 
-const res = await fetch(CONFIG.BACKEND_URL,{
-method:"POST",
-headers:{"Content-Type":"text/plain"},
-body:JSON.stringify({
-action:"kitchen_list",
-funcion:FUNCION,
-secret:"demo123"
-})
-});
+  showLoading();
 
-const data = await res.json();
+  try{
+    const data = await api({
+      action: "kitchen_list",
+      funcion
+    });
 
-render(data.rows);
+    if(!data.ok){
+      showError(data.error || "Error desconocido");
+      return;
+    }
 
+    render(data.rows || [], funcion);
+    updateTimestamp();
+
+  }catch(e){
+    showError("Error de conexión: " + e.message);
+  }
 }
 
-function groupByHora(rows){
+// ─── RENDER ───────────────────────────────────────────────
+function render(rows, funcion){
 
-const map = {};
+  if(!rows.length){
+    document.getElementById("summaryBar").style.display = "none";
+    document.getElementById("content").innerHTML = `
+      <div class="stateBox">
+        <div class="icon">🍽</div>
+        <h3>Sin reservaciones</h3>
+        <p>No hay preórdenes registradas para ${esc(funcion)}</p>
+      </div>
+    `;
+    return;
+  }
 
-rows.forEach(r=>{
-if(!map[r.hora]) map[r.hora]=[];
-map[r.hora].push(r);
-});
+  // ── GROUP BY HORA ────────────────────────────────────────
+  const byHora = {};
+  rows.forEach(r=>{
+    if(!byHora[r.hora]) byHora[r.hora] = [];
+    byHora[r.hora].push(r);
+  });
 
-return map;
+  // ── SUMMARY CHIPS ────────────────────────────────────────
+  const totalCovers = rows.length;
+  const totalHoras  = Object.keys(byHora).length;
 
+  // count unique reservas
+  const reservaSet = new Set(rows.map(r=>r.reservaId));
+  const totalReservas = reservaSet.size;
+
+  const bar = document.getElementById("summaryBar");
+  bar.style.display = "flex";
+  bar.innerHTML = `
+    <div class="summaryChip">
+      <div class="chipLabel">Función</div>
+      <div class="chipValue" style="font-size:14px;padding-top:4px">${esc(funcion)}</div>
+    </div>
+    <div class="summaryChip">
+      <div class="chipLabel">Covers</div>
+      <div class="chipValue gold">${totalCovers}</div>
+    </div>
+    <div class="summaryChip">
+      <div class="chipLabel">Reservaciones</div>
+      <div class="chipValue">${totalReservas}</div>
+    </div>
+    <div class="summaryChip">
+      <div class="chipLabel">Horarios</div>
+      <div class="chipValue">${totalHoras}</div>
+    </div>
+  `;
+
+  // ── BUILD HTML ───────────────────────────────────────────
+  let html = "";
+
+  Object.keys(byHora).forEach(hora=>{
+    const horaRows = byHora[hora];
+
+    // covers at this hour
+    const coversHora = horaRows.length;
+
+    // capacity badge
+    let badgeClass = "";
+    let badgeText  = `${coversHora} covers`;
+
+    if(coversHora >= LIMITE_POR_HORA){
+      badgeClass = "full";
+      badgeText  = `${coversHora} covers · LLENO`;
+    }else if(coversHora >= LIMITE_POR_HORA * 0.75){
+      badgeClass = "warn";
+      badgeText  = `${coversHora} covers · Casi lleno`;
+    }
+
+    // group by reserva within this hora
+    const byReserva = {};
+    horaRows.forEach(r=>{
+      const key = r.reserva + "||" + r.reservaId;
+      if(!byReserva[key]) byReserva[key] = [];
+      byReserva[key].push(r);
+    });
+
+    html += `
+      <div class="hourBlock">
+
+        <div class="hourHeader">
+          <div class="hourLabel">${esc(hora)}</div>
+          <div class="hourMeta">
+            <div class="hourBadge ${badgeClass}">${badgeText}</div>
+          </div>
+        </div>
+
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Reservación</th>
+                <th>Persona</th>
+                <th>Aperitivo</th>
+                <th>Principal</th>
+                <th>Postre</th>
+              </tr>
+            </thead>
+            <tbody>
+    `;
+
+    Object.keys(byReserva).forEach((key, groupIdx)=>{
+      const group     = byReserva[key];
+      const resName   = group[0].reserva;
+      const resId     = group[0].reservaId;
+      const groupSize = group.length;
+
+      group.forEach((r, rowIdx)=>{
+
+        const isFirst = rowIdx === 0;
+
+        // principal + proteína inline
+        let principalHtml = "";
+        if(r.principal){
+          principalHtml = `<span>${esc(r.principal)}</span>`;
+          if(r.proteina){
+            principalHtml += `<span class="proteinaBadge">${esc(r.proteina)}</span>`;
+          }
+        }else{
+          principalHtml = `<span class="courseCell empty">—</span>`;
+        }
+
+        html += `
+          <tr class="${isFirst ? "groupFirstRow" : ""}">
+            <td class="resCell">
+              ${isFirst ? `
+                ${esc(resName)}
+                <div class="resId">#${esc(resId)} · ${groupSize} pax</div>
+              ` : ""}
+            </td>
+            <td class="personCell">${esc(r.persona) || "—"}</td>
+            <td class="courseCell ${!r.aperitivo ? "empty" : ""}">
+              ${r.aperitivo ? esc(r.aperitivo) : "—"}
+            </td>
+            <td class="courseCell">
+              ${principalHtml}
+            </td>
+            <td class="courseCell ${!r.postre ? "empty" : ""}">
+              ${r.postre ? esc(r.postre) : "—"}
+            </td>
+          </tr>
+        `;
+
+        // notas callout — only on last row of group, only if notas exist
+        if(rowIdx === group.length - 1 && r.notas){
+          html += `
+            <tr class="notasRow">
+              <td colspan="5">
+                <div class="notasCallout">
+                  <span class="notasIcon">⚠️</span>
+                  <span><strong>${esc(resName)}:</strong> ${esc(r.notas)}</span>
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+
+      });
+
+      // visual gap between reservation groups (not after last)
+      if(groupIdx < Object.keys(byReserva).length - 1){
+        html += `<tr class="dividerRow"><td colspan="5"></td></tr>`;
+      }
+
+    });
+
+    html += `
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  });
+
+  document.getElementById("content").innerHTML = html;
 }
 
-function render(rows){
-
-const groupedByHora = {};
-
-rows.forEach(r=>{
-if(!groupedByHora[r.hora]) groupedByHora[r.hora]=[];
-groupedByHora[r.hora].push(r);
-});
-
-const html = Object.keys(groupedByHora).map(hora=>{
-
-const rowsHora = groupedByHora[hora];
-
-/* 🔥 agrupar por reservación */
-const groupedByReserva = {};
-
-rowsHora.forEach(r=>{
-if(!groupedByReserva[r.reserva]) groupedByReserva[r.reserva]=[];
-groupedByReserva[r.reserva].push(r);
-});
-
-return `
-<div class="block">
-
-<h2>${hora}</h2>
-
-<div class="row header">
-<div>Mesa</div>
-<div>Reservación</div>
-<div>Persona</div>
-<div>Aperitivo</div>
-<div>Principal</div>
-<div>Proteína</div>
-<div>Postre / Notas</div>
-</div>
-
-${Object.keys(groupedByReserva).map(reserva=>{
-
-const grupo = groupedByReserva[reserva];
-
-return grupo.map((r,i)=>`
-<div class="row">
-
-<div>${i===0 ? '<div class="mesa"></div>' : ''}</div>
-
-<div>${i===0 ? reserva : ''}</div>
-
-<div>${r.persona}</div>
-<div>${r.aperitivo}</div>
-<div>${r.principal}</div>
-<div>${r.proteina}</div>
-<div>${r.postre || ""} ${r.notas ? "• "+r.notas : ""}</div>
-
-</div>
-`).join("");
-
-}).join("")}
-
-</div>
-`;
-
-}).join("");
-
-document.getElementById("content").innerHTML = html;
-
-}
-
-load();
-
+// ─── INIT ─────────────────────────────────────────────────
+loadFunciones();
 </script>
 
 </body>
