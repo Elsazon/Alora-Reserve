@@ -187,9 +187,9 @@ body{
 #mainApp{ display:none; }
 
 .container{
-  width:min(1600px,96%);
+  width:min(1600px,98%);
   margin:0 auto;
-  padding:24px 0 40px;
+  padding:20px 8px 40px;
 }
 
 /* ─── TOPBAR ─────────────────────────────────────────────── */
@@ -266,8 +266,18 @@ body{
 .headerGrid{
   display:grid;
   grid-template-columns:1fr auto;
-  gap:20px;
+  gap:16px;
   align-items:center;
+}
+
+/* On iPad portrait stats go below controls */
+@media(max-width:720px){
+  .headerGrid{
+    grid-template-columns:1fr;
+  }
+  .stats{
+    justify-content:flex-start;
+  }
 }
 
 .controls{
@@ -298,7 +308,8 @@ select,input{
   border-radius:12px;
   font-size:13px;
   font-family:"DM Sans",sans-serif;
-  min-width:160px;
+  min-width:130px;
+  max-width:200px;
   outline:none;
 }
 
@@ -379,17 +390,31 @@ select option{ background:#0e1511; color:var(--ink); }
 /* ─── LAYOUT ─────────────────────────────────────────────── */
 .layout{
   display:grid;
-  grid-template-columns:300px 1fr 380px;
-  gap:16px;
+  grid-template-columns:280px 1fr 360px;
+  gap:14px;
   align-items:start;
 }
 
-@media(max-width:1300px){
-  .layout{ grid-template-columns:280px 1fr 360px; }
+/* Large desktop */
+@media(min-width:1400px){
+  .layout{ grid-template-columns:300px 1fr 380px; }
 }
 
+/* iPad landscape / small desktop — 2 col: list + map, detail below */
 @media(max-width:1100px){
+  .layout{
+    grid-template-columns:260px 1fr;
+    grid-template-rows:auto auto;
+  }
+  .layout > .panel:last-child{
+    grid-column:1 / -1;
+  }
+}
+
+/* iPad portrait / mobile — single column */
+@media(max-width:720px){
   .layout{ grid-template-columns:1fr; }
+  .layout > .panel:last-child{ grid-column:1; }
 }
 
 /* ─── PANELS ─────────────────────────────────────────────── */
@@ -421,10 +446,18 @@ select option{ background:#0e1511; color:var(--ink); }
 
 .panelBody{
   padding:14px;
-  max-height:calc(100vh - 280px);
+  max-height:calc(100vh - 260px);
   overflow-y:auto;
   scrollbar-width:thin;
   scrollbar-color:rgba(255,255,255,.08) transparent;
+}
+
+@media(max-width:1100px){
+  .panelBody{ max-height:60vh; }
+}
+
+@media(max-width:720px){
+  .panelBody{ max-height:50vh; }
 }
 
 .panelBody::-webkit-scrollbar{ width:4px; }
