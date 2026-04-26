@@ -277,17 +277,21 @@ body{
 }
 
 .headerGrid{
-  display:grid;
-  grid-template-columns:1fr 380px;
+  display:flex;
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:flex-start;
   gap:16px;
-  align-items:start;
+  flex-wrap:wrap;
 }
 
-@media(max-width:900px){
-  .headerGrid{
-    grid-template-columns:1fr;
-  }
-  .stats{ justify-content:flex-start; }
+.headerGrid > div:first-child{
+  flex:1;
+  min-width:300px;
+}
+
+.headerGrid > .stats{
+  flex-shrink:0;
 }
 
 .controls{
@@ -692,6 +696,15 @@ select option{ background:#0e1511; color:var(--ink); }
 
 .tableNode.circle{ border-radius:50%; }
 .tableNode.square{ border-radius:10px; }
+.tableNode.triangle{
+  border-radius:4px;
+  clip-path:polygon(50% 0%, 0% 100%, 100% 100%);
+  border:none;
+}
+.tableNode.triangle.libre{ background:#1a211d; opacity:.45; }
+.tableNode.triangle.llego{ background:#3fa86a; }
+.tableNode.triangle.ocupada{ background:#c26a4a; }
+.tableNode.triangle.suggested{ background:rgba(191,161,90,.6); }
 
 .tableNode:hover{ transform:translate(-50%,-50%) scale(1.07); }
 
@@ -1275,6 +1288,7 @@ select option{ background:#0e1511; color:var(--ink); }
       <select id="newTableShape">
         <option value="square">Cuadrada</option>
         <option value="circle">Redonda</option>
+        <option value="triangle">Triangulo (silla barra)</option>
       </select>
       <button class="btnMini" style="background:var(--gold);color:#111;" onclick="addTableToLayout()">Agregar</button>
       <button class="btnMini" style="background:#2a3430;color:var(--ink);" onclick="hideAddTableForm()">Cancelar</button>
@@ -1449,7 +1463,11 @@ const DEFAULT_LAYOUT = {
     {id:"A4",x:36,y:78,shape:"circle"},
     {id:"A5",x:54,y:78,shape:"circle"},
     {id:"B1",x:28,y:48,shape:"square"},
-    {id:"B2",x:58,y:47,shape:"square"}
+    {id:"B2",x:58,y:47,shape:"square"},
+    {id:"T1",x:20,y:30,shape:"triangle"},
+    {id:"T2",x:35,y:30,shape:"triangle"},
+    {id:"T3",x:50,y:30,shape:"triangle"},
+    {id:"T4",x:65,y:30,shape:"triangle"}
   ]
 };
 
@@ -1585,10 +1603,10 @@ function updateRefreshInfo(ok){
   const time = new Date().toLocaleTimeString("es-PR",{hour:"numeric",minute:"2-digit"});
   if(ok){
     el.className = "refreshInfo";
-    el.textContent = `↺ ${time}  ·  R para refrescar`;
+    el.textContent = time + " · R = refrescar";
   }else{
     el.className = "refreshInfo warn";
-    el.textContent = `⚠ Sin conexión · último ${time}`;
+    el.textContent = "Sin conexion · ultimo " + time;
   }
 }
 
