@@ -2074,19 +2074,18 @@ Ver menú disponible
 
 `;
 
-card.addEventListener("click", async ()=>{
+card.addEventListener("click", ()=>{
 
-document.querySelectorAll(".functionCard")
-.forEach(c=>c.classList.remove("active"));
+  // actualizar visual del carousel
+  document.querySelectorAll(".functionCard")
+    .forEach(c=>c.classList.remove("active"));
+  card.classList.add("active");
 
-card.classList.add("active");
-
-$("funcion").value = funcion;
-
-hydrateMenu(funcion);
-renderHorasBootstrap(funcion);
+  // SOLO hidratar el menu visual — NO tocar el formulario
+  hydrateMenu(funcion);
 
 });
+
 
 track.appendChild(card);
 
