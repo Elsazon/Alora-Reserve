@@ -184,12 +184,14 @@ body{
 }
 
 /*  MAIN LAYOUT  */
-#mainApp{ display:none; width:100%; }
+#mainApp{ display:none; width:100%; box-sizing:border-box; }
 
 .container{
-  width:min(1600px,98%);
+  width:100%;
+  max-width:1600px;
   margin:0 auto;
-  padding:20px 8px 40px;
+  padding:16px 12px 40px;
+  box-sizing:border-box;
 }
 
 /*  TOPBAR  */
@@ -390,20 +392,34 @@ select option{ background:#0e1511; color:var(--ink); }
 /*  LAYOUT  */
 .layout{
   display:grid;
-  grid-template-columns:260px 1fr 320px;
+  grid-template-columns:260px 1fr 300px;
+  grid-template-areas:"left center right";
   gap:12px;
   align-items:start;
+  width:100%;
 }
+
+.layout > .panel:nth-child(1){ grid-area:left; }
+.layout > .panel:nth-child(2){ grid-area:center; }
+.layout > .panel:nth-child(3){ grid-area:right; }
 
 /* Large desktop */
 @media(min-width:1400px){
-  .layout{ grid-template-columns:300px 1fr 380px; gap:16px; }
+  .layout{
+    grid-template-columns:300px 1fr 360px;
+    gap:16px;
+  }
 }
 
-/* iPad portrait / mobile — single column */
+/* Mobile only — single column */
 @media(max-width:700px){
-  .layout{ grid-template-columns:1fr; }
-  .layout > .panel:last-child{ grid-column:1; }
+  .layout{
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "left"
+      "center"
+      "right";
+  }
 }
 
 /*  PANELS  */
@@ -596,11 +612,20 @@ select option{ background:#0e1511; color:var(--ink); }
 
 .floor{
   position:relative;
-  height:clamp(380px,55vh,620px);
+  height:clamp(340px,50vh,580px);
   background:#0a0f0c;
   overflow:hidden;
   border:1px solid var(--line);
   border-radius:16px;
+  width:100%;
+}
+
+.mapContainer{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  width:100%;
+  overflow:hidden;
 }
 
 .floor.editMode{
@@ -1115,17 +1140,13 @@ select option{ background:#0e1511; color:var(--ink); }
       <h1>ALORA · Host Stand</h1>
       <p>Service console · salón principal + barra</p>
     </div>
-
-```
-<div class="topbarRight">
-  <div class="refreshInfo" id="refreshInfo"></div>
-  <div class="statusPill">
-    <div class="statusDot"></div>
-    Servicio activo
-  </div>
-</div>
-```
-
+    <div class="topbarRight">
+      <div class="refreshInfo" id="refreshInfo" style="font-family:monospace;font-size:10px;color:rgba(244,241,234,.45);"></div>
+      <div class="statusPill">
+        <div class="statusDot"></div>
+        Servicio activo
+      </div>
+    </div>
   </div>
 
   <!-- HEADER CARD -->
