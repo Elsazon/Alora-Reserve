@@ -1,30 +1,34 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ALORA · Producción</title>
-<script src="./config.js"></script>
+  <script src="./config.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     :root{
       --bg0:#0e1511;
       --bg1:#121a16;
       --ink:#f4f1ea;
-      --muted:rgba(244,241,234,.65);
+      --muted:rgba(244,241,234,.6);
       --terracotta:#c26a4a;
       --gold:#bfa15a;
+      --green:#3fa86a;
       --line:rgba(255,255,255,.08);
+      --card:rgba(255,255,255,.04);
+      --shadow:0 20px 50px rgba(0,0,0,.3);
+      --radius:18px;
     }
 
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box; margin:0; padding:0; }
 
     body{
-      margin:0;
-      font-family:Inter,Arial,sans-serif;
+      font-family:"DM Sans",system-ui,sans-serif;
       color:var(--ink);
       background:
         radial-gradient(900px 600px at 15% 10%, rgba(194,106,74,.10), transparent 60%),
@@ -34,58 +38,104 @@
     }
 
     .container{
-      width:min(1180px,94%);
+      width:min(1200px,96%);
       margin:0 auto;
-      padding:42px 0 60px;
+      padding:32px 0 60px;
     }
 
+    /* ── TOPBAR ── */
     .topbar{
       display:flex;
       justify-content:space-between;
       align-items:flex-end;
-      gap:18px;
-      margin-bottom:28px;
+      gap:16px;
+      margin-bottom:24px;
       flex-wrap:wrap;
     }
 
     .titleWrap h1{
-      margin:0;
       font-family:"Playfair Display",serif;
-      font-size:32px;
+      font-size:30px;
       font-weight:700;
+      margin:0;
     }
 
     .titleWrap p{
-      margin:8px 0 0;
+      margin:6px 0 0;
       color:var(--muted);
-      font-size:13px;
+      font-size:12px;
       letter-spacing:1.5px;
       text-transform:uppercase;
     }
 
-    .control{
+    .topbarRight{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    /* ── COUNTDOWN ── */
+    .countdownWrap{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--line);
+      background:var(--card);
+      border-radius:12px;
+      padding:8px 14px;
+    }
+
+    .countdownLabel{
+      font-size:11px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:1px;
+    }
+
+    .countdownBar{
+      width:80px;
+      height:4px;
+      background:rgba(255,255,255,.08);
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .countdownFill{
+      height:100%;
+      background:var(--gold);
+      border-radius:999px;
+      transition:width 1s linear;
+    }
+
+    .countdownNum{
+      font-family:"IBM Plex Mono",monospace;
+      font-size:11px;
+      color:var(--gold);
+      min-width:22px;
+      text-align:right;
+    }
+
+    /* ── CONTROLS ── */
+    .controls{
       display:flex;
       align-items:center;
       gap:10px;
-    }
-
-    .control label{
-      font-size:12px;
-      color:var(--muted);
-      text-transform:uppercase;
-      letter-spacing:1.2px;
+      flex-wrap:wrap;
     }
 
     .funcionSelect{
       appearance:none;
-      background:rgba(255,255,255,.05);
+      background:var(--card);
       border:1px solid var(--line);
       border-radius:12px;
       padding:10px 14px;
       color:var(--ink);
-      font-size:14px;
-      min-width:190px;
+      font-family:"DM Sans",sans-serif;
+      font-size:13px;
+      min-width:180px;
       outline:none;
+      cursor:pointer;
     }
 
     .funcionSelect:focus{
@@ -93,371 +143,703 @@
       box-shadow:0 0 0 1px var(--terracotta);
     }
 
+    .funcionSelect option{
+      background:#0e1511;
+      color:var(--ink);
+    }
+
+    .toggleBtn{
+      border:1px solid var(--line);
+      background:var(--card);
+      color:var(--muted);
+      padding:9px 14px;
+      border-radius:12px;
+      font-family:"DM Sans",sans-serif;
+      font-size:12px;
+      cursor:pointer;
+      transition:.2s;
+      white-space:nowrap;
+    }
+
+    .toggleBtn:hover{ border-color:var(--gold); color:var(--ink); }
+    .toggleBtn.active{ background:var(--gold); border-color:var(--gold); color:#111; font-weight:600; }
+
+    /* ── STAT CARDS ── */
     .stats{
       display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:16px;
-      margin-bottom:24px;
+      grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+      gap:14px;
+      margin-bottom:22px;
     }
 
     .statCard{
-      background:rgba(255,255,255,.04);
+      background:var(--card);
       border:1px solid var(--line);
-      border-radius:18px;
-      padding:18px 20px;
-      box-shadow:0 20px 50px rgba(0,0,0,.28);
+      border-radius:var(--radius);
+      padding:16px 18px;
+      box-shadow:var(--shadow);
     }
 
     .statLabel{
-      font-size:11px;
+      font-size:10px;
       color:var(--muted);
       text-transform:uppercase;
       letter-spacing:1.8px;
-      margin-bottom:8px;
+      margin-bottom:6px;
+      font-family:"IBM Plex Mono",monospace;
     }
 
     .statValue{
-      font-size:30px;
-      font-weight:600;
+      font-family:"Playfair Display",serif;
+      font-size:28px;
+      font-weight:700;
       color:var(--gold);
       line-height:1;
     }
 
+    /* ── UPDATED TIMESTAMP ── */
+    .updated{
+      font-size:10px;
+      color:rgba(244,241,234,.4);
+      letter-spacing:1px;
+      text-transform:uppercase;
+      margin-bottom:18px;
+      font-family:"IBM Plex Mono",monospace;
+    }
+
+    /* ── LOADING ── */
+    .loadingState{
+      text-align:center;
+      padding:60px 20px;
+      color:var(--muted);
+    }
+
+    .spinner{
+      width:32px;
+      height:32px;
+      border:2px solid var(--line);
+      border-top-color:var(--gold);
+      border-radius:50%;
+      animation:spin .8s linear infinite;
+      margin:0 auto 16px;
+    }
+
+    @keyframes spin{ to{ transform:rotate(360deg); } }
+
+    .loadingState p{ font-size:13px; }
+
+    /* ── ERROR ── */
+    .errorBox{
+      margin-top:16px;
+      padding:14px 16px;
+      border:1px solid rgba(200,91,91,.35);
+      background:rgba(200,91,91,.08);
+      border-radius:14px;
+      color:var(--ink);
+      font-size:13px;
+      display:none;
+    }
+
+    /* ── PANELS GRID ── */
     .gridTop{
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:18px;
-      margin-bottom:18px;
+      gap:16px;
+      margin-bottom:16px;
     }
 
     .gridBottom{
       display:grid;
       grid-template-columns:1fr 1fr 1fr;
-      gap:18px;
+      gap:16px;
+      margin-bottom:16px;
+    }
+
+    @media(max-width:900px){
+      .gridTop{ grid-template-columns:1fr; }
+      .gridBottom{ grid-template-columns:1fr; }
     }
 
     .panel{
-      background:rgba(255,255,255,.04);
+      background:var(--card);
       border:1px solid var(--line);
-      border-radius:20px;
-      padding:20px;
-      box-shadow:0 20px 50px rgba(0,0,0,.28);
+      border-radius:var(--radius);
+      padding:18px 20px;
+      box-shadow:var(--shadow);
+      min-height:140px;
     }
 
     .panel h2{
-      margin:0 0 14px;
       font-family:"Playfair Display",serif;
-      font-size:22px;
+      font-size:20px;
       font-weight:700;
+      margin-bottom:14px;
     }
 
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-    }
-
-    .row{
+    /* ── ROWS ── */
+    .dataRow{
       display:flex;
       justify-content:space-between;
-      gap:16px;
-      padding:10px 0;
+      align-items:center;
+      gap:12px;
+      padding:8px 0;
       border-bottom:1px solid var(--line);
-      font-size:15px;
+      font-size:14px;
     }
 
-    .row:last-child{
-      border-bottom:none;
-    }
+    .dataRow:last-child{ border-bottom:none; }
 
-    .rowName{
-      color:var(--ink);
-    }
+    .rowName{ color:var(--ink); flex:1; }
 
     .rowQty{
-      color:var(--gold);
-      font-weight:600;
-      white-space:nowrap;
+      background:var(--gold);
+      color:#111;
+      padding:4px 10px;
+      border-radius:8px;
+      font-weight:700;
+      min-width:38px;
+      text-align:center;
+      font-size:13px;
     }
 
     .empty{
       color:var(--muted);
-      font-size:14px;
-      padding:6px 0 2px;
+      font-size:13px;
+      padding:6px 0;
     }
 
-    .errorBox{
-      margin-top:16px;
-      padding:14px 16px;
-      border:1px solid rgba(255,92,92,.35);
-      background:rgba(255,92,92,.08);
+    /* ── PER HORA VIEW ── */
+    .horaSection{
+      margin-bottom:24px;
+    }
+
+    .horaHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+      padding-bottom:10px;
+      border-bottom:2px solid rgba(191,161,90,.3);
+    }
+
+    .horaTitle{
+      font-family:"Playfair Display",serif;
+      font-size:22px;
+      font-weight:700;
+      color:var(--gold);
+    }
+
+    .horaCoversBadge{
+      font-size:11px;
+      color:var(--muted);
+      font-family:"IBM Plex Mono",monospace;
+      letter-spacing:.5px;
+    }
+
+    .horaGrid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:12px;
+    }
+
+    .horaPanel{
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.06);
       border-radius:14px;
-      color:var(--ink);
-      display:none;
+      padding:14px 16px;
     }
 
-    @media (max-width:900px){
-      .stats{grid-template-columns:1fr}
-      .gridTop{grid-template-columns:1fr}
-      .gridBottom{grid-template-columns:1fr}
-      .statValue{font-size:26px}
+    .horaPanelTitle{
+      font-size:10px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:1.5px;
+      margin-bottom:10px;
+      font-family:"IBM Plex Mono",monospace;
     }
-    .rowQty{
 
-background:#bfa15a;
-color:#111;
+    /* ── DIETARY ALERTS ── */
+    .alertsPanel{
+      background:rgba(194,106,74,.06);
+      border:1px solid rgba(194,106,74,.2);
+      border-radius:var(--radius);
+      padding:18px 20px;
+      margin-bottom:16px;
+    }
 
-padding:4px 10px;
+    .alertsHeader{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+    }
 
-border-radius:8px;
+    .alertsTitle{
+      font-family:"Playfair Display",serif;
+      font-size:20px;
+      font-weight:700;
+      color:var(--terracotta);
+    }
 
-font-weight:600;
+    .alertsBadge{
+      background:var(--terracotta);
+      color:#fff;
+      font-size:11px;
+      font-weight:700;
+      padding:4px 10px;
+      border-radius:999px;
+    }
 
-min-width:40px;
-text-align:center;
+    .alertCard{
+      border:1px solid rgba(194,106,74,.2);
+      background:rgba(194,106,74,.04);
+      border-radius:12px;
+      padding:12px 14px;
+      margin-bottom:8px;
+    }
 
-}
-    .updated{
+    .alertCard:last-child{ margin-bottom:0; }
 
-margin-top:6px;
+    .alertTop{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:6px;
+    }
 
-font-size:11px;
+    .alertCliente{
+      font-weight:700;
+      font-size:14px;
+    }
 
-color:rgba(244,241,234,.55);
+    .alertHora{
+      font-size:11px;
+      color:var(--muted);
+      font-family:"IBM Plex Mono",monospace;
+      background:rgba(255,255,255,.05);
+      padding:3px 8px;
+      border-radius:999px;
+    }
 
-letter-spacing:1px;
+    .alertNotas{
+      font-size:13px;
+      color:var(--terracotta);
+      line-height:1.5;
+    }
 
-text-transform:uppercase;
-
-}
+    .noAlerts{
+      font-size:13px;
+      color:var(--muted);
+      text-align:center;
+      padding:20px 0;
+    }
   </style>
+
 </head>
+
 <body>
-  <div class="container">
+<div class="container">
 
-    <div class="topbar">
-      <div class="titleWrap">
-        <h1>ALORA · Producción</h1>
-        <p>Kitchen board por función</p>
-        <div id="updated" class="updated">
-      Actualizado: —
-      </div>
-      </div>
-      
+  <!-- TOPBAR -->
 
-      <div class="control">
-        <select id="funcionSelect" class="funcionSelect"></select>
-      </div>
+  <div class="topbar">
+    <div class="titleWrap">
+      <h1>ALORA · Producción</h1>
+      <p>Kitchen board por función</p>
     </div>
 
-    <div class="stats">
-      <div class="statCard">
-        <div class="statLabel">Covers</div>
-        <div class="statValue" id="coversTotal">0</div>
-      </div>
+```
+<div class="topbarRight">
 
-      <div class="statCard">
-        <div class="statLabel">Proteínas totales</div>
-        <div class="statValue" id="proteinasTotal">0</div>
-      </div>
-
-  <div class="gridTop">
-
-<div class="panel">
-<h2>Base Principales</h2>
-<div id="basePrincipales" class="list"></div>
-</div>
-
-<div class="panel">
-<h2>Combinaciones</h2>
-<div id="principales" class="list"></div>
-</div>
-
-</div>
-
-     
-
-    <div class="gridBottom">
-      <div class="panel">
-        <h2>Proteínas</h2>
-        <div id="proteinas" class="list"></div>
-      </div>
-
-      <div class="panel">
-        <h2>Aperitivos</h2>
-        <div id="aperitivos" class="list"></div>
-      </div>
-
-      <div class="panel">
-        <h2>Postres</h2>
-        <div id="postres" class="list"></div>
-      </div>
+  <!-- COUNTDOWN -->
+  <div class="countdownWrap">
+    <div class="countdownLabel">Refresh</div>
+    <div class="countdownBar">
+      <div class="countdownFill" id="countdownFill" style="width:100%"></div>
     </div>
+    <div class="countdownNum" id="countdownNum">20</div>
+  </div>
 
-    <div id="errorBox" class="errorBox"></div>
+  <!-- CONTROLS -->
+  <div class="controls">
+    <select id="funcionSelect" class="funcionSelect"></select>
+
+    <button
+      id="toggleHora"
+      class="toggleBtn"
+      onclick="toggleView(this)"
+    >
+      Ver por hora
+    </button>
+  </div>
+
+</div>
+```
 
   </div>
 
-  <script>
-    //const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyxgEL9fCZHe3HBlcHR2AvVN6gQAgR3nVnuqXSu4qGElW84pOUX91-k5PfLFeHsNcI4/exec";
-    //const SHARED_SECRET = "demo123";
+  <!-- STATS -->
 
-    function showError(msg){
-      const box = document.getElementById("errorBox");
-      box.style.display = "block";
-      box.textContent = msg;
-    }
+  <div class="stats">
+    <div class="statCard">
+      <div class="statLabel">Covers</div>
+      <div class="statValue" id="coversTotal">—</div>
+    </div>
+    <div class="statCard">
+      <div class="statLabel">Proteinas</div>
+      <div class="statValue" id="proteinasTotal">—</div>
+    </div>
+    <div class="statCard">
+      <div class="statLabel">Reservaciones</div>
+      <div class="statValue" id="reservasTotal">—</div>
+    </div>
+    <div class="statCard">
+      <div class="statLabel">Con notas</div>
+      <div class="statValue" id="notasTotal" style="color:var(--terracotta);">—</div>
+    </div>
+  </div>
 
-    function clearError(){
-      const box = document.getElementById("errorBox");
-      box.style.display = "none";
-      box.textContent = "";
-    }
+  <!-- TIMESTAMP -->
 
-   async function api(body){
-  const res = await fetch(CONFIG.BACKEND_URL,{
-    method:"POST",
-    headers:{ "Content-Type":"text/plain;charset=utf-8" },
-    body:JSON.stringify({
-      ...body,
-      secret: CONFIG.SECRET
-    })
-  });
+  <div class="updated" id="updated">Actualizando...</div>
 
-  return await res.json();
-}
+  <!-- ERROR -->
 
-    async function loadFunciones(){
-      clearError();
+  <div id="errorBox" class="errorBox"></div>
 
-      try{
-        const data = await api({
-          action:"funciones",
-          
-        });
+  <!-- DIETARY ALERTS -->
 
-        if(!data.ok || !Array.isArray(data.funciones)){
-          showError(data.error || "No se pudieron cargar las funciones.");
-          return;
-        }
+  <div class="alertsPanel" id="alertsPanel" style="display:none;">
+    <div class="alertsHeader">
+      <div class="alertsTitle">Alertas dieteticas</div>
+      <div class="alertsBadge" id="alertsBadge">0</div>
+    </div>
+    <div id="alertsList"></div>
+  </div>
 
-        const select = document.getElementById("funcionSelect");
-        select.innerHTML = "";
+  <!-- MAIN CONTENT -->
 
-        data.funciones.forEach(f=>{
-          const opt = document.createElement("option");
-          opt.value = f;
-          opt.textContent = f;
-          select.appendChild(opt);
-        });
+  <div id="mainContent">
+    <div class="loadingState">
+      <div class="spinner"></div>
+      <p>Cargando produccion...</p>
+    </div>
+  </div>
 
-        select.addEventListener("change", loadProduction);
+</div>
 
-        if(data.funciones.length){
-          loadProduction();
-        }else{
-          showError("No hay funciones disponibles.");
-        }
+<script>
+  const REFRESH_INTERVAL = 20; // seconds
 
-      }catch(e){
-        showError("Error cargando funciones: " + String(e));
+  let currentView = "total"; // "total" or "hora"
+  let countdownVal = REFRESH_INTERVAL;
+  let countdownTimer = null;
+  let refreshTimer = null;
+  let functionsLoaded = false;
+
+  /* ── API ── */
+  async function api(body){
+    const res = await fetch(CONFIG.BACKEND_URL,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify({ ...body, secret:CONFIG.SECRET })
+    });
+    return await res.json();
+  }
+
+  /* ── HELPERS ── */
+  function showError(msg){
+    const box = document.getElementById("errorBox");
+    box.style.display = "block";
+    box.textContent = msg;
+  }
+
+  function clearError(){
+    const box = document.getElementById("errorBox");
+    box.style.display = "none";
+    box.textContent = "";
+  }
+
+  function esc(str){
+    return String(str||"")
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;");
+  }
+
+  function sumObj(obj){
+    return Object.values(obj||{}).reduce((a,n)=>a+Number(n||0),0);
+  }
+
+  /* ── COUNTDOWN ── */
+  function startCountdown(){
+    if(countdownTimer) clearInterval(countdownTimer);
+    countdownVal = REFRESH_INTERVAL;
+
+    countdownTimer = setInterval(()=>{
+      countdownVal--;
+
+      const pct = (countdownVal / REFRESH_INTERVAL) * 100;
+      document.getElementById("countdownFill").style.width = pct + "%";
+      document.getElementById("countdownNum").textContent = countdownVal;
+
+      if(countdownVal <= 0){
+        clearInterval(countdownTimer);
+        loadProduction();
       }
-    }
+    }, 1000);
+  }
 
-    async function loadProduction(){
-      clearError();
+  /* ── TOGGLE VIEW ── */
+  function toggleView(btn){
+    currentView = currentView === "total" ? "hora" : "total";
+    btn.classList.toggle("active", currentView === "hora");
+    btn.textContent = currentView === "hora" ? "Ver total" : "Ver por hora";
 
-      const funcion = document.getElementById("funcionSelect").value;
+    // re-render with cached data
+    if(window._lastData) renderContent(window._lastData);
+  }
 
-      if(!funcion){
-        showError("Selecciona una función.");
+  /* ── LOAD FUNCIONES ── */
+  async function loadFunciones(){
+    try{
+      const data = await api({ action:"funciones" });
+
+      if(!data.ok || !data.funciones?.length){
+        showError("No se encontraron funciones activas.");
         return;
       }
 
-      try{
-        const data = await api({
-          action:"production",
-          funcion
-        });
+      const sel = document.getElementById("funcionSelect");
+      sel.innerHTML = "";
 
-        if(!data.ok){
-          showError(data.error || "No se pudo cargar producción.");
-          return;
-        }
+      data.funciones.forEach(f=>{
+        const o = document.createElement("option");
+        o.value = f;
+        o.textContent = f;
+        sel.appendChild(o);
+      });
 
-        const board = data.board || {
-          aperitivos:{},
-          principales:{},
-          postres:{},
-          proteinas:{}
-        };
+      sel.addEventListener("change", ()=>{
+        clearError();
+        loadProduction();
+      });
 
-        const covers = Number(data.covers || 0);
+      functionsLoaded = true;
+      await loadProduction();
+      startCountdown();
 
-        document.getElementById("coversTotal").textContent = covers;
-
-        const proteinasTotal = sumObjectValues(board.proteinas);
-        document.getElementById("proteinasTotal").textContent = proteinasTotal;
-
-        renderList("proteinas", board.proteinas);
-        renderList("aperitivos", board.aperitivos);
-        renderList("principales", board.principales);
-        renderList("postres", board.postres);
-        renderList("basePrincipales", board.basePrincipales || {});
-
-        document.getElementById("updated").textContent =
-"Actualizado: " + new Date().toLocaleTimeString("es-PR",{
-hour:"numeric",
-minute:"2-digit"
-});
-
-      }catch(e){
-        showError("Error cargando producción: " + String(e));
-      }
+    }catch(e){
+      showError("Error cargando funciones: " + e.message);
     }
-
-    function sumObjectValues(obj){
-      return Object.values(obj || {}).reduce((acc,n)=>acc + Number(n || 0),0);
-    }
-
-    function renderList(containerId, data){
-
-  const el = document.getElementById(containerId);
-  el.innerHTML = "";
-
-  const entries = Object.entries(data || {}).sort((a,b)=>b[1]-a[1]);
-
-  if(!entries.length){
-    el.innerHTML = '<div class="empty">Sin datos todavía</div>';
-    return;
   }
 
-  entries.forEach(([name, qty])=>{
-    const row = document.createElement("div");
-    row.className = "row";
-    row.innerHTML = `
-      <div class="rowName">${escapeHtml(name)}</div>
-      <div class="rowQty">${qty}</div>
-    `;
-    el.appendChild(row);
-  });
+  /* ── LOAD PRODUCTION ── */
+  async function loadProduction(){
+    if(!functionsLoaded) return;
 
-}
+    clearError();
 
-   
-
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
+    const funcion = document.getElementById("funcionSelect").value;
+    if(!funcion){
+      showError("Selecciona una función.");
+      return;
     }
-    
 
-    loadFunciones();
-    setInterval(loadProduction,20000);
-  </script>
+    // show loading only on first load
+    if(!window._lastData){
+      document.getElementById("mainContent").innerHTML = `
+        <div class="loadingState">
+          <div class="spinner"></div>
+          <p>Cargando produccion...</p>
+        </div>`;
+    }
+
+    try{
+      const data = await api({ action:"production", funcion });
+
+      if(!data.ok){
+        showError(data.error || "No se pudo cargar produccion.");
+        return;
+      }
+
+      window._lastData = data;
+
+      // stats
+      document.getElementById("coversTotal").textContent    = data.covers || 0;
+      document.getElementById("proteinasTotal").textContent = sumObj(data.board?.proteinas);
+      document.getElementById("reservasTotal").textContent  = (data.notas !== undefined)
+        ? (data.porHora ? Object.keys(data.porHora).reduce((s,h)=> s + sumObj(data.porHora[h]?.aperitivos), 0) : "—")
+        : "—";
+
+      const notasCount = (data.notas||[]).length;
+      document.getElementById("notasTotal").textContent = notasCount;
+      document.getElementById("reservasTotal").textContent =
+        data.porHora ? Object.keys(data.porHora).length + " horarios" : "—";
+
+      // timestamp
+      document.getElementById("updated").textContent =
+        "Actualizado: " + new Date().toLocaleTimeString("es-PR",{
+          hour:"numeric", minute:"2-digit", second:"2-digit"
+        });
+
+      // dietary alerts
+      renderAlerts(data.notas || []);
+
+      // main content
+      renderContent(data);
+
+      // restart countdown
+      startCountdown();
+
+    }catch(e){
+      showError("Error de conexion: " + e.message);
+      startCountdown();
+    }
+  }
+
+  /* ── RENDER ALERTS ── */
+  function renderAlerts(notas){
+    const panel = document.getElementById("alertsPanel");
+    const list  = document.getElementById("alertsList");
+    const badge = document.getElementById("alertsBadge");
+
+    badge.textContent = notas.length;
+
+    if(!notas.length){
+      panel.style.display = "block";
+      list.innerHTML = `<div class="noAlerts">Sin notas dieteticas para esta funcion</div>`;
+      return;
+    }
+
+    panel.style.display = "block";
+
+    list.innerHTML = notas.map(n=>`
+      <div class="alertCard">
+        <div class="alertTop">
+          <div class="alertCliente">${esc(n.cliente)}</div>
+          <div class="alertHora">${esc(n.hora)} &middot; ${n.personas} pax</div>
+        </div>
+        <div class="alertNotas">${esc(n.notas)}</div>
+      </div>
+    `).join("");
+  }
+
+  /* ── RENDER CONTENT ── */
+  function renderContent(data){
+    if(currentView === "hora"){
+      renderPorHora(data);
+    }else{
+      renderTotal(data);
+    }
+  }
+
+  /* ── RENDER TOTAL VIEW ── */
+  function renderTotal(data){
+    const board = data.board || {};
+
+    document.getElementById("mainContent").innerHTML = `
+      <div class="gridTop">
+        <div class="panel">
+          <h2>Base Principales</h2>
+          ${renderList(board.basePrincipales || {})}
+        </div>
+        <div class="panel">
+          <h2>Combinaciones</h2>
+          ${renderList(board.principales || {})}
+        </div>
+      </div>
+
+      <div class="gridBottom">
+        <div class="panel">
+          <h2>Proteinas</h2>
+          ${renderList(board.proteinas || {})}
+        </div>
+        <div class="panel">
+          <h2>Aperitivos</h2>
+          ${renderList(board.aperitivos || {})}
+        </div>
+        <div class="panel">
+          <h2>Postres</h2>
+          ${renderList(board.postres || {})}
+        </div>
+      </div>
+    `;
+  }
+
+  /* ── RENDER POR HORA VIEW ── */
+  function renderPorHora(data){
+    const porHora = data.porHora || {};
+    const horas = Object.keys(porHora).sort((a,b)=>a.localeCompare(b));
+
+    if(!horas.length){
+      document.getElementById("mainContent").innerHTML =
+        `<div class="loadingState"><p>Sin datos por hora disponibles.</p></div>`;
+      return;
+    }
+
+    const html = horas.map(hora=>{
+      const h = porHora[hora];
+      const coversHora = sumObj(h.aperitivos) || sumObj(h.basePrincipales) || 0;
+
+      return `
+        <div class="horaSection">
+          <div class="horaHeader">
+            <div class="horaTitle">${esc(hora)}</div>
+            <div class="horaCoversBadge">${coversHora} covers</div>
+          </div>
+
+          <div class="horaGrid">
+            <div class="horaPanel">
+              <div class="horaPanelTitle">Base Principales</div>
+              ${renderList(h.basePrincipales || {})}
+            </div>
+            <div class="horaPanel">
+              <div class="horaPanelTitle">Combinaciones</div>
+              ${renderList(h.principales || {})}
+            </div>
+            <div class="horaPanel">
+              <div class="horaPanelTitle">Proteinas</div>
+              ${renderList(h.proteinas || {})}
+            </div>
+            <div class="horaPanel">
+              <div class="horaPanelTitle">Aperitivos</div>
+              ${renderList(h.aperitivos || {})}
+            </div>
+            <div class="horaPanel">
+              <div class="horaPanelTitle">Postres</div>
+              ${renderList(h.postres || {})}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    document.getElementById("mainContent").innerHTML = html;
+  }
+
+  /* ── RENDER LIST ── */
+  function renderList(data){
+    const entries = Object.entries(data||{}).sort((a,b)=>b[1]-a[1]);
+
+    if(!entries.length){
+      return `<div class="empty">Sin datos</div>`;
+    }
+
+    return entries.map(([name,qty])=>`
+      <div class="dataRow">
+        <div class="rowName">${esc(name)}</div>
+        <div class="rowQty">${qty}</div>
+      </div>
+    `).join("");
+  }
+
+  /* ── INIT ── */
+  loadFunciones();
+</script>
+
 </body>
 </html>
