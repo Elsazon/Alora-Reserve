@@ -189,7 +189,13 @@ body{
 }
 
 /*  MAIN LAYOUT  */
-#mainApp{ display:none; width:100%; box-sizing:border-box; }
+#mainApp{
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  visibility:hidden;
+  pointer-events:none;
+}
 
 .container{
   width:100%;
@@ -1336,7 +1342,12 @@ select option{ background:#0e1511; color:var(--ink); }
  */
 function checkPin(){
   if(sessionStorage.getItem("alora_host_auth") === "1"){
-    showApp();
+    document.getElementById("pinOverlay").style.display = "none";
+    const app = document.getElementById("mainApp");
+    app.style.visibility = "visible";
+    app.style.pointerEvents = "auto";
+    // wait for layout to settle before init
+    setTimeout(()=> initApp(), 50);
   }
 }
 
@@ -1374,7 +1385,9 @@ function showApp(){
   overlay.classList.add("fade");
   setTimeout(()=>{
     overlay.style.display = "none";
-    document.getElementById("mainApp").style.display = "block";
+    const app = document.getElementById("mainApp");
+    app.style.visibility = "visible";
+    app.style.pointerEvents = "auto";
     initApp();
   }, 500);
 }
@@ -1667,6 +1680,8 @@ async function loadReservas(){
    RENDER RESERVAS
  */
 function renderReservas(list){
+  // preserve existing cache entries — only add/update, don't wipe
+  const prevCache = {...HOST_CACHE};
   HOST_CACHE = {};
   CURRENT_LIST = list.slice();
 
@@ -2053,6 +2068,7 @@ async function runPrimaryAction(id){
     SEATED_TIMES[id] = Date.now();
   }
 
+  // update all reservations in the group
   Object.values(HOST_CACHE).forEach(x=>{
     if((x.grupo||x.id)===ACTIVE_GROUP){
       x.estado = newEstado;
@@ -2060,10 +2076,33 @@ async function runPrimaryAction(id){
     }
   });
 
+  // auto-switch tab to follow the new estado
+  // so the selected reservation stays visible
+  if(newEstado==="Sentado"){
+    CURRENT_TAB = "sentados";
+    document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
+    $("tabSentados").classList.add("active");
+  }else if(newEstado==="Cerrado"){
+    CURRENT_TAB = "cerrados";
+    document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
+    $("tabCerrados").classList.add("active");
+  }else if(["Pendiente","Confirmado","Llegó"].includes(newEstado)){
+    CURRENT_TAB = "pendientes";
+    document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
+    $("tabPendientes").classList.add("active");
+  }
+
+  // re-render list first so HOST_CACHE is rebuilt
   renderReservas(CURRENT_LIST);
-  renderDetalle(HOST_CACHE[id]);
+
+  // then render detail with the updated reservation
+  // HOST_CACHE[id] is now the updated entry
+  const updated = HOST_CACHE[id];
+  if(updated) renderDetalle(updated);
+
   paintMesas(CURRENT_LIST);
-  showToast(`Estado → ${newEstado}`,"success");
+  drawConnectionLines();
+  showToast(`Estado actualizado: ${newEstado}`,"success");
 }
 
 /* 
@@ -2513,8 +2552,15 @@ async function assignMesa(id){
   });
 
   SELECTED_MESAS=[];
+
+  // auto-switch to sentados tab
+  CURRENT_TAB = "sentados";
+  document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
+  $("tabSentados").classList.add("active");
+
   renderReservas(CURRENT_LIST);
-  renderDetalle(HOST_CACHE[id]);
+  const updated = HOST_CACHE[id];
+  if(updated) renderDetalle(updated);
   paintMesas(CURRENT_LIST);
   drawConnectionLines();
   showToast(`Mesa ${mesaString} asignada`,"success");
@@ -2532,13 +2578,20 @@ async function assignSuggested(id){
   if(!SEATED_TIMES[id]) SEATED_TIMES[id]=Date.now();
 
   SELECTED_MESAS=[];
+
+  // auto-switch to sentados tab
+  CURRENT_TAB = "sentados";
+  document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
+  $("tabSentados").classList.add("active");
+
   renderReservas(CURRENT_LIST);
-  renderDetalle(HOST_CACHE[id]);
+  const updated = HOST_CACHE[id];
+  if(updated) renderDetalle(updated);
   paintMesas(CURRENT_LIST);
   drawConnectionLines();
 
   api({action:"host_update",id,mesa:mesaString,estado:"Sentado",funcion:$("funcion").value});
-  showToast(`Mesa ${mesaString} asignada ✨`,"success");
+  showToast(`Mesa ${mesaString} asignada`,"success");
 }
 
 async function liberarMesa(id){
@@ -2548,8 +2601,14 @@ async function liberarMesa(id){
   if(HOST_CACHE[id]){ HOST_CACHE[id].mesa=""; HOST_CACHE[id].estado=newEstado; }
   delete SEATED_TIMES[id];
 
+  // follow to correct tab
+  CURRENT_TAB = "pendientes";
+  document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
+  $("tabPendientes").classList.add("active");
+
   renderReservas(CURRENT_LIST);
-  renderDetalle(HOST_CACHE[id]);
+  const updated = HOST_CACHE[id];
+  if(updated) renderDetalle(updated);
   paintMesas(CURRENT_LIST);
   drawConnectionLines();
 
