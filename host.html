@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-/* ─── TOKENS ─────────────────────────────────────────────── */
+/*  TOKENS  */
 :root{
   --bg0:#0e1511;
   --bg1:#121a16;
@@ -41,7 +41,7 @@ body{
   overflow-x:hidden;
 }
 
-/* ─── PIN OVERLAY ────────────────────────────────────────── */
+/*  PIN OVERLAY  */
 #pinOverlay{
   position:fixed;
   inset:0;
@@ -183,8 +183,8 @@ body{
   80%{ transform:translateX(6px); }
 }
 
-/* ─── MAIN LAYOUT ────────────────────────────────────────── */
-#mainApp{ display:none; }
+/*  MAIN LAYOUT  */
+#mainApp{ display:none; width:100%; }
 
 .container{
   width:min(1600px,98%);
@@ -192,13 +192,13 @@ body{
   padding:20px 8px 40px;
 }
 
-/* ─── TOPBAR ─────────────────────────────────────────────── */
+/*  TOPBAR  */
 .topbar{
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:16px;
-  margin-bottom:20px;
+  margin-bottom:12px;
   flex-wrap:wrap;
 }
 
@@ -253,14 +253,14 @@ body{
   box-shadow:0 0 6px var(--green);
 }
 
-/* ─── HEADER CARD ────────────────────────────────────────── */
+/*  HEADER CARD  */
 .headerCard{
   border:1px solid var(--line);
   background:var(--card);
   border-radius:var(--radius);
-  padding:16px 20px;
+  padding:12px 16px;
   box-shadow:var(--shadow);
-  margin-bottom:20px;
+  margin-bottom:14px;
 }
 
 .headerGrid{
@@ -334,7 +334,7 @@ select option{ background:#0e1511; color:var(--ink); }
 
 .btnMini:hover{ opacity:.85; }
 
-/* ─── HORA FILTER BAR ────────────────────────────────────── */
+/*  HORA FILTER BAR  */
 .horaFilterBar{
   display:flex;
   gap:6px;
@@ -357,7 +357,7 @@ select option{ background:#0e1511; color:var(--ink); }
 .horaChip:hover{ border-color:var(--terra); color:var(--ink); }
 .horaChip.active{ background:var(--terra); border-color:var(--terra); color:#111; font-weight:600; }
 
-/* ─── STATS ──────────────────────────────────────────────── */
+/*  STATS  */
 .stats{
   display:flex;
   gap:10px;
@@ -387,7 +387,7 @@ select option{ background:#0e1511; color:var(--ink); }
   font-family:"Playfair Display",serif;
 }
 
-/* ─── LAYOUT ─────────────────────────────────────────────── */
+/*  LAYOUT  */
 .layout{
   display:grid;
   grid-template-columns:260px 1fr 320px;
@@ -406,13 +406,14 @@ select option{ background:#0e1511; color:var(--ink); }
   .layout > .panel:last-child{ grid-column:1; }
 }
 
-/* ─── PANELS ─────────────────────────────────────────────── */
+/*  PANELS  */
 .panel{
   border:1px solid var(--line);
   background:var(--card);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   overflow:hidden;
+  min-width:0;
 }
 
 .panelHead{
@@ -448,7 +449,7 @@ select option{ background:#0e1511; color:var(--ink); }
 .panelBody::-webkit-scrollbar{ width:4px; }
 .panelBody::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.08); border-radius:4px; }
 
-/* ─── TAB BAR ────────────────────────────────────────────── */
+/*  TAB BAR  */
 .tabBar{
   display:flex;
   gap:4px;
@@ -477,7 +478,7 @@ select option{ background:#0e1511; color:var(--ink); }
 .tabBtn:hover{ color:var(--ink); }
 .tabBtn.active{ background:var(--gold); color:#111; font-weight:600; }
 
-/* ─── RESERVATION CARDS ──────────────────────────────────── */
+/*  RESERVATION CARDS  */
 .groupContainer{
   margin-bottom:12px;
   border:1px solid rgba(191,161,90,.25);
@@ -563,7 +564,7 @@ select option{ background:#0e1511; color:var(--ink); }
   flex-shrink:0;
 }
 
-/* ─── EMPTY STATE ────────────────────────────────────────── */
+/*  EMPTY STATE  */
 .emptyState{
   text-align:center;
   padding:40px 20px;
@@ -573,7 +574,7 @@ select option{ background:#0e1511; color:var(--ink); }
 .emptyState .emptyIcon{ font-size:32px; margin-bottom:12px; }
 .emptyState p{ font-size:13px; line-height:1.6; }
 
-/* ─── GROUP TOOLBAR ──────────────────────────────────────── */
+/*  GROUP TOOLBAR  */
 #groupToolbar{
   display:none;
   margin:8px 14px;
@@ -590,7 +591,7 @@ select option{ background:#0e1511; color:var(--ink); }
   gap:10px;
 }
 
-/* ─── FLOOR MAP ──────────────────────────────────────────── */
+/*  FLOOR MAP  */
 .mapContainer{ display:flex; flex-direction:column; gap:10px; }
 
 .floor{
@@ -717,7 +718,7 @@ select option{ background:#0e1511; color:var(--ink); }
   100%{ box-shadow:0 0 8px rgba(191,161,90,.4); }
 }
 
-/* ─── MAP LEGEND ─────────────────────────────────────────── */
+/*  MAP LEGEND  */
 .mapLegend{
   display:flex;
   gap:14px;
@@ -749,7 +750,7 @@ select option{ background:#0e1511; color:var(--ink); }
 .swatch.ocupada{ background:#c26a4a; }
 .swatch.sugerida{ background:transparent; border:2px solid var(--gold); }
 
-/* ─── ZONE BUTTONS ───────────────────────────────────────── */
+/*  ZONE BUTTONS  */
 .zoneRow{
   display:flex;
   gap:8px;
@@ -775,7 +776,7 @@ select option{ background:#0e1511; color:var(--ink); }
 .zoneBtn.danger{ border-color:rgba(200,91,91,.4); color:var(--red); }
 .zoneBtn.danger:hover{ background:var(--red); color:white; border-color:var(--red); }
 
-/* ─── EDIT MODE TOOLBAR ──────────────────────────────────── */
+/*  EDIT MODE TOOLBAR  */
 .editToolbar{
   display:none;
   gap:8px;
@@ -798,7 +799,7 @@ select option{ background:#0e1511; color:var(--ink); }
   margin-bottom:4px;
 }
 
-/* ─── ADD TABLE FORM ─────────────────────────────────────── */
+/*  ADD TABLE FORM  */
 .addTableForm{
   display:none;
   gap:8px;
@@ -826,7 +827,7 @@ select option{ background:#0e1511; color:var(--ink); }
   font-size:12px;
 }
 
-/* ─── DETAIL PANEL ───────────────────────────────────────── */
+/*  DETAIL PANEL  */
 .detailEmpty{
   color:var(--muted);
   font-size:13px;
@@ -944,7 +945,7 @@ select option{ background:#0e1511; color:var(--ink); }
   margin-top:6px;
 }
 
-/* ─── INLINE CONFIRM ─────────────────────────────────────── */
+/*  INLINE CONFIRM  */
 .inlineConfirm{
   display:none;
   background:rgba(200,91,91,.08);
@@ -968,7 +969,7 @@ select option{ background:#0e1511; color:var(--ink); }
   gap:8px;
 }
 
-/* ─── TOAST ──────────────────────────────────────────────── */
+/*  TOAST  */
 #toast{
   position:fixed;
   bottom:28px;
@@ -992,7 +993,7 @@ select option{ background:#0e1511; color:var(--ink); }
 #toast.error{ border-left-color:var(--red); }
 #toast.warning{ border-left-color:var(--yellow); }
 
-/* ─── QR MODAL ───────────────────────────────────────────── */
+/*  QR MODAL  */
 #qrModal{
   position:fixed;
   inset:0;
@@ -1035,7 +1036,7 @@ select option{ background:#0e1511; color:var(--ink); }
   color:rgba(255,255,255,.5);
 }
 
-/* ─── BAR SHAPE ──────────────────────────────────────────── */
+/*  BAR SHAPE  */
 .bar{
   position:absolute;
   top:8%;left:22%;
@@ -1064,11 +1065,11 @@ select option{ background:#0e1511; color:var(--ink); }
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ======================== -->
 
 <!-- PIN OVERLAY                                             -->
 
-<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ======================== -->
 
 <div id="pinOverlay">
   <div class="pinCard">
@@ -1098,11 +1099,11 @@ select option{ background:#0e1511; color:var(--ink); }
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ======================== -->
 
 <!-- MAIN APP                                                -->
 
-<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ======================== -->
 
 <div id="mainApp">
 <div class="container">
@@ -1117,7 +1118,7 @@ select option{ background:#0e1511; color:var(--ink); }
 
 ```
 <div class="topbarRight">
-  <div class="refreshInfo" id="refreshInfo">—</div>
+  <div class="refreshInfo" id="refreshInfo"></div>
   <div class="statusPill">
     <div class="statusDot"></div>
     Servicio activo
@@ -1244,7 +1245,7 @@ select option{ background:#0e1511; color:var(--ink); }
 
   </div>
 
-  <div class="panelBody" style="padding:10px;overflow:visible;">
+  <div class="panelBody" style="padding:10px;overflow:hidden;">
     <div class="mapContainer">
       <div class="floor" id="floorMap">
         <canvas id="connectionCanvas"></canvas>
@@ -1299,9 +1300,9 @@ select option{ background:#0e1511; color:var(--ink); }
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <script>
-/* ═══════════════════════════════════════════════════════════
+/* 
    PIN
-═══════════════════════════════════════════════════════════ */
+ */
 function checkPin(){
   if(sessionStorage.getItem("alora_host_auth") === "1"){
     showApp();
@@ -1355,9 +1356,9 @@ document.getElementById("pinInput").addEventListener("keydown", e=>{
 // Check on load
 checkPin();
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    STATE
-═══════════════════════════════════════════════════════════ */
+ */
 const $ = id => document.getElementById(id);
 
 let HOST_CACHE       = {};
@@ -1429,9 +1430,9 @@ function buildTableMeta(layout){
   zone.forEach(t=>{ TABLE_META[t.id] = {x:t.x, y:t.y}; });
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    API
-═══════════════════════════════════════════════════════════ */
+ */
 async function api(body){
   const res = await fetch(CONFIG.BACKEND_URL,{
     method:"POST",
@@ -1441,9 +1442,9 @@ async function api(body){
   return await res.json();
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    INIT
-═══════════════════════════════════════════════════════════ */
+ */
 async function initApp(){
   await loadFunciones();
 
@@ -1477,9 +1478,9 @@ async function initApp(){
   startAutoRefresh();
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    FUNCIONES — dynamic load
-═══════════════════════════════════════════════════════════ */
+ */
 async function loadFunciones(){
   try{
     const data = await api({ action:"funciones" });
@@ -1496,9 +1497,9 @@ async function loadFunciones(){
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    AUTO REFRESH
-═══════════════════════════════════════════════════════════ */
+ */
 function startAutoRefresh(){
   if(refreshTimer) clearInterval(refreshTimer);
   refreshTimer = setInterval(async ()=>{
@@ -1547,9 +1548,9 @@ function updateRefreshInfo(ok){
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    HORA FILTER
-═══════════════════════════════════════════════════════════ */
+ */
 const HORA_PALETTE = [
   "#c26a4a","#bfa15a","#3fa86a","#4a7ec2",
   "#9a4ac2","#c24a7a","#4ac2b8","#c2a44a"
@@ -1586,9 +1587,9 @@ function resetHoraFilter(){
   });
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    TABS
-═══════════════════════════════════════════════════════════ */
+ */
 function setTab(tab){
   CURRENT_TAB = tab;
   document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
@@ -1596,9 +1597,9 @@ function setTab(tab){
   renderReservas(CURRENT_LIST);
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    LOAD RESERVAS
-═══════════════════════════════════════════════════════════ */
+ */
 async function loadReservas(){
   try{
     const data = await api({
@@ -1631,9 +1632,9 @@ async function loadReservas(){
   }
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    RENDER RESERVAS
-═══════════════════════════════════════════════════════════ */
+ */
 function renderReservas(list){
   HOST_CACHE = {};
   CURRENT_LIST = list.slice();
@@ -1771,9 +1772,9 @@ function buildResCard(r){
   return card;
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    QUICK ACTION MENU (right-click)
-═══════════════════════════════════════════════════════════ */
+ */
 function showQuickMenu(r, x, y){
   document.getElementById("quickMenu")?.remove();
 
@@ -1815,9 +1816,9 @@ async function quickUpdateEstado(id, estado){
   await loadReservas();
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    OPEN RESERVA
-═══════════════════════════════════════════════════════════ */
+ */
 async function openReserva(id, forceFetch=false){
   SELECTED_RESERVA_ID = id;
   let r = HOST_CACHE[id];
@@ -1840,9 +1841,9 @@ async function openReserva(id, forceFetch=false){
   setTimeout(loadCuentaGrupo, 0);
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    RENDER DETALLE
-═══════════════════════════════════════════════════════════ */
+ */
 function renderDetalle(r){
   if(!r){
     $("detalle").innerHTML = `<div class="detailEmpty"><div style="font-size:28px;margin-bottom:10px;">🪑</div>Selecciona una reserva</div>`;
@@ -1954,9 +1955,9 @@ function renderDetalle(r){
   `;
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    INLINE CONFIRM (replaces alert/confirm)
-═══════════════════════════════════════════════════════════ */
+ */
 let pendingConfirmFn = null;
 
 function confirmAction(message, fn){
@@ -1986,18 +1987,18 @@ function cancelConfirm(){
   pendingConfirmFn = null;
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    TIMERS
-═══════════════════════════════════════════════════════════ */
+ */
 function updateTimers(){
   if(!SELECTED_RESERVA_ID) return;
   const r = HOST_CACHE[SELECTED_RESERVA_ID];
   if(r) renderDetalle(r);
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    PRIMARY ACTIONS
-═══════════════════════════════════════════════════════════ */
+ */
 function getPrimaryAction(r){
   const e = r.estado||"Pendiente";
   if(e==="Pendiente")   return {label:"Confirmar reserva",class:"btnNeutral"};
@@ -2034,9 +2035,9 @@ async function runPrimaryAction(id){
   showToast(`Estado → ${newEstado}`,"success");
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    FLOOR MAP — EDIT MODE
-═══════════════════════════════════════════════════════════ */
+ */
 let EDIT_MODE_ACTIVE = false;
 
 function toggleEditMode(btn){
@@ -2101,9 +2102,9 @@ function confirmResetLayout(){
   });
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    RENDER MAP BASE
-═══════════════════════════════════════════════════════════ */
+ */
 function renderMapBase(){
   const container = $("floorMap");
 
@@ -2191,7 +2192,7 @@ function createTableNode(container, t){
   container.appendChild(el);
 }
 
-/* ─── DRAG ───────────────────────────────────────────────── */
+/*  DRAG  */
 function makeDraggable(el, tableId){
   let startX, startY, startLeft, startTop;
 
@@ -2280,9 +2281,9 @@ function makeDraggable(el, tableId){
   },{passive:false});
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    PAINT MESAS
-═══════════════════════════════════════════════════════════ */
+ */
 function paintMesas(list){
   document.querySelectorAll(".tableNode").forEach(el=>{
     el.classList.remove("ocupada","llego","suggested");
@@ -2321,9 +2322,9 @@ function paintMesas(list){
   });
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    CONNECTION LINES (canvas)
-═══════════════════════════════════════════════════════════ */
+ */
 function drawConnectionLines(){
   const canvas = $("connectionCanvas");
   if(!canvas) return;
@@ -2369,9 +2370,9 @@ function drawConnectionLines(){
   });
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    MESA INTERACTIONS
-═══════════════════════════════════════════════════════════ */
+ */
 function handleMesaClick(id){
   const reservas = CURRENT_LIST.filter(r=>{
     if(!r.mesa) return false;
@@ -2415,9 +2416,9 @@ function toggleMultiMode(btn){
   paintMesas(CURRENT_LIST);
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    SMART SEAT
-═══════════════════════════════════════════════════════════ */
+ */
 function sugerirMesas(personas){
   const disponibles = Array.from(
     document.querySelectorAll(".tableNode.libre")
@@ -2463,9 +2464,9 @@ function findBestCluster(mesas,cantidad){
   return best||[];
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    ASSIGN / LIBERAR MESA
-═══════════════════════════════════════════════════════════ */
+ */
 async function assignMesa(id){
   if(!SELECTED_MESAS.length){ showToast("Selecciona una mesa en el mapa","warning"); return; }
   const mesaString = SELECTED_MESAS.join(" + ");
@@ -2525,9 +2526,9 @@ async function liberarMesa(id){
   showToast("Mesa liberada","success");
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    GROUP MODE
-═══════════════════════════════════════════════════════════ */
+ */
 function toggleGroupMode(btn){
   GROUP_MODE=!GROUP_MODE;
   MULTI_MODE=false;
@@ -2603,9 +2604,9 @@ async function removeFromGroup(id){
   await loadReservas();
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    CONSUMO
-═══════════════════════════════════════════════════════════ */
+ */
 async function loadItemsMenu(){
   const data=await api({action:"get_items_menu"});
   const sel=$("itemSelect");
@@ -2678,9 +2679,9 @@ function handleReservaChange(e){
   if(label) label.textContent=e.target.options[e.target.selectedIndex].text;
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    CHECKOUT
-═══════════════════════════════════════════════════════════ */
+ */
 async function checkoutFromSelector(){
   const reservationId=$("reservaSelect")?.value;
   if(!reservationId){ showToast("Selecciona una reserva","warning"); return; }
@@ -2710,9 +2711,9 @@ async function checkoutGrupo(){
   window.open(`ticket.html?id=${grupo[0].id}`,"_blank");
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    QR SCANNER
-═══════════════════════════════════════════════════════════ */
+ */
 let qrScanner=null, scanning=false;
 
 function openQR(){
@@ -2755,9 +2756,9 @@ async function onScanSuccess(decodedText){
   setTimeout(()=>scanning=false,1000);
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    TOAST
-═══════════════════════════════════════════════════════════ */
+ */
 let toastTimer=null;
 
 function showToast(msg, type="success", duration=null){
@@ -2771,9 +2772,9 @@ function showToast(msg, type="success", duration=null){
   toastTimer=setTimeout(()=>{ t.style.display="none"; }, ms);
 }
 
-/* ═══════════════════════════════════════════════════════════
+/* 
    BULK ARRIVE (all for a given hora)
-═══════════════════════════════════════════════════════════ */
+ */
 function checkBulkArrive(){
   // show bulk arrive button if all in a hora have arrived
   // (called after each state change)
