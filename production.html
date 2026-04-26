@@ -510,16 +510,6 @@
 
   <div id="errorBox" class="errorBox"></div>
 
-  <!-- DIETARY ALERTS -->
-
-  <div class="alertsPanel" id="alertsPanel" style="display:none;">
-    <div class="alertsHeader">
-      <div class="alertsTitle">Alertas dieteticas</div>
-      <div class="alertsBadge" id="alertsBadge">0</div>
-    </div>
-    <div id="alertsList"></div>
-  </div>
-
   <!-- MAIN CONTENT -->
 
   <div id="mainContent">
@@ -527,6 +517,16 @@
       <div class="spinner"></div>
       <p>Cargando produccion...</p>
     </div>
+  </div>
+
+  <!-- DIETARY ALERTS — below panels -->
+
+  <div class="alertsPanel" id="alertsPanel" style="display:none;margin-top:16px;">
+    <div class="alertsHeader">
+      <div class="alertsTitle">Alertas dieteticas</div>
+      <div class="alertsBadge" id="alertsBadge">0</div>
+    </div>
+    <div id="alertsList"></div>
   </div>
 
 </div>
@@ -668,17 +668,14 @@
 
       window._lastData = data;
 
-      // stats
+      // stat cards
+      const notasCount  = (data.notas || []).length;
+      const horasCount  = Object.keys(data.porHora || {}).length;
+
       document.getElementById("coversTotal").textContent    = data.covers || 0;
       document.getElementById("proteinasTotal").textContent = sumObj(data.board?.proteinas);
-      document.getElementById("reservasTotal").textContent  = (data.notas !== undefined)
-        ? (data.porHora ? Object.keys(data.porHora).reduce((s,h)=> s + sumObj(data.porHora[h]?.aperitivos), 0) : "—")
-        : "—";
-
-      const notasCount = (data.notas||[]).length;
-      document.getElementById("notasTotal").textContent = notasCount;
-      document.getElementById("reservasTotal").textContent =
-        data.porHora ? Object.keys(data.porHora).length + " horarios" : "—";
+      document.getElementById("reservasTotal").textContent  = horasCount + (horasCount === 1 ? " horario" : " horarios");
+      document.getElementById("notasTotal").textContent     = notasCount;
 
       // timestamp
       document.getElementById("updated").textContent =
