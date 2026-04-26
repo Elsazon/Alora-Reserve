@@ -30,6 +30,10 @@
 
 *{ box-sizing:border-box; margin:0; padding:0; }
 
+html{
+  overflow-x:hidden;
+}
+
 body{
   font-family:"DM Sans",system-ui,sans-serif;
   color:var(--ink);
@@ -39,6 +43,7 @@ body{
     linear-gradient(180deg,var(--bg0),var(--bg1));
   min-height:100vh;
   overflow-x:hidden;
+  width:100%;
 }
 
 /*  PIN OVERLAY  */
@@ -267,19 +272,16 @@ body{
 
 .headerGrid{
   display:grid;
-  grid-template-columns:1fr auto;
+  grid-template-columns:1fr 380px;
   gap:16px;
-  align-items:center;
+  align-items:start;
 }
 
-/* On iPad portrait stats go below controls */
-@media(max-width:720px){
+@media(max-width:900px){
   .headerGrid{
     grid-template-columns:1fr;
   }
-  .stats{
-    justify-content:flex-start;
-  }
+  .stats{ justify-content:flex-start; }
 }
 
 .controls{
@@ -341,7 +343,9 @@ select option{ background:#0e1511; color:var(--ink); }
   display:flex;
   gap:6px;
   flex-wrap:wrap;
-  margin-top:12px;
+  margin-top:10px;
+  max-width:100%;
+  overflow:hidden;
 }
 
 .horaChip{
@@ -365,6 +369,8 @@ select option{ background:#0e1511; color:var(--ink); }
   gap:10px;
   flex-wrap:wrap;
   justify-content:flex-end;
+  min-width:0;
+  overflow:hidden;
 }
 
 .stat{
@@ -1069,11 +1075,15 @@ select option{ background:#0e1511; color:var(--ink); }
   pointer-events:none;
 }
 .bar::before{
-  content:"";position:absolute;
+  content:'';
+  display:block;
+  position:absolute;
   left:0;right:0;bottom:0;height:16px;background:#000;
 }
 .bar::after{
-  content:"";position:absolute;
+  content:'';
+  display:block;
+  position:absolute;
   left:0;bottom:0;width:16px;height:72%;background:#000;
   box-shadow:calc(100% - 16px) 0 0 #000;
 }
@@ -1771,7 +1781,7 @@ function buildResCard(r){
         <div class="resName">${r.cliente}</div>
         <div class="resMeta">
           <span class="horaBadge" style="background:${horaColor}22;color:${horaColor};border:1px solid ${horaColor}44">${r.hora||"—"}</span>
-          ${r.personas} pax · Mesa: ${r.mesa||"—"}
+          ${r.personas} pax · Mesa: ${r.mesa||"-"}
           <br>${r.telefono||"Sin teléfono"}
         </div>
       </div>
@@ -1918,7 +1928,7 @@ function renderDetalle(r){
       </div>
       <div style="margin-top:10px;font-size:13px;color:var(--muted);line-height:1.8;">
         👥 ${totalPersonas} pax &nbsp;·&nbsp; 📞 ${r.telefono||"—"}<br>
-        🍽 Mesa: ${SELECTED_MESAS.length ? `→ ${SELECTED_MESAS.join(" + ")}` : (r.mesa||"—")}
+        🍽 Mesa: ${SELECTED_MESAS.length ? `→ ${SELECTED_MESAS.join(" + ")}` : (r.mesa||"-")}
       </div>
     </div>
 
