@@ -238,7 +238,7 @@ body{
 }
 
 .refreshInfo{
-  font-family:"IBM Plex Mono",monospace;
+  font-family: ui-monospace, "SF Mono", Monaco, "Cascadia Mono", monospace;
   font-size:10px;
   color:var(--muted);
   letter-spacing:.5px;
@@ -1164,15 +1164,15 @@ select option{ background:#0e1511; color:var(--ink); }
 
   <!-- TOPBAR -->
 
-  <div class="topbar">
-    <div class="brandWrap">
-      <h1>ALORA · Host Stand</h1>
-      <p>Service console · salón principal + barra</p>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:12px;flex-wrap:wrap;">
+    <div>
+      <h1 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin:0;color:#f4f1ea;">ALORA · Host Stand</h1>
+      <p style="margin:4px 0 0;color:rgba(244,241,234,.55);font-size:12px;letter-spacing:1.6px;text-transform:uppercase;">Service console · salón principal + barra</p>
     </div>
-    <div class="topbarRight">
-      <div class="refreshInfo" id="refreshInfo" style="font-family:monospace;font-size:10px;color:rgba(244,241,234,.45);"></div>
-      <div class="statusPill">
-        <div class="statusDot"></div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div id="refreshInfo" style="font-family:monospace;font-size:10px;color:rgba(244,241,234,.45);"></div>
+      <div style="border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);padding:8px 14px;border-radius:999px;font-size:12px;color:rgba(244,241,234,.55);display:flex;align-items:center;gap:6px;">
+        <div style="width:6px;height:6px;border-radius:50%;background:#3fa86a;box-shadow:0 0 6px #3fa86a;flex-shrink:0;"></div>
         Servicio activo
       </div>
     </div>
@@ -1180,45 +1180,59 @@ select option{ background:#0e1511; color:var(--ink); }
 
   <!-- HEADER CARD -->
 
-  <div class="headerCard">
-    <div class="headerGrid">
+  <div style="
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.04);
+    border-radius:20px;
+    padding:14px 18px;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+    margin-bottom:14px;
+  ">
+    <div style="
+      display:flex;
+      flex-direction:row;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      flex-wrap:wrap;
+    ">
 
 ```
-  <div>
-    <div class="controls">
-      <div class="field">
-        <label for="funcion">Función</label>
-        <select id="funcion"></select>
+  <!-- LEFT: controls -->
+  <div style="flex:1;min-width:280px;">
+    <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        <label for="funcion" style="font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:rgba(244,241,234,.55);">Función</label>
+        <select id="funcion" style="background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);color:#f4f1ea;padding:10px 12px;border-radius:12px;font-size:13px;min-width:150px;outline:none;"></select>
       </div>
 
-      <div class="field">
-        <label for="buscar">Buscar</label>
-        <input id="buscar" placeholder="Cliente, teléfono o mesa">
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        <label for="buscar" style="font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:rgba(244,241,234,.55);">Buscar</label>
+        <input id="buscar" placeholder="Cliente, teléfono o mesa" style="background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);color:#f4f1ea;padding:10px 12px;border-radius:12px;font-size:13px;min-width:150px;outline:none;">
       </div>
 
-      <button onclick="openQR()" class="btnMini" style="background:var(--gold);color:#111;margin-bottom:1px;">
-        📷 Escanear QR
+      <button onclick="openQR()" style="background:#bfa15a;color:#111;border:none;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;cursor:pointer;">
+        Escanear QR
       </button>
     </div>
 
     <!-- HORA FILTER -->
-    <div class="horaFilterBar" id="horaFilterBar">
-      <div class="horaChip active" data-hora="all" onclick="setHoraFilter('all',this)">Todas</div>
-    </div>
+    <div id="horaFilterBar" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;"></div>
   </div>
 
-  <div class="stats">
-    <div class="stat">
-      <div class="statLabel">Covers</div>
-      <div class="statValue" id="coversTotal">0</div>
+  <!-- RIGHT: stats -->
+  <div style="display:flex;gap:10px;flex-wrap:wrap;flex-shrink:0;">
+    <div style="min-width:100px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.2);border-radius:14px;padding:10px 14px;">
+      <div style="font-size:10px;color:rgba(244,241,234,.55);text-transform:uppercase;letter-spacing:1px;">Covers</div>
+      <div id="coversTotal" style="font-size:22px;font-weight:600;color:#bfa15a;">0</div>
     </div>
-    <div class="stat">
-      <div class="statLabel">Llegaron</div>
-      <div class="statValue" id="coversArrived">0</div>
+    <div style="min-width:100px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.2);border-radius:14px;padding:10px 14px;">
+      <div style="font-size:10px;color:rgba(244,241,234,.55);text-transform:uppercase;letter-spacing:1px;">Llegaron</div>
+      <div id="coversArrived" style="font-size:22px;font-weight:600;color:#bfa15a;">0</div>
     </div>
-    <div class="stat">
-      <div class="statLabel">Pendientes</div>
-      <div class="statValue" id="coversPending">0</div>
+    <div style="min-width:100px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.2);border-radius:14px;padding:10px 14px;">
+      <div style="font-size:10px;color:rgba(244,241,234,.55);text-transform:uppercase;letter-spacing:1px;">Pendientes</div>
+      <div id="coversPending" style="font-size:22px;font-weight:600;color:#bfa15a;">0</div>
     </div>
   </div>
 
@@ -1296,14 +1310,14 @@ select option{ background:#0e1511; color:var(--ink); }
 
   </div>
 
-  <div class="panelBody" style="padding:10px;overflow:hidden;">
+  <div class="panelBody" style="padding:10px;overflow:hidden;max-height:none;">
     <div class="mapContainer">
-      <div class="floor" id="floorMap">
-        <canvas id="connectionCanvas"></canvas>
+      <div class="floor" id="floorMap" style="width:100%;box-sizing:border-box;">
+        <canvas id="connectionCanvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
       </div>
       <div class="mapLegend">
         <div class="legendItem"><div class="swatch libre"></div> Libre</div>
-        <div class="legendItem"><div class="swatch llego"></div> Llegó</div>
+        <div class="legendItem"><div class="swatch llego"></div> Llego</div>
         <div class="legendItem"><div class="swatch ocupada"></div> Sentado</div>
         <div class="legendItem"><div class="swatch sugerida"></div> Sugerida</div>
       </div>
