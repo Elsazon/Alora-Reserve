@@ -390,29 +390,18 @@ select option{ background:#0e1511; color:var(--ink); }
 /* ─── LAYOUT ─────────────────────────────────────────────── */
 .layout{
   display:grid;
-  grid-template-columns:280px 1fr 360px;
-  gap:14px;
+  grid-template-columns:260px 1fr 320px;
+  gap:12px;
   align-items:start;
 }
 
 /* Large desktop */
 @media(min-width:1400px){
-  .layout{ grid-template-columns:300px 1fr 380px; }
-}
-
-/* iPad landscape / small desktop — 2 col: list + map, detail below */
-@media(max-width:1100px){
-  .layout{
-    grid-template-columns:260px 1fr;
-    grid-template-rows:auto auto;
-  }
-  .layout > .panel:last-child{
-    grid-column:1 / -1;
-  }
+  .layout{ grid-template-columns:300px 1fr 380px; gap:16px; }
 }
 
 /* iPad portrait / mobile — single column */
-@media(max-width:720px){
+@media(max-width:700px){
   .layout{ grid-template-columns:1fr; }
   .layout > .panel:last-child{ grid-column:1; }
 }
@@ -445,18 +434,14 @@ select option{ background:#0e1511; color:var(--ink); }
 }
 
 .panelBody{
-  padding:14px;
-  max-height:calc(100vh - 260px);
+  padding:12px;
+  max-height:calc(100vh - 240px);
   overflow-y:auto;
   scrollbar-width:thin;
   scrollbar-color:rgba(255,255,255,.08) transparent;
 }
 
-@media(max-width:1100px){
-  .panelBody{ max-height:60vh; }
-}
-
-@media(max-width:720px){
+@media(max-width:700px){
   .panelBody{ max-height:50vh; }
 }
 
@@ -610,7 +595,7 @@ select option{ background:#0e1511; color:var(--ink); }
 
 .floor{
   position:relative;
-  height:clamp(460px,65vh,680px);
+  height:clamp(380px,55vh,620px);
   background:#0a0f0c;
   overflow:hidden;
   border:1px solid var(--line);
