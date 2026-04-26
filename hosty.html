@@ -53,7 +53,7 @@
     .heroInner{
       width:100%;
       border:1px solid rgba(255,255,255,.06);
-      border-radius:32px;
+      border-radius:calc(var(--radius)+8px);
       background:rgba(255,255,255,.04);
       padding:100px 40px;
       text-align:center;
@@ -177,7 +177,7 @@
     .functionCarousel::-webkit-scrollbar{display:none;}
     .functionTrack{display:flex;gap:14px;}
     .functionCard{
-      flex:0 0 240px;padding:20px;border-radius:22px;
+      flex:0 0 240px;padding:20px;border-radius:calc(var(--radius)-2px);
       border:1px solid rgba(255,255,255,.08);
       background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
       cursor:pointer;transition:.35s ease;scroll-snap-align:start;
@@ -520,21 +520,6 @@
       <span style="font-size:11px;opacity:.7;">Función seleccionada</span>
     </div>
 
-    <!-- NOTAS PRIMERO — visibilidad de alergias -->
-    <div style="
-      margin-bottom:16px;padding:12px 16px;
-      background:rgba(191,161,90,.06);border:1px solid rgba(191,161,90,.2);
-      border-radius:12px;font-size:13px;color:#d8cfa8;line-height:1.6;
-    ">
-      ⚠️ <strong>Alergias o necesidades especiales:</strong><br>
-      Si algún invitado tiene alergias, restricciones dietéticas o necesidades especiales, indícalo a continuación antes de continuar.
-    </div>
-
-    <label for="notas">Notas, alergias o solicitudes especiales</label>
-    <textarea id="notas" rows="3" placeholder="Ejemplo: alergia a nueces, vegetariano, silla de ruedas, celebración especial…"></textarea>
-
-    <div class="divider"></div>
-
     <div class="row2">
       <div>
         <label for="cliente">Cliente</label>
@@ -569,6 +554,21 @@
     </div>
 
     <div id="menuResetNotice">El menú cambió según la función seleccionada. Por favor selecciona nuevamente los platos.</div>
+
+    <label for="notas" style="margin-top:16px;">
+      <div class="divider"></div>
+      Notas, alergias o solicitudes especiales
+    </label>
+    <textarea id="notas" rows="3" placeholder="Ejemplo: alergia a nueces, intolerancia a lactosa, vegetariano, acceso para silla de ruedas, celebración especial, etc." style="margin-bottom:12px;"></textarea>
+
+    <div style="
+      margin:0 0 16px 0;padding:12px 16px;
+      background:rgba(191,161,90,.08);border:1px solid rgba(191,161,90,.25);
+      border-radius:10px;font-size:13px;color:#d8cfa8;line-height:1.6;
+    ">
+      ⚠️ <strong>Alergias o necesidades especiales:</strong><br>
+      Si algún invitado tiene alergias alimentarias, restricciones dietéticas o alguna discapacidad que debamos considerar para su comodidad, por favor indíquelo en el campo de notas.
+    </div>
 
     <div class="serviceOption">
       <label class="descorcheCard">
