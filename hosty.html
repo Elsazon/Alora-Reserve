@@ -1,210 +1,1280 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="es">
-
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ALORA | Fusión Boritaly</title>
+<script src="./config.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>ALORA Service Control</title>
-
-<style>
-
-body{
-background:#0e1511;
-color:#f4f1ea;
-font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-margin:0;
-padding:40px;
+  <style>
+ :root{
+  --bg0:#0e1511;
+  --bg1:#121a16;
+  --ink:#f4f1ea;
+  --muted:rgba(244,241,234,.65);
+  --olive:#4f5138;
+  --terracotta:#c26a4a;
+  --gold:#bfa15a;
+  --line:rgba(255,255,255,.08);
+  --radius:24px;
+  --shadow:0 30px 80px rgba(0,0,0,.65);
 }
 
-.panel{
-max-width:900px;
-margin:auto;
-}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(900px 600px at 15% 10%, rgba(194,106,74,.10), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(79,81,56,.15), transparent 60%),
+        linear-gradient(180deg,var(--bg0),var(--bg1));
+      min-height:100vh;
+      overflow-x:hidden;
+    }
 
-h1{
-font-size:28px;
-margin-bottom:25px;
-}
+    .wrap{max-width:1100px; margin:0 auto; padding:0 18px;}
+    a{color:inherit; text-decoration:none}
 
-label{
-font-size:13px;
-opacity:.7;
-}
+    /* HERO */
+    .hero{
+      min-height:92vh;
+      display:flex;
+      align-items:center;
+      padding:200px 0 170px;
+      justify-content:center;
+    }
+    .heroDivider{width:60px;height:1px;background:var(--line);margin:18px auto;opacity:.6;}
+    .heroInner{
+      width:100%;
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:32px;
+      background:rgba(255,255,255,.04);
+      padding:100px 40px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+      box-shadow:0 60px 140px rgba(0,0,0,.7);
+    }
+    .heroCenter{max-width:720px;margin:auto;position:relative;z-index:2;}
+    .heroInstitution{display:flex;justify-content:center;margin-bottom:50px;position:relative;}
+    .heroInstitution img{
+      height:100px;width:auto;
+      background:rgba(255,255,255,.88);
+      backdrop-filter:blur(6px);
+      padding:14px 26px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.35);
+      box-shadow:0 25px 70px rgba(0,0,0,.6),0 0 28px rgba(191,161,90,.15);
+    }
+    .heroInstitution::after{
+      content:"";position:absolute;bottom:-22px;left:50%;
+      transform:translateX(-50%);width:80px;height:1px;
+      background:var(--gold);opacity:.45;
+    }
+    .heroLogo{display:flex;justify-content:center;margin-bottom:25px;position:relative;}
+    .heroLogo::before{
+      content:"";position:absolute;top:50%;left:50%;
+      transform:translate(-50%,-50%);width:380px;height:380px;
+      background:radial-gradient(circle,rgba(191,161,90,.18) 0%,rgba(191,161,90,.10) 35%,transparent 70%);
+      filter:blur(40px);z-index:0;
+    }
+    .heroLogo img{
+      height:240px;width:auto;position:relative;z-index:1;
+      filter:drop-shadow(0 35px 80px rgba(0,0,0,.7)) drop-shadow(0 0 30px rgba(191,161,90,.25));
+      margin-bottom:34px;transition:transform .5s ease;
+    }
+    .heroLogo img:hover{transform:scale(1.03);}
+    .heroMeta{font-size:12px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;}
+    h1.heroTitle{font-family:"Playfair Display",serif;font-size:48px;margin-bottom:18px;}
+    .heroText{color:var(--muted);line-height:1.9;font-size:15px;margin-bottom:30px;}
+    .heroButtons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:10px;}
 
-select{
-margin-top:6px;
-padding:8px;
-border-radius:8px;
-background:#121a16;
-color:white;
-border:1px solid rgba(255,255,255,.15);
-}
+    /* BUTTONS */
+    .btn{border:none;cursor:pointer;border-radius:16px;padding:12px 14px;font-weight:600;font-size:14px;}
+    .btnPrimary{
+      background:var(--terracotta) !important;color:#111 !important;
+      border-radius:30px !important;
+      box-shadow:0 20px 50px rgba(194,106,74,.35),0 0 0 1px rgba(255,255,255,.05) !important;
+    }
+    .btnPrimary:hover{background:#b95839 !important;}
+    .btnGhost{background:rgba(255,255,255,.05);border:1px solid var(--line);color:rgba(255,255,255,.88);min-width:160px;}
 
-.card{
-background:#121a16;
-border:1px solid rgba(255,255,255,.08);
-border-radius:12px;
-padding:16px;
-margin-bottom:10px;
-}
+    /* SECTIONS */
+    section.block{padding:120px 0;}
+    .block+.block{border-top:1px solid rgba(255,255,255,.05);}
+    .sectionCard{
+      border:1px solid var(--line);
+      border-radius:calc(var(--radius)+6px);
+      padding:60px;
+      background:rgba(255,255,255,.04);
+      box-shadow:0 40px 100px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.03);
+      backdrop-filter:blur(6px);
+    }
+    .sectionTitle{
+      font-family:"Playfair Display",serif;font-size:24px;
+      margin:0 0 25px;position:relative;padding-bottom:12px;
+    }
+    .sectionTitle::after{
+      content:"";position:absolute;bottom:0;left:50%;
+      transform:translateX(-50%);width:60px;height:1px;
+      background:var(--gold);opacity:.4;
+    }
+    .sectionCard .sectionTitle{text-align:center;}
+    .sectionText{color:var(--muted);line-height:1.9;margin:0 0 20px;font-size:14px;}
+    .divider{height:1px;background:var(--line);margin:16px 0;}
 
-.row{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-}
+    /* MENU */
+    .menuGrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px;}
+    @media(max-width:900px){.menuGrid{grid-template-columns:1fr;}}
+    .menuCol{border:1px solid var(--line);border-radius:var(--radius);background:rgba(0,0,0,.16);padding:16px;}
+    .menuCol h3{margin:0 0 10px;font-size:13px;letter-spacing:.35px;text-transform:uppercase;color:rgba(255,255,255,.84);}
+    .smallNote{font-size:12px;color:rgba(255,255,255,.62);margin-top:10px;line-height:1.55;}
 
-button{
-background:#c26a4a;
-border:none;
-padding:7px 12px;
-border-radius:8px;
-color:black;
-font-weight:600;
-cursor:pointer;
-}
+    .menuItem{
+      position:relative;display:inline-block;
+      border:1px solid var(--line);background:rgba(255,255,255,.04);
+      border-radius:999px;padding:8px 14px;margin:6px 8px 0 0;
+      font-size:12px;cursor:pointer;transition:all .25s ease;
+    }
+    .menuItem:hover{
+      border-color:var(--terracotta);color:white;
+      box-shadow:0 0 0 1px var(--terracotta),0 12px 28px rgba(194,106,74,.25);
+      transform:translateY(-1px);
+    }
+    .menuName{pointer-events:none;}
+    .menuTooltip{
+      position:absolute;left:50%;top:140%;
+      transform:translateX(-50%) translateY(6px);
+      width:240px;background:#111;border:1px solid var(--line);
+      padding:14px;border-radius:14px;font-size:12px;line-height:1.6;
+      color:var(--muted);opacity:0;transition:all .25s ease;z-index:20;
+      box-shadow:0 20px 50px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.04);
+    }
+    .menuItem:hover .menuTooltip{opacity:1;transform:translateX(-50%) translateY(0);}
+    .menuTooltip::before{
+      content:"";position:absolute;top:-6px;left:50%;
+      transform:translateX(-50%) rotate(45deg);width:12px;height:12px;
+      background:#111;border-left:1px solid var(--line);border-top:1px solid var(--line);
+    }
+    @media(hover:none){
+      .menuTooltip{position:relative;left:auto;top:auto;transform:none;margin-top:8px;width:100%;opacity:1;display:none;}
+      .menuItem.active .menuTooltip{display:block;}
+    }
 
-button:hover{
-opacity:.85;
-}
+    /* CAROUSEL */
+    .functionCarousel{
+      margin-bottom:40px;overflow-x:auto;overflow-y:hidden;
+      padding:10px 4px 20px;scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;position:relative;
+      scroll-padding-left:20px;
+    }
+    .functionCarousel::-webkit-scrollbar{display:none;}
+    .functionTrack{display:flex;gap:14px;}
+    .functionCard{
+      flex:0 0 240px;padding:20px;border-radius:22px;
+      border:1px solid rgba(255,255,255,.08);
+      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+      cursor:pointer;transition:.35s ease;scroll-snap-align:start;
+    }
+    .functionCard:hover{transform:translateY(-3px);border-color:var(--terracotta);box-shadow:0 20px 50px rgba(194,106,74,.25);}
+    .functionCard.active{border-color:var(--terracotta);box-shadow:0 0 0 1px var(--terracotta),0 20px 60px rgba(194,106,74,.35);}
+    .functionTitle{font-family:"Playfair Display",serif;font-size:17px;margin-bottom:6px;}
+    .functionMeta{font-size:12px;color:var(--muted);}
+    .functionMenuPreview{margin-top:10px;font-size:12px;color:rgba(255,255,255,.75);line-height:1.5;}
+    @media(max-width:600px){.functionCard{flex:0 0 180px;padding:16px;}.functionTitle{font-size:16px;}}
+    .carouselArrow{
+      position:absolute;right:0;top:50%;transform:translateY(-50%);
+      padding:12px 18px;font-size:18px;color:rgba(255,255,255,.35);
+      background:linear-gradient(90deg,transparent,rgba(0,0,0,.35));
+      pointer-events:none;animation:arrowFade 2s infinite;
+    }
+    @keyframes arrowFade{
+      0%{opacity:.2;transform:translateY(-50%) translateX(0);}
+      50%{opacity:.6;transform:translateY(-50%) translateX(6px);}
+      100%{opacity:.2;transform:translateY(-50%) translateX(0);}
+    }
 
-</style>
+    /* FORM */
+    .reserveGrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px;}
+    @media(max-width:900px){.reserveGrid{grid-template-columns:1fr;}}
+    .formCard{
+      border:1px solid rgba(191,161,90,.15) !important;
+      background:rgba(255,255,255,.04) !important;
+      box-shadow:var(--shadow) !important;
+      padding:50px !important;
+      position:relative;
+      border-radius:calc(var(--radius)+6px);
+      backdrop-filter:blur(6px);
+    }
+    .formCard::before{
+      content:"";position:absolute;top:0;left:0;
+      width:100%;height:3px;background:var(--gold);opacity:.5;
+    }
+    label{display:block;font-size:12px;color:rgba(255,255,255,.76);margin:10px 0 6px;}
+    input,select,textarea{
+      width:100%;padding:12px;border-radius:14px !important;
+      border:1px solid rgba(255,255,255,.08) !important;
+      background:rgba(255,255,255,.05) !important;
+      color:rgba(255,255,255,.92);outline:none;
+      font-family:inherit;
+    }
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--terracotta) !important;
+      box-shadow:0 0 0 1px var(--terracotta) !important;
+    }
+    input::placeholder,textarea::placeholder{color:rgba(255,255,255,.45);}
+    select{cursor:pointer;color:#fff;}
+    select option{color:#000;background:#fff;}
+    textarea{min-height:96px;resize:vertical;}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    @media(max-width:520px){.row2{grid-template-columns:1fr;}}
+
+    /* FUNCTION BANNER inside form */
+    .formFuncionBanner{
+      display:none;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:16px;
+      padding:12px 16px;
+      background:rgba(191,161,90,.08);
+      border:1px solid rgba(191,161,90,.25);
+      border-radius:12px;
+      font-size:13px;
+      color:var(--gold);
+    }
+    .formFuncionBanner.visible{display:flex;}
+    .formFuncionBanner strong{font-weight:600;}
+    .formFuncionBanner span{color:var(--muted);font-size:12px;}
+
+    /* GUEST */
+    .guest{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.03);border-radius:16px;padding:12px;margin-top:12px;}
+    .guestTop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px;}
+    .guestLabel{font-weight:600;font-size:13px;color:rgba(255,255,255,.9);}
+    .ghostBtn{background:transparent;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.82);padding:8px 10px;border-radius:999px;font-size:12px;cursor:pointer;}
+    .ghostBtn:hover{border-color:rgba(255,255,255,.34);}
+    .btnSecondary{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.9);}
+
+    /* PROTEÍNA */
+    .chipsProteina{display:flex;gap:10px;margin-top:8px;}
+    .chipProteina{border:1px solid var(--line);background:rgba(255,255,255,.04);color:rgba(255,255,255,.82);padding:8px 12px;border-radius:999px;font-size:12px;cursor:pointer;transition:all .2s ease;}
+    .chipProteina:hover{border-color:var(--terracotta);color:white;}
+    .chipProteina.active{background:var(--terracotta);color:#1b0f0a;border-color:var(--terracotta);box-shadow:0 8px 20px rgba(194,106,74,.25);}
+
+    /* DESCORCHE */
+    .serviceOption{margin-top:24px;}
+    .descorcheCard{display:flex;align-items:center;gap:16px;padding:16px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.03);cursor:pointer;transition:all .25s ease;}
+    .descorcheCard:hover{background:rgba(255,255,255,.06);border-color:var(--gold);transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.4);}
+    .descorcheIcon{font-size:22px;}
+    .descorcheText{flex:1;display:flex;flex-direction:column;}
+    .descorcheTitle{font-weight:600;font-size:14px;}
+    .descorcheSubtitle{font-size:12px;color:var(--muted);margin-top:2px;}
+    .descorchePrice{font-size:12px;color:var(--gold);margin-top:4px;}
+    .descorcheCard input{width:20px;height:20px;accent-color:var(--terracotta);cursor:pointer;}
+    .descorcheCard input:checked{transform:scale(1.1);}
+
+    /* PRICE + TOAST */
+    .priceLine{margin-top:12px;border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;gap:12px;align-items:baseline;}
+    .priceLine .label{color:var(--muted);font-size:13px;}
+    .total{font-family:"Playfair Display",serif;font-size:24px !important;color:var(--gold) !important;}
+    .toast{margin-top:12px;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.28);color:rgba(255,255,255,.92);display:none;line-height:1.45;}
+    .toast.ok{border-color:#2ecc71;background:rgba(46,204,113,.08);}
+    .toast.warn{border-color:rgba(241,196,15,.35);}
+    .toast.err{border-color:rgba(255,92,92,.35);}
+    .mono{font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.82);margin-top:8px;word-break:break-word;}
+
+    /* CONFIRM MODAL */
+    #confirmModal{
+      position:fixed;inset:0;
+      background:rgba(0,0,0,.8);
+      backdrop-filter:blur(8px);
+      display:none;align-items:center;justify-content:center;
+      z-index:9998;
+    }
+    #confirmModal.open{display:flex;}
+    .confirmCard{
+      width:500px;max-width:92vw;
+      background:#121a16;
+      border:1px solid rgba(191,161,90,.2);
+      border-radius:24px;
+      padding:36px;
+      box-shadow:0 60px 120px rgba(0,0,0,.7);
+    }
+    .confirmTitle{font-family:"Playfair Display",serif;font-size:22px;margin-bottom:6px;}
+    .confirmSub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+    .confirmRow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px;}
+    .confirmRow:last-of-type{border-bottom:none;}
+    .confirmRow span{color:var(--muted);}
+    .confirmTotal{
+      margin-top:16px;padding-top:14px;border-top:2px solid rgba(191,161,90,.25);
+      display:flex;justify-content:space-between;align-items:baseline;
+    }
+    .confirmTotal span{color:var(--muted);font-size:13px;}
+    .confirmTotal strong{font-family:"Playfair Display",serif;font-size:28px;color:var(--gold);}
+    .confirmBtns{display:flex;gap:10px;margin-top:22px;}
+    .confirmBtns .btn{flex:1;padding:13px;}
+    .confirmCancel{background:rgba(255,255,255,.06);border:1px solid var(--line);color:rgba(255,255,255,.8);}
+    .confirmGo{background:var(--terracotta);color:#111;font-weight:700;}
+    .confirmGo:hover{background:#b95839;}
+    .confirmPersonList{margin:14px 0;max-height:200px;overflow-y:auto;}
+    .confirmPerson{font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);line-height:1.5;}
+    .confirmPerson:last-child{border-bottom:none;}
+    .confirmPerson strong{color:var(--ink);display:block;margin-bottom:2px;}
+
+    /* TICKET BUTTON post-confirm */
+    .ticketBtn{
+      display:none;width:100%;margin-top:12px;
+      padding:13px;border:none;border-radius:14px;
+      background:rgba(191,161,90,.15);border:1px solid rgba(191,161,90,.3);
+      color:var(--gold);font-size:14px;font-weight:600;cursor:pointer;
+      transition:.2s;text-align:center;
+    }
+    .ticketBtn:hover{background:rgba(191,161,90,.25);}
+    .ticketBtn.visible{display:block;}
+
+    /* MENU RESET NOTICE */
+    #menuResetNotice{
+      display:none;margin-top:12px;padding:12px;border-radius:12px;
+      border:1px solid rgba(241,196,15,.35);background:rgba(241,196,15,.08);
+      color:#f4f1ea;font-size:13px;
+    }
+
+    /* DRINKS */
+    .drinkGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:20px;}
+    .drinkCard{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:13px;}
+    .drinkIcon{font-size:18px;}
+    .drinkNote{margin-top:20px;font-size:13px;color:var(--muted);line-height:1.6;text-align:center;}
+
+    /* MARK ROW */
+    .markRow{display:flex;align-items:center;gap:12px;margin-top:10px;}
+    .markRow img{height:44px;width:auto;opacity:.94;filter:drop-shadow(0 0 18px rgba(191,161,90,.18)) drop-shadow(0 0 30px rgba(191,161,90,.08));}
+
+    /* LOADER */
+    #pageLoader{position:fixed;inset:0;background:#0e1511;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;transition:opacity .6s ease;}
+    #pageLoader img{height:110px;margin-bottom:30px;filter:drop-shadow(0 30px 60px rgba(0,0,0,.7)) drop-shadow(0 0 18px rgba(191,161,90,.2));}
+    .loaderLine{width:120px;height:1px;background:var(--gold);opacity:.4;position:relative;overflow:hidden;margin-bottom:18px;}
+    .loaderLine::after{content:"";position:absolute;left:-40%;top:0;width:40%;height:100%;background:var(--gold);animation:loaderMove 1.4s infinite;}
+    @keyframes loaderMove{0%{left:-40%}100%{left:120%}}
+    .loaderText{font-size:12px;letter-spacing:2px;color:rgba(255,255,255,.6);text-transform:uppercase;}
+
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(25px);transition:opacity .8s ease,transform .8s ease;}
+    .reveal.show{opacity:1;transform:translateY(0);}
+    .floatIn{animation:floatIn .9s ease both;}
+    @keyframes floatIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+
+    footer{padding:26px 0 50px;color:rgba(255,255,255,.55);font-size:12px;text-align:center;}
+  </style>
 
 </head>
 
 <body>
+<div id="pageLoader">
+  <img src="7E279685-0A21-4575-9890-80E64F81A59E.png" alt="ALORA">
+  <div class="loaderLine"></div>
+  <div class="loaderText">Preparando experiencia…</div>
+</div>
 
-<div class="panel">
+<div class="wrap">
 
-<h1>ALORA Service Control</h1>
+  <!-- HERO -->
 
-<label>Función</label><br>
-<select id="funcion"></select>
+  <section class="hero">
+    <div class="heroInner floatIn">
+      <div class="heroCenter">
+        <div class="heroInstitution">
+          <img src="uagm-hospitality.png" alt="UAGM Hospitality Program">
+        </div>
+        <div class="heroLogo">
+          <img src="7E279685-0A21-4575-9890-80E64F81A59E.png" alt="ALORA">
+        </div>
+        <div class="heroDivider"></div>
+        <div class="heroMeta">Universidad Ana G. Méndez · Recinto de Carolina</div>
+        <h1 class="heroTitle">Una experiencia gastronómica</h1>
+        <p class="heroText">
+          ALORA presenta una propuesta culinaria donde la tradición italiana
+          y la identidad puertorriqueña se encuentran en una experiencia
+          gastronómica elegante, contemporánea y cuidadosamente ejecutada.
+        </p>
+        <div class="heroButtons">
+          <a class="btn btnPrimary" href="#menu">Explorar menú</a>
+          <a class="btn btnGhost" href="#reservar">Reservar experiencia</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<div id="reservas" style="margin-top:25px"></div>
+  <!-- MENÚ -->
 
+  <section id="menu" class="block">
+    <div class="sectionCard reveal">
+      <div class="functionCarousel">
+        <div class="carouselArrow">→</div>
+        <div class="functionTrack" id="functionTrack"></div>
+      </div>
+      <div class="sectionTitle">Menú disponible</div>
+      <p class="sectionText">Opciones activas para la pre-orden. (Los adicionales se atienden en restaurante.)</p>
+      <div class="menuGrid">
+        <div class="menuCol">
+          <h3>Aperitivos</h3>
+          <div id="menuAperitivos"></div>
+        </div>
+        <div class="menuCol">
+          <h3>Platos principales</h3>
+          <div id="menuPrincipales"></div>
+          <div style="margin-top:14px;">
+            <h3 style="font-size:11px;opacity:.7;">Proteínas disponibles</h3>
+            <div id="menuProteinas"></div>
+          </div>
+        </div>
+        <div class="menuCol">
+          <h3>Postres</h3>
+          <div id="menuPostres"></div>
+        </div>
+        <div class="menuCol">
+          <h3>Menú infantil</h3>
+          <div id="menuNinos"></div>
+          <div class="smallNote">Al seleccionar "Niño", solo se muestran platos infantiles, incluye postre y bebida.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEBIDAS -->
+
+  <div class="sectionCard reveal">
+    <div class="sectionTitle">Bebidas</div>
+    <p class="sectionText" style="text-align:center">Cada reservación incluye <strong>una bebida de cortesía por persona</strong> para acompañar la experiencia gastronómica.</p>
+    <div class="drinkGrid">
+      <div class="drinkCard"><div class="drinkIcon">💧</div>Agua</div>
+      <div class="drinkCard"><div class="drinkIcon">🥤</div>Coca-Cola</div>
+      <div class="drinkCard"><div class="drinkIcon">🥤</div>Sprite</div>
+      <div class="drinkCard"><div class="drinkIcon">🥫</div>Coke Zero</div>
+      <div class="drinkCard"><div class="drinkIcon">🍊</div>Jugo de China</div>
+      <div class="drinkCard"><div class="drinkIcon">🍋</div>Jugo de Limón</div>
+      <div class="drinkCard"><div class="drinkIcon">🍹</div>Mocktail Sunrise</div>
+      <div class="drinkCard"><div class="drinkIcon">🍓</div>Sangría Virgen</div>
+    </div>
+    <div class="drinkNote">Bebidas adicionales estarán disponibles en el restaurante y podrán solicitarse durante el servicio. Estas <strong>no están incluidas en el precio del menú</strong> y se facturarán por separado.</div>
+  </div>
+
+  <section class="block">
+    <div class="sectionCard reveal">
+      <div class="sectionTitle">La propuesta</div>
+      <p class="sectionText" style="text-align:center">ALORA presenta una experiencia culinaria de precio fijo donde cada comensal disfruta un recorrido gastronómico cuidadosamente diseñado.</p>
+      <div style="margin-top:28px">
+        <div style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;text-align:center">Experiencia Adulto</div>
+        <div class="drinkGrid">
+          <div class="drinkCard">🍽 Aperitivo</div>
+          <div class="drinkCard">🍝 Plato principal</div>
+          <div class="drinkCard">🍰 Postre</div>
+          <div class="drinkCard">🥤 1 bebida incluida</div>
+        </div>
+      </div>
+      <div style="margin-top:30px">
+        <div style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;text-align:center">Menú Infantil</div>
+        <div class="drinkGrid">
+          <div class="drinkCard">🧒 Plato infantil</div>
+          <div class="drinkCard">🍰 Postre</div>
+          <div class="drinkCard">🥤 1 bebida incluida</div>
+        </div>
+        <div class="drinkNote">El menú infantil incluye plato principal, postre y bebida. El postre se selecciona en el restaurante durante el servicio.</div>
+      </div>
+      <div class="drinkNote">Duración aproximada de la experiencia: <strong>90 minutos</strong><br>Precio fijo adulto: <strong>$35</strong> · Menú infantil: <strong>$12.50</strong></div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:40px;">
+    <div class="sectionCard reveal">
+      <div class="sectionTitle">Métodos de pago</div>
+      <p class="sectionText" style="text-align:center">Para esta experiencia gastronómica aceptamos los siguientes métodos de pago directamente en el restaurante.</p>
+      <div class="drinkGrid" style="margin-top:24px">
+        <div class="drinkCard"><div class="drinkIcon">📱</div>ATH Móvil</div>
+        <div class="drinkCard"><div class="drinkIcon">💵</div>Efectivo</div>
+      </div>
+      <div class="drinkNote">El pago se realiza al llegar al restaurante antes de comenzar el servicio.<br><br><strong>Se recomienda ATH Móvil para agilizar el proceso de pago.</strong></div>
+    </div>
+  </section>
+
+  <!-- RESERVAR -->
+
+  <section id="reservar" class="block">
+    <div class="reserveGrid">
+      <div class="formCard reveal">
+        <div class="sectionTitle" style="margin-bottom:6px;">Reservar</div>
+        <p class="sectionText" style="margin-top:0;">Completa la reserva y añade las personas. Se ocultan automáticamente las horas llenas.</p>
+
+```
+    <!-- FUNCIÓN BANNER -->
+    <div class="formFuncionBanner" id="formFuncionBanner">
+      <div>
+        <strong id="bannerFuncion">—</strong>
+        <span id="bannerFecha"></span>
+      </div>
+      <span style="font-size:11px;opacity:.7;">Función seleccionada</span>
+    </div>
+
+    <!-- NOTAS PRIMERO — visibilidad de alergias -->
+    <div style="
+      margin-bottom:16px;padding:12px 16px;
+      background:rgba(191,161,90,.06);border:1px solid rgba(191,161,90,.2);
+      border-radius:12px;font-size:13px;color:#d8cfa8;line-height:1.6;
+    ">
+      ⚠️ <strong>Alergias o necesidades especiales:</strong><br>
+      Si algún invitado tiene alergias, restricciones dietéticas o necesidades especiales, indícalo a continuación antes de continuar.
+    </div>
+
+    <label for="notas">Notas, alergias o solicitudes especiales</label>
+    <textarea id="notas" rows="3" placeholder="Ejemplo: alergia a nueces, vegetariano, silla de ruedas, celebración especial…"></textarea>
+
+    <div class="divider"></div>
+
+    <div class="row2">
+      <div>
+        <label for="cliente">Cliente</label>
+        <input id="cliente" placeholder="Nombre y apellido" autocomplete="name">
+      </div>
+      <div>
+        <label for="telefono">Teléfono</label>
+        <input id="telefono" placeholder="+1 787 000 0000" inputmode="tel" autocomplete="tel">
+      </div>
+    </div>
+
+    <label for="email">Email <span style="color:var(--terracotta);font-size:11px;">(necesario para recibir tu ticket y QR)</span></label>
+    <input id="email" type="email" placeholder="correo@email.com" autocomplete="email">
+
+    <div class="row2" style="margin-top:10px;">
+      <div>
+        <label for="funcion">Función</label>
+        <select id="funcion"></select>
+      </div>
+      <div>
+        <label for="hora">Hora</label>
+        <select id="hora"></select>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sectionTitle" style="font-size:18px;margin:0;">Personas</div>
+    <div id="guests"></div>
+    <div style="margin-top:12px;">
+      <button class="btn btnSecondary" id="addGuestBtn" type="button" style="width:100%;">+ Añadir persona</button>
+    </div>
+
+    <div id="menuResetNotice">El menú cambió según la función seleccionada. Por favor selecciona nuevamente los platos.</div>
+
+    <div class="serviceOption">
+      <label class="descorcheCard">
+        <div class="descorcheIcon">🍷</div>
+        <div class="descorcheText">
+          <div class="descorcheTitle">Descorche de vino</div>
+          <div class="descorcheSubtitle">Trae tu propia botella a la mesa</div>
+          <div class="descorchePrice">+$12 por botella</div>
+        </div>
+        <input type="checkbox" id="descorche">
+      </label>
+    </div>
+
+    <div class="priceLine">
+      <div>
+        <div class="label">Total estimado</div>
+        <div class="total" id="total">$0.00</div>
+      </div>
+    </div>
+
+    <div style="margin-top:18px;">
+      <button class="btn btnPrimary" id="submitBtn" type="button" style="width:100%;">Confirmar experiencia</button>
+    </div>
+
+    <!-- TICKET BUTTON — aparece después de confirmar -->
+    <button class="ticketBtn" id="ticketBtn" onclick="irAlTicket()">Ver mi ticket →</button>
+
+    <div id="toast" class="toast"></div>
+
+    <div class="divider"></div>
+
+    <div id="detalles" style="margin-top:20px;padding:18px 20px;background:rgba(255,255,255,.03);border-radius:12px;border:1px solid rgba(255,255,255,.08);font-size:13px;line-height:1.7;color:rgba(255,255,255,.75);">
+      <strong>Detalles de la experiencia</strong><br><br>
+      • Cada reservación incluye un menú de tres cursos preparado por nuestro equipo culinario.<br><br>
+      • Las bebidas de cortesía se ofrecerán al llegar al restaurante antes de comenzar el servicio.<br><br>
+      • El pago se realiza presencialmente el día del evento mediante <strong>ATH Móvil o efectivo</strong>.
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="markRow">
+      <img src="2BE6E097-CFDA-4844-A545-BCFA182CF730.png" alt="ALORA mark">
+      <div>
+        <div style="font-weight:600;color:rgba(255,255,255,.88);">ALORA</div>
+        <div style="font-size:12px;color:var(--muted);">Fusión Boritaly · Fine dining</div>
+      </div>
+      <a href="https://maps.google.com/?q=UAGM+Carolina" target="_blank" style="font-size:12px;color:rgba(255,255,255,.62);">📍 Ver ubicación en Google Maps</a>
+    </div>
+
+    <div class="divider"></div>
+    <p class="sectionText" style="text-align:center;"><strong>Tradición. Técnica. Elegancia.</strong></p>
+  </div>
+</div>
+```
+
+  </section>
+
+  <footer>
+    <div style="margin-top:18px;font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;">
+      © <span id="year"></span> ALORA · Proyecto académico presentado en la
+      <strong>José A. "Tony" Santana International School of Hospitality and Culinary Arts</strong>
+      · Universidad Ana G. Méndez · Recinto de Carolina
+    </div>
+  </footer>
+</div>
+
+<!-- CONFIRM MODAL -->
+
+<div id="confirmModal">
+  <div class="confirmCard">
+    <div class="confirmTitle">Confirmar reserva</div>
+    <div class="confirmSub">Revisa los detalles antes de continuar</div>
+
+```
+<div id="confirmDetails"></div>
+
+<div class="confirmBtns">
+  <button class="btn confirmCancel" onclick="cerrarModal()">Editar</button>
+  <button class="btn confirmGo" id="confirmGoBtn">Confirmar →</button>
+</div>
+```
+
+  </div>
 </div>
 
 <script>
+  /* ─── GLOBALS ─────────────────────────────────────────── */
+  const PRECIO_ADULTO = 35;
+  const PRECIO_NINO   = 12.50;
+  let editId          = null;
+  let LAST_TICKET_ID  = null;
+  let BOOTSTRAP_TS    = null; // timestamp del último bootstrap
+  let PENDING_PAYLOAD = null; // payload esperando confirmación
 
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycbzdKNVULHVMBPz14LXn0wz2-D--FaU_s6fQQZeDGxHpnAR8WllvQbUcexwRM4rCKfzO/exec";
-const SHARED_SECRET = "demo123";
+  let PLATOS_MAP = {};
+  let CURRENT_MENU = { aperitivos:[], principales:[], postres:[], ninos:[] };
 
-const FUNCIONES = [
-"Función 1",
-"Función 2",
-"Función 3",
-"Función 4",
-"Función 5",
-"Función 6",
-"Función 7",
-"Función 8"
-];
+  const $ = id => document.getElementById(id);
 
-const $ = id => document.getElementById(id);
+  const FUNCION_FECHAS_DISPLAY = {
+    "Función 1":"19 marzo 2026","Función 2":"26 marzo 2026",
+    "Función 3":"9 abril 2026","Función 4":"16 abril 2026",
+    "Función 5":"23 abril 2026","Función 6":"30 abril 2026",
+    "Función 7":"7 mayo 2026","Función 8":"14 mayo 2026"
+  };
 
-function fillSelect(select, options){
+  const FUNCION_FECHAS_ISO = {
+    "Función 1":"2026-03-19","Función 2":"2026-03-26",
+    "Función 3":"2026-04-09","Función 4":"2026-04-16",
+    "Función 5":"2026-04-23","Función 6":"2026-04-30",
+    "Función 7":"2026-05-07","Función 8":"2026-05-14"
+  };
 
-select.innerHTML="";
+  /* ─── LOADER ──────────────────────────────────────────── */
+  function hideLoader(){
+    const l = $("pageLoader");
+    l.style.opacity = "0";
+    setTimeout(()=> l.style.display="none", 600);
+  }
 
-options.forEach(v=>{
+  /* ─── FUNCIÓN CERRADA ─────────────────────────────────── */
+  function funcionCerradaFrontend(funcion){
+    const fecha = FUNCION_FECHAS_ISO[funcion];
+    if(!fecha) return false;
+    const fd = new Date(fecha);
+    const dia = fd.getDay();
+    const lunes = new Date(fd);
+    lunes.setDate(fd.getDate() + (dia===0?-6:1-dia));
+    if(funcion==="Función 2") return new Date() > new Date("2026-03-24T08:00:00");
+    lunes.setHours(23,59,59,999);
+    return new Date() > lunes;
+  }
 
-const o=document.createElement("option");
-o.value=v;
-o.textContent=v;
+  /* ─── BOOTSTRAP ───────────────────────────────────────── */
+  async function cargarBootstrap(){
+    const res = await fetch(CONFIG.BACKEND_URL,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify({ action:"bootstrap", secret:CONFIG.SECRET })
+    });
+    const data = await res.json();
+    BOOTSTRAP_TS = Date.now();
+    return data;
+  }
 
-select.appendChild(o);
+  // Refresca disponibilidad si el bootstrap tiene más de 90 segundos
+  async function refreshDisponibilidad(funcion){
+    if(!BOOTSTRAP_TS || Date.now() - BOOTSTRAP_TS > 90000){
+      const boot = await cargarBootstrap();
+      if(boot.ok){
+        window.BOOTSTRAP_HORAS = boot.horas;
+        BOOTSTRAP_TS = Date.now();
+      }
+    }
+  }
 
-});
+  /* ─── CAROUSEL ────────────────────────────────────────── */
+  function renderFunctionCarousel(funciones){
+    const track = $("functionTrack");
+    track.innerHTML = "";
 
-}
+    funciones.forEach(funcion=>{
+      const card = document.createElement("div");
+      card.className = "functionCard";
+      card.dataset.funcion = funcion;
+      card.innerHTML = `
+        <div class="functionTitle">${funcion}</div>
+        <div class="functionMeta">${FUNCION_FECHAS_DISPLAY[funcion]||""}</div>
+        <div class="functionMenuPreview">Ver menú disponible</div>
+      `;
 
-async function loadReservas(){
+      card.addEventListener("click", ()=>{
+        // FIX: solo actualizar menú visual — NO tocar el formulario
+        document.querySelectorAll(".functionCard").forEach(c=>c.classList.remove("active"));
+        card.classList.add("active");
+        hydrateMenu(funcion);
+      });
 
-const funcion=$("funcion").value;
+      track.appendChild(card);
+    });
+  }
 
-const res = await fetch(BACKEND_URL,{
-method:"POST",
-headers:{ "Content-Type":"text/plain;charset=utf-8" },
-body:JSON.stringify({
-action:"host_list",
-funcion:funcion,
-secret:SHARED_SECRET
-})
-});
+  // Sincroniza el carousel con el select del formulario
+  function syncCarouselToForm(funcion){
+    document.querySelectorAll(".functionCard").forEach(c=>{
+      c.classList.toggle("active", c.dataset.funcion === funcion);
+    });
+  }
 
-const data=await res.json();
+  /* ─── HYDRATE MENU ────────────────────────────────────── */
+  function hydrateMenu(funcion){
+    CURRENT_MENU = window.ALL_MENUS[funcion] || { aperitivos:[], principales:[], postres:[], ninos:[] };
+    PLATOS_MAP = {};
+    [...CURRENT_MENU.aperitivos,...CURRENT_MENU.principales,...CURRENT_MENU.postres,...CURRENT_MENU.ninos]
+      .forEach(p=>{ PLATOS_MAP[p.nombre] = p; });
 
-const container=$("reservas");
-container.innerHTML="";
+    pillList("menuAperitivos",  CURRENT_MENU.aperitivos.map(p=>p.nombre));
+    pillList("menuPrincipales", CURRENT_MENU.principales.map(p=>p.nombre));
+    pillList("menuPostres",     CURRENT_MENU.postres.map(p=>p.nombre));
+    pillList("menuNinos",       CURRENT_MENU.ninos.map(p=>p.nombre));
 
-if(!data.reservas){
-container.innerHTML="No hay reservas.";
-return;
-}
+    const proteinasSet = new Set();
+    CURRENT_MENU.principales.forEach(p=>{
+      if(p.tieneProteina && Array.isArray(p.proteinas))
+        p.proteinas.forEach(pr=>{ if(pr.trim()) proteinasSet.add(pr); });
+    });
+    pillList("menuProteinas", Array.from(proteinasSet));
+  }
 
-data.reservas.forEach(r=>{
+  /* ─── HORAS ───────────────────────────────────────────── */
+  function renderHorasBootstrap(funcion, horaActual=null){
+    const sel = $("hora");
+    const horas = window.BOOTSTRAP_HORAS[funcion] || [];
+    sel.innerHTML = "";
 
-const card=document.createElement("div");
-card.className="card";
+    horas.forEach(h=>{
+      if(h.full && h.hora !== horaActual) return;
+      const opt = document.createElement("option");
+      opt.value = h.hora;
+      opt.textContent = h.full && h.hora===horaActual
+        ? `${h.hora} (tu reserva)`
+        : `${h.hora} (${h.disponibles} disponibles)`;
+      sel.appendChild(opt);
+    });
 
-card.innerHTML=`
+    if(!sel.options.length) sel.innerHTML = "<option>No hay horas disponibles</option>";
+  }
 
-<div class="row">
+  /* ─── PILL LIST ───────────────────────────────────────── */
+  function pillList(containerId, items){
+    const c = $(containerId);
+    c.innerHTML = "";
+    items.forEach(name=>{
+      const plato = PLATOS_MAP[name] || {};
+      const el = document.createElement("div");
+      el.className = "menuItem";
+      el.innerHTML = `
+        <div class="menuName">${name}</div>
+        <div class="menuTooltip">${plato.descripcion||"Descripción próximamente"}</div>
+      `;
+      c.appendChild(el);
+    });
+  }
 
-<div>
-<strong>${r.hora}</strong><br>
-${r.cliente} (${r.personas})<br>
-Mesa: ${r.mesa || "-"}
-</div>
+  document.addEventListener("click", e=>{
+    const item = e.target.closest(".menuItem");
+    if(!item) return;
+    if(window.matchMedia("(hover:none)").matches) item.classList.toggle("active");
+  });
 
-<div>
-<button onclick="arrive('${r.id}')">
-Llegó
-</button>
-</div>
+  /* ─── FILL SELECT ─────────────────────────────────────── */
+  function fillSelect(selectEl, options){
+    selectEl.innerHTML = "";
+    const ph = document.createElement("option");
+    ph.value=""; ph.textContent="Seleccionar"; ph.disabled=true; ph.selected=true;
+    selectEl.appendChild(ph);
+    options.forEach(v=>{
+      const o = document.createElement("option");
+      o.value = v;
+      const fecha = FUNCION_FECHAS_DISPLAY[v]||"";
+      o.textContent = fecha ? `${v} · ${fecha}` : v;
+      selectEl.appendChild(o);
+    });
+  }
 
-</div>
+  /* ─── TOTAL ───────────────────────────────────────────── */
+  function actualizarTotal(){
+    let total = 0;
+    document.querySelectorAll(".tipoPersona").forEach(sel=>{
+      total += sel.value==="nino" ? PRECIO_NINO : PRECIO_ADULTO;
+    });
+    if($("descorche")?.checked) total += 12;
+    $("total").textContent = "$" + total.toFixed(2);
+  }
 
-`;
+  /* ─── FUNCIÓN BANNER inside form ─────────────────────── */
+  function updateFormBanner(funcion){
+    const banner = $("formFuncionBanner");
+    if(!funcion){
+      banner.classList.remove("visible");
+      return;
+    }
+    $("bannerFuncion").textContent = funcion;
+    $("bannerFecha").textContent   = " · " + (FUNCION_FECHAS_DISPLAY[funcion]||"");
+    banner.classList.add("visible");
+  }
 
-container.appendChild(card);
+  /* ─── GUESTS ──────────────────────────────────────────── */
+  let guestCount = 0;
+  const MAX_GUESTS = 14;
 
-});
+  function guestTemplate(idx){
+    const wrap = document.createElement("div");
+    wrap.className = "guest";
+    wrap.dataset.idx = String(idx);
+    wrap.innerHTML = `
+      <div class="guestTop">
+        <div class="guestLabel">Persona ${idx}</div>
+        <button type="button" class="ghostBtn" data-action="remove">Eliminar</button>
+      </div>
+      <label>Nombre Persona</label>
+      <input class="name" placeholder="Nombre">
+      <label>Tipo</label>
+      <select class="tipoPersona">
+        <option value="adulto">Adulto $${PRECIO_ADULTO}</option>
+        <option value="nino">Niño $${PRECIO_NINO.toFixed(2)}</option>
+      </select>
+      <div class="menuAdulto">
+        <div class="row2">
+          <div><label>Aperitivo</label><select class="aperitivo"></select></div>
+          <div><label>Plato principal</label><select class="principal"></select></div>
+        </div>
+        <div class="proteinaBlock" style="display:none">
+          <label>Proteína</label><select class="proteina"></select>
+        </div>
+        <label>Postre</label><select class="postre"></select>
+      </div>
+      <div class="menuNino" style="display:none">
+        <label>Menú Niño</label>
+        <select class="principalNino"></select>
+        <div class="smallNote">Incluye solo plato principal en pre-orden.</div>
+      </div>
+    `;
 
-}
+    fillSelect(wrap.querySelector(".aperitivo"),    CURRENT_MENU.aperitivos.map(p=>p.nombre));
+    fillSelect(wrap.querySelector(".principal"),    CURRENT_MENU.principales.map(p=>p.nombre));
+    fillSelect(wrap.querySelector(".postre"),       CURRENT_MENU.postres.map(p=>p.nombre));
+    fillSelect(wrap.querySelector(".principalNino"),CURRENT_MENU.ninos.map(p=>p.nombre));
 
-async function arrive(id){
+    wrap.querySelector(".principal").addEventListener("change", e=>{
+      const nombre = e.target.value;
+      const bloque = wrap.querySelector(".proteinaBlock");
+      const selProt = wrap.querySelector(".proteina");
+      selProt.innerHTML = ""; selProt.value = "";
+      if(!nombre){ bloque.style.display="none"; return; }
+      const plato = PLATOS_MAP[nombre];
+      if(plato?.tieneProteina){
+        fillSelect(selProt, plato.proteinas||[]);
+        bloque.style.display="block";
+      }else{
+        bloque.style.display="none";
+      }
+    });
 
-await fetch(BACKEND_URL,{
-method:"POST",
-headers:{ "Content-Type":"text/plain;charset=utf-8" },
-body:JSON.stringify({
-action:"host_arrive",
-id:id,
-secret:SHARED_SECRET
-})
-});
+    wrap.querySelector('[data-action="remove"]').addEventListener("click",()=>{
+      wrap.remove(); renumberGuests(); setTimeout(actualizarTotal,0);
+    });
 
-loadReservas();
+    wrap.querySelector(".tipoPersona").addEventListener("change", e=>{
+      wrap.querySelector(".menuAdulto").style.display = e.target.value==="nino"?"none":"block";
+      wrap.querySelector(".menuNino").style.display   = e.target.value==="nino"?"block":"none";
+      actualizarTotal();
+    });
 
-}
+    wrap.addEventListener("change", e=>{
+      if(["tipoPersona","principal","principalNino","aperitivo","postre","proteina"]
+        .some(c=>e.target.classList.contains(c))) actualizarTotal();
+    });
 
-document.addEventListener("DOMContentLoaded",()=>{
+    return wrap;
+  }
 
-fillSelect($("funcion"),FUNCIONES);
+  function renumberGuests(){
+    const all = Array.from($("guests").querySelectorAll(".guest"));
+    guestCount = all.length;
+    all.forEach((g,i)=>{
+      const n = i+1;
+      g.dataset.idx = String(n);
+      g.querySelector(".guestLabel").textContent = `Persona ${n}`;
+    });
+    $("addGuestBtn").disabled = guestCount >= MAX_GUESTS;
+  }
 
-$("funcion").addEventListener("change",loadReservas);
+  function addGuest(){
+    if(guestCount >= MAX_GUESTS) return;
+    $("guests").appendChild(guestTemplate(guestCount+1));
+    renumberGuests(); actualizarTotal();
+  }
 
-loadReservas();
+  function getGuests(){
+    return Array.from($("guests").querySelectorAll(".guest")).map(g=>{
+      const tipo = g.querySelector(".tipoPersona").value;
+      const name = (g.querySelector(".name").value||"").trim();
+      if(tipo==="nino") return { name, aperitivo:"", principal:g.querySelector(".principalNino").value, postre:"" };
+      return {
+        name,
+        aperitivo: g.querySelector(".aperitivo").value,
+        principal: g.querySelector(".principal").value,
+        proteina:  g.querySelector(".proteina")?.value||"",
+        postre:    g.querySelector(".postre").value
+      };
+    });
+  }
 
-});
+  /* ─── VALIDATE ────────────────────────────────────────── */
+  function validate(payload){
+    if(!payload.cliente||payload.cliente.trim().length<3) return "Escribe el nombre del cliente.";
+    if(!payload.phone||payload.phone.trim().length<7)     return "Escribe un teléfono válido.";
+    if(!payload.email||!payload.email.includes("@"))      return "Escribe un email válido para recibir tu ticket.";
+    if(!payload.funcion)                                   return "Selecciona la función.";
+    if(!payload.hora)                                      return "Selecciona una hora.";
+    if(!payload.guests||!payload.guests.length)            return "Añade al menos 1 persona.";
+    for(let i=0;i<payload.guests.length;i++){
+      const g = payload.guests[i];
+      if(!g.name)      return `Falta el nombre en Persona ${i+1}.`;
+      if(!g.principal) return `Persona ${i+1}: selecciona el plato principal.`;
+      if(PLATOS_MAP[g.principal]?.tieneProteina && !g.proteina) return `Persona ${i+1}: selecciona proteína.`;
+      const isAdult = (g.aperitivo&&g.aperitivo.trim())||(g.postre&&g.postre.trim());
+      if(isAdult && (!g.aperitivo||!g.postre)) return `Persona ${i+1}: adulto requiere aperitivo y postre.`;
+    }
+    return null;
+  }
 
+  /* ─── TOAST ───────────────────────────────────────────── */
+  function setToast(type,message,extraHtml){
+    const t = $("toast");
+    t.className = "toast "+(type||"");
+    t.style.display = "block";
+    t.innerHTML = message + (extraHtml?`<div class="mono">${extraHtml}</div>`:"");
+  }
+  function clearToast(){ const t=$("toast"); t.style.display="none"; t.innerHTML=""; }
+
+  /* ─── CONFIRM MODAL ───────────────────────────────────── */
+  function abrirModal(payload){
+    PENDING_PAYLOAD = payload;
+
+    let total = 0;
+    payload.guests.forEach(g=>{
+      total += (g.aperitivo||g.postre) ? PRECIO_ADULTO : PRECIO_NINO;
+    });
+    if(payload.descorche) total += 12;
+
+    const adultos = payload.guests.filter(g=>g.aperitivo||g.postre).length;
+    const ninos   = payload.guests.length - adultos;
+
+    $("confirmDetails").innerHTML = `
+      <div class="confirmRow"><span>Función</span>${payload.funcion}</div>
+      <div class="confirmRow"><span>Fecha</span>${FUNCION_FECHAS_DISPLAY[payload.funcion]||"—"}</div>
+      <div class="confirmRow"><span>Hora</span>${payload.hora}</div>
+      <div class="confirmRow"><span>Adultos</span>${adultos} × $${PRECIO_ADULTO}</div>
+      ${ninos?`<div class="confirmRow"><span>Niños</span>${ninos} × $${PRECIO_NINO.toFixed(2)}</div>`:""}
+      ${payload.descorche?`<div class="confirmRow"><span>Descorche</span>$12.00</div>`:""}
+      <div class="confirmPersonList">
+        ${payload.guests.map((g,i)=>`
+          <div class="confirmPerson">
+            <strong>${g.name||"Invitado "+(i+1)}</strong>
+            ${g.aperitivo?`${g.aperitivo} · `:""}${g.principal||""}${g.proteina?" · "+g.proteina:""}${g.postre?" · "+g.postre:""}
+          </div>`).join("")}
+      </div>
+      ${payload.notas?`<div style="margin-top:10px;font-size:12px;color:var(--terracotta);">⚠ ${payload.notas}</div>`:""}
+      <div class="confirmTotal">
+        <span>Total estimado</span>
+        <strong>$${total.toFixed(2)}</strong>
+      </div>
+    `;
+
+    $("confirmModal").classList.add("open");
+  }
+
+  function cerrarModal(){
+    $("confirmModal").classList.remove("open");
+    PENDING_PAYLOAD = null;
+  }
+
+  // Click outside closes modal
+  $("confirmModal").addEventListener("click", e=>{
+    if(e.target === $("confirmModal")) cerrarModal();
+  });
+
+  /* ─── SUBMIT ──────────────────────────────────────────── */
+  async function submitReservation(){
+    clearToast();
+
+    const payload = {
+      secret: CONFIG.SECRET,
+      action: editId ? "update" : "create",
+      reservationId: editId||null,
+      cliente: $("cliente").value,
+      phone:   $("telefono").value,
+      email:   $("email").value,
+      funcion: $("funcion").value,
+      hora:    $("hora").value,
+      guests:  getGuests(),
+      notas:   $("notas").value||"",
+      descorche: $("descorche").checked
+    };
+
+    const err = validate(payload);
+    if(err){ setToast("warn","Revisa el formulario:",err); return; }
+    if(!$("hora").value){ setToast("warn","No hay horas disponibles.","Selecciona otra función o intenta más tarde."); return; }
+
+    // Refresh disponibilidad antes de mostrar el modal
+    await refreshDisponibilidad(payload.funcion);
+    renderHorasBootstrap(payload.funcion);
+
+    // Si es edición, ir directo sin modal
+    if(editId){ await ejecutarSubmit(payload); return; }
+
+    // Mostrar modal de confirmación
+    abrirModal(payload);
+  }
+
+  // El botón del modal llama esto
+  $("confirmGoBtn").addEventListener("click", async ()=>{
+    if(!PENDING_PAYLOAD) return;
+    const payload = PENDING_PAYLOAD;
+    cerrarModal();
+    await ejecutarSubmit(payload);
+  });
+
+  async function ejecutarSubmit(payload){
+    const btn = $("submitBtn");
+    if(btn.dataset.loading==="1") return;
+    btn.dataset.loading = "1";
+    btn.disabled = true;
+    btn.textContent = editId ? "Actualizando…" : "Confirmando…";
+
+    try{
+      const res = await fetch(CONFIG.BACKEND_URL,{
+        method:"POST",
+        headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if(data.ok){
+        if(editId){
+          window.location.href = "ticket.html?id=" + editId;
+          return;
+        }
+
+        // Guardar ID para el botón de ticket
+        LAST_TICKET_ID = data.reservation_id;
+
+        let total = 0;
+        payload.guests.forEach(g=>{
+          total += (g.aperitivo||g.postre) ? PRECIO_ADULTO : PRECIO_NINO;
+        });
+        if(payload.descorche) total += 12;
+
+        setToast("ok",`<strong>✔ Reserva confirmada</strong><br>📧 Recibirás un email con tu ticket y QR`,
+          `ID: ${data.reservation_id}\nHora: ${payload.hora}\nPersonas: ${payload.guests.length}\nTotal: $${total.toFixed(2)}`);
+
+        // Mostrar botón de ticket
+        const tb = $("ticketBtn");
+        tb.classList.add("visible");
+
+        // Reset form
+        $("cliente").value=""; $("telefono").value=""; $("email").value=""; $("notas").value="";
+        if($("descorche")) $("descorche").checked=false;
+        $("guests").innerHTML=""; guestCount=0; addGuest(); actualizarTotal();
+
+        const funcion = $("funcion").value;
+        hydrateMenu(funcion);
+        renderHorasBootstrap(funcion);
+
+      }else{
+        setToast("err","No se pudo confirmar.",data.error||"Error desconocido");
+      }
+    }catch(e){
+      setToast("err","Error de conexión.",String(e));
+    }finally{
+      btn.dataset.loading="0"; btn.disabled=false;
+      btn.textContent = editId?"Actualizar reserva":"Confirmar experiencia";
+    }
+  }
+
+  /* ─── VER TICKET ──────────────────────────────────────── */
+  function irAlTicket(){
+    if(LAST_TICKET_ID) window.open("ticket.html?id="+LAST_TICKET_ID,"_blank");
+  }
+
+  /* ─── LOAD RESERVATION (edit mode) ───────────────────── */
+  function loadReservationIntoForm(reserva){
+    $("cliente").value  = reserva.cliente||"";
+    $("telefono").value = reserva.telefono||"";
+    $("email").value    = reserva.email||"";
+    $("notas").value    = reserva.notas||"";
+    $("funcion").value  = reserva.funcion;
+    $("hora").disabled  = false;
+    hydrateMenu(reserva.funcion);
+    renderHorasBootstrap(reserva.funcion, reserva.hora);
+    updateFormBanner(reserva.funcion);
+    syncCarouselToForm(reserva.funcion);
+
+    setTimeout(()=>{
+      let existe = false;
+      Array.from($("hora").options).forEach(o=>{ if(o.value===reserva.hora) existe=true; });
+      if(!existe){
+        const opt=document.createElement("option");
+        opt.value=reserva.hora; opt.textContent=reserva.hora+" (tu reserva)";
+        $("hora").appendChild(opt);
+      }
+      $("hora").value=reserva.hora;
+      $("guests").innerHTML=""; guestCount=0;
+
+      reserva.guests.forEach(g=>{
+        addGuest();
+        const el = $("guests").lastElementChild;
+        const tipo = el.querySelector(".tipoPersona");
+        if(!g.aperitivo&&!g.postre){
+          tipo.value="nino";
+          el.querySelector(".menuAdulto").style.display="none";
+          el.querySelector(".menuNino").style.display="block";
+          el.querySelector(".principalNino").value=g.principal||"";
+        }else{
+          tipo.value="adulto";
+        }
+        el.querySelector(".name").value=g.name||"";
+        if(g.aperitivo) el.querySelector(".aperitivo").value=g.aperitivo;
+        if(g.principal){
+          const ps=el.querySelector(".principal");
+          ps.value=g.principal;
+          ps.dispatchEvent(new Event("change"));
+        }
+        if(g.postre)  el.querySelector(".postre").value=g.postre;
+        if(g.proteina) el.querySelector(".proteina").value=g.proteina;
+      });
+      actualizarTotal();
+    }, 80);
+  }
+
+  /* ─── REVEAL ──────────────────────────────────────────── */
+  function initReveal(){
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add("show"); });
+    },{threshold:.12});
+    document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+  }
+
+  /* ─── INIT ────────────────────────────────────────────── */
+  document.addEventListener("DOMContentLoaded", async ()=>{
+    $("year").textContent = new Date().getFullYear();
+
+    const boot = await cargarBootstrap();
+    if(!boot||!boot.ok){ alert("Error cargando menú"); return; }
+
+    window.ALL_MENUS      = boot.menus;
+    window.BOOTSTRAP_HORAS = boot.horas;
+
+    const disponibles = boot.funciones.filter(f=>!funcionCerradaFrontend(f));
+    fillSelect($("funcion"), disponibles);
+    renderFunctionCarousel(disponibles);
+
+    const params = new URLSearchParams(window.location.search);
+    editId = params.get("edit");
+
+    if(editId){
+      $("submitBtn").textContent = "Actualizar reserva";
+      document.querySelector(".sectionTitle").textContent = "Editar reserva";
+      const res = await fetch(CONFIG.BACKEND_URL,{
+        method:"POST",
+        headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body:JSON.stringify({ action:"get_ticket", secret:CONFIG.SECRET, ticketId:editId })
+      });
+      const data = await res.json();
+      if(data.ok) loadReservationIntoForm(data.reserva);
+    }else{
+      $("hora").innerHTML = "<option>Selecciona una función primero</option>";
+      $("hora").disabled  = true;
+      $("guests").innerHTML=""; guestCount=0; addGuest();
+    }
+
+    hideLoader();
+    $("hora").disabled = true;
+    if(!editId) $("hora").innerHTML = "<option>Seleccione función primero</option>";
+
+    /* cuando cambie función en el FORM */
+    $("funcion").addEventListener("change", ()=>{
+      const funcion = $("funcion").value;
+      $("hora").disabled = false;
+      hydrateMenu(funcion);
+      renderHorasBootstrap(funcion);
+      updateFormBanner(funcion);
+      syncCarouselToForm(funcion);
+
+      $("guests").innerHTML=""; guestCount=0; addGuest();
+      $("menuResetNotice").style.display="block";
+      // auto-ocultar aviso después de 4 segundos
+      setTimeout(()=>{ $("menuResetNotice").style.display="none"; }, 4000);
+
+      pillList("menuAperitivos",  CURRENT_MENU.aperitivos.map(p=>p.nombre));
+      pillList("menuPrincipales", CURRENT_MENU.principales.map(p=>p.nombre));
+      pillList("menuPostres",     CURRENT_MENU.postres.map(p=>p.nombre));
+      pillList("menuNinos",       CURRENT_MENU.ninos.map(p=>p.nombre));
+    });
+
+    $("addGuestBtn").addEventListener("click", addGuest);
+    $("descorche").addEventListener("change", actualizarTotal);
+    $("submitBtn").addEventListener("click", submitReservation);
+
+    initReveal();
+
+    // carousel scroll hint
+    setTimeout(()=>{
+      const el = document.querySelector(".functionCarousel");
+      if(!el) return;
+      el.scrollLeft=40;
+      setTimeout(()=>el.scrollLeft=0,600);
+    },800);
+
+    const arrow   = document.querySelector(".carouselArrow");
+    const carousel = document.querySelector(".functionCarousel");
+    if(carousel&&arrow) carousel.addEventListener("scroll",()=>arrow.style.opacity="0");
+  });
 </script>
 
 </body>
-
 </html>
