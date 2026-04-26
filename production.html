@@ -669,12 +669,11 @@
       window._lastData = data;
 
       // stat cards
-      const notasCount  = (data.notas || []).length;
-      const horasCount  = Object.keys(data.porHora || {}).length;
+      const notasCount = (data.notas || []).length;
 
       document.getElementById("coversTotal").textContent    = data.covers || 0;
       document.getElementById("proteinasTotal").textContent = sumObj(data.board?.proteinas);
-      document.getElementById("reservasTotal").textContent  = horasCount + (horasCount === 1 ? " horario" : " horarios");
+      document.getElementById("reservasTotal").textContent  = data.reservaciones || 0;
       document.getElementById("notasTotal").textContent     = notasCount;
 
       // timestamp
