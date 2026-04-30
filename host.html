@@ -1450,6 +1450,7 @@ let HORA_COLORS      = {};
 let refreshTimer     = null;
 let timerInterval    = null;
 let SEATED_TIMES     = {};
+let ITEMS_MENU_CACHE = null;
 
 // Layout stored in localStorage
 const LAYOUT_KEY = "alora_floor_layout_v2";
@@ -1673,6 +1674,8 @@ function setTab(tab){
   renderReservas(CURRENT_LIST);
 }
 
+
+  
 /* 
    LOAD RESERVAS
  */
@@ -2101,12 +2104,21 @@ async function runPrimaryAction(id){
   }
 
   // update all reservations in the group
-  Object.values(HOST_CACHE).forEach(x=>{
-    if((x.grupo||x.id)===ACTIVE_GROUP){
-      x.estado = newEstado;
+  // REEMPLAZA CON ESTO:
+Object.values(HOST_CACHE).forEach(x=>{
+  if((x.grupo||x.id)===ACTIVE_GROUP){
+    x.estado = newEstado;
+    // ✅ si cierra, limpiar mesa también
+    if(newEstado === "Cerrado"){
+      x.mesa = "";
+      delete SEATED_TIMES[x.id];
+      api({ action:"host_update", id:x.id, estado:newEstado, mesa:"", funcion:$("funcion").value });
+    } else {
       api({ action:"host_update", id:x.id, estado:newEstado, funcion:$("funcion").value });
     }
-  });
+  }
+});
+
 
   // auto-switch tab to follow the new estado
   // so the selected reservation stays visible
@@ -2730,31 +2742,55 @@ async function removeFromGroup(id){
    CONSUMO
  */
 async function loadItemsMenu(){
-  const data=await api({action:"get_items_menu"});
-  const sel=$("itemSelect");
-  if(!sel||!data.ok) return;
-  sel.innerHTML=`<option value="">Seleccionar item</option>`;
+  const sel = $("itemSelect");
+  if(!sel) return;
+
+  // ✅ usar cache local si ya se cargó
+  if(ITEMS_MENU_CACHE){
+    sel.innerHTML = `<option value="">Seleccionar item</option>`;
+    ITEMS_MENU_CACHE.forEach(i=>{
+      const o = document.createElement("option");
+      o.value = i.nombre;
+      o.textContent = `${i.nombre} ($${i.precio})`;
+      sel.appendChild(o);
+    });
+    return;
+  }
+
+  const data = await api({ action:"get_items_menu" });
+  if(!sel || !data.ok) return;
+
+  ITEMS_MENU_CACHE = data.items; // ✅ guardar en cache
+
+  sel.innerHTML = `<option value="">Seleccionar item</option>`;
   data.items.forEach(i=>{
-    const o=document.createElement("option");
-    o.value=i.nombre;
-    o.textContent=`${i.nombre} ($${i.precio})`;
+    const o = document.createElement("option");
+    o.value = i.nombre;
+    o.textContent = `${i.nombre} ($${i.precio})`;
     sel.appendChild(o);
   });
 }
 
+
 async function loadCuentaGrupo(){
-  const grupo=getReservasGrupo();
-  const container=$("cuentaList");
+  const grupo = getReservasGrupo();
+  const container = $("cuentaList");
   if(!container) return;
 
-  let html=""; let totalGrupo=0;
+  // ✅ cargar todas las cuentas en paralelo
+  const resultados = await Promise.all(
+    grupo.map(r => api({ action:"get_cuenta", id:r.id }))
+  );
 
-  for(const r of grupo){
-    const data=await api({action:"get_cuenta",id:r.id});
-    if(!data.ok) continue;
-    totalGrupo+=data.total||0;
+  let html = "";
+  let totalGrupo = 0;
 
-    html+=`
+  resultados.forEach((data, idx) => {
+    const r = grupo[idx];
+    if(!data.ok) return;
+    totalGrupo += data.total || 0;
+
+    html += `
       <div style="border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;background:rgba(255,255,255,.02);">
         <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
           <strong style="font-size:13px;">${r.cliente}</strong>
@@ -2769,12 +2805,13 @@ async function loadCuentaGrupo(){
             </div>
           </div>`).join("")}
       </div>`;
-  }
+  });
 
-  container.innerHTML=html||`<div style="color:var(--muted);font-size:13px;">Sin consumo adicional</div>`;
-  const totalEl=$("cuentaTotal");
-  if(totalEl) totalEl.textContent=totalGrupo.toFixed(2);
+  container.innerHTML = html || `<div style="color:var(--muted);font-size:13px;">Sin consumo adicional</div>`;
+  const totalEl = $("cuentaTotal");
+  if(totalEl) totalEl.textContent = totalGrupo.toFixed(2);
 }
+
 
 async function addConsumoFromSelector(){
   const reservaId=$("reservaSelect")?.value;
@@ -2805,33 +2842,72 @@ function handleReservaChange(e){
    CHECKOUT
  */
 async function checkoutFromSelector(){
-  const reservationId=$("reservaSelect")?.value;
+  const reservationId = $("reservaSelect")?.value;
   if(!reservationId){ showToast("Selecciona una reserva","warning"); return; }
 
   showToast("Procesando cuenta...","warning");
-  const res=await api({action:"checkout",id:reservationId,funcion:$("funcion").value});
+  const res = await api({ action:"checkout", id:reservationId, funcion:$("funcion").value });
   if(!res.ok){ showToast(res.error||"No se pudo hacer checkout","error",5000); return; }
+
+  // ✅ limpiar mesa y estado en cache local
+  if(HOST_CACHE[reservationId]){
+    HOST_CACHE[reservationId].mesa = "";
+    HOST_CACHE[reservationId].estado = "Cerrado";
+    delete SEATED_TIMES[reservationId];
+  }
+
+  SELECTED_MESAS = [];
+  SELECTED_RESERVA_ID = null;
+
+  // ✅ ir a historial
+  CURRENT_TAB = "cerrados";
+  document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
+  $("tabCerrados").classList.add("active");
 
   showToast(`Cuenta cerrada · $${(res.total||0).toFixed(2)}`,"success");
   await loadReservas();
   window.open(`ticket.html?id=${reservationId}`,"_blank");
 }
 
+
 async function checkoutGrupo(){
-  const grupo=getReservasGrupo();
+  const grupo = getReservasGrupo();
   if(!grupo.length){ showToast("No hay grupo activo","warning"); return; }
 
   showToast("Procesando grupo...","warning");
-  let total=0;
-  for(const r of grupo){
-    const res=await api({action:"checkout",id:r.id,funcion:$("funcion").value});
-    if(res.ok) total+=res.total||0;
-  }
+
+  // ✅ checkout en paralelo
+  const resultados = await Promise.all(
+    grupo.map(r => api({ action:"checkout", id:r.id, funcion:$("funcion").value }))
+  );
+
+  let total = 0;
+  resultados.forEach((res, idx) => {
+    if(res.ok){
+      total += res.total || 0;
+      const r = grupo[idx];
+      // ✅ limpiar cache local
+      if(HOST_CACHE[r.id]){
+        HOST_CACHE[r.id].mesa = "";
+        HOST_CACHE[r.id].estado = "Cerrado";
+        delete SEATED_TIMES[r.id];
+      }
+    }
+  });
+
+  SELECTED_MESAS = [];
+  SELECTED_RESERVA_ID = null;
+  ACTIVE_GROUP = null;
+
+  CURRENT_TAB = "cerrados";
+  document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
+  $("tabCerrados").classList.add("active");
 
   showToast(`Grupo cerrado · $${total.toFixed(2)}`,"success");
   await loadReservas();
   window.open(`ticket.html?id=${grupo[0].id}`,"_blank");
 }
+
 
 /* 
    QR SCANNER
