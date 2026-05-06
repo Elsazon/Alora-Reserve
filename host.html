@@ -827,12 +827,12 @@ function renderReservas(list){
   const totalPax=filtered.reduce((s,r)=>s+(r.personas||0),0);
   $("listSummary").textContent=filtered.length?`${filtered.length} reserva${filtered.length!==1?"s":""}  · ${totalPax} pax`:"";
 
+  // BUG #1 FIX — rebuild cache FIRST before ANY early returns
+  // updateHiddenTabNotice() needs HOST_CACHE populated even when tab is empty
+  list.forEach(r=>{ HOST_CACHE[r.id]=r; });
+
   const container=$("reservas");
   container.innerHTML="";
-
-  // Reconstruir HOST_CACHE con TODOS los datos (no solo los filtrados)
-  // Crítico: permite abrir reservas de cualquier tab sin perder datos
-  list.forEach(r=>{ HOST_CACHE[r.id]=r; });
 
   if(!filtered.length){
     container.innerHTML=`<div class="emptyState"><div class="emptyIcon">📋</div><p>No hay reservaciones en esta vista</p></div>`;
@@ -946,14 +946,15 @@ function showQuickMenu(r,x,y){
 }
 
 async function quickUpdateEstado(id,estado){
+  // BUG #2 FIX — optimistic update only, no loadReservas() after
+  // loadReservas() was overwriting our local change with Notion's 30s cached state
   if(HOST_CACHE[id]) HOST_CACHE[id].estado=estado;
-  // ── CHANGED: do NOT force tab switch — just re-render in place
   renderReservas(CURRENT_LIST);
   paintMesas(CURRENT_LIST);
   updateHiddenTabNotice();
-  await api({action:"host_update",id,estado,funcion:$("funcion").value});
+  // Fire-and-forget to Notion — silentRefresh will pick up confirmed state in 30s
+  api({action:"host_update",id,estado,funcion:$("funcion").value});
   showToast(`${HOST_CACHE[id]?.cliente||""} → ${estado}`,"success");
-  await loadReservas();
 }
 
 /* ============================================================
@@ -1095,6 +1096,10 @@ function cancelConfirm(){ const box=$("inlineConfirm"); if(box) box.classList.re
    ============================================================ */
 function updateTimers(){
   if(!SELECTED_RESERVA_ID) return;
+  // BUG #6 FIX — don't re-render if the host is actively using the consumo dropdown
+  // Recreating innerHTML would wipe whatever they have selected
+  const itemSel=$("itemSelect");
+  if(itemSel && itemSel.value) return; // user has something selected, skip this tick
   const r=HOST_CACHE[SELECTED_RESERVA_ID];
   if(r) renderDetalle(r);
 }
@@ -1107,7 +1112,7 @@ function getPrimaryAction(r){
   if(e==="Pendiente")  return {label:"Confirmar reserva",class:"btnNeutral"};
   if(e==="Confirmado") return {label:"Marcar llegó",class:"btnSecondary"};
   if(e==="Llegó")      return {label:"Sentar cliente",class:"btnPrimary"};
-  if(e==="Sentado")    return {label:"Cerrar mesa",class:"btnDanger"};
+  if(e==="Sentado")    return {label:"↓ Ver Checkout",class:"btnNeutral"}; // redirects to checkout section
   if(e==="Cerrado")    return {label:"Reabrir mesa",class:"btnReopen"};
   return null;
 }
@@ -1115,8 +1120,23 @@ function getPrimaryAction(r){
 async function runPrimaryAction(id){
   const r=HOST_CACHE[id];
   const estado=r?.estado||"Pendiente";
-  const map={"Pendiente":"Confirmado","Confirmado":"Llegó","Llegó":"Sentado","Sentado":"Cerrado","Cerrado":"Sentado"};
+  const map={"Pendiente":"Confirmado","Confirmado":"Llegó","Llegó":"Sentado","Cerrado":"Sentado"};
+
+  // BUG #7 FIX — "Sentado" primary action must go to CHECKOUT, not silently to "Cerrado"
+  // Closing state directly skips the consumo/extras billing flow entirely
+  if(estado==="Sentado"){
+    showToast("Usa el botón Checkout para cerrar la cuenta","warning",3000);
+    // Scroll detail panel to checkout section so it's visible
+    const detalleEl=$("detalle");
+    if(detalleEl){
+      const checkoutSection=detalleEl.querySelector(".detailSection:last-of-type");
+      if(checkoutSection) checkoutSection.scrollIntoView({behavior:"smooth",block:"nearest"});
+    }
+    return;
+  }
+
   const newEstado=map[estado]||estado;
+  if(!newEstado) return;
 
   if(newEstado==="Sentado"&&!SEATED_TIMES[id]) SEATED_TIMES[id]=Date.now();
 
@@ -1124,12 +1144,10 @@ async function runPrimaryAction(id){
   Object.values(HOST_CACHE).forEach(x=>{
     if((x.grupo||x.id)===ACTIVE_GROUP){
       x.estado=newEstado;
-      if(newEstado==="Cerrado"){ x.mesa=""; delete SEATED_TIMES[x.id]; api({action:"host_update",id:x.id,estado:newEstado,mesa:"",funcion:$("funcion").value}); }
-      else api({action:"host_update",id:x.id,estado:newEstado,funcion:$("funcion").value});
+      api({action:"host_update",id:x.id,estado:newEstado,funcion:$("funcion").value});
     }
   });
 
-  // ── CHANGED: do NOT force tab switch — stay on current tab, show notice banner
   renderReservas(CURRENT_LIST);
   const updated=HOST_CACHE[id];
   if(updated) renderDetalle(updated);
@@ -1486,7 +1504,18 @@ async function checkoutSingle(reservationId){
   const res=await api({action:"checkout",id:reservationId,funcion:$("funcion").value});
   if(!res.ok){ showToast(res.error||"No se pudo hacer checkout","error",5000); return; }
   if(HOST_CACHE[reservationId]){ HOST_CACHE[reservationId].mesa=""; HOST_CACHE[reservationId].estado="Cerrado"; delete SEATED_TIMES[reservationId]; }
-  SELECTED_MESAS=[]; SELECTED_RESERVA_ID=null; ACTIVE_GROUP=null;
+  SELECTED_MESAS=[];
+  SELECTED_RESERVA_ID=null;
+  // BUG #3 FIX — only clear ACTIVE_GROUP if no other open reservations remain in the group
+  if(ACTIVE_GROUP){
+    const remaining=Object.values(HOST_CACHE).filter(r=>
+      (r.grupo||r.id)===ACTIVE_GROUP &&
+      r.id!==reservationId &&
+      !["Cerrado","Cancelado"].includes(r.estado||"")
+    );
+    if(remaining.length===0) ACTIVE_GROUP=null;
+    // else keep ACTIVE_GROUP — the other reservas are still open
+  }
   showToast(`Cuenta cerrada · $${(res.total||0).toFixed(2)}`,"success");
   await loadReservas();
   window.open(`ticket.html?id=${reservationId}`,"_blank");
