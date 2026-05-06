@@ -675,7 +675,18 @@ async function silentRefresh(){
     drawConnectionLines();
     if(SELECTED_RESERVA_ID){
       const found=CURRENT_LIST.find(r=>r.id===SELECTED_RESERVA_ID);
-      if(found){ HOST_CACHE[found.id]=found; renderDetalle(found); }
+      if(found){
+        HOST_CACHE[found.id]=found;
+        // Only re-render detalle if host is NOT actively using the consumo dropdown
+        // renderDetalle wipes innerHTML including itemSelect — we restore it after
+        const itemSel=$("itemSelect");
+        const hadValue = itemSel ? itemSel.value : "";
+        renderDetalle(found);
+        // Re-populate menu instantly from cache (no API call)
+        loadItemsMenu();
+        // Re-load cuenta in background
+        setTimeout(loadCuentaGrupo, 0);
+      }
     }
     updateRefreshInfo(true);
   }catch(e){ updateRefreshInfo(false); }
@@ -778,6 +789,10 @@ async function loadReservas(){
     $("coversArrived").textContent=data.coversArrived||0;
     $("coversPending").textContent=data.coversPending||0;
     CURRENT_LIST=(data.reservas||[]);
+    // Seed SEATED_TIMES for already-seated reservations so timer shows on load/refresh
+    CURRENT_LIST.forEach(r=>{
+      if(r.estado==="Sentado" && !SEATED_TIMES[r.id]) SEATED_TIMES[r.id]=Date.now();
+    });
     renderMapBase();
     renderReservas(CURRENT_LIST);
     paintMesas(CURRENT_LIST);
@@ -786,7 +801,12 @@ async function loadReservas(){
     updateRefreshInfo(true);
     if(SELECTED_RESERVA_ID){
       const found=CURRENT_LIST.find(r=>r.id===SELECTED_RESERVA_ID);
-      if(found){ HOST_CACHE[found.id]=found; renderDetalle(found); }
+      if(found){
+        HOST_CACHE[found.id]=found;
+        renderDetalle(found);
+        loadItemsMenu();           // restore menu instantly from cache
+        setTimeout(loadCuentaGrupo, 0);
+      }
       else{ SELECTED_RESERVA_ID=null; $("detalle").innerHTML=`<div class="detailEmpty"><div style="font-size:28px;margin-bottom:10px;">🪑</div>Selecciona una reserva</div>`; }
     }
     updateHiddenTabNotice();
@@ -867,13 +887,27 @@ function buildResCard(r){
 
   const card=document.createElement("div");
   card.className="resCard";
-  card.dataset.id=r.id; // ── NEW: needed for scrollIntoView
+  card.dataset.id=r.id;
 
   if(r.id===SELECTED_RESERVA_ID||(r.grupo&&r.grupo===ACTIVE_GROUP)) card.classList.add("active");
   if(SELECTED_RESERVAS.includes(r.id)) card.classList.add("selected");
   if(["Cerrado","Cancelado"].includes(estado)) card.style.opacity=".45";
 
-  // ── NEW: quick action chips per estado
+  // Seated timer — show elapsed minutes directly on card
+  let timerCardHtml="";
+  if(estado==="Sentado" && SEATED_TIMES[r.id]){
+    const mins=Math.floor((Date.now()-SEATED_TIMES[r.id])/60000);
+    const timerColor = mins>=90?"#c85b5b": mins>=60?"#d2a94b":"rgba(191,161,90,.7)";
+    timerCardHtml=`<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:${timerColor};margin-left:6px;vertical-align:middle;" title="Tiempo sentados">⏱ ${mins}m</span>`;
+  }
+
+  // Notes warning icon — visible at a glance without opening detail
+  const hasNotas=r.notas && r.notas.trim().length>0;
+  const notasIcon=hasNotas
+    ? `<span title="${r.notas}" style="font-size:11px;cursor:default;" >⚠️</span>`
+    : "";
+
+  // Quick action chips per estado
   let quickActionsHtml="";
   if(estado==="Pendiente")  quickActionsHtml=`<button class="quickChip" style="background:#4f8f6a;color:#111;" onclick="e_quickEstado(event,'${r.id}','Confirmado')">Confirmar</button>`;
   if(estado==="Confirmado") quickActionsHtml=`<button class="quickChip" style="background:#3fa86a;color:#111;" onclick="e_quickEstado(event,'${r.id}','Llegó')">✓ Llegó</button>`;
@@ -882,11 +916,11 @@ function buildResCard(r){
 
   card.innerHTML=`
     <div class="resCardTop">
-      <div>
-        <div class="resName">${r.cliente}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="resName">${r.cliente} ${notasIcon}</div>
         <div class="resMeta">
           <span class="horaBadge" style="background:${horaColor}22;color:${horaColor};border:1px solid ${horaColor}44">${r.hora||"—"}</span>
-          ${r.personas} pax · Mesa: ${r.mesa||"-"}
+          ${r.personas} pax · Mesa: ${r.mesa||"-"}${timerCardHtml}
           <br>${r.telefono||"Sin teléfono"}
         </div>
       </div>
@@ -1095,13 +1129,33 @@ function cancelConfirm(){ const box=$("inlineConfirm"); if(box) box.classList.re
    TIMERS
    ============================================================ */
 function updateTimers(){
-  if(!SELECTED_RESERVA_ID) return;
-  // BUG #6 FIX — don't re-render if the host is actively using the consumo dropdown
-  // Recreating innerHTML would wipe whatever they have selected
-  const itemSel=$("itemSelect");
-  if(itemSel && itemSel.value) return; // user has something selected, skip this tick
-  const r=HOST_CACHE[SELECTED_RESERVA_ID];
-  if(r) renderDetalle(r);
+  // Refresh timer on detail panel (skip if host is mid-selection on consumo)
+  if(SELECTED_RESERVA_ID){
+    const itemSel=$("itemSelect");
+    if(!itemSel || !itemSel.value){
+      const r=HOST_CACHE[SELECTED_RESERVA_ID];
+      if(r) renderDetalle(r);
+      loadItemsMenu();
+    }
+  }
+  // Refresh timer text on ALL seated cards in the list — just the timer span, no full re-render
+  Object.values(SEATED_TIMES).forEach((_,id)=>{
+    // id is the key, _ is the timestamp — Object.entries gives us both
+  });
+  Object.entries(SEATED_TIMES).forEach(([id, startMs])=>{
+    const card=document.querySelector(`.resCard[data-id="${id}"]`);
+    if(!card) return;
+    const mins=Math.floor((Date.now()-startMs)/60000);
+    const timerColor = mins>=90?"#c85b5b": mins>=60?"#d2a94b":"rgba(191,161,90,.7)";
+    // Find the timer span by its ⏱ content and update it in place (no full re-render)
+    const spans=card.querySelectorAll("span");
+    spans.forEach(s=>{
+      if(s.textContent.startsWith("⏱")){
+        s.textContent=`⏱ ${mins}m`;
+        s.style.color=timerColor;
+      }
+    });
+  });
 }
 
 /* ============================================================
@@ -1548,8 +1602,24 @@ function closeQR(){ $("qrModal").style.display="none"; if(qrScanner) qrScanner.s
 async function onScanSuccess(decodedText){
   if(scanning) return; scanning=true; showToast("Procesando QR...","warning");
   const res=await api({action:"host_arrive_qr",ticketId:decodedText.trim(),funcion:$("funcion").value});
-  if(res.ok){ closeQR(); showToast(`✔ ${res.cliente} llegó`,"success"); const r=HOST_CACHE[decodedText.trim()]; if(r){ r.estado="Llegó"; SELECTED_RESERVA_ID=decodedText.trim(); SELECTED_MESAS=sugerirMesas(r.personas||1); renderReservas(CURRENT_LIST); renderDetalle(r); paintMesas(CURRENT_LIST); updateHiddenTabNotice(); } }
-  else showToast("QR inválido o no encontrado","error",5000);
+  if(res.ok){
+    closeQR();
+    showToast(`✔ ${res.cliente} llegó`,"success");
+    const r=HOST_CACHE[decodedText.trim()];
+    if(r){
+      r.estado="Llegó";
+      SELECTED_RESERVA_ID=decodedText.trim();
+      ACTIVE_GROUP=r.grupo||r.id;
+      SELECTED_MESAS=sugerirMesas(r.personas||1);
+      renderReservas(CURRENT_LIST);
+      renderDetalle(r);
+      paintMesas(CURRENT_LIST);
+      updateHiddenTabNotice();
+      // Restore menu and cuenta — renderDetalle wiped the innerHTML
+      loadItemsMenu();
+      setTimeout(loadCuentaGrupo,0);
+    }
+  } else showToast("QR inválido o no encontrado","error",5000);
   setTimeout(()=>scanning=false,1000);
 }
 
