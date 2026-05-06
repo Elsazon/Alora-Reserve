@@ -11,7 +11,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-/*  TOKENS  */
 :root{
   --bg0:#0e1511;
   --bg1:#121a16;
@@ -27,13 +26,8 @@
   --shadow:0 30px 80px rgba(0,0,0,.45);
   --radius:20px;
 }
-
 *{ box-sizing:border-box; margin:0; padding:0; }
-
-html{
-  overflow-x:hidden;
-}
-
+html{ overflow-x:hidden; }
 body{
   font-family:"DM Sans",system-ui,sans-serif;
   color:var(--ink);
@@ -46,1084 +40,260 @@ body{
   width:100%;
 }
 
-/*  PIN OVERLAY  */
+/* PIN OVERLAY */
 #pinOverlay{
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(900px 600px at 20% 20%, rgba(194,106,74,.12), transparent 55%),
-    linear-gradient(180deg,#0a0f0c,#0e1511);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  z-index:99999;
-  transition:opacity .5s ease;
+  position:fixed;inset:0;
+  background:radial-gradient(900px 600px at 20% 20%, rgba(194,106,74,.12), transparent 55%),linear-gradient(180deg,#0a0f0c,#0e1511);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:99999;transition:opacity .5s ease;
 }
-
-#pinOverlay.fade{
-  opacity:0;
-  pointer-events:none;
-}
-
+#pinOverlay.fade{ opacity:0;pointer-events:none; }
 .pinCard{
-  width:340px;
-  max-width:90vw;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:28px;
-  padding:44px 36px;
-  text-align:center;
-  box-shadow:0 60px 120px rgba(0,0,0,.7);
-  backdrop-filter:blur(12px);
+  width:340px;max-width:90vw;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:28px;padding:44px 36px;text-align:center;
+  box-shadow:0 60px 120px rgba(0,0,0,.7);backdrop-filter:blur(12px);
 }
-
-.pinLogo{
-  font-family:"Playfair Display",serif;
-  font-size:28px;
-  font-weight:700;
-  letter-spacing:.5px;
-  margin-bottom:6px;
-}
-
-.pinSub{
-  font-size:11px;
-  letter-spacing:2px;
-  color:var(--muted);
-  text-transform:uppercase;
-  margin-bottom:32px;
-}
-
-.pinGoldLine{
-  width:50px;
-  height:1px;
-  background:var(--gold);
-  margin:0 auto 28px;
-  opacity:.5;
-}
-
-.pinLabel{
-  font-size:12px;
-  color:var(--muted);
-  letter-spacing:1px;
-  text-transform:uppercase;
-  margin-bottom:12px;
-}
-
-.pinInputWrap{
-  position:relative;
-  margin-bottom:20px;
-}
-
+.pinLogo{ font-family:"Playfair Display",serif;font-size:28px;font-weight:700;letter-spacing:.5px;margin-bottom:6px; }
+.pinSub{ font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:32px; }
+.pinGoldLine{ width:50px;height:1px;background:var(--gold);margin:0 auto 28px;opacity:.5; }
+.pinLabel{ font-size:12px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px; }
+.pinInputWrap{ position:relative;margin-bottom:20px; }
 #pinInput{
-  width:100%;
-  padding:14px 44px 14px 18px;
-  background:rgba(0,0,0,.3);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:14px;
-  color:var(--ink);
-  font-size:22px;
-  letter-spacing:8px;
-  text-align:center;
-  outline:none;
-  font-family:"IBM Plex Mono",monospace;
-  transition:border-color .2s;
+  width:100%;padding:14px 44px 14px 18px;
+  background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;color:var(--ink);font-size:22px;letter-spacing:8px;
+  text-align:center;outline:none;font-family:"IBM Plex Mono",monospace;transition:border-color .2s;
 }
-
-#pinInput:focus{
-  border-color:var(--gold);
-  box-shadow:0 0 0 1px var(--gold);
-}
-
-#pinInput.shake{
-  animation:pinShake .4s ease;
-  border-color:var(--red) !important;
-}
-
-.pinEye{
-  position:absolute;
-  right:14px;
-  top:50%;
-  transform:translateY(-50%);
-  background:none;
-  border:none;
-  color:var(--muted);
-  cursor:pointer;
-  font-size:16px;
-  padding:4px;
-}
-
+#pinInput:focus{ border-color:var(--gold);box-shadow:0 0 0 1px var(--gold); }
+#pinInput.shake{ animation:pinShake .4s ease;border-color:var(--red) !important; }
+.pinEye{ position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:4px; }
 .pinEye:hover{ color:var(--ink); }
-
-#pinBtn{
-  width:100%;
-  padding:14px;
-  background:var(--gold);
-  color:#111;
-  border:none;
-  border-radius:14px;
-  font-family:"DM Sans",sans-serif;
-  font-size:15px;
-  font-weight:700;
-  cursor:pointer;
-  transition:.2s;
-  letter-spacing:.5px;
-}
-
+#pinBtn{ width:100%;padding:14px;background:var(--gold);color:#111;border:none;border-radius:14px;font-family:"DM Sans",sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;letter-spacing:.5px; }
 #pinBtn:hover{ background:#a8893a; }
+.pinError{ margin-top:14px;font-size:12px;color:var(--red);min-height:18px;transition:opacity .2s; }
+@keyframes pinShake{ 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
 
-.pinError{
-  margin-top:14px;
-  font-size:12px;
-  color:var(--red);
-  min-height:18px;
-  transition:opacity .2s;
-}
+/* MAIN APP */
+#mainApp{ display:block;width:100%;box-sizing:border-box;visibility:hidden;pointer-events:none; }
+.container{ width:100%;max-width:1600px;margin:0 auto;padding:16px 12px 40px;box-sizing:border-box; }
 
-@keyframes pinShake{
-  0%,100%{ transform:translateX(0); }
-  20%{ transform:translateX(-8px); }
-  40%{ transform:translateX(8px); }
-  60%{ transform:translateX(-6px); }
-  80%{ transform:translateX(6px); }
-}
-
-/*  MAIN LAYOUT  */
-#mainApp{
-  display:block;
-  width:100%;
-  box-sizing:border-box;
-  visibility:hidden;
-  pointer-events:none;
-}
-
-.container{
-  width:100%;
-  max-width:1600px;
-  margin:0 auto;
-  padding:16px 12px 40px;
-  box-sizing:border-box;
-}
-
-/*  TOPBAR  */
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  margin-bottom:12px;
-  flex-wrap:wrap;
-}
-
-.brandWrap h1{
-  font-family:"Playfair Display",serif;
-  font-size:28px;
-  font-weight:700;
-  margin:0;
-}
-
-.brandWrap p{
-  margin:4px 0 0;
-  color:var(--muted);
-  font-size:12px;
-  letter-spacing:1.6px;
-  text-transform:uppercase;
-}
-
-.topbarRight{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
-}
-
-.refreshInfo{
-  font-family: ui-monospace, "SF Mono", Monaco, "Cascadia Mono", monospace;
-  font-size:10px;
-  color:var(--muted);
-  letter-spacing:.5px;
-}
-
+/* TOPBAR */
+.topbar{ display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:12px;flex-wrap:wrap; }
+.brandWrap h1{ font-family:"Playfair Display",serif;font-size:28px;font-weight:700;margin:0; }
+.brandWrap p{ margin:4px 0 0;color:var(--muted);font-size:12px;letter-spacing:1.6px;text-transform:uppercase; }
+.topbarRight{ display:flex;align-items:center;gap:12px;flex-wrap:wrap; }
+.refreshInfo{ font-family:ui-monospace,"SF Mono",Monaco,"Cascadia Mono",monospace;font-size:10px;color:var(--muted);letter-spacing:.5px; }
 .refreshInfo.warn{ color:var(--red); }
+.statusPill{ border:1px solid var(--line);background:var(--card);padding:8px 14px;border-radius:999px;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px; }
+.statusDot{ width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green); }
 
-.statusPill{
-  border:1px solid var(--line);
-  background:var(--card);
-  padding:8px 14px;
-  border-radius:999px;
-  font-size:12px;
-  color:var(--muted);
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
+/* HEADER CARD */
+.headerCard{ border:1px solid var(--line);background:var(--card);border-radius:var(--radius);padding:12px 16px;box-shadow:var(--shadow);margin-bottom:14px; }
 
-.statusDot{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 6px var(--green);
-}
-
-/*  HEADER CARD  */
-.headerCard{
-  border:1px solid var(--line);
-  background:var(--card);
-  border-radius:var(--radius);
-  padding:12px 16px;
-  box-shadow:var(--shadow);
-  margin-bottom:14px;
-}
-
-.headerGrid{
-  display:flex;
-  flex-direction:row;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:16px;
-  flex-wrap:wrap;
-}
-
-.headerGrid > div:first-child{
-  flex:1;
-  min-width:300px;
-}
-
-.headerGrid > .stats{
-  flex-shrink:0;
-}
-
-.controls{
-  display:flex;
-  gap:12px;
-  align-items:flex-end;
-  flex-wrap:wrap;
-}
-
-.field{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-}
-
-.field label{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:1.4px;
-  color:var(--muted);
-}
-
-select,input{
-  background:rgba(0,0,0,.3);
-  border:1px solid var(--line);
-  color:var(--ink);
-  padding:10px 12px;
-  border-radius:12px;
-  font-size:13px;
-  font-family:"DM Sans",sans-serif;
-  min-width:130px;
-  max-width:200px;
-  outline:none;
-}
-
-select:focus,input:focus{
-  border-color:var(--terra);
-  box-shadow:0 0 0 1px var(--terra);
-}
-
-select option{ background:#0e1511; color:var(--ink); }
-
-.btnMini{
-  border:none;
-  border-radius:10px;
-  padding:8px 12px;
-  font-size:12px;
-  font-family:"DM Sans",sans-serif;
-  font-weight:500;
-  cursor:pointer;
-  transition:.2s;
-  white-space:nowrap;
-}
-
+/* CONTROLS */
+.field{ display:flex;flex-direction:column;gap:5px; }
+.field label{ font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted); }
+select,input{ background:rgba(0,0,0,.3);border:1px solid var(--line);color:var(--ink);padding:10px 12px;border-radius:12px;font-size:13px;font-family:"DM Sans",sans-serif;min-width:130px;max-width:200px;outline:none; }
+select:focus,input:focus{ border-color:var(--terra);box-shadow:0 0 0 1px var(--terra); }
+select option{ background:#0e1511;color:var(--ink); }
+.btnMini{ border:none;border-radius:10px;padding:8px 12px;font-size:12px;font-family:"DM Sans",sans-serif;font-weight:500;cursor:pointer;transition:.2s;white-space:nowrap; }
 .btnMini:hover{ opacity:.85; }
 
-/*  HORA FILTER BAR  */
-.horaFilterBar{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  margin-top:10px;
-  max-width:100%;
-  overflow:hidden;
-}
+/* HORA FILTER */
+.horaChip{ padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);font-size:11px;cursor:pointer;transition:.2s;font-family:"DM Sans",sans-serif; }
+.horaChip:hover{ border-color:var(--terra);color:var(--ink); }
+.horaChip.active{ background:var(--terra);border-color:var(--terra);color:#111;font-weight:600; }
 
-.horaChip{
-  padding:5px 12px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:var(--card);
-  color:var(--muted);
-  font-size:11px;
-  cursor:pointer;
-  transition:.2s;
-  font-family:"DM Sans",sans-serif;
-}
+/* STATS */
+.stats{ display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;min-width:0; }
+.stat{ min-width:110px;border:1px solid var(--line);background:rgba(0,0,0,.2);border-radius:14px;padding:10px 14px; }
+.statLabel{ font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px; }
+.statValue{ font-size:22px;font-weight:600;color:var(--gold);font-family:"Playfair Display",serif; }
 
-.horaChip:hover{ border-color:var(--terra); color:var(--ink); }
-.horaChip.active{ background:var(--terra); border-color:var(--terra); color:#111; font-weight:600; }
-
-/*  STATS  */
-.stats{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
-  min-width:0;
-  overflow:hidden;
-}
-
-.stat{
-  min-width:110px;
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.2);
-  border-radius:14px;
-  padding:10px 14px;
-}
-
-.statLabel{
-  font-size:10px;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.statValue{
-  font-size:22px;
-  font-weight:600;
-  color:var(--gold);
-  font-family:"Playfair Display",serif;
-}
-
-/*  LAYOUT  */
+/* LAYOUT */
 .layout{
   display:grid;
   grid-template-columns:260px 1fr 300px;
   grid-template-areas:"left center right";
-  gap:12px;
-  align-items:start;
-  width:100%;
+  gap:12px;align-items:start;width:100%;
 }
-
 .layout > .panel:nth-child(1){ grid-area:left; }
 .layout > .panel:nth-child(2){ grid-area:center; }
 .layout > .panel:nth-child(3){ grid-area:right; }
+@media(min-width:1400px){ .layout{ grid-template-columns:300px 1fr 360px;gap:16px; } }
+@media(max-width:700px){ .layout{ grid-template-columns:1fr;grid-template-areas:"left" "center" "right"; } }
 
-/* Large desktop */
-@media(min-width:1400px){
-  .layout{
-    grid-template-columns:300px 1fr 360px;
-    gap:16px;
-  }
-}
-
-/* Mobile only — single column */
-@media(max-width:700px){
-  .layout{
-    grid-template-columns:1fr;
-    grid-template-areas:
-      "left"
-      "center"
-      "right";
-  }
-}
-
-/*  PANELS  */
-.panel{
-  border:1px solid var(--line);
-  background:var(--card);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-  min-width:0;
-}
-
-.panelHead{
-  padding:16px 18px;
-  border-bottom:1px solid var(--line);
-}
-
-.panelHead h2{
-  font-family:"Playfair Display",serif;
-  font-size:18px;
-  font-weight:600;
-  margin-bottom:4px;
-}
-
-.panelHead p{
-  font-size:12px;
-  color:var(--muted);
-  margin:0;
-}
-
-.panelBody{
-  padding:12px;
-  max-height:calc(100vh - 240px);
-  overflow-y:auto;
-  scrollbar-width:thin;
-  scrollbar-color:rgba(255,255,255,.08) transparent;
-}
-
-@media(max-width:700px){
-  .panelBody{ max-height:50vh; }
-}
-
+/* PANELS */
+.panel{ border:1px solid var(--line);background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;min-width:0; }
+.panelHead{ padding:16px 18px;border-bottom:1px solid var(--line); }
+.panelHead h2{ font-family:"Playfair Display",serif;font-size:18px;font-weight:600;margin-bottom:4px; }
+.panelHead p{ font-size:12px;color:var(--muted);margin:0; }
+.panelBody{ padding:12px;max-height:calc(100vh - 240px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.08) transparent; }
+@media(max-width:700px){ .panelBody{ max-height:50vh; } }
 .panelBody::-webkit-scrollbar{ width:4px; }
-.panelBody::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.08); border-radius:4px; }
+.panelBody::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.08);border-radius:4px; }
 
-/*  TAB BAR  */
-.tabBar{
-  display:flex;
-  gap:4px;
-  margin:12px 14px 0;
-  background:rgba(255,255,255,.03);
-  padding:4px;
-  border-radius:12px;
-  border:1px solid var(--line);
-}
-
-.tabBtn{
-  flex:1;
-  border:none;
-  padding:9px 6px;
-  border-radius:9px;
-  background:transparent;
-  color:var(--muted);
-  cursor:pointer;
-  font-size:11px;
-  font-family:"DM Sans",sans-serif;
-  font-weight:500;
-  transition:.2s;
-  white-space:nowrap;
-}
-
+/* TAB BAR */
+.tabBar{ display:flex;gap:4px;margin:12px 14px 0;background:rgba(255,255,255,.03);padding:4px;border-radius:12px;border:1px solid var(--line); }
+.tabBtn{ flex:1;border:none;padding:9px 6px;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer;font-size:11px;font-family:"DM Sans",sans-serif;font-weight:500;transition:.2s;white-space:nowrap; }
 .tabBtn:hover{ color:var(--ink); }
-.tabBtn.active{ background:var(--gold); color:#111; font-weight:600; }
+.tabBtn.active{ background:var(--gold);color:#111;font-weight:600; }
 
-/*  RESERVATION CARDS  */
-.groupContainer{
-  margin-bottom:12px;
-  border:1px solid rgba(191,161,90,.25);
-  border-radius:16px;
-  overflow:hidden;
-  background:rgba(191,161,90,.03);
-}
-
-.groupHeader{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:8px 12px;
-  background:rgba(191,161,90,.08);
-  border-bottom:1px solid rgba(191,161,90,.15);
-  font-size:11px;
-  color:var(--gold);
-  letter-spacing:.5px;
-}
-
-.resCard{
-  background:rgba(255,255,255,.025);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:12px 14px;
-  margin-bottom:8px;
-  cursor:pointer;
-  transition:border-color .2s, background .2s;
-  position:relative;
-}
-
-.resCard:last-child{ margin-bottom:0; }
-
-.groupContainer .resCard{
-  border-radius:0;
-  border:none;
-  border-bottom:1px solid rgba(255,255,255,.04);
-  margin-bottom:0;
-}
-
-.groupContainer .resCard:last-child{ border-bottom:none; }
-
-.resCard:hover{ border-color:rgba(255,255,255,.18); background:rgba(255,255,255,.04); }
-.resCard.active{ border-color:var(--gold); background:rgba(191,161,90,.06); }
-.resCard.selected{ background:rgba(191,161,90,.12); border-color:var(--gold); }
-
-.resCardTop{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:10px;
-}
-
-.resName{
-  font-weight:600;
-  font-size:14px;
-  color:var(--ink);
-}
-
-.resMeta{
-  margin-top:5px;
-  font-size:12px;
-  color:var(--muted);
-  line-height:1.6;
-}
-
-.horaBadge{
-  display:inline-block;
-  padding:3px 8px;
-  border-radius:999px;
-  font-size:10px;
-  font-weight:600;
-  margin-right:6px;
-  vertical-align:middle;
-}
-
-.estadoBadge{
-  padding:4px 10px;
-  border-radius:999px;
-  font-size:10px;
-  font-weight:600;
-  white-space:nowrap;
-  flex-shrink:0;
-}
-
-/*  EMPTY STATE  */
-.emptyState{
-  text-align:center;
-  padding:40px 20px;
-  color:var(--muted);
-}
-
-.emptyState .emptyIcon{ font-size:32px; margin-bottom:12px; }
-.emptyState p{ font-size:13px; line-height:1.6; }
-
-/*  GROUP TOOLBAR  */
-#groupToolbar{
-  display:none;
+/* ── HIDDEN-TAB NOTICE (NEW) ── */
+/* Banner that appears in the list panel when the selected reservation
+   is not visible in the current tab */
+#hiddenTabNotice{
   margin:8px 14px;
-  background:rgba(191,161,90,.08);
-  border:1px solid rgba(191,161,90,.2);
-  padding:10px 12px;
+  background:rgba(191,161,90,.10);
+  border:1px solid rgba(191,161,90,.3);
   border-radius:12px;
-}
-
-.groupToolbarInner{
-  display:flex;
-  justify-content:space-between;
+  padding:10px 14px;
+  font-size:12px;
+  color:var(--gold);
+  display:none;
   align-items:center;
+  justify-content:space-between;
   gap:10px;
 }
+#hiddenTabNotice.visible{ display:flex; }
+#hiddenTabNotice button{ background:var(--gold);color:#111;border:none;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer; }
 
-/*  FLOOR MAP  */
-.mapContainer{ display:flex; flex-direction:column; gap:10px; }
+/* RESERVATION CARDS */
+.groupContainer{ margin-bottom:12px;border:1px solid rgba(191,161,90,.25);border-radius:16px;overflow:hidden;background:rgba(191,161,90,.03); }
+.groupHeader{ display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(191,161,90,.08);border-bottom:1px solid rgba(191,161,90,.15);font-size:11px;color:var(--gold);letter-spacing:.5px; }
+.resCard{ background:rgba(255,255,255,.025);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:border-color .2s, background .2s;position:relative; }
+.resCard:last-child{ margin-bottom:0; }
+.groupContainer .resCard{ border-radius:0;border:none;border-bottom:1px solid rgba(255,255,255,.04);margin-bottom:0; }
+.groupContainer .resCard:last-child{ border-bottom:none; }
+.resCard:hover{ border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.04); }
+.resCard.active{ border-color:var(--gold);background:rgba(191,161,90,.06); }
+.resCard.selected{ background:rgba(191,161,90,.12);border-color:var(--gold); }
+.resCardTop{ display:flex;justify-content:space-between;align-items:flex-start;gap:10px; }
+.resName{ font-weight:600;font-size:14px;color:var(--ink); }
+.resMeta{ margin-top:5px;font-size:12px;color:var(--muted);line-height:1.6; }
+.horaBadge{ display:inline-block;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:600;margin-right:6px;vertical-align:middle; }
+.estadoBadge{ padding:4px 10px;border-radius:999px;font-size:10px;font-weight:600;white-space:nowrap;flex-shrink:0; }
 
-.floor{
-  position:relative;
-  height:clamp(340px,50vh,580px);
-  background:#0a0f0c;
-  overflow:hidden;
-  border:1px solid var(--line);
-  border-radius:16px;
-  width:100%;
+/* QUICK STATUS CHIPS on card (NEW) */
+.resQuickActions{
+  display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;
 }
-
-.mapContainer{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  width:100%;
-  overflow:hidden;
+.quickChip{
+  border:none;border-radius:8px;padding:4px 9px;font-size:10px;font-weight:600;
+  cursor:pointer;transition:.15s;font-family:"DM Sans",sans-serif;
 }
+.quickChip:hover{ opacity:.85; }
 
-.floor.editMode{
-  border-color:var(--gold);
-  box-shadow:0 0 0 2px rgba(191,161,90,.3), inset 0 0 40px rgba(191,161,90,.04);
-}
+/* EMPTY STATE */
+.emptyState{ text-align:center;padding:40px 20px;color:var(--muted); }
+.emptyState .emptyIcon{ font-size:32px;margin-bottom:12px; }
+.emptyState p{ font-size:13px;line-height:1.6; }
 
-.editModeBanner{
-  position:absolute;
-  top:10px;
-  left:50%;
-  transform:translateX(-50%);
-  background:rgba(191,161,90,.9);
-  color:#111;
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  padding:5px 14px;
-  border-radius:999px;
-  z-index:10;
-  pointer-events:none;
-}
+/* GROUP TOOLBAR */
+#groupToolbar{ display:none;margin:8px 14px;background:rgba(191,161,90,.08);border:1px solid rgba(191,161,90,.2);padding:10px 12px;border-radius:12px; }
+.groupToolbarInner{ display:flex;justify-content:space-between;align-items:center;gap:10px; }
 
-/* canvas for connecting lines */
-#connectionCanvas{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  z-index:1;
-}
+/* FLOOR MAP */
+.mapContainer{ display:flex;flex-direction:column;gap:10px;width:100%;overflow:hidden; }
+.floor{ position:relative;height:clamp(340px,50vh,580px);background:#0a0f0c;overflow:hidden;border:1px solid var(--line);border-radius:16px;width:100%; }
+.floor.editMode{ border-color:var(--gold);box-shadow:0 0 0 2px rgba(191,161,90,.3), inset 0 0 40px rgba(191,161,90,.04); }
+.editModeBanner{ position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(191,161,90,.9);color:#111;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 14px;border-radius:999px;z-index:10;pointer-events:none; }
+#connectionCanvas{ position:absolute;inset:0;pointer-events:none;z-index:1; }
 
 /* TABLE NODES */
-.tableNode{
-  position:absolute;
-  width:68px;
-  height:68px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  font-weight:600;
-  font-size:12px;
-  border:1px solid var(--line);
-  background:#1a211d;
-  cursor:pointer;
-  transition:transform .15s, box-shadow .15s;
-  transform:translate(-50%,-50%);
-  z-index:2;
-  user-select:none;
-}
-
+.tableNode{ position:absolute;width:68px;height:68px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:600;font-size:12px;border:1px solid var(--line);background:#1a211d;cursor:pointer;transition:transform .15s, box-shadow .15s;transform:translate(-50%,-50%);z-index:2;user-select:none; }
 .tableNode.circle{ border-radius:50%; }
 .tableNode.square{ border-radius:10px; }
-.tableNode.triangle{
-  border-radius:4px;
-  clip-path:polygon(50% 0%, 0% 100%, 100% 100%);
-  border:none;
-}
-.tableNode.triangle.libre{ background:#1a211d; opacity:.45; }
+.tableNode.triangle{ border-radius:4px;clip-path:polygon(50% 0%, 0% 100%, 100% 100%);border:none; }
+.tableNode.triangle.libre{ background:#1a211d;opacity:.45; }
 .tableNode.triangle.llego{ background:#3fa86a; }
 .tableNode.triangle.ocupada{ background:#c26a4a; }
 .tableNode.triangle.suggested{ background:rgba(191,161,90,.6); }
-
 .tableNode:hover{ transform:translate(-50%,-50%) scale(1.07); }
-
-.tableNode.libre{ background:#1a211d; opacity:.45; }
-.tableNode.llego{ background:#3fa86a; box-shadow:0 0 18px rgba(63,168,106,.7); opacity:1; }
-.tableNode.ocupada{ background:#c26a4a; box-shadow:0 0 18px rgba(194,106,74,.7); opacity:1; }
-.tableNode.suggested{
-  outline:2px solid var(--gold);
-  box-shadow:0 0 22px rgba(191,161,90,.6);
-  animation:pulseGold 1.5s infinite;
-  opacity:1;
-}
-
-.tableNode.editMode{
-  cursor:grab;
-  opacity:1 !important;
-  border-color:rgba(191,161,90,.4);
-}
-
-.tableNode.editMode:hover{
-  border-color:var(--gold);
-  box-shadow:0 0 12px rgba(191,161,90,.4);
-}
-
-.tableNode.editMode.selectedForDelete{
-  border-color:var(--red);
-  box-shadow:0 0 14px rgba(200,91,91,.5);
-}
-
-.tableNode.dragging{
-  cursor:grabbing;
-  opacity:.8;
-  z-index:20;
-  box-shadow:0 20px 50px rgba(0,0,0,.5);
-}
-
-/* table tooltip */
-.tableTooltip{
-  position:absolute;
-  bottom:calc(100% + 8px);
-  left:50%;
-  transform:translateX(-50%);
-  background:#0e1511;
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:8px 12px;
-  font-size:11px;
-  white-space:nowrap;
-  pointer-events:none;
-  z-index:30;
-  box-shadow:0 10px 30px rgba(0,0,0,.5);
-  display:none;
-  line-height:1.5;
-}
-
+.tableNode.libre{ background:#1a211d;opacity:.45; }
+.tableNode.llego{ background:#3fa86a;box-shadow:0 0 18px rgba(63,168,106,.7);opacity:1; }
+.tableNode.ocupada{ background:#c26a4a;box-shadow:0 0 18px rgba(194,106,74,.7);opacity:1; }
+.tableNode.suggested{ outline:2px solid var(--gold);box-shadow:0 0 22px rgba(191,161,90,.6);animation:pulseGold 1.5s infinite;opacity:1; }
+.tableNode.editMode{ cursor:grab;opacity:1 !important;border-color:rgba(191,161,90,.4); }
+.tableNode.editMode:hover{ border-color:var(--gold);box-shadow:0 0 12px rgba(191,161,90,.4); }
+.tableNode.editMode.selectedForDelete{ border-color:var(--red);box-shadow:0 0 14px rgba(200,91,91,.5); }
+.tableNode.dragging{ cursor:grabbing;opacity:.8;z-index:20;box-shadow:0 20px 50px rgba(0,0,0,.5); }
+.tableTooltip{ position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#0e1511;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:11px;white-space:nowrap;pointer-events:none;z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.5);display:none;line-height:1.5; }
 .tableNode:hover .tableTooltip{ display:block; }
+@keyframes pulseGold{ 0%{box-shadow:0 0 8px rgba(191,161,90,.4)} 50%{box-shadow:0 0 28px rgba(191,161,90,.85)} 100%{box-shadow:0 0 8px rgba(191,161,90,.4)} }
 
-@keyframes pulseGold{
-  0%{ box-shadow:0 0 8px rgba(191,161,90,.4); }
-  50%{ box-shadow:0 0 28px rgba(191,161,90,.85); }
-  100%{ box-shadow:0 0 8px rgba(191,161,90,.4); }
-}
-
-/*  MAP LEGEND  */
-.mapLegend{
-  display:flex;
-  gap:14px;
-  align-items:center;
-  flex-wrap:wrap;
-  padding:10px 14px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:rgba(255,255,255,.02);
-}
-
-.legendItem{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  font-size:11px;
-  color:var(--muted);
-}
-
-.swatch{
-  width:12px;
-  height:12px;
-  border-radius:3px;
-  flex-shrink:0;
-}
-
-.swatch.libre{ background:#1a211d; border:1px solid rgba(255,255,255,.2); }
+/* MAP LEGEND */
+.mapLegend{ display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02); }
+.legendItem{ display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted); }
+.swatch{ width:12px;height:12px;border-radius:3px;flex-shrink:0; }
+.swatch.libre{ background:#1a211d;border:1px solid rgba(255,255,255,.2); }
 .swatch.llego{ background:#3fa86a; }
 .swatch.ocupada{ background:#c26a4a; }
-.swatch.sugerida{ background:transparent; border:2px solid var(--gold); }
+.swatch.sugerida{ background:transparent;border:2px solid var(--gold); }
 
-/*  ZONE BUTTONS  */
-.zoneRow{
-  display:flex;
-  gap:8px;
-  align-items:center;
-  flex-wrap:wrap;
-  margin-top:10px;
-}
-
-.zoneBtn{
-  background:#1a211d;
-  border:1px solid var(--line);
-  color:var(--muted);
-  padding:6px 12px;
-  border-radius:10px;
-  cursor:pointer;
-  font-size:12px;
-  font-family:"DM Sans",sans-serif;
-  transition:.2s;
-}
-
-.zoneBtn:hover{ border-color:rgba(255,255,255,.2); color:var(--ink); }
-.zoneBtn.active{ background:var(--gold); color:#111; border-color:var(--gold); font-weight:600; }
-.zoneBtn.danger{ border-color:rgba(200,91,91,.4); color:var(--red); }
-.zoneBtn.danger:hover{ background:var(--red); color:white; border-color:var(--red); }
-
-/*  EDIT MODE TOOLBAR  */
-.editToolbar{
-  display:none;
-  gap:8px;
-  align-items:center;
-  flex-wrap:wrap;
-  padding:10px 14px;
-  background:rgba(191,161,90,.06);
-  border:1px solid rgba(191,161,90,.2);
-  border-radius:12px;
-  margin-top:8px;
-}
-
+/* ZONE / EDIT BUTTONS */
+.zoneRow{ display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px; }
+.zoneBtn{ background:#1a211d;border:1px solid var(--line);color:var(--muted);padding:6px 12px;border-radius:10px;cursor:pointer;font-size:12px;font-family:"DM Sans",sans-serif;transition:.2s; }
+.zoneBtn:hover{ border-color:rgba(255,255,255,.2);color:var(--ink); }
+.zoneBtn.active{ background:var(--gold);color:#111;border-color:var(--gold);font-weight:600; }
+.zoneBtn.danger{ border-color:rgba(200,91,91,.4);color:var(--red); }
+.zoneBtn.danger:hover{ background:var(--red);color:white;border-color:var(--red); }
+.editToolbar{ display:none;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 14px;background:rgba(191,161,90,.06);border:1px solid rgba(191,161,90,.2);border-radius:12px;margin-top:8px; }
 .editToolbar.visible{ display:flex; }
-
-.editHint{
-  font-size:11px;
-  color:var(--gold);
-  flex:1;
-  min-width:100%;
-  margin-bottom:4px;
-}
-
-/*  ADD TABLE FORM  */
-.addTableForm{
-  display:none;
-  gap:8px;
-  align-items:center;
-  flex-wrap:wrap;
-  padding:10px 14px;
-  background:rgba(255,255,255,.03);
-  border:1px solid var(--line);
-  border-radius:12px;
-  margin-top:6px;
-}
-
+.editHint{ font-size:11px;color:var(--gold);flex:1;min-width:100%;margin-bottom:4px; }
+.addTableForm{ display:none;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;margin-top:6px; }
 .addTableForm.visible{ display:flex; }
+.addTableForm input{ min-width:80px;width:80px;padding:7px 10px;font-size:12px; }
+.addTableForm select{ min-width:100px;padding:7px 10px;font-size:12px; }
 
-.addTableForm input{
-  min-width:80px;
-  width:80px;
-  padding:7px 10px;
-  font-size:12px;
-}
-
-.addTableForm select{
-  min-width:100px;
-  padding:7px 10px;
-  font-size:12px;
-}
-
-/*  DETAIL PANEL  */
-.detailEmpty{
-  color:var(--muted);
-  font-size:13px;
-  text-align:center;
-  padding:30px 10px;
-}
-
-.detailSection{
-  border-top:1px solid var(--line);
-  padding-top:14px;
-  margin-top:14px;
-}
-
-.detailSection h3{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:1.5px;
-  color:var(--muted);
-  margin-bottom:10px;
-  font-family:"IBM Plex Mono",monospace;
-}
-
-.btn{
-  border:none;
-  padding:11px;
-  border-radius:12px;
-  font-size:13px;
-  font-family:"DM Sans",sans-serif;
-  cursor:pointer;
-  width:100%;
-  font-weight:600;
-  transition:.2s;
-}
-
+/* DETAIL PANEL */
+.detailEmpty{ color:var(--muted);font-size:13px;text-align:center;padding:30px 10px; }
+.detailSection{ border-top:1px solid var(--line);padding-top:14px;margin-top:14px; }
+.detailSection h3{ font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:10px;font-family:"IBM Plex Mono",monospace; }
+.btn{ border:none;padding:11px;border-radius:12px;font-size:13px;font-family:"DM Sans",sans-serif;cursor:pointer;width:100%;font-weight:600;transition:.2s; }
 .btn:hover{ opacity:.88; }
-
-.btnPrimary{ background:var(--gold); color:#111; }
-.btnSecondary{ background:#3fa86a; color:#111; }
-.btnDanger{ background:#c85b5b; color:white; }
-.btnNeutral{ background:#2a3430; color:var(--ink); border:1px solid var(--line); }
-.btnSoftDanger{ background:#7a3e3e; color:white; }
-.btnReopen{ background:#4f8f6a; color:#111; }
-
-/* notas warning */
-.notasWarning{
-  background:rgba(194,106,74,.1);
-  border:1px solid rgba(194,106,74,.3);
-  border-left:3px solid var(--terra);
-  border-radius:10px;
-  padding:10px 12px;
-  font-size:12px;
-  color:var(--terra);
-  line-height:1.6;
-  margin-bottom:14px;
-}
-
-.notasWarning strong{
-  display:block;
-  font-size:10px;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  margin-bottom:4px;
-  opacity:.7;
-}
-
-/* cover cards */
-.coverCard{
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:10px 12px;
-  background:rgba(255,255,255,.02);
-  margin-bottom:8px;
-}
-
-.coverCard.incomplete{
-  border-color:rgba(210,169,75,.3);
-  background:rgba(210,169,75,.04);
-}
-
-.coverName{
-  font-weight:600;
-  font-size:13px;
-  margin-bottom:6px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.incompleteTag{
-  font-size:10px;
-  color:var(--yellow);
-  background:rgba(210,169,75,.15);
-  padding:2px 8px;
-  border-radius:999px;
-}
-
-.coverDish{
-  font-size:12px;
-  color:var(--muted);
-  line-height:1.7;
-}
-
-/* timer */
-.timerBadge{
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  padding:4px 10px;
-  border-radius:999px;
-  font-size:11px;
-  font-family:"IBM Plex Mono",monospace;
-  background:rgba(191,161,90,.12);
-  border:1px solid rgba(191,161,90,.25);
-  color:var(--gold);
-  margin-top:6px;
-}
-
-/*  INLINE CONFIRM  */
-.inlineConfirm{
-  display:none;
-  background:rgba(200,91,91,.08);
-  border:1px solid rgba(200,91,91,.25);
-  border-radius:12px;
-  padding:12px 14px;
-  margin-top:8px;
-}
-
+.btnPrimary{ background:var(--gold);color:#111; }
+.btnSecondary{ background:#3fa86a;color:#111; }
+.btnDanger{ background:#c85b5b;color:white; }
+.btnNeutral{ background:#2a3430;color:var(--ink);border:1px solid var(--line); }
+.btnSoftDanger{ background:#7a3e3e;color:white; }
+.btnReopen{ background:#4f8f6a;color:#111; }
+.notasWarning{ background:rgba(194,106,74,.1);border:1px solid rgba(194,106,74,.3);border-left:3px solid var(--terra);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--terra);line-height:1.6;margin-bottom:14px; }
+.notasWarning strong{ display:block;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;opacity:.7; }
+.coverCard{ border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,.02);margin-bottom:8px; }
+.coverCard.incomplete{ border-color:rgba(210,169,75,.3);background:rgba(210,169,75,.04); }
+.coverName{ font-weight:600;font-size:13px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center; }
+.incompleteTag{ font-size:10px;color:var(--yellow);background:rgba(210,169,75,.15);padding:2px 8px;border-radius:999px; }
+.coverDish{ font-size:12px;color:var(--muted);line-height:1.7; }
+.timerBadge{ display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:11px;font-family:"IBM Plex Mono",monospace;background:rgba(191,161,90,.12);border:1px solid rgba(191,161,90,.25);color:var(--gold);margin-top:6px; }
+.inlineConfirm{ display:none;background:rgba(200,91,91,.08);border:1px solid rgba(200,91,91,.25);border-radius:12px;padding:12px 14px;margin-top:8px; }
 .inlineConfirm.visible{ display:block; }
+.inlineConfirmText{ font-size:13px;color:var(--ink);margin-bottom:10px;line-height:1.5; }
+.inlineConfirmBtns{ display:flex;gap:8px; }
 
-.inlineConfirmText{
-  font-size:13px;
-  color:var(--ink);
-  margin-bottom:10px;
-  line-height:1.5;
-}
-
-.inlineConfirmBtns{
-  display:flex;
-  gap:8px;
-}
-
-/*  TOAST  */
-#toast{
-  position:fixed;
-  bottom:28px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#121a16;
-  border:1px solid var(--line);
-  padding:12px 20px;
-  border-radius:12px;
-  color:var(--ink);
-  font-size:13px;
-  display:none;
-  z-index:9999;
-  box-shadow:0 10px 40px rgba(0,0,0,.6);
-  max-width:340px;
-  text-align:center;
-  border-left-width:3px;
-}
-
+/* TOAST */
+#toast{ position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#121a16;border:1px solid var(--line);padding:12px 20px;border-radius:12px;color:var(--ink);font-size:13px;display:none;z-index:9999;box-shadow:0 10px 40px rgba(0,0,0,.6);max-width:340px;text-align:center;border-left-width:3px; }
 #toast.success{ border-left-color:var(--green); }
 #toast.error{ border-left-color:var(--red); }
 #toast.warning{ border-left-color:var(--yellow); }
 
-/*  QR MODAL  */
-#qrModal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.92);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:9998;
-  flex-direction:column;
-  gap:16px;
-}
-
-.qrTitle{
-  font-family:"Playfair Display",serif;
-  font-size:20px;
-  color:var(--gold);
-}
-
-.qrBox{
-  position:relative;
-  width:300px;
-  height:300px;
-  border-radius:18px;
-  overflow:hidden;
-  border:2px solid rgba(255,255,255,.1);
-  box-shadow:0 20px 60px rgba(0,0,0,.6);
-}
-
-.qrOverlay{
-  position:absolute;
-  inset:0;
-  border:2px solid var(--gold);
-  border-radius:18px;
-  pointer-events:none;
-  box-shadow:0 0 20px rgba(191,161,90,.4);
-}
-
-.qrHint{
-  font-size:12px;
-  color:rgba(255,255,255,.5);
-}
-
-/*  BAR SHAPE  */
-.bar{
-  position:absolute;
-  top:8%;left:22%;
-  width:56%;height:18%;
-  pointer-events:none;
-}
-.bar::before{
-  content:'';
-  display:block;
-  position:absolute;
-  left:0;right:0;bottom:0;height:16px;background:#000;
-}
-.bar::after{
-  content:'';
-  display:block;
-  position:absolute;
-  left:0;bottom:0;width:16px;height:72%;background:#000;
-  box-shadow:calc(100% - 16px) 0 0 #000;
-}
-
-.door{
-  position:absolute;
-  background:#d7d7d7;
-  border-radius:6px;
-  opacity:.9;
-  pointer-events:none;
-}
+/* QR MODAL */
+#qrModal{ position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:9998;flex-direction:column;gap:16px; }
+.qrTitle{ font-family:"Playfair Display",serif;font-size:20px;color:var(--gold); }
+.qrBox{ position:relative;width:300px;height:300px;border-radius:18px;overflow:hidden;border:2px solid rgba(255,255,255,.1);box-shadow:0 20px 60px rgba(0,0,0,.6); }
+.qrOverlay{ position:absolute;inset:0;border:2px solid var(--gold);border-radius:18px;pointer-events:none;box-shadow:0 0 20px rgba(191,161,90,.4); }
+.qrHint{ font-size:12px;color:rgba(255,255,255,.5); }
+.bar{ position:absolute;top:8%;left:22%;width:56%;height:18%;pointer-events:none; }
+.bar::before{ content:'';display:block;position:absolute;left:0;right:0;bottom:0;height:16px;background:#000; }
+.bar::after{ content:'';display:block;position:absolute;left:0;bottom:0;width:16px;height:72%;background:#000;box-shadow:calc(100% - 16px) 0 0 #000; }
+.door{ position:absolute;background:#d7d7d7;border-radius:6px;opacity:.9;pointer-events:none; }
 </style>
 
 </head>
 <body>
 
-<!-- ======================== -->
-
-<!-- PIN OVERLAY                                             -->
-
-<!-- ======================== -->
+<!-- PIN OVERLAY -->
 
 <div id="pinOverlay">
   <div class="pinCard">
@@ -1131,48 +301,31 @@ select option{ background:#0e1511; color:var(--ink); }
     <div class="pinSub">Host Stand · Staff Access</div>
     <div class="pinGoldLine"></div>
     <div class="pinLabel">Ingresa tu PIN</div>
-
-```
-<div class="pinInputWrap">
-  <input
-    type="password"
-    id="pinInput"
-    maxlength="8"
-    placeholder="••••"
-    autocomplete="off"
-    inputmode="numeric"
-  >
-  <button class="pinEye" id="pinEye" onclick="togglePinVisibility()">👁</button>
-</div>
-
-<button id="pinBtn" onclick="submitPin()">Acceder</button>
-
-<div class="pinError" id="pinError"></div>
-```
-
+    <div class="pinInputWrap">
+      <input type="password" id="pinInput" maxlength="8" placeholder="••••" autocomplete="off" inputmode="numeric">
+      <button class="pinEye" id="pinEye" onclick="togglePinVisibility()">👁</button>
+    </div>
+    <button id="pinBtn" onclick="submitPin()">Acceder</button>
+    <div class="pinError" id="pinError"></div>
   </div>
 </div>
 
-<!-- ======================== -->
-
-<!-- MAIN APP                                                -->
-
-<!-- ======================== -->
+<!-- MAIN APP -->
 
 <div id="mainApp">
 <div class="container">
 
   <!-- TOPBAR -->
 
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:12px;flex-wrap:wrap;">
-    <div>
-      <h1 style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin:0;color:#f4f1ea;">ALORA · Host Stand</h1>
-      <p style="margin:4px 0 0;color:rgba(244,241,234,.55);font-size:12px;letter-spacing:1.6px;text-transform:uppercase;">Service console · salón principal + barra</p>
+  <div class="topbar">
+    <div class="brandWrap">
+      <h1>ALORA · Host Stand</h1>
+      <p>Service console · salón principal + barra</p>
     </div>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <div id="refreshInfo" style="font-family:monospace;font-size:10px;color:rgba(244,241,234,.45);"></div>
-      <div style="border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);padding:8px 14px;border-radius:999px;font-size:12px;color:rgba(244,241,234,.55);display:flex;align-items:center;gap:6px;">
-        <div style="width:6px;height:6px;border-radius:50%;background:#3fa86a;box-shadow:0 0 6px #3fa86a;flex-shrink:0;"></div>
+    <div class="topbarRight">
+      <div id="refreshInfo" class="refreshInfo"></div>
+      <div class="statusPill">
+        <div class="statusDot"></div>
         Servicio activo
       </div>
     </div>
@@ -1180,65 +333,29 @@ select option{ background:#0e1511; color:var(--ink); }
 
   <!-- HEADER CARD -->
 
-  <div style="
-    border:1px solid rgba(255,255,255,.08);
-    background:rgba(255,255,255,.04);
-    border-radius:20px;
-    padding:14px 18px;
-    box-shadow:0 30px 80px rgba(0,0,0,.45);
-    margin-bottom:14px;
-  ">
-    <div style="
-      display:flex;
-      flex-direction:row;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:16px;
-      flex-wrap:wrap;
-    ">
-
-```
-  <!-- LEFT: controls -->
-  <div style="flex:1;min-width:280px;">
-    <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
-      <div style="display:flex;flex-direction:column;gap:5px;">
-        <label for="funcion" style="font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:rgba(244,241,234,.55);">Función</label>
-        <select id="funcion" style="background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);color:#f4f1ea;padding:10px 12px;border-radius:12px;font-size:13px;min-width:150px;outline:none;"></select>
+  <div class="headerCard">
+    <div style="display:flex;flex-direction:row;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:280px;">
+        <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;">
+          <div class="field">
+            <label for="funcion">Función</label>
+            <select id="funcion"></select>
+          </div>
+          <div class="field">
+            <label for="buscar">Buscar</label>
+            <input id="buscar" placeholder="Cliente, teléfono o mesa">
+          </div>
+          <button onclick="openQR()" class="btnMini" style="background:var(--gold);color:#111;">Escanear QR</button>
+          <button onclick="loadReservas()" class="btnMini" style="background:#2a3430;color:var(--ink);border:1px solid var(--line);">⟳ Refrescar</button>
+        </div>
+        <div id="horaFilterBar" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;"></div>
       </div>
-
-      <div style="display:flex;flex-direction:column;gap:5px;">
-        <label for="buscar" style="font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:rgba(244,241,234,.55);">Buscar</label>
-        <input id="buscar" placeholder="Cliente, teléfono o mesa" style="background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08);color:#f4f1ea;padding:10px 12px;border-radius:12px;font-size:13px;min-width:150px;outline:none;">
+      <div class="stats">
+        <div class="stat"><div class="statLabel">Covers</div><div class="statValue" id="coversTotal">0</div></div>
+        <div class="stat"><div class="statLabel">Llegaron</div><div class="statValue" id="coversArrived">0</div></div>
+        <div class="stat"><div class="statLabel">Pendientes</div><div class="statValue" id="coversPending">0</div></div>
       </div>
-
-      <button onclick="openQR()" style="background:#bfa15a;color:#111;border:none;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;cursor:pointer;">
-        Escanear QR
-      </button>
     </div>
-
-    <!-- HORA FILTER -->
-    <div id="horaFilterBar" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;"></div>
-  </div>
-
-  <!-- RIGHT: stats -->
-  <div style="display:flex;gap:10px;flex-wrap:wrap;flex-shrink:0;">
-    <div style="min-width:100px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.2);border-radius:14px;padding:10px 14px;">
-      <div style="font-size:10px;color:rgba(244,241,234,.55);text-transform:uppercase;letter-spacing:1px;">Covers</div>
-      <div id="coversTotal" style="font-size:22px;font-weight:600;color:#bfa15a;">0</div>
-    </div>
-    <div style="min-width:100px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.2);border-radius:14px;padding:10px 14px;">
-      <div style="font-size:10px;color:rgba(244,241,234,.55);text-transform:uppercase;letter-spacing:1px;">Llegaron</div>
-      <div id="coversArrived" style="font-size:22px;font-weight:600;color:#bfa15a;">0</div>
-    </div>
-    <div style="min-width:100px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.2);border-radius:14px;padding:10px 14px;">
-      <div style="font-size:10px;color:rgba(244,241,234,.55);text-transform:uppercase;letter-spacing:1px;">Pendientes</div>
-      <div id="coversPending" style="font-size:22px;font-weight:600;color:#bfa15a;">0</div>
-    </div>
-  </div>
-
-</div>
-```
-
   </div>
 
   <!-- THREE COLUMN LAYOUT -->
@@ -1246,18 +363,23 @@ select option{ background:#0e1511; color:var(--ink); }
   <div class="layout">
 
 ```
-<!-- LEFT — RESERVATIONS -->
+<!-- LEFT: RESERVATIONS -->
 <div class="panel">
   <div class="panelHead">
     <h2>Reservas</h2>
     <div id="listSummary" style="font-size:12px;color:var(--muted);margin-top:3px;"></div>
   </div>
 
-  <!-- TAB BAR -->
   <div class="tabBar">
     <button id="tabPendientes" class="tabBtn active" onclick="setTab('pendientes')">Activos</button>
     <button id="tabSentados"   class="tabBtn"        onclick="setTab('sentados')">Sentados</button>
     <button id="tabCerrados"   class="tabBtn"        onclick="setTab('cerrados')">Historial</button>
+  </div>
+
+  <!-- HIDDEN TAB NOTICE (NEW) -->
+  <div id="hiddenTabNotice">
+    <span id="hiddenTabText">Reserva seleccionada en otro tab</span>
+    <button onclick="jumpToSelectedTab()">Ver →</button>
   </div>
 
   <!-- GROUP TOOLBAR -->
@@ -1274,12 +396,11 @@ select option{ background:#0e1511; color:var(--ink); }
   <div class="panelBody" id="reservas"></div>
 </div>
 
-<!-- CENTER — FLOOR MAP -->
+<!-- CENTER: FLOOR MAP -->
 <div class="panel">
   <div class="panelHead">
     <h2>Mapa del salón</h2>
     <p id="mapSubtitle">Selecciona una mesa para asignarla</p>
-
     <div class="zoneRow">
       <button class="zoneBtn active" onclick="setZone('salon',event)">Salón</button>
       <button class="zoneBtn" onclick="setZone('barra',event)">Barra</button>
@@ -1287,16 +408,12 @@ select option{ background:#0e1511; color:var(--ink); }
       <button class="zoneBtn" id="groupModeBtn" onclick="toggleGroupMode(this)">Agrupar reservas</button>
       <button class="zoneBtn" id="editModeBtn" onclick="toggleEditMode(this)">✏️ Editar salón</button>
     </div>
-
-    <!-- EDIT TOOLBAR -->
     <div class="editToolbar" id="editToolbar">
       <div class="editHint">Modo edición activo — arrastra mesas para reposicionarlas</div>
       <button class="btnMini" style="background:rgba(63,168,106,.2);color:#3fa86a;border:1px solid rgba(63,168,106,.3);" onclick="showAddTableForm()">+ Agregar mesa</button>
       <button class="btnMini" style="background:rgba(200,91,91,.15);color:var(--red);border:1px solid rgba(200,91,91,.3);" id="deleteTableBtn" onclick="deleteSelectedTable()" style="display:none">🗑 Eliminar</button>
       <button class="btnMini zoneBtn danger" onclick="confirmResetLayout()">↺ Resetear layout</button>
     </div>
-
-    <!-- ADD TABLE FORM -->
     <div class="addTableForm" id="addTableForm">
       <input id="newTableName" placeholder="Nombre (ej: 15)" maxlength="4">
       <select id="newTableShape">
@@ -1307,9 +424,7 @@ select option{ background:#0e1511; color:var(--ink); }
       <button class="btnMini" style="background:var(--gold);color:#111;" onclick="addTableToLayout()">Agregar</button>
       <button class="btnMini" style="background:#2a3430;color:var(--ink);" onclick="hideAddTableForm()">Cancelar</button>
     </div>
-
   </div>
-
   <div class="panelBody" style="padding:10px;overflow:hidden;max-height:none;">
     <div class="mapContainer">
       <div class="floor" id="floorMap" style="width:100%;box-sizing:border-box;">
@@ -1325,7 +440,7 @@ select option{ background:#0e1511; color:var(--ink); }
   </div>
 </div>
 
-<!-- RIGHT — DETAIL -->
+<!-- RIGHT: DETAIL -->
 <div class="panel">
   <div class="panelHead">
     <h2>Detalle</h2>
@@ -1360,472 +475,412 @@ select option{ background:#0e1511; color:var(--ink); }
 
 <div id="toast"></div>
 
-<!-- QR LIBRARY -->
-
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <script>
-/* 
+/* ============================================================
    PIN
- */
+   ============================================================ */
 function checkPin(){
-  if(sessionStorage.getItem("alora_host_auth") === "1"){
-    document.getElementById("pinOverlay").style.display = "none";
-    const app = document.getElementById("mainApp");
-    app.style.visibility = "visible";
-    app.style.pointerEvents = "auto";
-    // wait for layout to settle before init
-    setTimeout(()=> initApp(), 50);
+  if(sessionStorage.getItem("alora_host_auth")==="1"){
+    document.getElementById("pinOverlay").style.display="none";
+    const app=document.getElementById("mainApp");
+    app.style.visibility="visible";
+    app.style.pointerEvents="auto";
+    setTimeout(()=>initApp(),50);
   }
 }
-
 function togglePinVisibility(){
-  const inp = document.getElementById("pinInput");
-  const eye = document.getElementById("pinEye");
-  if(inp.type === "password"){
-    inp.type = "text";
-    eye.textContent = "🙈";
-  }else{
-    inp.type = "password";
-    eye.textContent = "👁";
-  }
+  const inp=document.getElementById("pinInput");
+  const eye=document.getElementById("pinEye");
+  if(inp.type==="password"){ inp.type="text"; eye.textContent="🙈"; }
+  else{ inp.type="password"; eye.textContent="👁"; }
 }
-
 function submitPin(){
-  const val = document.getElementById("pinInput").value;
-  const correct = (CONFIG.PIN || "1234");
-
-  if(val === correct){
-    sessionStorage.setItem("alora_host_auth","1");
-    showApp();
-  }else{
-    const inp = document.getElementById("pinInput");
-    const err = document.getElementById("pinError");
+  const val=document.getElementById("pinInput").value;
+  const correct=(CONFIG.PIN||"1234");
+  if(val===correct){ sessionStorage.setItem("alora_host_auth","1"); showApp(); }
+  else{
+    const inp=document.getElementById("pinInput");
     inp.classList.add("shake");
-    err.textContent = "PIN incorrecto. Intenta de nuevo.";
-    inp.value = "";
-    setTimeout(()=> inp.classList.remove("shake"), 400);
+    document.getElementById("pinError").textContent="PIN incorrecto. Intenta de nuevo.";
+    inp.value="";
+    setTimeout(()=>inp.classList.remove("shake"),400);
   }
 }
-
 function showApp(){
-  const overlay = document.getElementById("pinOverlay");
+  const overlay=document.getElementById("pinOverlay");
   overlay.classList.add("fade");
   setTimeout(()=>{
-    overlay.style.display = "none";
-    const app = document.getElementById("mainApp");
-    app.style.visibility = "visible";
-    app.style.pointerEvents = "auto";
+    overlay.style.display="none";
+    const app=document.getElementById("mainApp");
+    app.style.visibility="visible";
+    app.style.pointerEvents="auto";
     initApp();
-  }, 500);
+  },500);
 }
-
-// Enter key on PIN
-document.getElementById("pinInput").addEventListener("keydown", e=>{
-  if(e.key === "Enter") submitPin();
-});
-
-// Check on load
+document.getElementById("pinInput").addEventListener("keydown",e=>{ if(e.key==="Enter") submitPin(); });
 checkPin();
 
-/* 
+/* ============================================================
    STATE
- */
-const $ = id => document.getElementById(id);
+   ============================================================ */
+const $=id=>document.getElementById(id);
 
-let HOST_CACHE       = {};
-let CURRENT_LIST     = [];
-let SELECTED_RESERVA_ID = null;
-let SELECTED_MESAS   = [];
-let SELECTED_RESERVAS = [];
-let CURRENT_ZONE     = "salon";
-let MULTI_MODE       = false;
-let ACTIVE_GROUP     = null;
-let CURRENT_TAB      = "pendientes";
-let GROUP_MODE       = false;
-let EDIT_MODE        = false;
-let SELECTED_TABLE_FOR_DELETE = null;
-let CURRENT_HORA_FILTER = "all";
-let HORA_COLORS      = {};
-let refreshTimer     = null;
-let timerInterval    = null;
-let SEATED_TIMES     = {};
-let ITEMS_MENU_CACHE = null;
+let HOST_CACHE={};
+let CURRENT_LIST=[];
+let SELECTED_RESERVA_ID=null;
+let SELECTED_MESAS=[];
+let SELECTED_RESERVAS=[];
+let CURRENT_ZONE="salon";
+let MULTI_MODE=false;
+let ACTIVE_GROUP=null;
+let CURRENT_TAB="pendientes";
+let GROUP_MODE=false;
+let EDIT_MODE_ACTIVE=false;
+let SELECTED_TABLE_FOR_DELETE=null;
+let CURRENT_HORA_FILTER="all";
+let HORA_COLORS={};
+let refreshTimer=null;
+let timerInterval=null;
+let SEATED_TIMES={};
+let ITEMS_MENU_CACHE=null;
 
-// Layout stored in localStorage
-const LAYOUT_KEY = "alora_floor_layout_v2";
-
-const DEFAULT_LAYOUT = {
+const LAYOUT_KEY="alora_floor_layout_v2";
+const DEFAULT_LAYOUT={
   salon:[
-    {id:"14",x:20,y:18,shape:"square"},
-    {id:"13",x:40,y:18,shape:"square"},
-    {id:"12",x:60,y:18,shape:"square"},
-    {id:"11",x:80,y:18,shape:"square"},
-    {id:"24",x:20,y:38,shape:"square"},
-    {id:"23",x:40,y:38,shape:"square"},
-    {id:"22",x:60,y:38,shape:"square"},
-    {id:"21",x:80,y:38,shape:"square"},
-    {id:"33",x:30,y:58,shape:"square"},
-    {id:"32",x:50,y:58,shape:"square"},
-    {id:"31",x:70,y:58,shape:"square"},
-    {id:"42",x:35,y:78,shape:"square"},
+    {id:"14",x:20,y:18,shape:"square"},{id:"13",x:40,y:18,shape:"square"},
+    {id:"12",x:60,y:18,shape:"square"},{id:"11",x:80,y:18,shape:"square"},
+    {id:"24",x:20,y:38,shape:"square"},{id:"23",x:40,y:38,shape:"square"},
+    {id:"22",x:60,y:38,shape:"square"},{id:"21",x:80,y:38,shape:"square"},
+    {id:"33",x:30,y:58,shape:"square"},{id:"32",x:50,y:58,shape:"square"},
+    {id:"31",x:70,y:58,shape:"square"},{id:"42",x:35,y:78,shape:"square"},
     {id:"41",x:65,y:78,shape:"square"}
   ],
   barra:[
-    {id:"A1",x:84,y:30,shape:"circle"},
-    {id:"A2",x:84,y:52,shape:"circle"},
-    {id:"A3",x:18,y:78,shape:"circle"},
-    {id:"A4",x:36,y:78,shape:"circle"},
-    {id:"A5",x:54,y:78,shape:"circle"},
-    {id:"B1",x:28,y:48,shape:"square"},
-    {id:"B2",x:58,y:47,shape:"square"},
-    {id:"T1",x:20,y:30,shape:"triangle"},
-    {id:"T2",x:35,y:30,shape:"triangle"},
-    {id:"T3",x:50,y:30,shape:"triangle"},
+    {id:"A1",x:84,y:30,shape:"circle"},{id:"A2",x:84,y:52,shape:"circle"},
+    {id:"A3",x:18,y:78,shape:"circle"},{id:"A4",x:36,y:78,shape:"circle"},
+    {id:"A5",x:54,y:78,shape:"circle"},{id:"B1",x:28,y:48,shape:"square"},
+    {id:"B2",x:58,y:47,shape:"square"},{id:"T1",x:20,y:30,shape:"triangle"},
+    {id:"T2",x:35,y:30,shape:"triangle"},{id:"T3",x:50,y:30,shape:"triangle"},
     {id:"T4",x:65,y:30,shape:"triangle"}
   ]
 };
-
-let TABLE_META = {};
+let TABLE_META={};
 
 function getLayout(){
-  try{
-    const saved = localStorage.getItem(LAYOUT_KEY);
-    return saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_LAYOUT));
-  }catch(e){
-    return JSON.parse(JSON.stringify(DEFAULT_LAYOUT));
-  }
+  try{ const s=localStorage.getItem(LAYOUT_KEY); return s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT_LAYOUT)); }
+  catch(e){ return JSON.parse(JSON.stringify(DEFAULT_LAYOUT)); }
 }
+function saveLayout(layout){ localStorage.setItem(LAYOUT_KEY,JSON.stringify(layout)); }
+function buildTableMeta(layout){ TABLE_META={}; (layout[CURRENT_ZONE]||[]).forEach(t=>{ TABLE_META[t.id]={x:t.x,y:t.y}; }); }
 
-function saveLayout(layout){
-  localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout));
-}
-
-function buildTableMeta(layout){
-  TABLE_META = {};
-  const zone = layout[CURRENT_ZONE] || [];
-  zone.forEach(t=>{ TABLE_META[t.id] = {x:t.x, y:t.y}; });
-}
-
-/* 
+/* ============================================================
    API
- */
+   ============================================================ */
 async function api(body){
-  const res = await fetch(CONFIG.BACKEND_URL,{
+  const res=await fetch(CONFIG.BACKEND_URL,{
     method:"POST",
     headers:{"Content-Type":"text/plain;charset=utf-8"},
-    body:JSON.stringify({ ...body, secret:CONFIG.SECRET })
+    body:JSON.stringify({...body,secret:CONFIG.SECRET})
   });
   return await res.json();
 }
 
-/* 
+/* ============================================================
    INIT
- */
+   ============================================================ */
 async function initApp(){
   await loadFunciones();
-
-  $("funcion").addEventListener("change", async ()=>{
-    SELECTED_RESERVA_ID = null;
-    SELECTED_MESAS = [];
-    CURRENT_HORA_FILTER = "all";
-    resetHoraFilter();
-    await loadReservas();
+  $("funcion").addEventListener("change",async()=>{
+    SELECTED_RESERVA_ID=null; SELECTED_MESAS=[]; CURRENT_HORA_FILTER="all";
+    resetHoraFilter(); await loadReservas();
   });
+  $("buscar").addEventListener("input",()=>renderReservas(CURRENT_LIST));
 
-  $("buscar").addEventListener("input", ()=> renderReservas(CURRENT_LIST));
-
-  // keyboard shortcuts
-  document.addEventListener("keydown", e=>{
-    if(document.activeElement.tagName === "INPUT") return;
-    if(e.key === "r" || e.key === "R") loadReservas();
-    if(e.key === "Escape"){
-      SELECTED_RESERVA_ID = null;
-      SELECTED_MESAS = [];
-      $("detalle").innerHTML = `<div class="detailEmpty"><div style="font-size:28px;margin-bottom:10px;">🪑</div>Selecciona una reserva</div>`;
+  // Keyboard shortcuts
+  document.addEventListener("keydown",e=>{
+    if(document.activeElement.tagName==="INPUT") return;
+    if(e.key==="r"||e.key==="R") loadReservas();
+    // ── NEW: Enter = primary action on selected reservation ──
+    if(e.key==="Enter"&&SELECTED_RESERVA_ID){
+      const r=HOST_CACHE[SELECTED_RESERVA_ID];
+      if(r) runPrimaryAction(SELECTED_RESERVA_ID);
+    }
+    if(e.key==="Escape"){
+      SELECTED_RESERVA_ID=null; SELECTED_MESAS=[];
+      $("detalle").innerHTML=`<div class="detailEmpty"><div style="font-size:28px;margin-bottom:10px;">🪑</div>Selecciona una reserva</div>`;
+      updateHiddenTabNotice();
       renderReservas(CURRENT_LIST);
       paintMesas(CURRENT_LIST);
     }
   });
 
-  // timer updater
-  timerInterval = setInterval(updateTimers, 60000);
-
-  // auto refresh
+  timerInterval=setInterval(updateTimers,60000);
   startAutoRefresh();
+
+  // Precargar menú en background al inicio — una sola vez
+  // Cuando el host abra el primer detalle ya estará listo sin esperar
+  preloadItemsMenu();
 }
 
-/* 
-   FUNCIONES — dynamic load
- */
+// HTML de options pre-renderizado — se construye una sola vez
+let ITEMS_MENU_OPTIONS_HTML = null;
+
+async function preloadItemsMenu(){
+  if(ITEMS_MENU_CACHE) return;
+  try{
+    const data = await api({ action:"get_items_menu" });
+    if(!data.ok) return;
+    ITEMS_MENU_CACHE = data.items;
+    ITEMS_MENU_OPTIONS_HTML = '<option value="">Seleccionar item</option>' +
+      data.items.map(i=>`<option value="${i.nombre}">${i.nombre} ($${i.precio})</option>`).join('');
+  }catch(e){ /* silencioso */ }
+}
+
+/* ============================================================
+   FUNCIONES
+   ============================================================ */
 async function loadFunciones(){
   try{
-    const data = await api({ action:"funciones" });
-    const sel = $("funcion");
-    sel.innerHTML = "";
-    (data.funciones || []).forEach(f=>{
-      const o = document.createElement("option");
-      o.value = f; o.textContent = f;
-      sel.appendChild(o);
-    });
+    const data=await api({action:"funciones"});
+    const sel=$("funcion");
+    sel.innerHTML="";
+    (data.funciones||[]).forEach(f=>{ const o=document.createElement("option"); o.value=f; o.textContent=f; sel.appendChild(o); });
     await loadReservas();
-  }catch(e){
-    showToast("Error cargando funciones","error",5000);
-  }
+  }catch(e){ showToast("Error cargando funciones","error",5000); }
 }
 
-/* 
+/* ============================================================
    AUTO REFRESH
- */
+   ============================================================ */
 function startAutoRefresh(){
   if(refreshTimer) clearInterval(refreshTimer);
-  refreshTimer = setInterval(async ()=>{
-    // don't refresh if a confirm dialog is open
+  refreshTimer=setInterval(async()=>{
     if(document.querySelector(".inlineConfirm.visible")) return;
     await silentRefresh();
-  }, 30000);
+  },30000);
 }
 
 async function silentRefresh(){
   try{
-    const data = await api({
-      action:"host_snapshot",
-      funcion:$("funcion").value
-    });
-
-    $("coversTotal").textContent   = data.coversTotal   || 0;
-    $("coversArrived").textContent = data.coversArrived || 0;
-    $("coversPending").textContent = data.coversPending || 0;
-
+    const data=await api({action:"host_snapshot",funcion:$("funcion").value});
+    $("coversTotal").textContent=data.coversTotal||0;
+    $("coversArrived").textContent=data.coversArrived||0;
+    $("coversPending").textContent=data.coversPending||0;
+    CURRENT_LIST=(data.reservas||[]);
     renderMapBase();
-    renderReservas(data.reservas || []);
-    paintMesas(data.reservas || []);
+    renderReservas(CURRENT_LIST);
+    paintMesas(CURRENT_LIST);
     drawConnectionLines();
-
     if(SELECTED_RESERVA_ID){
-      const found = (data.reservas||[]).find(r=>r.id===SELECTED_RESERVA_ID);
-      if(found) renderDetalle(found);
+      const found=CURRENT_LIST.find(r=>r.id===SELECTED_RESERVA_ID);
+      if(found){ HOST_CACHE[found.id]=found; renderDetalle(found); }
     }
-
     updateRefreshInfo(true);
-  }catch(e){
-    updateRefreshInfo(false);
-  }
+  }catch(e){ updateRefreshInfo(false); }
 }
 
 function updateRefreshInfo(ok){
-  const el = $("refreshInfo");
-  const time = new Date().toLocaleTimeString("es-PR",{hour:"numeric",minute:"2-digit"});
-  if(ok){
-    el.className = "refreshInfo";
-    el.textContent = time + " · R = refrescar";
-  }else{
-    el.className = "refreshInfo warn";
-    el.textContent = "Sin conexion · ultimo " + time;
-  }
+  const el=$("refreshInfo");
+  const time=new Date().toLocaleTimeString("es-PR",{hour:"numeric",minute:"2-digit"});
+  el.className=ok?"refreshInfo":"refreshInfo warn";
+  el.textContent=ok?`${time} · R = refrescar`:`Sin conexión · último ${time}`;
 }
 
-/* 
+/* ============================================================
    HORA FILTER
- */
-const HORA_PALETTE = [
-  "#c26a4a","#bfa15a","#3fa86a","#4a7ec2",
-  "#9a4ac2","#c24a7a","#4ac2b8","#c2a44a"
-];
+   ============================================================ */
+const HORA_PALETTE=["#c26a4a","#bfa15a","#3fa86a","#4a7ec2","#9a4ac2","#c24a7a","#4ac2b8","#c2a44a"];
 
 function buildHoraFilter(list){
-  const horas = [...new Set(list.map(r=>r.hora).filter(Boolean))].sort();
-  const bar = $("horaFilterBar");
-  bar.innerHTML = `<div class="horaChip active" data-hora="all" onclick="setHoraFilter('all',this)">Todas</div>`;
-
+  const horas=[...new Set(list.map(r=>r.hora).filter(Boolean))].sort();
+  const bar=$("horaFilterBar");
+  bar.innerHTML=`<div class="horaChip active" data-hora="all" onclick="setHoraFilter('all',this)">Todas</div>`;
   horas.forEach((h,i)=>{
-    HORA_COLORS[h] = HORA_PALETTE[i % HORA_PALETTE.length];
-    const chip = document.createElement("div");
-    chip.className = "horaChip" + (CURRENT_HORA_FILTER===h?" active":"");
-    chip.dataset.hora = h;
-    chip.style.setProperty("--hc", HORA_PALETTE[i % HORA_PALETTE.length]);
-    chip.textContent = h;
-    chip.onclick = ()=> setHoraFilter(h,chip);
+    HORA_COLORS[h]=HORA_PALETTE[i%HORA_PALETTE.length];
+    const chip=document.createElement("div");
+    chip.className="horaChip"+(CURRENT_HORA_FILTER===h?" active":"");
+    chip.dataset.hora=h;
+    chip.textContent=h;
+    chip.onclick=()=>setHoraFilter(h,chip);
     bar.appendChild(chip);
   });
 }
 
-function setHoraFilter(hora, el){
-  CURRENT_HORA_FILTER = hora;
+function setHoraFilter(hora,el){
+  CURRENT_HORA_FILTER=hora;
   document.querySelectorAll(".horaChip").forEach(c=>c.classList.remove("active"));
   el.classList.add("active");
   renderReservas(CURRENT_LIST);
 }
 
 function resetHoraFilter(){
-  CURRENT_HORA_FILTER = "all";
-  document.querySelectorAll(".horaChip").forEach(c=>{
-    c.classList.toggle("active", c.dataset.hora==="all");
-  });
+  CURRENT_HORA_FILTER="all";
+  document.querySelectorAll(".horaChip").forEach(c=>c.classList.toggle("active",c.dataset.hora==="all"));
 }
 
-/* 
+/* ============================================================
    TABS
- */
+   ============================================================ */
 function setTab(tab){
-  CURRENT_TAB = tab;
+  CURRENT_TAB=tab;
   document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
   $("tab"+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add("active");
   renderReservas(CURRENT_LIST);
+  updateHiddenTabNotice();
 }
 
+/* ============================================================
+   ── NEW: HIDDEN TAB NOTICE ──
+   Shows a banner when the selected reservation is not visible
+   in the current tab, so the host always knows where it went.
+   ============================================================ */
+function getTabForEstado(estado){
+  if(["Pendiente","Confirmado","Llegó"].includes(estado)) return "pendientes";
+  if(estado==="Sentado") return "sentados";
+  if(["Cerrado","Cancelado"].includes(estado)) return "cerrados";
+  return "pendientes";
+}
 
-  
-/* 
+function updateHiddenTabNotice(){
+  const notice=$("hiddenTabNotice");
+  if(!SELECTED_RESERVA_ID){ notice.classList.remove("visible"); return; }
+  const r=HOST_CACHE[SELECTED_RESERVA_ID];
+  if(!r){ notice.classList.remove("visible"); return; }
+  const targetTab=getTabForEstado(r.estado||"Pendiente");
+  if(targetTab===CURRENT_TAB){ notice.classList.remove("visible"); return; }
+  const tabLabels={pendientes:"Activos",sentados:"Sentados",cerrados:"Historial"};
+  $("hiddenTabText").textContent=`"${r.cliente}" está en ${tabLabels[targetTab]}`;
+  notice.classList.add("visible");
+}
+
+function jumpToSelectedTab(){
+  if(!SELECTED_RESERVA_ID) return;
+  const r=HOST_CACHE[SELECTED_RESERVA_ID];
+  if(!r) return;
+  const targetTab=getTabForEstado(r.estado||"Pendiente");
+  setTab(targetTab);
+  // scroll the card into view after a brief render delay
+  setTimeout(()=>{
+    const card=document.querySelector(`.resCard[data-id="${SELECTED_RESERVA_ID}"]`);
+    if(card) card.scrollIntoView({behavior:"smooth",block:"nearest"});
+  },80);
+}
+
+/* ============================================================
    LOAD RESERVAS
- */
+   ============================================================ */
 async function loadReservas(){
   try{
-    const data = await api({
-      action:"host_snapshot",
-      funcion:$("funcion").value
-    });
-
-    $("coversTotal").textContent   = data.coversTotal   || 0;
-    $("coversArrived").textContent = data.coversArrived || 0;
-    $("coversPending").textContent = data.coversPending || 0;
-
+    const data=await api({action:"host_snapshot",funcion:$("funcion").value});
+    $("coversTotal").textContent=data.coversTotal||0;
+    $("coversArrived").textContent=data.coversArrived||0;
+    $("coversPending").textContent=data.coversPending||0;
+    CURRENT_LIST=(data.reservas||[]);
     renderMapBase();
-    renderReservas(data.reservas || []);
-    paintMesas(data.reservas || []);
-    buildHoraFilter(data.reservas || []);
+    renderReservas(CURRENT_LIST);
+    paintMesas(CURRENT_LIST);
+    buildHoraFilter(CURRENT_LIST);
     drawConnectionLines();
     updateRefreshInfo(true);
-
     if(SELECTED_RESERVA_ID){
-      const found = (data.reservas||[]).find(r=>r.id===SELECTED_RESERVA_ID);
-      if(found) renderDetalle(found);
-      else{
-        SELECTED_RESERVA_ID = null;
-        $("detalle").innerHTML = `<div class="detailEmpty"><div style="font-size:28px;margin-bottom:10px;">🪑</div>Selecciona una reserva</div>`;
-      }
+      const found=CURRENT_LIST.find(r=>r.id===SELECTED_RESERVA_ID);
+      if(found){ HOST_CACHE[found.id]=found; renderDetalle(found); }
+      else{ SELECTED_RESERVA_ID=null; $("detalle").innerHTML=`<div class="detailEmpty"><div style="font-size:28px;margin-bottom:10px;">🪑</div>Selecciona una reserva</div>`; }
     }
-  }catch(e){
-    showToast("Error cargando reservas: "+e.message,"error",5000);
-    updateRefreshInfo(false);
-  }
+    updateHiddenTabNotice();
+  }catch(e){ showToast("Error cargando reservas: "+e.message,"error",5000); updateRefreshInfo(false); }
 }
 
-/* 
+/* ============================================================
    RENDER RESERVAS
- */
+   ============================================================ */
 function renderReservas(list){
-  // preserve existing cache entries — only add/update, don't wipe
-  const prevCache = {...HOST_CACHE};
-  HOST_CACHE = {};
-  CURRENT_LIST = list.slice();
+  HOST_CACHE={};
+  CURRENT_LIST=list.slice();
+  const q=$("buscar").value.trim().toLowerCase();
 
-  const q = $("buscar").value.trim().toLowerCase();
+  const pendCount=list.filter(r=>["Pendiente","Confirmado","Llegó"].includes(r.estado||"Pendiente")).length;
+  const sentCount=list.filter(r=>r.estado==="Sentado").length;
+  const histCount=list.filter(r=>["Cerrado","Cancelado"].includes(r.estado||"")).length;
 
-  // tab counts
-  const pendCount = list.filter(r=>["Pendiente","Confirmado","Llegó"].includes(r.estado||"Pendiente")).length;
-  const sentCount = list.filter(r=>r.estado==="Sentado").length;
-  const histCount = list.filter(r=>["Cerrado","Cancelado"].includes(r.estado||"")).length;
+  $("tabPendientes").textContent=`Activos (${pendCount})`;
+  $("tabSentados").textContent=`Sentados (${sentCount})`;
+  $("tabCerrados").textContent=`Historial (${histCount})`;
 
-  $("tabPendientes").textContent = `Activos (${pendCount})`;
-  $("tabSentados").textContent   = `Sentados (${sentCount})`;
-  $("tabCerrados").textContent   = `Historial (${histCount})`;
-
-  // filter
-  let filtered = list.filter(r=>{
-    const estado = r.estado || "Pendiente";
-    const matchSearch = !q || (
-      (r.cliente||"").toLowerCase().includes(q) ||
-      (r.telefono||"").toLowerCase().includes(q) ||
+  let filtered=list.filter(r=>{
+    const estado=r.estado||"Pendiente";
+    const matchSearch=!q||(
+      (r.cliente||"").toLowerCase().includes(q)||
+      (r.telefono||"").toLowerCase().includes(q)||
       (r.mesa||"").toLowerCase().includes(q)
     );
     if(q) return matchSearch;
-
-    if(CURRENT_HORA_FILTER !== "all" && r.hora !== CURRENT_HORA_FILTER) return false;
-
+    if(CURRENT_HORA_FILTER!=="all"&&r.hora!==CURRENT_HORA_FILTER) return false;
     if(CURRENT_TAB==="pendientes") return ["Pendiente","Confirmado","Llegó"].includes(estado);
     if(CURRENT_TAB==="sentados")   return estado==="Sentado";
     if(CURRENT_TAB==="cerrados")   return ["Cerrado","Cancelado"].includes(estado);
     return true;
   });
 
-  // summary
-  const totalPax = filtered.reduce((s,r)=>s+(r.personas||0),0);
-  $("listSummary").textContent = filtered.length
-    ? `${filtered.length} reserva${filtered.length!==1?"s":""} · ${totalPax} pax`
-    : "";
+  const totalPax=filtered.reduce((s,r)=>s+(r.personas||0),0);
+  $("listSummary").textContent=filtered.length?`${filtered.length} reserva${filtered.length!==1?"s":""}  · ${totalPax} pax`:"";
 
-  const container = $("reservas");
-  container.innerHTML = "";
+  const container=$("reservas");
+  container.innerHTML="";
+
+  // Reconstruir HOST_CACHE con TODOS los datos (no solo los filtrados)
+  // Crítico: permite abrir reservas de cualquier tab sin perder datos
+  list.forEach(r=>{ HOST_CACHE[r.id]=r; });
 
   if(!filtered.length){
-    container.innerHTML = `
-      <div class="emptyState">
-        <div class="emptyIcon">📋</div>
-        <p>No hay reservaciones en esta vista</p>
-      </div>`;
+    container.innerHTML=`<div class="emptyState"><div class="emptyIcon">📋</div><p>No hay reservaciones en esta vista</p></div>`;
+    updateHiddenTabNotice();
     return;
   }
 
-  // group by grupo field
-  const groups = {};
-  const ungrouped = [];
+  const groups={};
+  const ungrouped=[];
+  filtered.forEach(r=>{ if(r.grupo){ if(!groups[r.grupo]) groups[r.grupo]=[]; groups[r.grupo].push(r); }else{ ungrouped.push(r); } });
 
-  filtered.forEach(r=>{
-    HOST_CACHE[r.id] = r;
-    if(r.grupo){
-      if(!groups[r.grupo]) groups[r.grupo] = [];
-      groups[r.grupo].push(r);
-    }else{
-      ungrouped.push(r);
-    }
-  });
-
-  // render grouped
   Object.keys(groups).forEach(grupoId=>{
-    const gReservas = groups[grupoId];
-    const totalGpax = gReservas.reduce((s,r)=>s+(r.personas||0),0);
-
-    const wrapper = document.createElement("div");
-    wrapper.className = "groupContainer";
-
-    const hdr = document.createElement("div");
-    hdr.className = "groupHeader";
-    hdr.innerHTML = `🔗 ${grupoId} · ${gReservas.length} reservas · ${totalGpax} pax total`;
+    const gReservas=groups[grupoId];
+    const totalGpax=gReservas.reduce((s,r)=>s+(r.personas||0),0);
+    const wrapper=document.createElement("div"); wrapper.className="groupContainer";
+    const hdr=document.createElement("div"); hdr.className="groupHeader";
+    hdr.innerHTML=`🔗 ${grupoId} · ${gReservas.length} reservas · ${totalGpax} pax total`;
     wrapper.appendChild(hdr);
-
-    gReservas.forEach(r=> wrapper.appendChild(buildResCard(r)));
+    gReservas.forEach(r=>wrapper.appendChild(buildResCard(r)));
     container.appendChild(wrapper);
   });
 
-  // render ungrouped
-  ungrouped.forEach(r=> container.appendChild(buildResCard(r)));
+  ungrouped.forEach(r=>container.appendChild(buildResCard(r)));
+  updateHiddenTabNotice();
 }
 
 function buildResCard(r){
-  const estado = r.estado || "Pendiente";
-  const badgeColors = {
-    "Pendiente":"#3a3a3a","Confirmado":"#4f8f6a",
-    "Llegó":"#3fa86a","Sentado":"#bfa15a",
-    "Cerrado":"#444","Cancelado":"#c85b5b"
-  };
-  const badgeBg = badgeColors[estado] || "#3a3a3a";
-  const horaColor = HORA_COLORS[r.hora] || "var(--muted)";
+  const estado=r.estado||"Pendiente";
+  const badgeColors={"Pendiente":"#3a3a3a","Confirmado":"#4f8f6a","Llegó":"#3fa86a","Sentado":"#bfa15a","Cerrado":"#444","Cancelado":"#c85b5b"};
+  const badgeBg=badgeColors[estado]||"#3a3a3a";
+  const horaColor=HORA_COLORS[r.hora]||"var(--muted)";
 
-  const card = document.createElement("div");
-  card.className = "resCard";
+  const card=document.createElement("div");
+  card.className="resCard";
+  card.dataset.id=r.id; // ── NEW: needed for scrollIntoView
 
-  if(r.id === SELECTED_RESERVA_ID || (r.grupo && r.grupo===ACTIVE_GROUP)){
-    card.classList.add("active");
-  }
-  if(SELECTED_RESERVAS.includes(r.id)){
-    card.classList.add("selected");
-  }
-  if(["Cerrado","Cancelado"].includes(estado)){
-    card.style.opacity = ".45";
-  }
+  if(r.id===SELECTED_RESERVA_ID||(r.grupo&&r.grupo===ACTIVE_GROUP)) card.classList.add("active");
+  if(SELECTED_RESERVAS.includes(r.id)) card.classList.add("selected");
+  if(["Cerrado","Cancelado"].includes(estado)) card.style.opacity=".45";
 
-  card.innerHTML = `
+  // ── NEW: quick action chips per estado
+  let quickActionsHtml="";
+  if(estado==="Pendiente")  quickActionsHtml=`<button class="quickChip" style="background:#4f8f6a;color:#111;" onclick="e_quickEstado(event,'${r.id}','Confirmado')">Confirmar</button>`;
+  if(estado==="Confirmado") quickActionsHtml=`<button class="quickChip" style="background:#3fa86a;color:#111;" onclick="e_quickEstado(event,'${r.id}','Llegó')">✓ Llegó</button>`;
+  if(estado==="Llegó")      quickActionsHtml=`<button class="quickChip" style="background:#bfa15a;color:#111;" onclick="e_quickEstado(event,'${r.id}','Sentado')">Sentar</button><button class="quickChip" style="background:#4a7ec2;color:#fff;" onclick="e_smartSeat(event,'${r.id}')">Smart ✨</button>`;
+  if(estado==="Sentado")    quickActionsHtml=`<button class="quickChip" style="background:#c85b5b;color:white;" onclick="e_quickCheckout(event,'${r.id}')">Checkout</button>`;
+
+  card.innerHTML=`
     <div class="resCardTop">
       <div>
         <div class="resName">${r.cliente}</div>
@@ -1837,139 +892,128 @@ function buildResCard(r){
       </div>
       <div class="estadoBadge" style="background:${badgeBg};color:#fff;">${estado}</div>
     </div>
+    ${quickActionsHtml?`<div class="resQuickActions">${quickActionsHtml}</div>`:""}
   `;
 
   card.addEventListener("click",()=>{
     if(GROUP_MODE){ toggleReservaSeleccion(r.id); updateGroupToolbar(); return; }
     openReserva(r.id);
   });
-
-  // right-click mini menu
-  card.addEventListener("contextmenu", e=>{
-    e.preventDefault();
-    showQuickMenu(r, e.clientX, e.clientY);
-  });
-
+  card.addEventListener("contextmenu",e=>{ e.preventDefault(); showQuickMenu(r,e.clientX,e.clientY); });
   return card;
 }
 
-/* 
-   QUICK ACTION MENU (right-click)
- */
-function showQuickMenu(r, x, y){
-  document.getElementById("quickMenu")?.remove();
-
-  const menu = document.createElement("div");
-  menu.id = "quickMenu";
-  menu.style.cssText = `
-    position:fixed;left:${x}px;top:${y}px;
-    background:#121a16;border:1px solid var(--line);
-    border-radius:12px;padding:6px;z-index:9990;
-    box-shadow:0 20px 50px rgba(0,0,0,.6);min-width:180px;
-  `;
-
-  const actions = [
-    { label:"Abrir detalle", fn:()=>openReserva(r.id) },
-    { label:"Marcar Llegó", fn:()=>quickUpdateEstado(r.id,"Llegó"), show: r.estado!=="Llegó" && r.estado!=="Cerrado" },
-    { label:"Smart seat ✨", fn:()=>{ openReserva(r.id); setTimeout(()=>assignSuggested(r.id),200); }, show: r.estado!=="Cerrado" },
-  ];
-
-  actions.filter(a=>a.show!==false).forEach(a=>{
-    const item = document.createElement("div");
-    item.style.cssText = "padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;transition:.15s;";
-    item.textContent = a.label;
-    item.onmouseenter = ()=> item.style.background="rgba(255,255,255,.07)";
-    item.onmouseleave = ()=> item.style.background="";
-    item.onclick = ()=>{ a.fn(); menu.remove(); };
-    menu.appendChild(item);
-  });
-
-  document.body.appendChild(menu);
-  setTimeout(()=> document.addEventListener("click",()=>menu.remove(),{once:true}), 0);
+/* Quick action handlers — stop propagation so card click doesn't also fire */
+function e_quickEstado(e,id,estado){
+  e.stopPropagation();
+  quickUpdateEstado(id,estado);
+}
+function e_smartSeat(e,id){
+  e.stopPropagation();
+  openReserva(id);
+  setTimeout(()=>assignSuggested(id),150);
+}
+function e_quickCheckout(e,id){
+  e.stopPropagation();
+  openReserva(id);
+  setTimeout(()=>{ confirmAction("¿Cerrar cuenta?",()=>checkoutSingle(id)); },150);
 }
 
-async function quickUpdateEstado(id, estado){
-  if(HOST_CACHE[id]) HOST_CACHE[id].estado = estado;
+/* ============================================================
+   QUICK MENU (right-click)
+   ============================================================ */
+function showQuickMenu(r,x,y){
+  document.getElementById("quickMenu")?.remove();
+  const menu=document.createElement("div");
+  menu.id="quickMenu";
+  menu.style.cssText=`position:fixed;left:${x}px;top:${y}px;background:#121a16;border:1px solid var(--line);border-radius:12px;padding:6px;z-index:9990;box-shadow:0 20px 50px rgba(0,0,0,.6);min-width:180px;`;
+  const actions=[
+    {label:"Abrir detalle",fn:()=>openReserva(r.id)},
+    {label:"Marcar Llegó",fn:()=>quickUpdateEstado(r.id,"Llegó"),show:r.estado!=="Llegó"&&r.estado!=="Cerrado"},
+    {label:"Smart seat ✨",fn:()=>{ openReserva(r.id); setTimeout(()=>assignSuggested(r.id),200); },show:r.estado!=="Cerrado"},
+  ];
+  actions.filter(a=>a.show!==false).forEach(a=>{
+    const item=document.createElement("div");
+    item.style.cssText="padding:9px 12px;border-radius:8px;cursor:pointer;font-size:13px;transition:.15s;";
+    item.textContent=a.label;
+    item.onmouseenter=()=>item.style.background="rgba(255,255,255,.07)";
+    item.onmouseleave=()=>item.style.background="";
+    item.onclick=()=>{ a.fn(); menu.remove(); };
+    menu.appendChild(item);
+  });
+  document.body.appendChild(menu);
+  setTimeout(()=>document.addEventListener("click",()=>menu.remove(),{once:true}),0);
+}
+
+async function quickUpdateEstado(id,estado){
+  if(HOST_CACHE[id]) HOST_CACHE[id].estado=estado;
+  // ── CHANGED: do NOT force tab switch — just re-render in place
   renderReservas(CURRENT_LIST);
   paintMesas(CURRENT_LIST);
-  await api({ action:"host_update", id, estado, funcion:$("funcion").value });
-  showToast(`Estado actualizado: ${estado}`,"success");
+  updateHiddenTabNotice();
+  await api({action:"host_update",id,estado,funcion:$("funcion").value});
+  showToast(`${HOST_CACHE[id]?.cliente||""} → ${estado}`,"success");
   await loadReservas();
 }
 
-/* 
+/* ============================================================
    OPEN RESERVA
- */
-async function openReserva(id, forceFetch=false){
-  SELECTED_RESERVA_ID = id;
-  let r = HOST_CACHE[id];
+   ── CHANGED: never forces tab switch, just opens detail
+   ============================================================ */
+async function openReserva(id,forceFetch=false){
+  SELECTED_RESERVA_ID=id;
+  let r=HOST_CACHE[id];
 
-  if(forceFetch || !r?.covers){
-    const data = await api({ action:"host_get", id });
-    r = data.reserva;
-    HOST_CACHE[id] = r;
+  if(forceFetch||!r?.covers){
+    const data=await api({action:"host_get",id});
+    r=data.reserva;
+    HOST_CACHE[id]=r;
   }
 
-  ACTIVE_GROUP = r.grupo || r.id;
-  SELECTED_MESAS = sugerirMesas(r.personas||1);
+  ACTIVE_GROUP=r.grupo||r.id;
+  SELECTED_MESAS=sugerirMesas(r.personas||1);
 
+  // ── CHANGED: do NOT call setTab here. Stay on current tab.
   renderReservas(CURRENT_LIST);
   renderDetalle(r);
   paintMesas(CURRENT_LIST);
   drawConnectionLines();
+  updateHiddenTabNotice(); // show banner if reservation is in different tab
 
-  setTimeout(loadItemsMenu, 0);
-  setTimeout(loadCuentaGrupo, 0);
+  setTimeout(loadItemsMenu,0);
+  setTimeout(loadCuentaGrupo,0);
 }
 
-/* 
+/* ============================================================
    RENDER DETALLE
- */
+   ============================================================ */
 function renderDetalle(r){
-  if(!r){
-    $("detalle").innerHTML = `<div class="detailEmpty"><div style="font-size:28px;margin-bottom:10px;">🪑</div>Selecciona una reserva</div>`;
-    return;
+  if(!r){ $("detalle").innerHTML=`<div class="detailEmpty"><div style="font-size:28px;margin-bottom:10px;">🪑</div>Selecciona una reserva</div>`; return; }
+
+  const grupoReservas=getReservasGrupo();
+  const totalPersonas=grupoReservas.reduce((s,x)=>s+(x.personas||0),0);
+  const covers=grupoReservas.flatMap(x=>x.covers||[]);
+  const primary=getPrimaryAction(r);
+  const estado=r.estado||"Pendiente";
+  const estadoColors={"Llegó":"#3fa86a","Sentado":"#bfa15a","Cerrado":"#555"};
+  const estadoColor=estadoColors[estado]||"#666";
+
+  let timerHtml="";
+  if(estado==="Sentado"&&SEATED_TIMES[r.id]){
+    const mins=Math.floor((Date.now()-SEATED_TIMES[r.id])/60000);
+    timerHtml=`<div class="timerBadge">⏱ ${mins} min sentados</div>`;
   }
 
-  const grupoReservas = getReservasGrupo();
-  const totalPersonas = grupoReservas.reduce((s,x)=>s+(x.personas||0),0);
-  const covers = grupoReservas.flatMap(x=>x.covers||[]);
-  const primary = getPrimaryAction(r);
-  const estado = r.estado || "Pendiente";
+  const coversHtml=covers.length?covers.map(c=>{
+    const incomplete=!c.aperitivo||!c.principal||!c.postre;
+    return `<div class="coverCard ${incomplete?"incomplete":""}">
+      <div class="coverName">👤 ${c.nombre||"Invitado"}${incomplete?'<span class="incompleteTag">Incompleto</span>':""}</div>
+      <div class="coverDish">🥗 ${c.aperitivo||"—"}<br>🍝 ${c.principal||"—"}${c.proteina?` · <em>${c.proteina}</em>`:""}<br>🍰 ${c.postre||"—"}</div>
+    </div>`;
+  }).join(""):`<div style="color:var(--muted);font-size:13px;">Sin preorden registrado</div>`;
 
-  const estadoColors = {
-    "Llegó":"#3fa86a","Sentado":"#bfa15a","Cerrado":"#555"
-  };
-  const estadoColor = estadoColors[estado] || "#666";
-
-  // seated timer
-  let timerHtml = "";
-  if(estado==="Sentado" && SEATED_TIMES[r.id]){
-    const mins = Math.floor((Date.now()-SEATED_TIMES[r.id])/60000);
-    timerHtml = `<div class="timerBadge">⏱ ${mins} min sentados</div>`;
-  }
-
-  // covers with incomplete detection
-  const coversHtml = covers.length ? covers.map(c=>{
-    const incomplete = !c.aperitivo || !c.principal || !c.postre;
-    return `
-      <div class="coverCard ${incomplete?"incomplete":""}">
-        <div class="coverName">
-          👤 ${c.nombre||"Invitado"}
-          ${incomplete?'<span class="incompleteTag">Incompleto</span>':""}
-        </div>
-        <div class="coverDish">
-          🥗 ${c.aperitivo||"—"}<br>
-          🍝 ${c.principal||"—"}${c.proteina?` · <em>${c.proteina}</em>`:""}  <br>
-          🍰 ${c.postre||"—"}
-        </div>
-      </div>`;
-  }).join("") : `<div style="color:var(--muted);font-size:13px;">Sin preorden registrado</div>`;
-
-  $("detalle").innerHTML = `
-
+  $("detalle").innerHTML=`
     ${r.notas?`<div class="notasWarning"><strong>⚠ Nota del cliente</strong>${r.notas}</div>`:""}
-
     <div style="margin-bottom:16px;">
       <div style="font-size:19px;font-weight:700;font-family:'Playfair Display',serif;">${r.cliente}</div>
       ${timerHtml}
@@ -1978,18 +1022,17 @@ function renderDetalle(r){
       </div>
       <div style="margin-top:10px;font-size:13px;color:var(--muted);line-height:1.8;">
         👥 ${totalPersonas} pax &nbsp;·&nbsp; 📞 ${r.telefono||"—"}<br>
-        🍽 Mesa: ${SELECTED_MESAS.length ? `→ ${SELECTED_MESAS.join(" + ")}` : (r.mesa||"-")}
+        🍽 Mesa: ${SELECTED_MESAS.length?`→ ${SELECTED_MESAS.join(" + ")}`:r.mesa||"-"}
       </div>
     </div>
 
     ${grupoReservas.length>1?`
     <div class="detailSection">
       <h3>Grupo · ${grupoReservas.length} reservas</h3>
-      ${grupoReservas.map(res=>`
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px;">
-          <div>${res.cliente} <span style="color:var(--muted);font-size:11px;">${res.personas} pax</span></div>
-          <button class="btnMini btnSoftDanger" onclick="confirmAction('¿Sacar a ${res.cliente} del grupo?',()=>removeFromGroup('${res.id}'))">Quitar</button>
-        </div>`).join("")}
+      ${grupoReservas.map(res=>`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px;">
+        <div>${res.cliente} <span style="color:var(--muted);font-size:11px;">${res.personas} pax</span></div>
+        <button class="btnMini btnSoftDanger" onclick="confirmAction('¿Sacar a ${res.cliente} del grupo?',()=>removeFromGroup('${res.id}'))">Quitar</button>
+      </div>`).join("")}
       <button class="btn btnDanger" style="margin-top:8px;" onclick="confirmAction('¿Disolver todo el grupo?',()=>dissolveGroup())">Disolver grupo</button>
     </div>`:""}
 
@@ -2008,17 +1051,13 @@ function renderDetalle(r){
     <div class="detailSection">
       <h3>Consumo</h3>
       <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Añadiendo a: <strong id="reservaActivaLabel">${r.cliente}</strong></div>
-
       <select id="reservaSelect" style="width:100%;margin-bottom:10px;" onchange="handleReservaChange(event)">
         ${grupoReservas.map(gr=>`<option value="${gr.id}" ${gr.id===r.id?"selected":""}>${gr.cliente} (${gr.personas} pax)</option>`).join("")}
       </select>
-
-      ${estado!=="Cerrado"?`
-      <div style="display:flex;gap:8px;margin-bottom:10px;">
+      ${estado!=="Cerrado"?`<div style="display:flex;gap:8px;margin-bottom:10px;">
         <select id="itemSelect" style="flex:1;"><option value="">Cargando menú...</option></select>
         <button class="btnMini" style="background:var(--green);color:#111;" onclick="addConsumoFromSelector()">+ Añadir</button>
       </div>`:""}
-
       <div id="cuentaList"><div style="color:var(--muted);font-size:13px;">Cargando cuenta...</div></div>
       <div style="margin-top:10px;font-weight:700;font-size:15px;">Total grupo: $<span id="cuentaTotal">0.00</span></div>
     </div>
@@ -2036,954 +1075,464 @@ function renderDetalle(r){
   `;
 }
 
-/* 
-   INLINE CONFIRM (replaces alert/confirm)
- */
-let pendingConfirmFn = null;
-
-function confirmAction(message, fn){
-  pendingConfirmFn = fn;
-  const box = $("inlineConfirm");
-  if(!box) return fn(); // fallback
-  box.innerHTML = `
-    <div class="inlineConfirmText">${message}</div>
-    <div class="inlineConfirmBtns">
-      <button class="btn btnNeutral" style="padding:8px;" onclick="cancelConfirm()">Cancelar</button>
-      <button class="btn btnDanger"  style="padding:8px;" onclick="runConfirm()">Confirmar</button>
-    </div>`;
+/* ============================================================
+   INLINE CONFIRM
+   ============================================================ */
+let pendingConfirmFn=null;
+function confirmAction(message,fn){
+  pendingConfirmFn=fn;
+  const box=$("inlineConfirm");
+  if(!box) return fn();
+  box.innerHTML=`<div class="inlineConfirmText">${message}</div><div class="inlineConfirmBtns"><button class="btn btnNeutral" style="padding:8px;" onclick="cancelConfirm()">Cancelar</button><button class="btn btnDanger" style="padding:8px;" onclick="runConfirm()">Confirmar</button></div>`;
   box.classList.add("visible");
   box.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
+function runConfirm(){ const box=$("inlineConfirm"); if(box) box.classList.remove("visible"); if(pendingConfirmFn) pendingConfirmFn(); pendingConfirmFn=null; }
+function cancelConfirm(){ const box=$("inlineConfirm"); if(box) box.classList.remove("visible"); pendingConfirmFn=null; }
 
-function runConfirm(){
-  const box = $("inlineConfirm");
-  if(box) box.classList.remove("visible");
-  if(pendingConfirmFn) pendingConfirmFn();
-  pendingConfirmFn = null;
-}
-
-function cancelConfirm(){
-  const box = $("inlineConfirm");
-  if(box) box.classList.remove("visible");
-  pendingConfirmFn = null;
-}
-
-/* 
+/* ============================================================
    TIMERS
- */
+   ============================================================ */
 function updateTimers(){
   if(!SELECTED_RESERVA_ID) return;
-  const r = HOST_CACHE[SELECTED_RESERVA_ID];
+  const r=HOST_CACHE[SELECTED_RESERVA_ID];
   if(r) renderDetalle(r);
 }
 
-/* 
+/* ============================================================
    PRIMARY ACTIONS
- */
+   ============================================================ */
 function getPrimaryAction(r){
-  const e = r.estado||"Pendiente";
-  if(e==="Pendiente")   return {label:"Confirmar reserva",class:"btnNeutral"};
-  if(e==="Confirmado")  return {label:"Marcar llegó",class:"btnSecondary"};
-  if(e==="Llegó")       return {label:"Sentar cliente",class:"btnPrimary"};
-  if(e==="Sentado")     return {label:"Cerrar mesa",class:"btnDanger"};
-  if(e==="Cerrado")     return {label:"Reabrir mesa",class:"btnReopen"};
+  const e=r.estado||"Pendiente";
+  if(e==="Pendiente")  return {label:"Confirmar reserva",class:"btnNeutral"};
+  if(e==="Confirmado") return {label:"Marcar llegó",class:"btnSecondary"};
+  if(e==="Llegó")      return {label:"Sentar cliente",class:"btnPrimary"};
+  if(e==="Sentado")    return {label:"Cerrar mesa",class:"btnDanger"};
+  if(e==="Cerrado")    return {label:"Reabrir mesa",class:"btnReopen"};
   return null;
 }
 
 async function runPrimaryAction(id){
-  const r = HOST_CACHE[id];
-  const estado = r?.estado||"Pendiente";
-  const map = {
-    "Pendiente":"Confirmado","Confirmado":"Llegó",
-    "Llegó":"Sentado","Sentado":"Cerrado","Cerrado":"Sentado"
-  };
-  const newEstado = map[estado]||estado;
+  const r=HOST_CACHE[id];
+  const estado=r?.estado||"Pendiente";
+  const map={"Pendiente":"Confirmado","Confirmado":"Llegó","Llegó":"Sentado","Sentado":"Cerrado","Cerrado":"Sentado"};
+  const newEstado=map[estado]||estado;
 
-  if(newEstado==="Sentado" && !SEATED_TIMES[id]){
-    SEATED_TIMES[id] = Date.now();
-  }
+  if(newEstado==="Sentado"&&!SEATED_TIMES[id]) SEATED_TIMES[id]=Date.now();
 
-  // update all reservations in the group
-  // REEMPLAZA CON ESTO:
-Object.values(HOST_CACHE).forEach(x=>{
-  if((x.grupo||x.id)===ACTIVE_GROUP){
-    x.estado = newEstado;
-    // ✅ si cierra, limpiar mesa también
-    if(newEstado === "Cerrado"){
-      x.mesa = "";
-      delete SEATED_TIMES[x.id];
-      api({ action:"host_update", id:x.id, estado:newEstado, mesa:"", funcion:$("funcion").value });
-    } else {
-      api({ action:"host_update", id:x.id, estado:newEstado, funcion:$("funcion").value });
+  // Update all in group
+  Object.values(HOST_CACHE).forEach(x=>{
+    if((x.grupo||x.id)===ACTIVE_GROUP){
+      x.estado=newEstado;
+      if(newEstado==="Cerrado"){ x.mesa=""; delete SEATED_TIMES[x.id]; api({action:"host_update",id:x.id,estado:newEstado,mesa:"",funcion:$("funcion").value}); }
+      else api({action:"host_update",id:x.id,estado:newEstado,funcion:$("funcion").value});
     }
-  }
-});
+  });
 
-
-  // auto-switch tab to follow the new estado
-  // so the selected reservation stays visible
-  if(newEstado==="Sentado"){
-    CURRENT_TAB = "sentados";
-    document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
-    $("tabSentados").classList.add("active");
-  }else if(newEstado==="Cerrado"){
-    CURRENT_TAB = "cerrados";
-    document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
-    $("tabCerrados").classList.add("active");
-  }else if(["Pendiente","Confirmado","Llegó"].includes(newEstado)){
-    CURRENT_TAB = "pendientes";
-    document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
-    $("tabPendientes").classList.add("active");
-  }
-
-  // re-render list first so HOST_CACHE is rebuilt
+  // ── CHANGED: do NOT force tab switch — stay on current tab, show notice banner
   renderReservas(CURRENT_LIST);
-
-  // then render detail with the updated reservation
-  // HOST_CACHE[id] is now the updated entry
-  const updated = HOST_CACHE[id];
+  const updated=HOST_CACHE[id];
   if(updated) renderDetalle(updated);
-
   paintMesas(CURRENT_LIST);
   drawConnectionLines();
-  showToast(`Estado actualizado: ${newEstado}`,"success");
+  updateHiddenTabNotice();
+  showToast(`${r.cliente} → ${newEstado}`,"success");
 }
 
-/* 
+/* ============================================================
    FLOOR MAP — EDIT MODE
- */
-let EDIT_MODE_ACTIVE = false;
-
+   ============================================================ */
 function toggleEditMode(btn){
-  EDIT_MODE_ACTIVE = !EDIT_MODE_ACTIVE;
+  EDIT_MODE_ACTIVE=!EDIT_MODE_ACTIVE;
   btn.classList.toggle("active");
-  const toolbar = $("editToolbar");
-  toolbar.classList.toggle("visible", EDIT_MODE_ACTIVE);
-  SELECTED_TABLE_FOR_DELETE = null;
+  $("editToolbar").classList.toggle("visible",EDIT_MODE_ACTIVE);
+  SELECTED_TABLE_FOR_DELETE=null;
   renderMapBase();
   paintMesas(CURRENT_LIST);
 }
-
-function showAddTableForm(){
-  $("addTableForm").classList.add("visible");
-}
-
-function hideAddTableForm(){
-  $("addTableForm").classList.remove("visible");
-  $("newTableName").value = "";
-}
-
+function showAddTableForm(){ $("addTableForm").classList.add("visible"); }
+function hideAddTableForm(){ $("addTableForm").classList.remove("visible"); $("newTableName").value=""; }
 function addTableToLayout(){
-  const name = $("newTableName").value.trim();
-  const shape = $("newTableShape").value;
+  const name=$("newTableName").value.trim();
+  const shape=$("newTableShape").value;
   if(!name){ showToast("Escribe un nombre para la mesa","warning"); return; }
-
-  const layout = getLayout();
-  const zone = layout[CURRENT_ZONE] || [];
-
-  if(zone.find(t=>t.id===name)){
-    showToast("Ya existe una mesa con ese nombre","warning");
-    return;
-  }
-
-  zone.push({id:name, x:50, y:50, shape});
-  layout[CURRENT_ZONE] = zone;
-  saveLayout(layout);
-  hideAddTableForm();
-  renderMapBase();
-  paintMesas(CURRENT_LIST);
+  const layout=getLayout(); const zone=layout[CURRENT_ZONE]||[];
+  if(zone.find(t=>t.id===name)){ showToast("Ya existe una mesa con ese nombre","warning"); return; }
+  zone.push({id:name,x:50,y:50,shape}); layout[CURRENT_ZONE]=zone; saveLayout(layout);
+  hideAddTableForm(); renderMapBase(); paintMesas(CURRENT_LIST);
   showToast(`Mesa ${name} agregada`,"success");
 }
-
 function deleteSelectedTable(){
   if(!SELECTED_TABLE_FOR_DELETE){ showToast("Selecciona una mesa para eliminar","warning"); return; }
-
-  const layout = getLayout();
-  layout[CURRENT_ZONE] = (layout[CURRENT_ZONE]||[]).filter(t=>t.id!==SELECTED_TABLE_FOR_DELETE);
-  saveLayout(layout);
-  SELECTED_TABLE_FOR_DELETE = null;
-  renderMapBase();
-  paintMesas(CURRENT_LIST);
+  const layout=getLayout(); layout[CURRENT_ZONE]=(layout[CURRENT_ZONE]||[]).filter(t=>t.id!==SELECTED_TABLE_FOR_DELETE);
+  saveLayout(layout); SELECTED_TABLE_FOR_DELETE=null; renderMapBase(); paintMesas(CURRENT_LIST);
   showToast("Mesa eliminada","success");
 }
-
 function confirmResetLayout(){
-  confirmAction("¿Resetear el layout al original? Esta acción no se puede deshacer.",()=>{
-    localStorage.removeItem(LAYOUT_KEY);
-    renderMapBase();
-    paintMesas(CURRENT_LIST);
+  confirmAction("¿Resetear el layout al original?",()=>{
+    localStorage.removeItem(LAYOUT_KEY); renderMapBase(); paintMesas(CURRENT_LIST);
     showToast("Layout reseteado","success");
   });
 }
 
-/* 
+/* ============================================================
    RENDER MAP BASE
- */
+   ============================================================ */
 function renderMapBase(){
-  const container = $("floorMap");
-
-  // clear except canvas
-  Array.from(container.children).forEach(c=>{
-    if(c.id!=="connectionCanvas") c.remove();
-  });
-
-  const layout = getLayout();
-  buildTableMeta(layout);
-  const zone = layout[CURRENT_ZONE] || [];
-
-  // edit mode banner
-  if(EDIT_MODE_ACTIVE){
-    const banner = document.createElement("div");
-    banner.className = "editModeBanner";
-    banner.textContent = "✏ Modo Edición";
-    container.appendChild(banner);
-    container.querySelector(".floor") && container.classList.add("editMode");
-    container.classList.add("editMode");
-  }else{
-    container.classList.remove("editMode");
-  }
-
-  // doors
-  if(CURRENT_ZONE==="salon"){
-    createDoor(container, 46, 8, false);
-  }else{
-    createBar(container);
-    createDoor(container, 2, 38, true);
-    createDoor(container, 60, 88, false);
-  }
-
-  zone.forEach(t=> createTableNode(container, t));
+  const container=$("floorMap");
+  Array.from(container.children).forEach(c=>{ if(c.id!=="connectionCanvas") c.remove(); });
+  const layout=getLayout(); buildTableMeta(layout);
+  if(EDIT_MODE_ACTIVE){ const b=document.createElement("div"); b.className="editModeBanner"; b.textContent="✏ Modo Edición"; container.appendChild(b); container.classList.add("editMode"); }
+  else container.classList.remove("editMode");
+  if(CURRENT_ZONE==="salon") createDoor(container,46,8,false);
+  else{ createBar(container); createDoor(container,2,38,true); createDoor(container,60,88,false); }
+  (layout[CURRENT_ZONE]||[]).forEach(t=>createTableNode(container,t));
 }
-
-function createDoor(container, x, y, vertical=false){
-  const el = document.createElement("div");
-  el.className = "door";
-  el.style.width  = vertical?"10px":"50px";
-  el.style.height = vertical?"50px":"10px";
-  el.style.left   = x+"%";
-  el.style.top    = y+"%";
-  container.appendChild(el);
+function createDoor(container,x,y,vertical=false){
+  const el=document.createElement("div"); el.className="door";
+  el.style.width=vertical?"10px":"50px"; el.style.height=vertical?"50px":"10px";
+  el.style.left=x+"%"; el.style.top=y+"%"; container.appendChild(el);
 }
-
-function createBar(container){
-  const bar = document.createElement("div");
-  bar.className = "bar";
-  container.appendChild(bar);
-}
-
-function createTableNode(container, t){
-  const el = document.createElement("div");
-  el.className = `tableNode libre ${t.shape||"square"}`;
-  el.dataset.id = t.id;
-  el.style.left = t.x+"%";
-  el.style.top  = t.y+"%";
-
-  const label = document.createElement("div");
-  label.textContent = t.id;
-  el.appendChild(label);
-
-  // tooltip (non-edit mode)
-  const tip = document.createElement("div");
-  tip.className = "tableTooltip";
-  tip.id = `tip-${t.id}`;
-  el.appendChild(tip);
-
+function createBar(container){ const bar=document.createElement("div"); bar.className="bar"; container.appendChild(bar); }
+function createTableNode(container,t){
+  const el=document.createElement("div");
+  el.className=`tableNode libre ${t.shape||"square"}`;
+  el.dataset.id=t.id; el.style.left=t.x+"%"; el.style.top=t.y+"%";
+  const label=document.createElement("div"); label.textContent=t.id; el.appendChild(label);
+  const tip=document.createElement("div"); tip.className="tableTooltip"; tip.id=`tip-${t.id}`; el.appendChild(tip);
   if(EDIT_MODE_ACTIVE){
     el.classList.add("editMode");
-    makeDraggable(el, t.id);
-
+    makeDraggable(el,t.id);
     el.addEventListener("click",()=>{
       document.querySelectorAll(".tableNode.selectedForDelete").forEach(n=>n.classList.remove("selectedForDelete"));
-      el.classList.add("selectedForDelete");
-      SELECTED_TABLE_FOR_DELETE = t.id;
+      el.classList.add("selectedForDelete"); SELECTED_TABLE_FOR_DELETE=t.id;
       $("deleteTableBtn").style.display="inline-block";
     });
-
   }else{
-    el.addEventListener("click",()=> handleMesaClick(t.id));
+    el.addEventListener("click",()=>handleMesaClick(t.id));
   }
-
   container.appendChild(el);
 }
 
-/*  DRAG  */
-function makeDraggable(el, tableId){
-  let startX, startY, startLeft, startTop;
-
-  el.addEventListener("mousedown", e=>{
-    e.preventDefault();
-    el.classList.add("dragging");
-
-    const container = $("floorMap");
-    const rect = container.getBoundingClientRect();
-
-    startX = e.clientX;
-    startY = e.clientY;
-    startLeft = parseFloat(el.style.left);
-    startTop  = parseFloat(el.style.top);
-
+/* DRAG */
+function makeDraggable(el,tableId){
+  el.addEventListener("mousedown",e=>{
+    e.preventDefault(); el.classList.add("dragging");
+    const container=$("floorMap"); const rect=container.getBoundingClientRect();
+    const startX=e.clientX,startY=e.clientY;
+    const startLeft=parseFloat(el.style.left),startTop=parseFloat(el.style.top);
     function onMove(e){
-      const dx = ((e.clientX - startX) / rect.width)  * 100;
-      const dy = ((e.clientY - startY) / rect.height) * 100;
-
-      const newLeft = Math.min(95, Math.max(5, startLeft + dx));
-      const newTop  = Math.min(95, Math.max(5, startTop  + dy));
-
-      el.style.left = newLeft+"%";
-      el.style.top  = newTop+"%";
-
-      TABLE_META[tableId] = {x:newLeft, y:newTop};
+      const dx=((e.clientX-startX)/rect.width)*100; const dy=((e.clientY-startY)/rect.height)*100;
+      const newLeft=Math.min(95,Math.max(5,startLeft+dx)); const newTop=Math.min(95,Math.max(5,startTop+dy));
+      el.style.left=newLeft+"%"; el.style.top=newTop+"%"; TABLE_META[tableId]={x:newLeft,y:newTop};
     }
-
     function onUp(){
-      el.classList.remove("dragging");
-      document.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseup", onUp);
-
-      // persist
-      const layout = getLayout();
-      const zone = layout[CURRENT_ZONE]||[];
-      const tbl = zone.find(t=>t.id===tableId);
-      if(tbl){
-        tbl.x = parseFloat(el.style.left);
-        tbl.y = parseFloat(el.style.top);
-      }
-      saveLayout(layout);
+      el.classList.remove("dragging"); document.removeEventListener("mousemove",onMove); document.removeEventListener("mouseup",onUp);
+      const layout=getLayout(); const zone=layout[CURRENT_ZONE]||[]; const tbl=zone.find(t=>t.id===tableId);
+      if(tbl){ tbl.x=parseFloat(el.style.left); tbl.y=parseFloat(el.style.top); } saveLayout(layout);
     }
-
-    document.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseup", onUp);
+    document.addEventListener("mousemove",onMove); document.addEventListener("mouseup",onUp);
   });
-
-  // touch
-  el.addEventListener("touchstart", e=>{
-    e.preventDefault();
-    const touch = e.touches[0];
-    const container = $("floorMap");
-    const rect = container.getBoundingClientRect();
-
-    startX = touch.clientX;
-    startY = touch.clientY;
-    startLeft = parseFloat(el.style.left);
-    startTop  = parseFloat(el.style.top);
+  el.addEventListener("touchstart",e=>{
+    e.preventDefault(); const touch=e.touches[0];
+    const container=$("floorMap"); const rect=container.getBoundingClientRect();
+    const startX=touch.clientX,startY=touch.clientY;
+    const startLeft=parseFloat(el.style.left),startTop=parseFloat(el.style.top);
     el.classList.add("dragging");
-
-    function onTouchMove(e){
-      const t = e.touches[0];
-      const dx = ((t.clientX - startX)/rect.width)*100;
-      const dy = ((t.clientY - startY)/rect.height)*100;
-      const newLeft = Math.min(95,Math.max(5,startLeft+dx));
-      const newTop  = Math.min(95,Math.max(5,startTop+dy));
-      el.style.left = newLeft+"%";
-      el.style.top  = newTop+"%";
-      TABLE_META[tableId] = {x:newLeft,y:newTop};
-    }
-
-    function onTouchEnd(){
-      el.classList.remove("dragging");
-      el.removeEventListener("touchmove",onTouchMove);
-      el.removeEventListener("touchend",onTouchEnd);
-      const layout = getLayout();
-      const zone = layout[CURRENT_ZONE]||[];
-      const tbl = zone.find(t=>t.id===tableId);
-      if(tbl){ tbl.x=parseFloat(el.style.left); tbl.y=parseFloat(el.style.top); }
-      saveLayout(layout);
-    }
-
-    el.addEventListener("touchmove",onTouchMove,{passive:false});
-    el.addEventListener("touchend",onTouchEnd);
+    function onTouchMove(e){ const t=e.touches[0]; const dx=((t.clientX-startX)/rect.width)*100; const dy=((t.clientY-startY)/rect.height)*100; const newLeft=Math.min(95,Math.max(5,startLeft+dx)); const newTop=Math.min(95,Math.max(5,startTop+dy)); el.style.left=newLeft+"%"; el.style.top=newTop+"%"; TABLE_META[tableId]={x:newLeft,y:newTop}; }
+    function onTouchEnd(){ el.classList.remove("dragging"); el.removeEventListener("touchmove",onTouchMove); el.removeEventListener("touchend",onTouchEnd); const layout=getLayout(); const zone=layout[CURRENT_ZONE]||[]; const tbl=zone.find(t=>t.id===tableId); if(tbl){ tbl.x=parseFloat(el.style.left); tbl.y=parseFloat(el.style.top); } saveLayout(layout); }
+    el.addEventListener("touchmove",onTouchMove,{passive:false}); el.addEventListener("touchend",onTouchEnd);
   },{passive:false});
 }
 
-/* 
+/* ============================================================
    PAINT MESAS
- */
+   ============================================================ */
 function paintMesas(list){
   document.querySelectorAll(".tableNode").forEach(el=>{
-    el.classList.remove("ocupada","llego","suggested");
-    el.classList.add("libre");
-
-    // update tooltip
-    const tip = document.getElementById(`tip-${el.dataset.id}`);
-    if(tip) tip.innerHTML = "";
+    el.classList.remove("ocupada","llego","suggested"); el.classList.add("libre");
+    const tip=document.getElementById(`tip-${el.dataset.id}`); if(tip) tip.innerHTML="";
   });
-
   list.forEach(r=>{
     if(!r.mesa) return;
     r.mesa.split(" + ").forEach(id=>{
-      const el = document.querySelector(`.tableNode[data-id="${id}"]`);
-      if(!el) return;
+      const el=document.querySelector(`.tableNode[data-id="${id}"]`); if(!el) return;
       el.classList.remove("libre");
-      if(r.estado==="Llegó")   el.classList.add("llego");
+      if(r.estado==="Llegó") el.classList.add("llego");
       else if(r.estado==="Sentado") el.classList.add("ocupada");
       else el.classList.add("libre");
-
-      // tooltip
-      const tip = document.getElementById(`tip-${id}`);
-      if(tip){
-        tip.innerHTML = `
-          <strong>${r.cliente}</strong><br>
-          ${r.personas} pax · ${r.hora}<br>
-          ${r.estado}
-        `;
-      }
+      const tip=document.getElementById(`tip-${id}`);
+      if(tip) tip.innerHTML=`<strong>${r.cliente}</strong><br>${r.personas} pax · ${r.hora}<br>${r.estado}`;
     });
   });
-
-  SELECTED_MESAS.forEach(id=>{
-    const el = document.querySelector(`.tableNode[data-id="${id}"]`);
-    if(el) el.classList.add("suggested");
-  });
+  SELECTED_MESAS.forEach(id=>{ const el=document.querySelector(`.tableNode[data-id="${id}"]`); if(el) el.classList.add("suggested"); });
 }
 
-/* 
-   CONNECTION LINES (canvas)
- */
+/* ============================================================
+   CONNECTION LINES
+   ============================================================ */
 function drawConnectionLines(){
-  const canvas = $("connectionCanvas");
-  if(!canvas) return;
-
-  const floor = $("floorMap");
-  canvas.width  = floor.offsetWidth;
-  canvas.height = floor.offsetHeight;
-
-  const ctx = canvas.getContext("2d");
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  // draw lines between tables in the same multi-mesa reservation
+  const canvas=$("connectionCanvas"); if(!canvas) return;
+  const floor=$("floorMap"); canvas.width=floor.offsetWidth; canvas.height=floor.offsetHeight;
+  const ctx=canvas.getContext("2d"); ctx.clearRect(0,0,canvas.width,canvas.height);
   CURRENT_LIST.forEach(r=>{
     if(!r.mesa) return;
-    const mesas = r.mesa.split(" + ");
-    if(mesas.length < 2) return;
-
-    const positions = mesas.map(id=>{
-      const el = document.querySelector(`.tableNode[data-id="${id}"]`);
-      if(!el) return null;
-      return{
-        x: (parseFloat(el.style.left)/100)*canvas.width,
-        y: (parseFloat(el.style.top) /100)*canvas.height
-      };
-    }).filter(Boolean);
-
-    if(positions.length < 2) return;
-
-    ctx.beginPath();
-    ctx.strokeStyle = r.estado==="Sentado"
-      ? "rgba(191,161,90,.5)"
-      : "rgba(63,168,106,.5)";
-    ctx.lineWidth = 2;
-    ctx.setLineDash([6,4]);
-
-    positions.forEach((p,i)=>{
-      if(i===0) ctx.moveTo(p.x,p.y);
-      else ctx.lineTo(p.x,p.y);
-    });
-
-    ctx.stroke();
-    ctx.setLineDash([]);
+    const mesas=r.mesa.split(" + "); if(mesas.length<2) return;
+    const positions=mesas.map(id=>{ const el=document.querySelector(`.tableNode[data-id="${id}"]`); if(!el) return null; return{x:(parseFloat(el.style.left)/100)*canvas.width,y:(parseFloat(el.style.top)/100)*canvas.height}; }).filter(Boolean);
+    if(positions.length<2) return;
+    ctx.beginPath(); ctx.strokeStyle=r.estado==="Sentado"?"rgba(191,161,90,.5)":"rgba(63,168,106,.5)"; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+    positions.forEach((p,i)=>{ if(i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y); });
+    ctx.stroke(); ctx.setLineDash([]);
   });
 }
 
-/* 
+/* ============================================================
    MESA INTERACTIONS
- */
+   ── CHANGED: clicking occupied table opens detail without 
+      switching tabs. The host stays in their current view.
+   ============================================================ */
 function handleMesaClick(id){
-  const reservas = CURRENT_LIST.filter(r=>{
-    if(!r.mesa) return false;
-    return r.mesa.split(" + ").includes(id);
-  });
-
+  const reservas=CURRENT_LIST.filter(r=>{ if(!r.mesa) return false; return r.mesa.split(" + ").includes(id); });
   if(reservas.length){
-    const target = reservas[0];
-    openReserva(target.id, false);
+    // ── Always open the reservation detail, no tab switch
+    openReserva(reservas[0].id, false);
     return;
   }
   selectMesa(id);
 }
 
 function selectMesa(id){
-  if(!MULTI_MODE){
-    SELECTED_MESAS = [id];
-  }else{
-    if(SELECTED_MESAS.includes(id)){
-      SELECTED_MESAS = SELECTED_MESAS.filter(m=>m!==id);
-    }else{
-      SELECTED_MESAS.push(id);
-    }
-  }
+  if(!MULTI_MODE) SELECTED_MESAS=[id];
+  else{ if(SELECTED_MESAS.includes(id)) SELECTED_MESAS=SELECTED_MESAS.filter(m=>m!==id); else SELECTED_MESAS.push(id); }
   paintMesas(CURRENT_LIST);
   if(SELECTED_RESERVA_ID) renderDetalle(HOST_CACHE[SELECTED_RESERVA_ID]);
 }
 
-function setZone(zone, e){
-  CURRENT_ZONE = zone;
+function setZone(zone,e){
+  CURRENT_ZONE=zone;
   document.querySelectorAll(".zoneBtn").forEach(b=>b.classList.remove("active"));
   if(e) e.target.classList.add("active");
-  renderMapBase();
-  paintMesas(CURRENT_LIST);
+  renderMapBase(); paintMesas(CURRENT_LIST);
 }
+function toggleMultiMode(btn){ MULTI_MODE=!MULTI_MODE; btn.classList.toggle("active"); if(!MULTI_MODE) SELECTED_MESAS=SELECTED_MESAS.slice(0,1); paintMesas(CURRENT_LIST); }
 
-function toggleMultiMode(btn){
-  MULTI_MODE = !MULTI_MODE;
-  btn.classList.toggle("active");
-  if(!MULTI_MODE) SELECTED_MESAS = SELECTED_MESAS.slice(0,1);
-  paintMesas(CURRENT_LIST);
-}
-
-/* 
+/* ============================================================
    SMART SEAT
- */
+   ============================================================ */
 function sugerirMesas(personas){
-  const disponibles = Array.from(
-    document.querySelectorAll(".tableNode.libre")
-  ).map(el=>el.dataset.id).filter(id=>TABLE_META[id]);
-
+  const disponibles=Array.from(document.querySelectorAll(".tableNode.libre")).map(el=>el.dataset.id).filter(id=>TABLE_META[id]);
   if(!disponibles.length) return [];
-
-  const centro = {x:50,y:50};
-  const dist = (a,b)=> Math.hypot(a.x-b.x, a.y-b.y);
-
-  disponibles.sort((a,b)=>
-    dist(TABLE_META[a],centro) - dist(TABLE_META[b],centro)
-  );
-
-  if(personas<=4)  return [disponibles[0]];
-  if(personas<=8)  return findBestCluster(disponibles,2);
+  const centro={x:50,y:50}; const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+  disponibles.sort((a,b)=>dist(TABLE_META[a],centro)-dist(TABLE_META[b],centro));
+  if(personas<=4) return [disponibles[0]];
+  if(personas<=8) return findBestCluster(disponibles,2);
   if(personas<=12) return findBestCluster(disponibles,3);
   return findBestCluster(disponibles,4);
 }
-
 function findBestCluster(mesas,cantidad){
-  let best=null, bestScore=Infinity;
-
+  let best=null,bestScore=Infinity;
   for(let i=0;i<mesas.length;i++){
-    const base = mesas[i];
-    if(!TABLE_META[base]) continue;
-
+    const base=mesas[i]; if(!TABLE_META[base]) continue;
     const group=[base];
-    const cercanas = mesas.filter(m=>m!==base && TABLE_META[m])
-      .map(m=>({id:m,dist:Math.hypot(TABLE_META[m].x-TABLE_META[base].x,TABLE_META[m].y-TABLE_META[base].y)}))
-      .sort((a,b)=>a.dist-b.dist);
-
+    const cercanas=mesas.filter(m=>m!==base&&TABLE_META[m]).map(m=>({id:m,dist:Math.hypot(TABLE_META[m].x-TABLE_META[base].x,TABLE_META[m].y-TABLE_META[base].y)})).sort((a,b)=>a.dist-b.dist);
     for(let j=0;j<cercanas.length&&group.length<cantidad;j++) group.push(cercanas[j].id);
-
     let score=0;
-    for(let a=0;a<group.length;a++)
-      for(let b=a+1;b<group.length;b++)
-        if(TABLE_META[group[a]]&&TABLE_META[group[b]])
-          score+=Math.hypot(TABLE_META[group[a]].x-TABLE_META[group[b]].x,TABLE_META[group[a]].y-TABLE_META[group[b]].y);
-
+    for(let a=0;a<group.length;a++) for(let b=a+1;b<group.length;b++) if(TABLE_META[group[a]]&&TABLE_META[group[b]]) score+=Math.hypot(TABLE_META[group[a]].x-TABLE_META[group[b]].x,TABLE_META[group[a]].y-TABLE_META[group[b]].y);
     if(score<bestScore){ bestScore=score; best=group; }
   }
   return best||[];
 }
 
-/* 
+/* ============================================================
    ASSIGN / LIBERAR MESA
- */
+   ── CHANGED: no auto tab switch, stay in current view
+   ============================================================ */
 async function assignMesa(id){
   if(!SELECTED_MESAS.length){ showToast("Selecciona una mesa en el mapa","warning"); return; }
-  const mesaString = SELECTED_MESAS.join(" + ");
-
+  const mesaString=SELECTED_MESAS.join(" + ");
   Object.values(HOST_CACHE).forEach(r=>{
     if(!ACTIVE_GROUP) return;
     if((r.grupo||r.id)===ACTIVE_GROUP){
-      r.mesa   = mesaString;
-      r.estado = "Sentado";
-      if(!SEATED_TIMES[r.id]) SEATED_TIMES[r.id] = Date.now();
+      r.mesa=mesaString; r.estado="Sentado";
+      if(!SEATED_TIMES[r.id]) SEATED_TIMES[r.id]=Date.now();
       api({action:"host_update",id:r.id,mesa:mesaString,estado:"Sentado",funcion:$("funcion").value});
     }
   });
-
   SELECTED_MESAS=[];
-
-  // auto-switch to sentados tab
-  CURRENT_TAB = "sentados";
-  document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
-  $("tabSentados").classList.add("active");
-
+  // ── CHANGED: no tab switch
   renderReservas(CURRENT_LIST);
-  const updated = HOST_CACHE[id];
+  const updated=HOST_CACHE[id];
   if(updated) renderDetalle(updated);
-  paintMesas(CURRENT_LIST);
-  drawConnectionLines();
-  showToast(`Mesa ${mesaString} asignada`,"success");
+  paintMesas(CURRENT_LIST); drawConnectionLines();
+  updateHiddenTabNotice();
+  showToast(`Mesa ${mesaString} asignada — ver en Sentados`,"success");
 }
 
 async function assignSuggested(id){
-  const r = HOST_CACHE[id];
-  if(!r) return;
-
-  const sugeridas = sugerirMesas(r.personas||1);
+  const r=HOST_CACHE[id]; if(!r) return;
+  const sugeridas=sugerirMesas(r.personas||1);
   if(!sugeridas.length){ showToast("No hay mesas disponibles","warning"); return; }
-
-  const mesaString = sugeridas.join(" + ");
+  const mesaString=sugeridas.join(" + ");
   if(HOST_CACHE[id]){ HOST_CACHE[id].mesa=mesaString; HOST_CACHE[id].estado="Sentado"; }
   if(!SEATED_TIMES[id]) SEATED_TIMES[id]=Date.now();
-
   SELECTED_MESAS=[];
-
-  // auto-switch to sentados tab
-  CURRENT_TAB = "sentados";
-  document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
-  $("tabSentados").classList.add("active");
-
+  // ── CHANGED: no tab switch
   renderReservas(CURRENT_LIST);
-  const updated = HOST_CACHE[id];
+  const updated=HOST_CACHE[id];
   if(updated) renderDetalle(updated);
-  paintMesas(CURRENT_LIST);
-  drawConnectionLines();
-
+  paintMesas(CURRENT_LIST); drawConnectionLines();
+  updateHiddenTabNotice();
   api({action:"host_update",id,mesa:mesaString,estado:"Sentado",funcion:$("funcion").value});
-  showToast(`Mesa ${mesaString} asignada`,"success");
+  showToast(`Mesa ${mesaString} asignada — ver en Sentados`,"success");
 }
 
 async function liberarMesa(id){
-  const r = HOST_CACHE[id];
-  const newEstado = r?.estado==="Sentado" ? "Llegó" : "Pendiente";
-
+  const r=HOST_CACHE[id];
+  const newEstado=r?.estado==="Sentado"?"Llegó":"Pendiente";
   if(HOST_CACHE[id]){ HOST_CACHE[id].mesa=""; HOST_CACHE[id].estado=newEstado; }
   delete SEATED_TIMES[id];
-
-  // follow to correct tab
-  CURRENT_TAB = "pendientes";
-  document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
-  $("tabPendientes").classList.add("active");
-
-  renderReservas(CURRENT_LIST);
-  const updated = HOST_CACHE[id];
+  // ── CHANGED: no tab switch
+  renderReservas(CURRENT_LIST); const updated=HOST_CACHE[id];
   if(updated) renderDetalle(updated);
-  paintMesas(CURRENT_LIST);
-  drawConnectionLines();
-
+  paintMesas(CURRENT_LIST); drawConnectionLines();
+  updateHiddenTabNotice();
   api({action:"host_update",id,mesa:"",estado:newEstado,funcion:$("funcion").value});
   showToast("Mesa liberada","success");
 }
 
-/* 
+/* ============================================================
    GROUP MODE
- */
-function toggleGroupMode(btn){
-  GROUP_MODE=!GROUP_MODE;
-  MULTI_MODE=false;
-  SELECTED_RESERVAS=[];
-  btn.classList.toggle("active");
-  updateGroupToolbar();
-  renderReservas(CURRENT_LIST);
-}
-
-function cancelGroupMode(){
-  GROUP_MODE=false;
-  SELECTED_RESERVAS=[];
-  $("groupModeBtn").classList.remove("active");
-  updateGroupToolbar();
-  renderReservas(CURRENT_LIST);
-}
-
-function updateGroupToolbar(){
-  $("groupToolbar").style.display = GROUP_MODE?"block":"none";
-  $("groupCount").textContent = SELECTED_RESERVAS.length;
-}
-
-function toggleReservaSeleccion(id){
-  if(SELECTED_RESERVAS.includes(id)){
-    SELECTED_RESERVAS=SELECTED_RESERVAS.filter(x=>x!==id);
-  }else{
-    SELECTED_RESERVAS.push(id);
-  }
-  renderReservas(CURRENT_LIST);
-}
+   ============================================================ */
+function toggleGroupMode(btn){ GROUP_MODE=!GROUP_MODE; MULTI_MODE=false; SELECTED_RESERVAS=[]; btn.classList.toggle("active"); updateGroupToolbar(); renderReservas(CURRENT_LIST); }
+function cancelGroupMode(){ GROUP_MODE=false; SELECTED_RESERVAS=[]; $("groupModeBtn").classList.remove("active"); updateGroupToolbar(); renderReservas(CURRENT_LIST); }
+function updateGroupToolbar(){ $("groupToolbar").style.display=GROUP_MODE?"block":"none"; $("groupCount").textContent=SELECTED_RESERVAS.length; }
+function toggleReservaSeleccion(id){ if(SELECTED_RESERVAS.includes(id)) SELECTED_RESERVAS=SELECTED_RESERVAS.filter(x=>x!==id); else SELECTED_RESERVAS.push(id); renderReservas(CURRENT_LIST); }
 
 async function confirmCreateGroup(){
   if(SELECTED_RESERVAS.length<2){ showToast("Selecciona al menos 2 reservaciones","warning"); return; }
-
-  const ids=[...SELECTED_RESERVAS];
-  const tempId="G-"+Date.now();
-
+  const ids=[...SELECTED_RESERVAS]; const tempId="G-"+Date.now();
   ids.forEach(id=>{ if(HOST_CACHE[id]) HOST_CACHE[id].grupo=tempId; });
-  ACTIVE_GROUP=tempId;
-
-  GROUP_MODE=false;
-  SELECTED_RESERVAS=[];
-  $("groupModeBtn").classList.remove("active");
-  updateGroupToolbar();
-
-  renderReservas(CURRENT_LIST);
-  paintMesas(CURRENT_LIST);
+  ACTIVE_GROUP=tempId; GROUP_MODE=false; SELECTED_RESERVAS=[]; $("groupModeBtn").classList.remove("active"); updateGroupToolbar();
+  renderReservas(CURRENT_LIST); paintMesas(CURRENT_LIST);
   showToast("Grupo creado","success");
-
   api({action:"create_group_host",ids,funcion:$("funcion").value});
   setTimeout(loadReservas,800);
 }
 
 function getReservasGrupo(){
-  if(!ACTIVE_GROUP) return SELECTED_RESERVA_ID ? [HOST_CACHE[SELECTED_RESERVA_ID]].filter(Boolean) : [];
+  if(!ACTIVE_GROUP) return SELECTED_RESERVA_ID?[HOST_CACHE[SELECTED_RESERVA_ID]].filter(Boolean):[];
   return Object.values(HOST_CACHE).filter(r=>(r.grupo||r.id)===ACTIVE_GROUP);
 }
+async function dissolveGroup(){ if(!ACTIVE_GROUP){ showToast("No hay grupo activo","warning"); return; } const res=await api({action:"dissolve_group",groupId:ACTIVE_GROUP,funcion:$("funcion").value}); if(!res.ok){ showToast(res.error||"Error","error",5000); return; } showToast("Grupo disuelto","success"); ACTIVE_GROUP=null; await loadReservas(); }
+async function removeFromGroup(id){ const res=await api({action:"remove_from_group",id,funcion:$("funcion").value}); if(!res.ok){ showToast(res.error||"Error","error",5000); return; } showToast("Reservación separada","success"); if(SELECTED_RESERVA_ID===id) ACTIVE_GROUP=null; await loadReservas(); }
 
-async function dissolveGroup(){
-  if(!ACTIVE_GROUP){ showToast("No hay grupo activo","warning"); return; }
-  const res=await api({action:"dissolve_group",groupId:ACTIVE_GROUP,funcion:$("funcion").value});
-  if(!res.ok){ showToast(res.error||"Error","error",5000); return; }
-  showToast("Grupo disuelto","success");
-  ACTIVE_GROUP=null;
-  await loadReservas();
-}
-
-async function removeFromGroup(id){
-  const res=await api({action:"remove_from_group",id,funcion:$("funcion").value});
-  if(!res.ok){ showToast(res.error||"Error","error",5000); return; }
-  showToast("Reservación separada","success");
-  if(SELECTED_RESERVA_ID===id) ACTIVE_GROUP=null;
-  await loadReservas();
-}
-
-/* 
+/* ============================================================
    CONSUMO
- */
+   ============================================================ */
 async function loadItemsMenu(){
-  const sel = $("itemSelect");
-  if(!sel) return;
+  const sel=$("itemSelect"); if(!sel) return;
 
-  // ✅ usar cache local si ya se cargó
-  if(ITEMS_MENU_CACHE){
-    sel.innerHTML = `<option value="">Seleccionar item</option>`;
-    ITEMS_MENU_CACHE.forEach(i=>{
-      const o = document.createElement("option");
-      o.value = i.nombre;
-      o.textContent = `${i.nombre} ($${i.precio})`;
-      sel.appendChild(o);
-    });
+  // Si el HTML ya está pre-renderizado, inyección instantánea — sin esperar nada
+  if(ITEMS_MENU_OPTIONS_HTML){
+    sel.innerHTML = ITEMS_MENU_OPTIONS_HTML;
     return;
   }
 
-  const data = await api({ action:"get_items_menu" });
-  if(!sel || !data.ok) return;
-
-  ITEMS_MENU_CACHE = data.items; // ✅ guardar en cache
-
-  sel.innerHTML = `<option value="">Seleccionar item</option>`;
-  data.items.forEach(i=>{
-    const o = document.createElement("option");
-    o.value = i.nombre;
-    o.textContent = `${i.nombre} ($${i.precio})`;
-    sel.appendChild(o);
-  });
+  // Fallback: si el preload aún no terminó, hacer la llamada ahora
+  sel.innerHTML = '<option value="">Cargando...</option>';
+  try{
+    const data = await api({ action:"get_items_menu" });
+    if(!sel || !data.ok) return;
+    ITEMS_MENU_CACHE = data.items;
+    ITEMS_MENU_OPTIONS_HTML = '<option value="">Seleccionar item</option>' +
+      data.items.map(i=>`<option value="${i.nombre}">${i.nombre} ($${i.precio})</option>`).join('');
+    sel.innerHTML = ITEMS_MENU_OPTIONS_HTML;
+  }catch(e){
+    sel.innerHTML = '<option value="">Error cargando menú</option>';
+  }
 }
-
 
 async function loadCuentaGrupo(){
-  const grupo = getReservasGrupo();
-  const container = $("cuentaList");
-  if(!container) return;
-
-  // ✅ cargar todas las cuentas en paralelo
-  const resultados = await Promise.all(
-    grupo.map(r => api({ action:"get_cuenta", id:r.id }))
-  );
-
-  let html = "";
-  let totalGrupo = 0;
-
-  resultados.forEach((data, idx) => {
-    const r = grupo[idx];
-    if(!data.ok) return;
-    totalGrupo += data.total || 0;
-
-    html += `
-      <div style="border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;background:rgba(255,255,255,.02);">
-        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-          <strong style="font-size:13px;">${r.cliente}</strong>
-          <span style="color:var(--gold);font-weight:600;">$${data.total.toFixed(2)}</span>
-        </div>
-        ${(data.items||[]).map(i=>`
-          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;gap:8px;">
-            <span>${i.nombre}</span>
-            <div style="display:flex;gap:6px;align-items:center;">
-              <span>$${i.precio.toFixed(2)}</span>
-              <button class="btnMini btnSoftDanger" style="padding:3px 7px;font-size:10px;" onclick="deleteConsumo('${i.id}','${r.id}')">✕</button>
-            </div>
-          </div>`).join("")}
-      </div>`;
+  const grupo=getReservasGrupo(); const container=$("cuentaList"); if(!container) return;
+  const resultados=await Promise.all(grupo.map(r=>api({action:"get_cuenta",id:r.id})));
+  let html=""; let totalGrupo=0;
+  resultados.forEach((data,idx)=>{
+    const r=grupo[idx]; if(!data.ok) return;
+    totalGrupo+=data.total||0;
+    html+=`<div style="border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;background:rgba(255,255,255,.02);">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><strong style="font-size:13px;">${r.cliente}</strong><span style="color:var(--gold);font-weight:600;">$${data.total.toFixed(2)}</span></div>
+      ${(data.items||[]).map(i=>`<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;gap:8px;"><span>${i.nombre}</span><div style="display:flex;gap:6px;align-items:center;"><span>$${i.precio.toFixed(2)}</span><button class="btnMini btnSoftDanger" style="padding:3px 7px;font-size:10px;" onclick="deleteConsumo('${i.id}','${r.id}')">✕</button></div></div>`).join("")}
+    </div>`;
   });
-
-  container.innerHTML = html || `<div style="color:var(--muted);font-size:13px;">Sin consumo adicional</div>`;
-  const totalEl = $("cuentaTotal");
-  if(totalEl) totalEl.textContent = totalGrupo.toFixed(2);
+  container.innerHTML=html||`<div style="color:var(--muted);font-size:13px;">Sin consumo adicional</div>`;
+  const totalEl=$("cuentaTotal"); if(totalEl) totalEl.textContent=totalGrupo.toFixed(2);
 }
-
 
 async function addConsumoFromSelector(){
-  const reservaId=$("reservaSelect")?.value;
-  const item=$("itemSelect")?.value;
+  const reservaId=$("reservaSelect")?.value; const item=$("itemSelect")?.value;
   if(!item){ showToast("Selecciona un item","warning"); return; }
-
   const res=await api({action:"add_consumo",reservationId:reservaId,nombre:item,funcion:$("funcion").value});
   if(!res.ok){ showToast(res.error||"Error","error",5000); return; }
-
-  $("itemSelect").value="";
-  showToast("Consumo añadido","success");
-  loadCuentaGrupo();
+  $("itemSelect").value=""; showToast("Consumo añadido","success"); loadCuentaGrupo();
 }
+async function deleteConsumo(itemId){ const res=await api({action:"delete_consumo",itemId}); if(!res.ok){ showToast(res.error||"Error","error",5000); return; } showToast("Item eliminado","success"); await loadCuentaGrupo(); }
+function handleReservaChange(e){ const label=$("reservaActivaLabel"); if(label) label.textContent=e.target.options[e.target.selectedIndex].text; }
 
-async function deleteConsumo(itemId){
-  const res=await api({action:"delete_consumo",itemId});
-  if(!res.ok){ showToast(res.error||"Error","error",5000); return; }
-  showToast("Item eliminado","success");
-  await loadCuentaGrupo();
-}
-
-function handleReservaChange(e){
-  const label=$("reservaActivaLabel");
-  if(label) label.textContent=e.target.options[e.target.selectedIndex].text;
-}
-
-/* 
+/* ============================================================
    CHECKOUT
- */
-async function checkoutFromSelector(){
-  const reservationId = $("reservaSelect")?.value;
-  if(!reservationId){ showToast("Selecciona una reserva","warning"); return; }
-
+   ============================================================ */
+async function checkoutSingle(reservationId){
   showToast("Procesando cuenta...","warning");
-  const res = await api({ action:"checkout", id:reservationId, funcion:$("funcion").value });
+  const res=await api({action:"checkout",id:reservationId,funcion:$("funcion").value});
   if(!res.ok){ showToast(res.error||"No se pudo hacer checkout","error",5000); return; }
-
-  // ✅ limpiar mesa y estado en cache local
-  if(HOST_CACHE[reservationId]){
-    HOST_CACHE[reservationId].mesa = "";
-    HOST_CACHE[reservationId].estado = "Cerrado";
-    delete SEATED_TIMES[reservationId];
-  }
-
-  SELECTED_MESAS = [];
-  SELECTED_RESERVA_ID = null;
-
-  // ✅ ir a historial
-  CURRENT_TAB = "cerrados";
-  document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
-  $("tabCerrados").classList.add("active");
-
+  if(HOST_CACHE[reservationId]){ HOST_CACHE[reservationId].mesa=""; HOST_CACHE[reservationId].estado="Cerrado"; delete SEATED_TIMES[reservationId]; }
+  SELECTED_MESAS=[]; SELECTED_RESERVA_ID=null; ACTIVE_GROUP=null;
   showToast(`Cuenta cerrada · $${(res.total||0).toFixed(2)}`,"success");
   await loadReservas();
   window.open(`ticket.html?id=${reservationId}`,"_blank");
 }
 
+async function checkoutFromSelector(){
+  const reservationId=$("reservaSelect")?.value;
+  if(!reservationId){ showToast("Selecciona una reserva","warning"); return; }
+  await checkoutSingle(reservationId);
+}
 
 async function checkoutGrupo(){
-  const grupo = getReservasGrupo();
-  if(!grupo.length){ showToast("No hay grupo activo","warning"); return; }
-
+  const grupo=getReservasGrupo(); if(!grupo.length){ showToast("No hay grupo activo","warning"); return; }
   showToast("Procesando grupo...","warning");
-
-  // ✅ checkout en paralelo
-  const resultados = await Promise.all(
-    grupo.map(r => api({ action:"checkout", id:r.id, funcion:$("funcion").value }))
-  );
-
-  let total = 0;
-  resultados.forEach((res, idx) => {
-    if(res.ok){
-      total += res.total || 0;
-      const r = grupo[idx];
-      // ✅ limpiar cache local
-      if(HOST_CACHE[r.id]){
-        HOST_CACHE[r.id].mesa = "";
-        HOST_CACHE[r.id].estado = "Cerrado";
-        delete SEATED_TIMES[r.id];
-      }
-    }
-  });
-
-  SELECTED_MESAS = [];
-  SELECTED_RESERVA_ID = null;
-  ACTIVE_GROUP = null;
-
-  CURRENT_TAB = "cerrados";
-  document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
-  $("tabCerrados").classList.add("active");
-
+  const resultados=await Promise.all(grupo.map(r=>api({action:"checkout",id:r.id,funcion:$("funcion").value})));
+  let total=0;
+  resultados.forEach((res,idx)=>{ if(res.ok){ total+=res.total||0; const r=grupo[idx]; if(HOST_CACHE[r.id]){ HOST_CACHE[r.id].mesa=""; HOST_CACHE[r.id].estado="Cerrado"; delete SEATED_TIMES[r.id]; } } });
+  SELECTED_MESAS=[]; SELECTED_RESERVA_ID=null; ACTIVE_GROUP=null;
   showToast(`Grupo cerrado · $${total.toFixed(2)}`,"success");
   await loadReservas();
   window.open(`ticket.html?id=${grupo[0].id}`,"_blank");
 }
 
-
-/* 
+/* ============================================================
    QR SCANNER
- */
-let qrScanner=null, scanning=false;
-
-function openQR(){
-  $("qrModal").style.display="flex";
-  qrScanner=new Html5Qrcode("qr-reader");
-  qrScanner.start(
-    {facingMode:"environment"},
-    {fps:15, qrbox:(w,h)=>({width:w*.8,height:h*.8})},
-    onScanSuccess
-  ).catch(err=>{ showToast("Error cámara: "+err,"error",5000); });
-}
-
-function closeQR(){
-  $("qrModal").style.display="none";
-  if(qrScanner) qrScanner.stop().then(()=>qrScanner.clear());
-}
-
+   ============================================================ */
+let qrScanner=null,scanning=false;
+function openQR(){ $("qrModal").style.display="flex"; qrScanner=new Html5Qrcode("qr-reader"); qrScanner.start({facingMode:"environment"},{fps:15,qrbox:(w,h)=>({width:w*.8,height:h*.8})},onScanSuccess).catch(err=>{ showToast("Error cámara: "+err,"error",5000); }); }
+function closeQR(){ $("qrModal").style.display="none"; if(qrScanner) qrScanner.stop().then(()=>qrScanner.clear()); }
 async function onScanSuccess(decodedText){
-  if(scanning) return;
-  scanning=true;
-  showToast("Procesando QR...","warning");
-
+  if(scanning) return; scanning=true; showToast("Procesando QR...","warning");
   const res=await api({action:"host_arrive_qr",ticketId:decodedText.trim(),funcion:$("funcion").value});
-
-  if(res.ok){
-    closeQR();
-    showToast(`✔ ${res.cliente} llegó`,"success");
-    const r=HOST_CACHE[decodedText.trim()];
-    if(r){
-      r.estado="Llegó";
-      SELECTED_RESERVA_ID=decodedText.trim();
-      SELECTED_MESAS=sugerirMesas(r.personas||1);
-      renderReservas(CURRENT_LIST);
-      renderDetalle(r);
-      paintMesas(CURRENT_LIST);
-    }
-  }else{
-    showToast("QR inválido o no encontrado","error",5000);
-  }
+  if(res.ok){ closeQR(); showToast(`✔ ${res.cliente} llegó`,"success"); const r=HOST_CACHE[decodedText.trim()]; if(r){ r.estado="Llegó"; SELECTED_RESERVA_ID=decodedText.trim(); SELECTED_MESAS=sugerirMesas(r.personas||1); renderReservas(CURRENT_LIST); renderDetalle(r); paintMesas(CURRENT_LIST); updateHiddenTabNotice(); } }
+  else showToast("QR inválido o no encontrado","error",5000);
   setTimeout(()=>scanning=false,1000);
 }
 
-/* 
+/* ============================================================
    TOAST
- */
+   ============================================================ */
 let toastTimer=null;
-
-function showToast(msg, type="success", duration=null){
-  const t=$("toast");
-  t.textContent=msg;
-  t.className=type;
-  t.style.display="block";
-
+function showToast(msg,type="success",duration=null){
+  const t=$("toast"); t.textContent=msg; t.className=type; t.style.display="block";
   if(toastTimer) clearTimeout(toastTimer);
-  const ms = duration || (type==="error"?5000:2000);
-  toastTimer=setTimeout(()=>{ t.style.display="none"; }, ms);
+  toastTimer=setTimeout(()=>{ t.style.display="none"; },duration||(type==="error"?5000:2500));
 }
-
-/* 
-   BULK ARRIVE (all for a given hora)
- */
-function checkBulkArrive(){
-  // show bulk arrive button if all in a hora have arrived
-  // (called after each state change)
-  const horas={};
-  CURRENT_LIST.forEach(r=>{
-    if(!horas[r.hora]) horas[r.hora]={total:0,arrived:0};
-    horas[r.hora].total++;
-    if(["Llegó","Sentado","Cerrado"].includes(r.estado)) horas[r.hora].arrived++;
-  });
-}
-
 </script>
 
 </body>
