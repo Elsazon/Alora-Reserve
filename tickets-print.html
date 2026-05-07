@@ -487,8 +487,9 @@ function emitPairRow(a, b){
 // ─── MAIN RENDER ───────────────────────────────────────────
 async function init(){
   try{
-    // Función fija: Función 7
-    const funcion = "Función 7";
+    // Lee la función del URL: tickets-print.html?funcion=Función+7
+    const params = new URLSearchParams(window.location.search);
+    const funcion = params.get("funcion") || "Función 7";
     setMsg(`Cargando tickets de ${funcion}...`);
 
     const data = await api({ action:"kitchen_list", funcion });
@@ -567,14 +568,23 @@ async function init(){
     `;
 
     let lastHora = null;
+    let pendingSingle = null;
+
+    function flushPending(){
+      if(pendingSingle !== null){
+        html += emitPairRow(pendingSingle, null);
+        pendingSingle = null;
+      }
+    }
 
     slots.forEach(slot=>{
       const slotHora = slot.type === "single"
         ? slot.covers[0].hora
         : slot.reservations[0][0].hora;
 
-      // Hora separator
+      // Hora separator — flush pending single first
       if(slotHora !== lastHora){
+        flushPending();
         lastHora = slotHora;
         html += `
           <div style="${S.horaBand}">
@@ -584,25 +594,28 @@ async function init(){
       }
 
       if(slot.type === "single"){
-        // Pair singles: collect into pairs of 2
-        // (we handle this below by batching)
-        html += emitPairRow(buildTicketHTML(slot.covers, false), null);
-
+        const tix = buildTicketHTML(slot.covers, false);
+        if(pendingSingle === null){
+          pendingSingle = tix;
+        } else {
+          html += emitPairRow(pendingSingle, tix);
+          pendingSingle = null;
+        }
       } else {
-        // Group banner
+        flushPending();
         html += `
           <div style="${S.groupBanner}">
             🔗 Grupo · ${esc(slot.memberNames.join(" + "))} · ${slot.totalPax} covers
           </div>
         `;
-
-        // Emit group tickets in pairs of 2
         const tixHTML = slot.reservations.map(c=> buildTicketHTML(c, true));
         for(let i = 0; i < tixHTML.length; i += 2){
           html += emitPairRow(tixHTML[i], tixHTML[i+1] || null);
         }
       }
     });
+
+    flushPending();
 
     html += `</div>`;
 
