@@ -79,6 +79,15 @@ body{ font-family:"DM Sans",system-ui,sans-serif; background:var(--bg); color:va
 #ticketView.visible{ display:block; }
 #content.hidden{ display:none; }
 
+/* Ensure ticket view always shows when body has print-tickets class
+   Use !important here at screen level too to win specificity battle */
+body.print-tickets #ticketView{ display:block !important; }
+body.print-tickets #content{ display:none !important; }
+body.print-tickets #summaryBar{ display:none !important; }
+body.print-tickets #groupLegendWrap{ display:none !important; }
+body.print-tickets .topbar{ display:none !important; }
+body.print-tickets .content{ padding:4mm 0 0 !important; max-width:100% !important; }
+
 .ticketGrid{
   display:grid;
   grid-template-columns:repeat(2, 1fr);
@@ -294,15 +303,6 @@ body{ font-family:"DM Sans",system-ui,sans-serif; background:var(--bg); color:va
   body:not(.print-tickets) .stateBox,.spinner{ display:none !important; }
 
   /* ── PRINT — TICKETS ── */
-  body.print-tickets #content,
-  body.print-tickets #summaryBar,
-  body.print-tickets #groupLegendWrap{ display:none !important; }
-
-  body.print-tickets #ticketView{
-    display:block !important;
-  }
-
-  /* 4 tickets per page: 2 col × 2 row grid */
   body.print-tickets .ticketGrid{
     display:grid !important;
     grid-template-columns:repeat(2, 1fr) !important;
@@ -945,9 +945,25 @@ function printExpo(){
 }
 
 function printTickets(){
+  // Make sure tickets are rendered in the DOM first
+  if(LAST_ROWS.length) renderTickets(LAST_ROWS);
+
+  // Add class to body — this makes ticketView visible via CSS
   document.body.classList.add("print-tickets");
-  window.print();
-  document.body.classList.remove("print-tickets");
+
+  // Give the browser 2 frames to re-paint before opening the print dialog
+  // Without this, iOS Safari takes a screenshot before the DOM is ready
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      setTimeout(()=>{
+        window.print();
+        // Remove class after print dialog closes
+        setTimeout(()=>{
+          document.body.classList.remove("print-tickets");
+        }, 500);
+      }, 100);
+    });
+  });
 }
 
 // ── TICKET RENDERING ─────────────────────────────────────────
