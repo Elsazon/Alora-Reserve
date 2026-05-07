@@ -619,7 +619,7 @@ tbody td{
     </div>
     <button class="topbarBtn printBtn" id="printExpoBtn" onclick="printExpo()">🖨 Print Expo</button>
     <button class="topbarBtn printBtn printTicketsBtn" id="printTicketsBtn" onclick="printTickets()" style="display:none">🖨 Print Tickets</button>
-    <button class="topbarBtn" style="background:#3a7d5a;border-color:#3a7d5a;color:white;font-weight:600;" onclick="window.open('tickets-print.html','_blank')">🖨 Imprimir Tickets</button>
+    <button class="topbarBtn" style="background:#3a7d5a;border-color:#3a7d5a;color:white;font-weight:600;" onclick="window.open('tickets-print.html?funcion='+encodeURIComponent(document.getElementById('funcionSelect').value),'_blank')">🖨 Imprimir Tickets</button>
     <div class="timestamp" id="timestamp">—</div>
   </div>
 </div>
