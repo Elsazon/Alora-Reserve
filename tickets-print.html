@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ALORA · Tickets de Servidor</title>
+<script src="./config.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=IBM+Plex+Mono:wght@400;600&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ── SCREEN: loading state only ── */
+body {
+  font-family: "DM Sans", sans-serif;
+  background: #f5f2eb;
+  color: #1a1a18;
+  margin: 0;
+  padding: 0;
+}
+
+#loadingScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 16px;
+}
+
+.loadTitle {
+  font-family: "Playfair Display", serif;
+  font-size: 28px;
+  color: #1a1a18;
+}
+
+.loadSub {
+  font-size: 13px;
+  color: #6b6b62;
+}
+
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid #d8d4c8;
+  border-top-color: #b8922a;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+#errorBox {
+  display: none;
+  max-width: 400px;
+  text-align: center;
+  padding: 20px;
+  background: #fff0f0;
+  border: 1px solid #c85b5b;
+  border-radius: 12px;
+  color: #c85b5b;
+  font-size: 14px;
+  margin: 20px auto;
+}
+
+/* ── PRINT SHEET (hidden on screen, shown on print) ── */
+#printSheet {
+  display: none;
+}
+
+/* ── PRINT STYLES ── */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 8mm;
+  }
+
+  body { margin: 0; padding: 0; background: white; }
+  #loadingScreen { display: none !important; }
+  #printSheet { display: block !important; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- LOADING SCREEN (visible on screen while fetching) -->
+
+<div id="loadingScreen">
+  <div class="loadTitle">ALORA · Tickets</div>
+  <div class="spinner"></div>
+  <div class="loadSub" id="loadMsg">Cargando reservaciones...</div>
+  <div id="errorBox"></div>
+</div>
+
+<!-- PRINT SHEET (only visible when printing) -->
+
+<div id="printSheet"></div>
+
+<script>
+// ─── HELPERS ───────────────────────────────────────────────
+function esc(s){ return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function setMsg(msg){ document.getElementById("loadMsg").textContent = msg; }
+
+function showError(msg){
+  const e = document.getElementById("errorBox");
+  e.textContent = msg;
+  e.style.display = "block";
+  document.querySelector(".spinner").style.display = "none";
+}
+
+async function api(body){
+  const res = await fetch(CONFIG.BACKEND_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ ...body, secret: CONFIG.SECRET })
+  });
+  return await res.json();
+}
+
+// ─── INLINE STYLE CONSTANTS ────────────────────────────────
+// Everything is inline so print cannot override anything
+
+const S = {
+  page: `
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10pt;
+    color: #000;
+    background: white;
+  `,
+
+  // Hora separator band
+  horaBand: `
+    display: table;
+    width: 100%;
+    margin: 6mm 0 3mm 0;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  `,
+  horaBandInner: `
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9pt;
+    font-weight: 600;
+    letter-spacing: 2px;
+    color: #000;
+    border-bottom: 2px solid #000;
+    padding-bottom: 4px;
+    text-transform: uppercase;
+  `,
+
+  // Group banner
+  groupBanner: `
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    background: #e8e8e8;
+    border: 1.5px solid #444;
+    border-radius: 3px;
+    padding: 4px 10px;
+    margin: 3mm 0 2mm 0;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8pt;
+    font-weight: 700;
+    color: #000;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  `,
+
+  // Grid row: 2 tickets side by side
+  gridRow: `
+    display: table;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 5mm 0;
+    margin-bottom: 4mm;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  `,
+  gridCell: `
+    display: table-cell;
+    width: 50%;
+    vertical-align: top;
+  `,
+  gridCellEmpty: `
+    display: table-cell;
+    width: 50%;
+    vertical-align: top;
+  `,
+
+  // Ticket wrapper
+  ticket: `
+    display: block;
+    border: 1.5px solid #333;
+    border-radius: 4px;
+    overflow: hidden;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  `,
+  ticketGrouped: `
+    display: block;
+    border: 1.5px solid #333;
+    border-left: 4px solid #333;
+    border-radius: 4px;
+    overflow: hidden;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  `,
+
+  // Ticket header
+  ticketHeader: `
+    display: table;
+    width: 100%;
+    box-sizing: border-box;
+    background: #1a1a18;
+    padding: 5px 8px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  `,
+  ticketHeaderLeft: `
+    display: table-cell;
+    vertical-align: middle;
+  `,
+  ticketHeaderRight: `
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right;
+    white-space: nowrap;
+    width: 1%;
+    padding-left: 6px;
+  `,
+  ticketName: `
+    font-family: 'Playfair Display', serif;
+    font-size: 11pt;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+    display: block;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  `,
+  ticketMeta: `
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7pt;
+    color: rgba(255,255,255,0.6);
+    display: block;
+    margin-top: 1px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  `,
+  ticketGroupLabel: `
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7pt;
+    color: rgba(255,255,255,0.55);
+    display: block;
+    margin-top: 2px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  `,
+  ticketHora: `
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 8pt;
+    font-weight: 600;
+    color: #ffffff;
+    background: rgba(255,255,255,0.2);
+    padding: 2px 6px;
+    border-radius: 3px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  `,
+  ticketMesa: `
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 7pt;
+    color: rgba(255,255,255,0.6);
+    margin-top: 2px;
+    text-align: right;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  `,
+
+  // Column header row
+  colHeader: `
+    display: table;
+    width: 100%;
+    background: #e8e8e8;
+    border-bottom: 1px solid #ccc;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  `,
+  colHeaderCell: `
+    display: table-cell;
+    padding: 3px 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 6pt;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #555;
+    border-right: 1px solid #ccc;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  `,
+  colHeaderCellName: `
+    display: table-cell;
+    padding: 3px 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 6pt;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #555;
+    border-right: 1px solid #ccc;
+    width: 22%;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  `,
+  colHeaderCellLast: `
+    display: table-cell;
+    padding: 3px 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 6pt;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #555;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  `,
+
+  // Cover row
+  coverRow: `
+    display: table;
+    width: 100%;
+    border-bottom: 1px solid #e0e0e0;
+  `,
+  coverRowLast: `
+    display: table;
+    width: 100%;
+  `,
+  coverCellName: `
+    display: table-cell;
+    width: 22%;
+    padding: 4px 5px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 8pt;
+    font-weight: 700;
+    color: #000;
+    border-right: 1px solid #e0e0e0;
+    vertical-align: top;
+    line-height: 1.3;
+  `,
+  coverCell: `
+    display: table-cell;
+    padding: 4px 5px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 7.5pt;
+    color: #000;
+    border-right: 1px solid #e0e0e0;
+    vertical-align: top;
+    line-height: 1.3;
+  `,
+  coverCellLast: `
+    display: table-cell;
+    padding: 4px 5px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 7.5pt;
+    color: #000;
+    vertical-align: top;
+    line-height: 1.3;
+  `,
+  coverEmpty: `color: #aaa; font-style: italic;`,
+  protein: `
+    display: block;
+    font-size: 6.5pt;
+    font-weight: 700;
+    color: #7a5010;
+    margin-top: 1px;
+  `,
+
+  // Notas
+  notaRow: `
+    display: table;
+    width: 100%;
+    background: #fff8f0;
+    border-top: 1px solid #e0c090;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  `,
+  notaCell: `
+    display: table-cell;
+    padding: 3px 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 7pt;
+    font-weight: 600;
+    color: #7a3a1a;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  `,
+};
+
+// ─── BUILD TICKET HTML ─────────────────────────────────────
+function buildTicketHTML(covers, isGrouped){
+  const r0 = covers[0];
+  const mesaText = r0.mesa ? `Mesa ${r0.mesa}` : "Sin mesa";
+  const ticketStyle = isGrouped ? S.ticketGrouped : S.ticket;
+
+  const groupLabel = isGrouped
+    ? `<span style="${S.ticketGroupLabel}">🔗 mismo grupo</span>`
+    : "";
+
+  // Cover rows
+  const coverRowsHTML = covers.map((c, i) => {
+    const isLast = i === covers.length - 1;
+    const rowStyle = isLast && !r0.notas ? S.coverRowLast : S.coverRow;
+
+    const principal = c.principal
+      ? `${esc(c.principal)}${c.proteina ? `<span style="${S.protein}">▸ ${esc(c.proteina)}</span>` : ""}`
+      : `<span style="${S.coverEmpty}">—</span>`;
+
+    const aperitivo = c.aperitivo
+      ? esc(c.aperitivo)
+      : `<span style="${S.coverEmpty}">—</span>`;
+
+    const postre = c.postre
+      ? esc(c.postre)
+      : `<span style="${S.coverEmpty}">—</span>`;
+
+    return `
+      <div style="${rowStyle}">
+        <div style="${S.coverCellName}">${esc(c.persona||"Invitado")}</div>
+        <div style="${S.coverCell}">${aperitivo}</div>
+        <div style="${S.coverCell}">${principal}</div>
+        <div style="${S.coverCellLast}">${postre}</div>
+      </div>
+    `;
+  }).join("");
+
+  // Notas row
+  const notasHTML = r0.notas ? `
+    <div style="${S.notaRow}">
+      <div style="${S.notaCell}">⚠ ${esc(r0.notas)}</div>
+    </div>
+  ` : "";
+
+  return `
+    <div style="${ticketStyle}">
+      <div style="${S.ticketHeader}">
+        <div style="${S.ticketHeaderLeft}">
+          <span style="${S.ticketName}">${esc(r0.reserva)}</span>
+          <span style="${S.ticketMeta}">#${esc(r0.reservaId)} · ${covers.length} pax</span>
+          ${groupLabel}
+        </div>
+        <div style="${S.ticketHeaderRight}">
+          <span style="${S.ticketHora}">${esc(r0.hora||"—")}</span>
+          <span style="${S.ticketMesa}">${esc(mesaText)}</span>
+        </div>
+      </div>
+      <div style="${S.colHeader}">
+        <div style="${S.colHeaderCellName}">Persona</div>
+        <div style="${S.colHeaderCell}">Aperitivo</div>
+        <div style="${S.colHeaderCell}">Principal</div>
+        <div style="${S.colHeaderCellLast}">Postre</div>
+      </div>
+      ${coverRowsHTML}
+      ${notasHTML}
+    </div>
+  `;
+}
+
+// ─── EMIT PAIR ROW ─────────────────────────────────────────
+// Takes up to 2 ticket HTML strings and wraps them in a 2-col table row
+function emitPairRow(a, b){
+  const bCell = b
+    ? `<div style="${S.gridCell}">${b}</div>`
+    : `<div style="${S.gridCellEmpty}"></div>`;
+
+  return `
+    <div style="${S.gridRow}">
+      <div style="${S.gridCell}">${a}</div>
+      ${bCell}
+    </div>
+  `;
+}
+
+// ─── MAIN RENDER ───────────────────────────────────────────
+async function init(){
+  try{
+    setMsg("Cargando funciones...");
+    const fData = await api({ action:"funciones" });
+    if(!fData.ok || !fData.funciones?.length){
+      showError("No se encontraron funciones activas.");
+      return;
+    }
+
+    // Use most recent función (last in list)
+    const funcion = fData.funciones[fData.funciones.length - 1];
+    setMsg(`Cargando tickets de ${funcion}...`);
+
+    const data = await api({ action:"kitchen_list", funcion });
+    if(!data.ok){
+      showError(data.error || "Error cargando datos");
+      return;
+    }
+
+    const rows = data.rows || [];
+    if(!rows.length){
+      showError(`No hay reservaciones para ${funcion}`);
+      return;
+    }
+
+    setMsg("Generando tickets...");
+
+    // ── Group covers by reservation ──
+    const byReserva = {};
+    rows.forEach(r=>{
+      const key = r.reservaId + "||" + r.reserva;
+      if(!byReserva[key]) byReserva[key] = [];
+      byReserva[key].push(r);
+    });
+
+    // ── Sort by hora then name ──
+    const sortedKeys = Object.keys(byReserva).sort((a,b)=>{
+      const ha = byReserva[a][0].hora || "";
+      const hb = byReserva[b][0].hora || "";
+      if(ha !== hb) return ha.localeCompare(hb);
+      return (byReserva[a][0].reserva||"").localeCompare(byReserva[b][0].reserva||"");
+    });
+
+    // ── Build slots (grouped reservations stay together) ──
+    const slots = [];
+    const processed = new Set();
+
+    sortedKeys.forEach(key=>{
+      if(processed.has(key)) return;
+      const r0 = byReserva[key][0];
+      const grupoId = r0.grupo;
+
+      if(!grupoId){
+        slots.push({ type:"single", covers: byReserva[key] });
+        processed.add(key);
+      } else {
+        const gKeys = sortedKeys.filter(k=>
+          !processed.has(k) && byReserva[k][0].grupo === grupoId
+        );
+        const memberNames = gKeys.map(k=> byReserva[k][0].reserva);
+        const totalPax = gKeys.reduce((s,k)=>s+byReserva[k].length, 0);
+        slots.push({
+          type:"group",
+          grupoId,
+          memberNames,
+          totalPax,
+          reservations: gKeys.map(k=> byReserva[k])
+        });
+        gKeys.forEach(k=> processed.add(k));
+      }
+    });
+
+    // ── Build HTML ──
+    let html = `<div style="${S.page}">`;
+
+    // Header
+    html += `
+      <div style="margin-bottom:5mm;border-bottom:2px solid #000;padding-bottom:4px;display:table;width:100%;">
+        <div style="display:table-cell;vertical-align:bottom;">
+          <span style="font-family:'Playfair Display',serif;font-size:14pt;font-weight:700;color:#000;">ALORA</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:8pt;color:#555;margin-left:10px;">Tickets de Servidor · ${esc(funcion)}</span>
+        </div>
+        <div style="display:table-cell;vertical-align:bottom;text-align:right;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:7pt;color:#888;">${new Date().toLocaleString("es-PR")}</span>
+        </div>
+      </div>
+    `;
+
+    let lastHora = null;
+
+    slots.forEach(slot=>{
+      const slotHora = slot.type === "single"
+        ? slot.covers[0].hora
+        : slot.reservations[0][0].hora;
+
+      // Hora separator
+      if(slotHora !== lastHora){
+        lastHora = slotHora;
+        html += `
+          <div style="${S.horaBand}">
+            <div style="${S.horaBandInner}">⏰ ${esc(slotHora||"Sin hora")}</div>
+          </div>
+        `;
+      }
+
+      if(slot.type === "single"){
+        // Pair singles: collect into pairs of 2
+        // (we handle this below by batching)
+        html += emitPairRow(buildTicketHTML(slot.covers, false), null);
+
+      } else {
+        // Group banner
+        html += `
+          <div style="${S.groupBanner}">
+            🔗 Grupo · ${esc(slot.memberNames.join(" + "))} · ${slot.totalPax} covers
+          </div>
+        `;
+
+        // Emit group tickets in pairs of 2
+        const tixHTML = slot.reservations.map(c=> buildTicketHTML(c, true));
+        for(let i = 0; i < tixHTML.length; i += 2){
+          html += emitPairRow(tixHTML[i], tixHTML[i+1] || null);
+        }
+      }
+    });
+
+    html += `</div>`;
+
+    // ── Inject into print sheet ──
+    document.getElementById("printSheet").innerHTML = html;
+
+    // ── Auto print after fonts load ──
+    setMsg("Listo — abriendo impresora...");
+    setTimeout(()=>{
+      window.print();
+    }, 800);
+
+  }catch(e){
+    showError("Error: " + e.message);
+  }
+}
+
+// Wait for fonts then run
+document.fonts.ready.then(init).catch(()=>init());
+</script>
+
+</body>
+</html>
