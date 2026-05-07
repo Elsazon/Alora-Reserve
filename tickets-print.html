@@ -487,15 +487,8 @@ function emitPairRow(a, b){
 // ─── MAIN RENDER ───────────────────────────────────────────
 async function init(){
   try{
-    setMsg("Cargando funciones...");
-    const fData = await api({ action:"funciones" });
-    if(!fData.ok || !fData.funciones?.length){
-      showError("No se encontraron funciones activas.");
-      return;
-    }
-
-    // Use most recent función (last in list)
-    const funcion = fData.funciones[fData.funciones.length - 1];
+    // Función fija: Función 7
+    const funcion = "Función 7";
     setMsg(`Cargando tickets de ${funcion}...`);
 
     const data = await api({ action:"kitchen_list", funcion });
