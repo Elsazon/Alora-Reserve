@@ -668,7 +668,21 @@ async function silentRefresh(){
     $("coversTotal").textContent=data.coversTotal||0;
     $("coversArrived").textContent=data.coversArrived||0;
     $("coversPending").textContent=data.coversPending||0;
-    CURRENT_LIST=(data.reservas||[]);
+
+    // FIX BUG #1 — apply pending local overrides BEFORE updating CURRENT_LIST
+    // If the host just freed a mesa, the server snapshot may still show it occupied
+    // (Notion API cache = 30s). We protect our local state until server confirms.
+    const reservas = data.reservas || [];
+    reservas.forEach(r=>{
+      if(PENDING_MESA_LIBERADAS.has(r.id)){
+        r.mesa = "";
+        // Keep whatever local estado we set — don't let stale snapshot overwrite it
+        const local = HOST_CACHE[r.id];
+        if(local) r.estado = local.estado;
+      }
+    });
+
+    CURRENT_LIST=reservas;
     renderMapBase();
     renderReservas(CURRENT_LIST);
     paintMesas(CURRENT_LIST);
@@ -677,14 +691,10 @@ async function silentRefresh(){
       const found=CURRENT_LIST.find(r=>r.id===SELECTED_RESERVA_ID);
       if(found){
         HOST_CACHE[found.id]=found;
-        // Only re-render detalle if host is NOT actively using the consumo dropdown
-        // renderDetalle wipes innerHTML including itemSelect — we restore it after
         const itemSel=$("itemSelect");
         const hadValue = itemSel ? itemSel.value : "";
         renderDetalle(found);
-        // Re-populate menu instantly from cache (no API call)
         loadItemsMenu();
-        // Re-load cuenta in background
         setTimeout(loadCuentaGrupo, 0);
       }
     }
@@ -788,7 +798,18 @@ async function loadReservas(){
     $("coversTotal").textContent=data.coversTotal||0;
     $("coversArrived").textContent=data.coversArrived||0;
     $("coversPending").textContent=data.coversPending||0;
-    CURRENT_LIST=(data.reservas||[]);
+
+    // Protect pending local liberations from being overwritten by stale server data
+    const reservas=data.reservas||[];
+    reservas.forEach(r=>{
+      if(PENDING_MESA_LIBERADAS.has(r.id)){
+        r.mesa="";
+        const local=HOST_CACHE[r.id];
+        if(local) r.estado=local.estado;
+      }
+    });
+
+    CURRENT_LIST=reservas;
     // Seed SEATED_TIMES for already-seated reservations so timer shows on load/refresh
     CURRENT_LIST.forEach(r=>{
       if(r.estado==="Sentado" && !SEATED_TIMES[r.id]) SEATED_TIMES[r.id]=Date.now();
@@ -1458,18 +1479,50 @@ async function assignSuggested(id){
   showToast(`Mesa ${mesaString} asignada — ver en Sentados`,"success");
 }
 
+/* ============================================================
+   PENDING OPERATIONS — protects optimistic updates from
+   being overwritten by stale server snapshots.
+   When the host frees a mesa, we track it here until the
+   server confirms the change (next successful API write).
+   ============================================================ */
+const PENDING_MESA_LIBERADAS = new Set(); // reservation IDs with local-only mesa clear
+
 async function liberarMesa(id){
   const r=HOST_CACHE[id];
-  const newEstado=r?.estado==="Sentado"?"Llegó":"Pendiente";
-  if(HOST_CACHE[id]){ HOST_CACHE[id].mesa=""; HOST_CACHE[id].estado=newEstado; }
-  delete SEATED_TIMES[id];
-  // ── CHANGED: no tab switch
-  renderReservas(CURRENT_LIST); const updated=HOST_CACHE[id];
+  if(!r){ showToast("Reserva no encontrada","warning"); return; }
+  const newEstado=r.estado==="Sentado"?"Llegó":"Pendiente";
+  const mesaAnterior=r.mesa||"";
+
+  // FIX BUG #2 — clear mesa for ALL reservations in the group, not just this one
+  // When a group shares a joined table, all members need their mesa cleared
+  const grupoId=r.grupo||r.id;
+  const afectadas=Object.values(HOST_CACHE).filter(x=>(x.grupo||x.id)===grupoId);
+
+  afectadas.forEach(x=>{
+    x.mesa="";
+    x.estado=(x.estado==="Sentado"?"Llegó":"Pendiente");
+    delete SEATED_TIMES[x.id];
+    // FIX BUG #1 — mark as pending so silentRefresh won't overwrite it
+    PENDING_MESA_LIBERADAS.add(x.id);
+  });
+
+  renderReservas(CURRENT_LIST);
+  const updated=HOST_CACHE[id];
   if(updated) renderDetalle(updated);
-  paintMesas(CURRENT_LIST); drawConnectionLines();
+  paintMesas(CURRENT_LIST);
+  drawConnectionLines();
   updateHiddenTabNotice();
-  api({action:"host_update",id,mesa:"",estado:newEstado,funcion:$("funcion").value});
-  showToast("Mesa liberada","success");
+
+  // Fire API calls for all affected — fire-and-forget, remove from pending on success
+  const calls=afectadas.map(x=>
+    api({action:"host_update",id:x.id,mesa:"",estado:x.estado,funcion:$("funcion").value})
+      .then(()=>{ PENDING_MESA_LIBERADAS.delete(x.id); })
+      .catch(()=>{ /* will retry on next silentRefresh */ })
+  );
+  Promise.all(calls);
+
+  const label=afectadas.length>1?`${afectadas.length} reservas liberadas`:"Mesa liberada";
+  showToast(`${label}${mesaAnterior?" · "+mesaAnterior:""}`, "success");
 }
 
 /* ============================================================
