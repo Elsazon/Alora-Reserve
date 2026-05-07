@@ -271,6 +271,23 @@ body.print-tickets .content{ padding:4mm 0 0 !important; max-width:100% !importa
 @media print{
   @page{ margin:10mm 8mm; size:A4 portrait; }
 
+  /* Universal reset for readability */
+  *{
+    box-shadow:none !important;
+    text-shadow:none !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  /* Expo line elements go black on white */
+  .summaryChip, .hourBlock, table, thead, tbody, td, th,
+  .resCell, .resId, .personCell, .courseCell, .proteinaBadge,
+  .notasCallout, .dividerRow, .groupLegend{
+    color:black !important;
+    background:white !important;
+    border-color:#999 !important;
+  }
+
   /* always hide topbar and controls */
   .topbar{ display:none !important; }
   .content{ padding:4mm 0 0 !important; max-width:100% !important; }
@@ -306,9 +323,17 @@ body.print-tickets .content{ padding:4mm 0 0 !important; max-width:100% !importa
   body.print-tickets .ticketGrid{
     display:grid !important;
     grid-template-columns:repeat(2, 1fr) !important;
-    gap:6mm !important;
+    gap:5mm !important;
     padding:0 !important;
     width:100% !important;
+    align-items:start !important;
+  }
+
+  body.print-tickets .groupTicketBanner{
+    margin-top:0 !important;
+    padding:4px 10px !important;
+    font-size:9px !important;
+    border-radius:3px !important;
   }
 
   /* Group banner spans both columns */
@@ -342,25 +367,29 @@ body.print-tickets .content{ padding:4mm 0 0 !important; max-width:100% !importa
     padding:6px 10px !important;
   }
 
-  body.print-tickets .ticketName{
-    font-size:12px !important;
+  /* Explicitly set ALL text inside ticket header to white — beats any reset */
+  body.print-tickets .ticketHeader,
+  body.print-tickets .ticketHeader div,
+  body.print-tickets .ticketHeader span,
+  body.print-tickets .ticketName,
+  body.print-tickets .ticketMeta,
+  body.print-tickets .ticketMesa,
+  body.print-tickets .ticketGroupBand{
     color:white !important;
     -webkit-print-color-adjust:exact;
     print-color-adjust:exact;
   }
-  body.print-tickets .ticketMeta{ color:rgba(255,255,255,.6) !important; font-size:8px !important; }
+
   body.print-tickets .ticketHora{
-    background:rgba(255,255,255,.2) !important;
+    background:#444 !important;
     color:white !important;
     font-size:9px !important;
+    border-color:#444 !important;
     -webkit-print-color-adjust:exact;
     print-color-adjust:exact;
   }
-  body.print-tickets .ticketMesa{ color:rgba(255,255,255,.65) !important; font-size:8px !important; }
-  body.print-tickets .ticketGroupBand{
-    -webkit-print-color-adjust:exact;
-    print-color-adjust:exact;
-  }
+
+  body.print-tickets .ticketName{ font-size:11px !important; font-weight:700 !important; }
 
   body.print-tickets .ticketColHeader{
     background:#e8e8e8 !important;
