@@ -329,6 +329,12 @@ body.print-tickets .content{ padding:4mm 0 0 !important; max-width:100% !importa
     align-items:start !important;
   }
 
+  body.print-tickets .horaBand{
+    grid-column:1/-1 !important;
+    margin-top:3mm !important;
+    margin-bottom:1mm !important;
+  }
+
   body.print-tickets .groupTicketBanner{
     margin-top:0 !important;
     padding:4px 10px !important;
@@ -1056,7 +1062,46 @@ function renderTickets(rows){
   const grid = document.getElementById("ticketGrid");
   grid.innerHTML = "";
 
+  let lastHora = null;
+
   slots.forEach(slot=>{
+    // Get the hora of this slot
+    const slotHora = slot.type === "single"
+      ? slot.covers[0].hora
+      : slot.reservations[0][0].hora;
+
+    // Insert hora separator band when hora changes
+    if(slotHora !== lastHora){
+      lastHora = slotHora;
+      const horaBand = document.createElement("div");
+      horaBand.className = "horaBand";
+      horaBand.style.cssText = `
+        grid-column:1/-1;
+        display:flex;
+        align-items:center;
+        gap:12px;
+        margin-top:${grid.children.length === 0 ? "0" : "8px"};
+        margin-bottom:4px;
+      `;
+      horaBand.innerHTML = `
+        <div style="flex:1;height:1px;background:var(--line);"></div>
+        <div style="
+          font-family:'IBM Plex Mono',monospace;
+          font-size:11px;
+          font-weight:600;
+          color:var(--ink);
+          letter-spacing:1.5px;
+          background:var(--bg);
+          padding:4px 12px;
+          border:1px solid var(--line);
+          border-radius:999px;
+          white-space:nowrap;
+        ">⏰ ${esc(slotHora||"Sin hora")}</div>
+        <div style="flex:1;height:1px;background:var(--line);"></div>
+      `;
+      grid.appendChild(horaBand);
+    }
+
     if(slot.type === "single"){
       grid.appendChild(buildTicket(slot.covers, null, null));
     } else {
@@ -1108,6 +1153,9 @@ function buildTicket(covers, grupoId, groupColor){
   // ── HEADER ──
   const header = document.createElement("div");
   header.className = "ticketHeader";
+  // Inline styles as backup — print CSS resets can override class-based colors
+  // but inline styles have highest specificity and survive
+  header.style.cssText = "background:#1a1a18;color:#f5f2eb;padding:10px 14px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;";
 
   // If grouped, show partner names under the main name
   const partnersHtml = groupColor && grupoId
@@ -1120,14 +1168,14 @@ function buildTicket(covers, grupoId, groupColor){
     : "";
 
   header.innerHTML = `
-    <div style="flex:1;min-width:0;">
-      <div class="ticketName">${esc(r0.reserva)}</div>
-      <div class="ticketMeta">#${esc(r0.reservaId)} · ${covers.length} pax</div>
+    <div style="flex:1;min-width:0;color:#f5f2eb;">
+      <div class="ticketName" style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;line-height:1.2;color:#f5f2eb;">${esc(r0.reserva)}</div>
+      <div class="ticketMeta" style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(245,242,235,.6);margin-top:3px;">#${esc(r0.reservaId)} · ${covers.length} pax</div>
       ${partnersHtml}
     </div>
-    <div class="ticketBadges">
-      <div class="ticketHora">${esc(r0.hora||"—")}</div>
-      <div class="ticketMesa">${esc(mesaText)}</div>
+    <div class="ticketBadges" style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
+      <div class="ticketHora" style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;background:rgba(255,255,255,.18);padding:3px 8px;border-radius:5px;color:#f5f2eb;white-space:nowrap;">${esc(r0.hora||"—")}</div>
+      <div class="ticketMesa" style="font-size:9px;color:rgba(245,242,235,.65);font-family:'IBM Plex Mono',monospace;">${esc(mesaText)}</div>
     </div>
   `;
   ticket.appendChild(header);
