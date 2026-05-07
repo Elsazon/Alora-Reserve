@@ -258,66 +258,132 @@ body{ font-family:"DM Sans",system-ui,sans-serif; background:var(--bg); color:va
   line-height:1.5;
 }
 
-/* ── PRINT — TICKETS ── */
+/* ── PRINT — EXPO LINE (default) ── */
 @media print{
-  /* When printing tickets, hide expo line and show tickets full-page */
+  @page{ margin:10mm 8mm; size:A4 portrait; }
+
+  /* always hide topbar and controls */
+  .topbar{ display:none !important; }
+  .content{ padding:4mm 0 0 !important; max-width:100% !important; }
+
+  /* expo line print styles */
+  body:not(.print-tickets) .summaryBar{ gap:6px; margin-bottom:8px; }
+  body:not(.print-tickets) .summaryChip{ border:1px solid #888 !important; padding:5px 10px; min-width:90px; }
+  body:not(.print-tickets) .chipLabel{ font-size:8px; color:#555 !important; letter-spacing:1px; }
+  body:not(.print-tickets) .chipValue{ font-size:17px; color:black !important; font-weight:700; }
+  body:not(.print-tickets) .groupLegend{ display:none !important; }
+  body:not(.print-tickets) .hourBlock{ border:1.5px solid black !important; margin-bottom:14px; page-break-before:always; break-before:always; }
+  body:not(.print-tickets) .hourBlock:first-of-type{ page-break-before:auto; break-before:auto; }
+  body:not(.print-tickets) .hourHeader{ background:white !important; border-bottom:2px solid black !important; padding:7px 12px; }
+  body:not(.print-tickets) .hourLabel{ font-size:14px; font-weight:700; color:black !important; }
+  body:not(.print-tickets) .hourBadge{ background:white !important; border:1px solid #666 !important; color:black !important; font-size:9px; padding:3px 8px; }
+  body:not(.print-tickets) thead th{ background:#e8e8e8 !important; color:black !important; border-bottom:1.5px solid black !important; padding:5px 10px; font-size:8px; letter-spacing:1.5px; }
+  body:not(.print-tickets) tbody td{ padding:6px 10px; color:black !important; border-bottom:1px solid #ccc !important; }
+  body:not(.print-tickets) .tableWrap{ overflow:visible !important; }
+  body:not(.print-tickets) .resCell{ font-weight:700; color:black !important; }
+  body:not(.print-tickets) .resId{ color:#555 !important; font-size:8px; }
+  body:not(.print-tickets) .courseCell.empty{ color:#aaa !important; }
+  body:not(.print-tickets) .proteinaBadge{ background:white !important; border:none !important; color:black !important; font-size:10px; font-weight:700; padding:0 !important; margin-left:4px !important; }
+  body:not(.print-tickets) .proteinaBadge::before{ content:"["; }
+  body:not(.print-tickets) .proteinaBadge::after{ content:"]"; }
+  body:not(.print-tickets) .notasCallout{ background:white !important; border-left:3px solid black !important; color:black !important; padding:5px 10px; font-size:10px; font-weight:600; }
+  body:not(.print-tickets) .notasIcon{ display:none; }
+  body:not(.print-tickets) .notasCallout::before{ content:"⚠ NOTA: "; font-weight:700; }
+  body:not(.print-tickets) .dividerRow td{ background:#f0f0f0 !important; height:4px; }
+  body:not(.print-tickets) #ticketView{ display:none !important; }
+  body:not(.print-tickets) .stateBox,.spinner{ display:none !important; }
+
+  /* ── PRINT — TICKETS ── */
   body.print-tickets #content,
-  body.print-tickets .summaryBar,
-  body.print-tickets #groupLegendWrap,
-  body.print-tickets .topbar{ display:none !important; }
+  body.print-tickets #summaryBar,
+  body.print-tickets #groupLegendWrap{ display:none !important; }
 
-  body.print-tickets #ticketView{ display:block !important; }
-  body.print-tickets .content{ padding:0 !important; }
+  body.print-tickets #ticketView{
+    display:block !important;
+  }
 
-  /* 4 tickets per page: 2 columns × 2 rows */
+  /* 4 tickets per page: 2 col × 2 row grid */
   body.print-tickets .ticketGrid{
     display:grid !important;
-    grid-template-columns:repeat(2,1fr) !important;
-    gap:8mm !important;
+    grid-template-columns:repeat(2, 1fr) !important;
+    gap:6mm !important;
     padding:0 !important;
+    width:100% !important;
+  }
+
+  /* Group banner spans both columns */
+  body.print-tickets .groupTicketBanner{
+    grid-column: 1 / -1 !important;
+    background:#e8e8e8 !important;
+    border:1.5px solid #444 !important;
+    border-radius:4px !important;
+    color:black !important;
+    font-size:10px !important;
+    padding:5px 10px !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+    break-before:auto;
+    page-break-before:auto;
   }
 
   body.print-tickets .ticket{
     border:1px solid #888 !important;
-    border-radius:6px !important;
+    border-radius:4px !important;
     box-shadow:none !important;
     break-inside:avoid !important;
     page-break-inside:avoid !important;
-  }
-
-  /* Force new page every 4 tickets */
-  body.print-tickets .ticket:nth-child(4n+1){
-    page-break-before:auto;
-  }
-  body.print-tickets .ticket:nth-child(5){
-    page-break-before:always;
+    overflow:hidden !important;
   }
 
   body.print-tickets .ticketHeader{
     background:#1a1a18 !important;
     -webkit-print-color-adjust:exact;
     print-color-adjust:exact;
-    padding:8px 12px !important;
+    padding:6px 10px !important;
   }
 
-  body.print-tickets .ticketName{ font-size:13px !important; color:white !important; }
-  body.print-tickets .ticketMeta{ color:rgba(255,255,255,.55) !important; }
-  body.print-tickets .ticketHora{ background:rgba(255,255,255,.15) !important; color:white !important; font-size:10px !important; }
-  body.print-tickets .ticketMesa{ color:rgba(255,255,255,.6) !important; }
+  body.print-tickets .ticketName{
+    font-size:12px !important;
+    color:white !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  body.print-tickets .ticketMeta{ color:rgba(255,255,255,.6) !important; font-size:8px !important; }
+  body.print-tickets .ticketHora{
+    background:rgba(255,255,255,.2) !important;
+    color:white !important;
+    font-size:9px !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  body.print-tickets .ticketMesa{ color:rgba(255,255,255,.65) !important; font-size:8px !important; }
+  body.print-tickets .ticketGroupBand{
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
 
-  body.print-tickets .ticketColHeader{ background:#e8e8e8 !important; }
-  body.print-tickets .ticketColHeader div{ color:#444 !important; border-color:#ccc !important; }
-
-  body.print-tickets .ticketCoverName{ background:#f4f4f4 !important; border-color:#ccc !important; font-size:10px !important; }
+  body.print-tickets .ticketColHeader{
+    background:#e8e8e8 !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  body.print-tickets .ticketColHeader div{ color:#555 !important; border-color:#ccc !important; font-size:7px !important; }
+  body.print-tickets .ticketCoverName{ background:#f2f2f2 !important; border-color:#ccc !important; font-size:9px !important; padding:5px 7px !important; }
   body.print-tickets .ticketCover{ border-color:#ccc !important; }
-  body.print-tickets .ticketCourse{ border-color:#ccc !important; }
-  body.print-tickets .ticketCourseLabel{ color:#666 !important; }
-  body.print-tickets .ticketCourseVal{ font-size:9px !important; }
-  body.print-tickets .ticketProtein{ color:#8a6a1a !important; }
-  body.print-tickets .ticketNotas{ background:#fff8f0 !important; border-color:#c26a4a !important; color:#7a3a1a !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body.print-tickets .ticketCourse{ border-color:#ccc !important; padding:5px 6px !important; }
+  body.print-tickets .ticketCourseVal{ font-size:8px !important; }
+  body.print-tickets .ticketCourseVal.empty{ color:#aaa !important; }
+  body.print-tickets .ticketProtein{ font-size:7px !important; color:#6a4a0a !important; }
+  body.print-tickets .ticketNotas{
+    background:#fff5ee !important;
+    color:#7a3a1a !important;
+    font-size:8px !important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
 
-  /* hide print buttons etc when printing */
-  body.print-tickets .printTicketsBtn{ display:none !important; }
+  body.print-tickets .printTicketsBtn,
+  body.print-tickets .viewToggle{ display:none !important; }
 }
 
 /* ── CONTENT ── */
@@ -886,7 +952,17 @@ function printTickets(){
 
 // ── TICKET RENDERING ─────────────────────────────────────────
 function renderTickets(rows){
-  // Group all covers by reservation ID
+  // Same group color map as expo line
+  const grupoColorMap = {};
+  let colorIdx = 0;
+  rows.forEach(r=>{
+    if(r.grupo && !grupoColorMap[r.grupo]){
+      grupoColorMap[r.grupo] = GROUP_COLORS[colorIdx % GROUP_COLORS.length];
+      colorIdx++;
+    }
+  });
+
+  // Group covers by reservation key
   const byReserva = {};
   rows.forEach(r=>{
     const key = r.reservaId + "||" + r.reserva;
@@ -894,88 +970,165 @@ function renderTickets(rows){
     byReserva[key].push(r);
   });
 
-  // Sort reservations by hora then name
-  const reservaList = Object.values(byReserva).sort((a,b)=>{
-    const horaA = a[0].hora || "";
-    const horaB = b[0].hora || "";
-    if(horaA !== horaB) return horaA.localeCompare(horaB);
-    return (a[0].reserva||"").localeCompare(b[0].reserva||"");
+  // Sort keys by hora then name
+  const sortedKeys = Object.keys(byReserva).sort((a,b)=>{
+    const ha = byReserva[a][0].hora || "";
+    const hb = byReserva[b][0].hora || "";
+    if(ha !== hb) return ha.localeCompare(hb);
+    return (byReserva[a][0].reserva||"").localeCompare(byReserva[b][0].reserva||"");
+  });
+
+  // Build slots: group reservations with same grupoId together
+  const slots = [];
+  const processedKeys = new Set();
+
+  sortedKeys.forEach(key=>{
+    if(processedKeys.has(key)) return;
+    const r0 = byReserva[key][0];
+    const grupoId = r0.grupo;
+
+    if(!grupoId){
+      slots.push({ type:"single", covers: byReserva[key] });
+      processedKeys.add(key);
+    } else {
+      const groupKeys = sortedKeys.filter(k=>
+        !processedKeys.has(k) && byReserva[k][0].grupo === grupoId
+      );
+      const memberNames = groupKeys.map(k=> byReserva[k][0].reserva);
+      const totalPax = groupKeys.reduce((s,k)=>s+byReserva[k].length, 0);
+      slots.push({
+        type: "group",
+        grupoId,
+        color: grupoColorMap[grupoId] || GROUP_COLORS[0],
+        memberNames,
+        totalPax,
+        reservations: groupKeys.map(k=> byReserva[k])
+      });
+      groupKeys.forEach(k=> processedKeys.add(k));
+    }
   });
 
   const grid = document.getElementById("ticketGrid");
   grid.innerHTML = "";
 
-  reservaList.forEach(covers=>{
-    const r0 = covers[0];
-    const ticket = document.createElement("div");
-    ticket.className = "ticket";
+  slots.forEach(slot=>{
+    if(slot.type === "single"){
+      grid.appendChild(buildTicket(slot.covers, null, null));
+    } else {
+      // ── Group banner spanning both columns ──
+      const c = slot.color;
+      const banner = document.createElement("div");
+      banner.className = "groupTicketBanner";
+      banner.style.cssText = `
+        grid-column:1/-1;
+        background:${c.bg};
+        border:1.5px solid ${c.border};
+        border-radius:8px;
+        padding:8px 14px;
+        display:flex;
+        align-items:center;
+        gap:10px;
+        font-size:12px;
+        font-weight:700;
+        color:${c.text};
+        margin-top:12px;
+        letter-spacing:.2px;
+      `;
+      banner.innerHTML = `
+        <span style="font-size:16px;flex-shrink:0">🔗</span>
+        <span>Grupo · ${esc(slot.memberNames.join(" + "))} · ${slot.totalPax} covers</span>
+      `;
+      grid.appendChild(banner);
 
-    // Group indicator
-    const grupoTag = r0.grupo
-      ? `<div class="ticketGroupTag">🔗 Grupo</div>`
-      : "";
+      // Each reservation in the group with matching left-border color
+      slot.reservations.forEach(covers=>{
+        grid.appendChild(buildTicket(covers, slot.grupoId, slot.color));
+      });
+    }
+  });
+}
 
-    // Mesa display
-    const mesaText = r0.mesa ? `Mesa ${r0.mesa}` : "Sin mesa";
+function buildTicket(covers, grupoId, groupColor){
+  const r0 = covers[0];
+  const mesaText = r0.mesa ? `Mesa ${r0.mesa}` : "Sin mesa";
 
-    // Build header
-    ticket.innerHTML = `
-      <div class="ticketHeader">
-        <div>
-          <div class="ticketName">${esc(r0.reserva)}</div>
-          <div class="ticketMeta">#${esc(r0.reservaId)} · ${covers.length} pax</div>
-          ${grupoTag}
-        </div>
-        <div class="ticketBadges">
-          <div class="ticketHora">${esc(r0.hora||"—")}</div>
-          <div class="ticketMesa">${esc(mesaText)}</div>
-        </div>
+  const ticket = document.createElement("div");
+  ticket.className = "ticket";
+
+  // Colored left border for grouped tickets
+  if(groupColor){
+    ticket.style.borderLeft = `4px solid ${groupColor.solid}`;
+  }
+
+  // ── HEADER ──
+  const header = document.createElement("div");
+  header.className = "ticketHeader";
+
+  // If grouped, show partner names under the main name
+  const partnersHtml = groupColor && grupoId
+    ? `<div class="ticketGroupBand" style="
+        margin-top:4px;font-size:9px;
+        color:rgba(255,255,255,.65);
+        display:flex;align-items:center;gap:4px;">
+        <span style="font-size:10px">🔗</span> mismo grupo
+      </div>`
+    : "";
+
+  header.innerHTML = `
+    <div style="flex:1;min-width:0;">
+      <div class="ticketName">${esc(r0.reserva)}</div>
+      <div class="ticketMeta">#${esc(r0.reservaId)} · ${covers.length} pax</div>
+      ${partnersHtml}
+    </div>
+    <div class="ticketBadges">
+      <div class="ticketHora">${esc(r0.hora||"—")}</div>
+      <div class="ticketMesa">${esc(mesaText)}</div>
+    </div>
+  `;
+  ticket.appendChild(header);
+
+  // ── COLUMN HEADERS ──
+  const colHeader = document.createElement("div");
+  colHeader.className = "ticketColHeader";
+  colHeader.innerHTML = `<div>Persona</div><div>Aperitivo</div><div>Principal</div><div>Postre</div>`;
+  ticket.appendChild(colHeader);
+
+  // ── COVER ROWS ──
+  const body = document.createElement("div");
+  body.className = "ticketBody";
+
+  covers.forEach(c=>{
+    const row = document.createElement("div");
+    row.className = "ticketCover";
+
+    const principalVal = c.principal
+      ? `<div class="ticketCourseVal">${esc(c.principal)}</div>${c.proteina?`<div class="ticketProtein">▸ ${esc(c.proteina)}</div>`:""}`
+      : `<div class="ticketCourseVal empty">—</div>`;
+
+    row.innerHTML = `
+      <div class="ticketCoverName">${esc(c.persona||"Invitado")}</div>
+      <div class="ticketCourse">
+        <div class="ticketCourseVal ${!c.aperitivo?"empty":""}">${c.aperitivo?esc(c.aperitivo):"—"}</div>
       </div>
-      <div class="ticketColHeader">
-        <div>Persona</div>
-        <div>Aperitivo</div>
-        <div>Principal</div>
-        <div>Postre</div>
+      <div class="ticketCourse">${principalVal}</div>
+      <div class="ticketCourse">
+        <div class="ticketCourseVal ${!c.postre?"empty":""}">${c.postre?esc(c.postre):"—"}</div>
       </div>
     `;
-
-    // Cover rows
-    const body = document.createElement("div");
-    body.className = "ticketBody";
-
-    covers.forEach(c=>{
-      const row = document.createElement("div");
-      row.className = "ticketCover";
-
-      const principalVal = c.principal
-        ? `<div class="ticketCourseVal">${esc(c.principal)}</div>${c.proteina?`<div class="ticketProtein">▸ ${esc(c.proteina)}</div>`:""}`
-        : `<div class="ticketCourseVal empty">—</div>`;
-
-      row.innerHTML = `
-        <div class="ticketCoverName">${esc(c.persona||"Invitado")}</div>
-        <div class="ticketCourse">
-          <div class="ticketCourseVal ${!c.aperitivo?"empty":""}">${c.aperitivo?esc(c.aperitivo):"—"}</div>
-        </div>
-        <div class="ticketCourse">${principalVal}</div>
-        <div class="ticketCourse">
-          <div class="ticketCourseVal ${!c.postre?"empty":""}">${c.postre?esc(c.postre):"—"}</div>
-        </div>
-      `;
-      body.appendChild(row);
-    });
-
-    ticket.appendChild(body);
-
-    // Notas
-    if(r0.notas){
-      const notasEl = document.createElement("div");
-      notasEl.className = "ticketNotas";
-      notasEl.innerHTML = `⚠ <strong>${esc(r0.reserva)}:</strong> ${esc(r0.notas)}`;
-      ticket.appendChild(notasEl);
-    }
-
-    grid.appendChild(ticket);
+    body.appendChild(row);
   });
+
+  ticket.appendChild(body);
+
+  // ── NOTAS ──
+  if(r0.notas){
+    const notasEl = document.createElement("div");
+    notasEl.className = "ticketNotas";
+    notasEl.innerHTML = `⚠ <strong>${esc(r0.reserva)}:</strong> ${esc(r0.notas)}`;
+    ticket.appendChild(notasEl);
+  }
+
+  return ticket;
 }
 
 loadFunciones();
