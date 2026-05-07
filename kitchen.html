@@ -2,714 +2,266 @@
 
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ALORA · Expo Line</title>
 <script src="./config.js"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-/* ─── TOKENS ────────────────────────────────────────────── */
 :root{
-  --bg:       #f5f2eb;
-  --surface:  #ffffff;
-  --ink:      #1a1a18;
-  --muted:    #6b6b62;
-  --line:     #d8d4c8;
-  --gold:     #b8922a;
-  --terra:    #c26a4a;
-  --green:    #3a7d5a;
-  --red:      #c0392b;
-  --radius:   10px;
+  --bg:      #f5f2eb;
+  --surface: #ffffff;
+  --ink:     #1a1a18;
+  --muted:   #6b6b62;
+  --line:    #d8d4c8;
+  --gold:    #b8922a;
+  --terra:   #c26a4a;
+  --green:   #3a7d5a;
+  --red:     #c0392b;
+  --group-a: #2a5a8a;   /* group accent colors */
+  --group-b: #7a3a8a;
+  --group-c: #3a7a4a;
+  --group-d: #8a5a2a;
+  --radius:  10px;
 }
 
-/* ─── RESET ─────────────────────────────────────────────── */
 *{ box-sizing:border-box; margin:0; padding:0; }
+body{ font-family:"DM Sans",system-ui,sans-serif; background:var(--bg); color:var(--ink); min-height:100vh; font-size:13px; }
 
-body{
-  font-family:"DM Sans", system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--ink);
-  min-height: 100vh;
-  font-size: 13px;
-}
-
-/* ─── TOPBAR ────────────────────────────────────────────── */
+/* ── TOPBAR ── */
 .topbar{
-  background: var(--ink);
-  color: #f5f2eb;
-  padding: 14px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 16px rgba(0,0,0,.25);
+  background:var(--ink); color:#f5f2eb;
+  padding:14px 24px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  position:sticky; top:0; z-index:100;
+  box-shadow:0 2px 16px rgba(0,0,0,.25);
 }
-
-.topbarLeft{
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.brand{
-  font-family: "Playfair Display", serif;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: .5px;
-  color: #f5f2eb;
-  white-space: nowrap;
-}
-
-.brandSub{
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 10px;
-  color: rgba(245,242,235,.5);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-top: 2px;
-}
-
-.topbarControls{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.selectWrap{
-  position: relative;
-}
-
+.topbarLeft{ display:flex; align-items:center; gap:16px; }
+.brand{ font-family:"Playfair Display",serif; font-size:18px; font-weight:700; letter-spacing:.5px; color:#f5f2eb; }
+.brandSub{ font-family:"IBM Plex Mono",monospace; font-size:10px; color:rgba(245,242,235,.5); letter-spacing:2px; text-transform:uppercase; margin-top:2px; }
+.topbarControls{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.selectWrap{ position:relative; }
 .funcionSelect{
-  appearance: none;
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.18);
-  border-radius: 8px;
-  padding: 8px 32px 8px 12px;
-  color: #f5f2eb;
-  font-family: "DM Sans", sans-serif;
-  font-size: 13px;
-  min-width: 180px;
-  outline: none;
-  cursor: pointer;
+  appearance:none; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18);
+  border-radius:8px; padding:8px 32px 8px 12px; color:#f5f2eb;
+  font-family:"DM Sans",sans-serif; font-size:13px; min-width:180px; outline:none; cursor:pointer;
 }
-
-.funcionSelect:focus{
-  border-color: var(--gold);
-}
-
-.funcionSelect option{
-  background: #1a1a18;
-  color: #f5f2eb;
-}
-
-.selectArrow{
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  font-size: 10px;
-  color: rgba(245,242,235,.5);
-}
-
+.funcionSelect:focus{ border-color:var(--gold); }
+.funcionSelect option{ background:#1a1a18; color:#f5f2eb; }
+.selectArrow{ position:absolute; right:10px; top:50%; transform:translateY(-50%); pointer-events:none; font-size:10px; color:rgba(245,242,235,.5); }
 .topbarBtn{
-  border: 1px solid rgba(255,255,255,.2);
-  background: rgba(255,255,255,.08);
-  color: #f5f2eb;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-family: "DM Sans", sans-serif;
-  font-size: 12px;
-  cursor: pointer;
-  transition: .2s;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.08); color:#f5f2eb;
+  padding:8px 14px; border-radius:8px; font-family:"DM Sans",sans-serif; font-size:12px;
+  cursor:pointer; transition:.2s; white-space:nowrap; display:flex; align-items:center; gap:6px;
 }
+.topbarBtn:hover{ background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.35); }
+.printBtn{ background:var(--gold); border-color:var(--gold); color:#1a1a18; font-weight:600; }
+.printBtn:hover{ background:#a37d22; border-color:#a37d22; }
+.timestamp{ font-family:"IBM Plex Mono",monospace; font-size:10px; color:rgba(245,242,235,.45); letter-spacing:.5px; white-space:nowrap; }
 
-.topbarBtn:hover{
-  background: rgba(255,255,255,.15);
-  border-color: rgba(255,255,255,.35);
-}
+/* ── CONTENT ── */
+.content{ max-width:1100px; margin:0 auto; padding:28px 20px 60px; }
 
-.printBtn{
-  background: var(--gold);
-  border-color: var(--gold);
-  color: #1a1a18;
-  font-weight: 600;
-}
-
-.printBtn:hover{
-  background: #a37d22;
-  border-color: #a37d22;
-}
-
-.timestamp{
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 10px;
-  color: rgba(245,242,235,.45);
-  letter-spacing: .5px;
-  white-space: nowrap;
-}
-
-/* ─── CONTENT ────────────────────────────────────────────── */
-.content{
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 28px 20px 60px;
-}
-
-/* ─── SUMMARY BAR ────────────────────────────────────────── */
-.summaryBar{
-  display: flex;
-  gap: 12px;
-  margin-bottom: 28px;
-  flex-wrap: wrap;
-}
-
+/* ── SUMMARY BAR ── */
+.summaryBar{ display:flex; gap:12px; margin-bottom:28px; flex-wrap:wrap; }
 .summaryChip{
-  border: 1px solid var(--line);
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 10px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 110px;
+  border:1px solid var(--line); background:var(--surface); border-radius:var(--radius);
+  padding:10px 16px; display:flex; flex-direction:column; gap:2px; min-width:110px;
+}
+.chipLabel{ font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); }
+.chipValue{ font-family:"Playfair Display",serif; font-size:22px; font-weight:700; color:var(--ink); line-height:1; }
+.chipValue.gold{ color:var(--gold); }
+
+/* ── GROUP LEGEND CHIP (screen only) ── */
+.groupLegend{
+  display:flex; gap:8px; flex-wrap:wrap;
+  margin-bottom:20px; padding:10px 14px;
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+}
+.groupLegend-label{ font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-right:4px; align-self:center; }
+.groupPill{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:4px 10px; border-radius:999px; font-size:11px; font-weight:600;
+  border:1px solid; cursor:default;
 }
 
-.chipLabel{
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.chipValue{
-  font-family: "Playfair Display", serif;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1;
-}
-
-.chipValue.gold{ color: var(--gold); }
-
-/* ─── HOUR BLOCK ─────────────────────────────────────────── */
+/* ── HOUR BLOCK ── */
 .hourBlock{
-  margin-bottom: 32px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--surface);
-  overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  margin-bottom:32px; border:1px solid var(--line);
+  border-radius:var(--radius); background:var(--surface);
+  overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.06);
 }
-
 .hourHeader{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 18px;
-  background: var(--ink);
-  color: #f5f2eb;
-  gap: 16px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 18px; background:var(--ink); color:#f5f2eb; gap:16px;
 }
-
-.hourLabel{
-  font-family: "Playfair Display", serif;
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: .3px;
-}
-
-.hourMeta{
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
+.hourLabel{ font-family:"Playfair Display",serif; font-size:17px; font-weight:700; letter-spacing:.3px; }
+.hourMeta{ display:flex; align-items:center; gap:12px; }
 .hourBadge{
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: rgba(255,255,255,.1);
-  color: rgba(245,242,235,.8);
-  letter-spacing: .5px;
+  font-family:"IBM Plex Mono",monospace; font-size:11px; padding:4px 10px;
+  border-radius:999px; background:rgba(255,255,255,.1); color:rgba(245,242,235,.8); letter-spacing:.5px;
 }
+.hourBadge.warn{ background:rgba(184,146,42,.25); color:#e8c86a; }
+.hourBadge.full{ background:rgba(192,57,43,.25); color:#f08a7a; }
 
-.hourBadge.warn{
-  background: rgba(184,146,42,.25);
-  color: #e8c86a;
-}
-
-.hourBadge.full{
-  background: rgba(192,57,43,.25);
-  color: #f08a7a;
-}
-
-/* ─── TABLE ──────────────────────────────────────────────── */
-.tableWrap{
-  overflow-x: auto;
-}
-
-table{
-  width: 100%;
-  border-collapse: collapse;
-}
-
+/* ── TABLE ── */
+.tableWrap{ overflow-x:auto; }
+table{ width:100%; border-collapse:collapse; }
 thead th{
-  padding: 9px 14px;
-  text-align: left;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 9px;
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
-  color: var(--muted);
-  border-bottom: 1px solid var(--line);
-  background: #faf8f4;
-  white-space: nowrap;
+  padding:9px 14px; text-align:left;
+  font-family:"IBM Plex Mono",monospace; font-size:9px; letter-spacing:1.8px; text-transform:uppercase;
+  color:var(--muted); border-bottom:1px solid var(--line); background:#faf8f4; white-space:nowrap;
+}
+tbody td{
+  padding:10px 14px; border-bottom:1px solid var(--line);
+  vertical-align:top; line-height:1.4;
 }
 
-tbody td{
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--line);
-  vertical-align: top;
-  line-height: 1.4;
+/* ── GROUP ROW ACCENT ── */
+/* Left border on td:first-child colors the whole row's group */
+.group-row td:first-child{
+  border-left:3px solid var(--group-color, var(--line));
+  padding-left:11px; /* compensate for border */
 }
+
+/* ── GROUP HEADER ROW (merged reservations) ── */
+.group-header-row{
+  background:#faf8f4;
+}
+.group-header-row td{
+  padding:6px 14px;
+  border-bottom:1px solid var(--line);
+}
+.group-header-cell{
+  display:flex; align-items:center; gap:8px;
+}
+.group-tag{
+  display:inline-flex; align-items:center; gap:5px;
+  padding:3px 9px; border-radius:999px;
+  font-size:10px; font-weight:700; letter-spacing:.3px;
+  border:1px solid;
+}
+.group-tag-icon{ font-size:11px; }
 
 /* reservation group separator */
-.groupFirstRow td{
-  border-top: 2px solid var(--line);
-}
+.groupFirstRow td{ border-top:2px solid var(--line); }
+.groupFirstRow:first-child td{ border-top:none; }
 
-.groupFirstRow:first-child td{
-  border-top: none;
-}
+/* merged-group first row gets stronger separator */
+.mergedGroupFirstRow td{ border-top:3px solid; }
 
-/* reservation label cell */
-.resCell{
-  font-weight: 600;
-  font-size: 12px;
-  color: var(--ink);
-  white-space: nowrap;
-}
-
-.resId{
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 9px;
-  color: var(--muted);
-  letter-spacing: .5px;
-  margin-top: 2px;
-}
-
-/* person name */
-.personCell{
-  font-size: 13px;
-  color: var(--ink);
-}
-
-/* course cells */
-.courseCell{
-  font-size: 12px;
-  color: var(--ink);
-}
-
-.courseCell.empty{
-  color: var(--muted);
-  font-style: italic;
-}
-
-/* proteína inline badge */
+.resCell{ font-weight:600; font-size:12px; color:var(--ink); white-space:nowrap; }
+.resId{ font-family:"IBM Plex Mono",monospace; font-size:9px; color:var(--muted); letter-spacing:.5px; margin-top:2px; }
+.personCell{ font-size:13px; color:var(--ink); }
+.courseCell{ font-size:12px; color:var(--ink); }
+.courseCell.empty{ color:var(--muted); font-style:italic; }
 .proteinaBadge{
-  display: inline-block;
-  margin-left: 6px;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: rgba(184,146,42,.12);
-  border: 1px solid rgba(184,146,42,.3);
-  color: var(--gold);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .3px;
-  white-space: nowrap;
+  display:inline-block; margin-left:6px; padding:2px 7px; border-radius:999px;
+  background:rgba(184,146,42,.12); border:1px solid rgba(184,146,42,.3);
+  color:var(--gold); font-size:10px; font-weight:600; letter-spacing:.3px; white-space:nowrap;
 }
-
-/* notas callout row */
-.notasRow td{
-  padding: 6px 14px 10px 14px;
-  border-bottom: 1px solid var(--line);
-}
-
+.notasRow td{ padding:6px 14px 10px; border-bottom:1px solid var(--line); }
 .notasCallout{
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 7px 12px;
-  border-radius: 7px;
-  background: rgba(194,106,74,.07);
-  border-left: 3px solid var(--terra);
-  font-size: 12px;
-  color: var(--terra);
-  line-height: 1.5;
+  display:flex; align-items:flex-start; gap:8px; padding:7px 12px;
+  border-radius:7px; background:rgba(194,106,74,.07); border-left:3px solid var(--terra);
+  font-size:12px; color:var(--terra); line-height:1.5;
 }
+.notasIcon{ font-size:13px; flex-shrink:0; margin-top:1px; }
+.dividerRow td{ padding:0; height:6px; background:#faf8f4; border-bottom:1px solid var(--line); }
 
-.notasIcon{
-  font-size: 13px;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
+/* ── LOADING / ERROR ── */
+.stateBox{ text-align:center; padding:60px 20px; color:var(--muted); }
+.stateBox .icon{ font-size:36px; margin-bottom:14px; }
+.stateBox h3{ font-family:"Playfair Display",serif; font-size:20px; color:var(--ink); margin-bottom:8px; }
+.stateBox p{ font-size:13px; line-height:1.6; }
+.spinner{ width:32px; height:32px; border:2px solid var(--line); border-top-color:var(--gold); border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 16px; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
 
-/* reservation divider row */
-.dividerRow td{
-  padding: 0;
-  height: 6px;
-  background: #faf8f4;
-  border-bottom: 1px solid var(--line);
-}
-
-/* ─── LOADING / ERROR / EMPTY ────────────────────────────── */
-.stateBox{
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--muted);
-}
-
-.stateBox .icon{
-  font-size: 36px;
-  margin-bottom: 14px;
-}
-
-.stateBox h3{
-  font-family: "Playfair Display", serif;
-  font-size: 20px;
-  color: var(--ink);
-  margin-bottom: 8px;
-}
-
-.stateBox p{
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-.spinner{
-  width: 32px;
-  height: 32px;
-  border: 2px solid var(--line);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
-  margin: 0 auto 16px;
-}
-
-@keyframes spin{
-  to{ transform: rotate(360deg); }
-}
-
-/* ─── PRINT — FULL B&W SAFE ──────────────────────────────── */
+/* ── PRINT ── */
 @media print{
-
-  @page{
-    margin: 14mm 12mm;
-    size: A4 portrait;
-  }
-
-  /* ── GLOBAL RESET FOR PRINT ── */
-  *{
-    color: black !important;
-    background: white !important;
-    border-color: #999 !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  body{
-    font-size: 10.5px;
-    line-height: 1.4;
-  }
-
-  /* ── TOPBAR ── */
-  .topbar{
-    position: static;
-    border-bottom: 2.5px solid black !important;
-    padding: 8px 0 10px;
-  }
-
-  /* hide all controls — only brand + timestamp show */
-  .topbarControls{ display: none !important; }
-
-  .brand{
-    font-size: 15px;
-    font-weight: 700;
-  }
-
-  .brandSub{
-    font-size: 9px;
-    color: #444 !important;
-  }
-
-  .timestamp{
-    font-size: 9px;
-    color: #444 !important;
-  }
-
-  /* ── CONTENT ── */
-  .content{
-    padding: 12px 0 0;
-  }
-
-  /* ── SUMMARY CHIPS ── */
-  .summaryBar{
-    gap: 6px;
-    margin-bottom: 12px;
-  }
-
-  .summaryChip{
-    border: 1px solid #888 !important;
-    padding: 5px 10px;
-    min-width: 90px;
-  }
-
-  .chipLabel{
-    font-size: 8px;
-    color: #555 !important;
-    letter-spacing: 1px;
-  }
-
-  /* remove gold color — use bold black instead */
-  .chipValue{
-    font-size: 17px;
-    color: black !important;
-    font-weight: 700;
-  }
-
-  /* ── HOUR BLOCKS ── */
-  .hourBlock{
-    border: 1.5px solid black !important;
-    margin-bottom: 18px;
-    /* allow content to flow — avoid was silently cutting blocks */
-    page-break-inside: auto;
-    break-inside: auto;
-    /* each hora starts on its own page for kitchen clarity */
-    page-break-before: always;
-    break-before: always;
-  }
-
-  /* first block never forces a blank first page */
-  .hourBlock:first-of-type{
-    page-break-before: auto;
-    break-before: auto;
-  }
-
-  /* header: white bg, black text, thick bottom border */
-  .hourHeader{
-    background: white !important;
-    border-bottom: 2px solid black !important;
-    padding: 7px 12px;
-  }
-
-  .hourLabel{
-    font-size: 14px;
-    font-weight: 700;
-    color: black !important;
-  }
-
-  /* capacity badges — text only, no color background */
-  .hourBadge{
-    background: white !important;
-    border: 1px solid #666 !important;
-    color: black !important;
-    font-size: 9px;
-    padding: 3px 8px;
-  }
-
-  /* LLENO badge — bold border to stand out in B&W */
-  .hourBadge.full{
-    border: 1.5px solid black !important;
-    font-weight: 700;
-  }
-
-  .hourBadge.warn{
-    border: 1px solid #444 !important;
-    font-weight: 600;
-  }
-
-  /* ── TABLE ── */
-  thead th{
-    background: #e8e8e8 !important;
-    color: black !important;
-    border-bottom: 1.5px solid black !important;
-    padding: 5px 10px;
-    font-size: 8px;
-    letter-spacing: 1.5px;
-  }
-
-  tbody td{
-    padding: 6px 10px;
-    color: black !important;
-    border-bottom: 1px solid #ccc !important;
-    /* allow rows to break across pages */
-    page-break-inside: auto;
-    break-inside: auto;
-  }
-
-  /* tableWrap must not clip overflow in print */
-  .tableWrap{
-    overflow: visible !important;
-  }
-
-  /* reservation group first row — stronger separator */
-  .groupFirstRow td{
-    border-top: 1.5px solid #666 !important;
-  }
-
-  .groupFirstRow:first-child td{
-    border-top: none !important;
-  }
-
-  /* reservation name */
-  .resCell{
-    font-weight: 700;
-    color: black !important;
-  }
-
-  .resId{
-    color: #555 !important;
-    font-size: 8px;
-  }
-
-  /* empty cells */
-  .courseCell.empty{
-    color: #aaa !important;
-  }
-
-  /* proteína — replace colored pill with bracketed text */
-  .proteinaBadge{
-    background: white !important;
-    border: none !important;
-    border-radius: 0 !important;
-    color: black !important;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 0 !important;
-    margin-left: 4px !important;
-  }
-
-  /* add brackets around proteína in print */
-  .proteinaBadge::before{ content: "["; }
-  .proteinaBadge::after{  content: "]"; }
-
-  /* ── NOTAS CALLOUT ── */
-  .notasRow td{
-    padding: 4px 10px 8px;
-  }
-
-  .notasCallout{
-    background: white !important;
-    border-left: 3px solid black !important;
-    border-radius: 0 !important;
-    color: black !important;
-    padding: 5px 10px;
-    font-size: 10px;
-    font-weight: 600;
-  }
-
-  /* replace emoji icon with plain text marker */
-  .notasIcon{
-    display: none;
-  }
-
-  .notasCallout::before{
-    content: "⚠ NOTA: ";
-    font-weight: 700;
-    margin-right: 4px;
-    flex-shrink: 0;
-  }
-
-  /* ── DIVIDER ROWS ── */
-  .dividerRow td{
-    background: #f0f0f0 !important;
-    height: 4px;
-    border-bottom: 1px solid #ccc !important;
-  }
-
-  /* ── HIDE SCREEN-ONLY ELEMENTS ── */
-  .stateBox,
-  .spinner{
-    display: none !important;
-  }
+  @page{ margin:14mm 12mm; size:A4 portrait; }
+  *{ color:black !important; background:white !important; border-color:#999 !important; box-shadow:none !important; text-shadow:none !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body{ font-size:10.5px; line-height:1.4; }
+  .topbar{ position:static; border-bottom:2.5px solid black !important; padding:8px 0 10px; }
+  .topbarControls{ display:none !important; }
+  .brand{ font-size:15px; font-weight:700; }
+  .brandSub,.timestamp{ font-size:9px; color:#444 !important; }
+  .content{ padding:12px 0 0; }
+  .summaryBar{ gap:6px; margin-bottom:12px; }
+  .summaryChip{ border:1px solid #888 !important; padding:5px 10px; min-width:90px; }
+  .chipLabel{ font-size:8px; color:#555 !important; letter-spacing:1px; }
+  .chipValue{ font-size:17px; color:black !important; font-weight:700; }
+  /* hide group legend on print — groups shown via left border + header row */
+  .groupLegend{ display:none !important; }
+  .hourBlock{ border:1.5px solid black !important; margin-bottom:18px; page-break-before:always; break-before:always; }
+  .hourBlock:first-of-type{ page-break-before:auto; break-before:auto; }
+  .hourHeader{ background:white !important; border-bottom:2px solid black !important; padding:7px 12px; }
+  .hourLabel{ font-size:14px; font-weight:700; color:black !important; }
+  .hourBadge{ background:white !important; border:1px solid #666 !important; color:black !important; font-size:9px; padding:3px 8px; }
+  .hourBadge.full{ border:1.5px solid black !important; font-weight:700; }
+  .hourBadge.warn{ border:1px solid #444 !important; font-weight:600; }
+  thead th{ background:#e8e8e8 !important; color:black !important; border-bottom:1.5px solid black !important; padding:5px 10px; font-size:8px; letter-spacing:1.5px; }
+  tbody td{ padding:6px 10px; color:black !important; border-bottom:1px solid #ccc !important; }
+  .tableWrap{ overflow:visible !important; }
+  .groupFirstRow td{ border-top:1.5px solid #666 !important; }
+  .groupFirstRow:first-child td{ border-top:none !important; }
+  /* group header row in print */
+  .group-header-row td{ background:#e8e8e8 !important; border-top:2px solid black !important; border-bottom:1px solid #888 !important; }
+  .group-tag{ background:white !important; border:1.5px solid black !important; color:black !important; font-size:9px; }
+  /* group left border — print as thicker rule */
+  .group-row td:first-child{ border-left:3px solid black !important; padding-left:11px; }
+  .resCell{ font-weight:700; color:black !important; }
+  .resId{ color:#555 !important; font-size:8px; }
+  .courseCell.empty{ color:#aaa !important; }
+  .proteinaBadge{ background:white !important; border:none !important; border-radius:0 !important; color:black !important; font-size:10px; font-weight:700; padding:0 !important; margin-left:4px !important; }
+  .proteinaBadge::before{ content:"["; }
+  .proteinaBadge::after{ content:"]"; }
+  .notasRow td{ padding:4px 10px 8px; }
+  .notasCallout{ background:white !important; border-left:3px solid black !important; border-radius:0 !important; color:black !important; padding:5px 10px; font-size:10px; font-weight:600; }
+  .notasIcon{ display:none; }
+  .notasCallout::before{ content:"⚠ NOTA: "; font-weight:700; margin-right:4px; flex-shrink:0; }
+  .dividerRow td{ background:#f0f0f0 !important; height:4px; border-bottom:1px solid #ccc !important; }
+  .stateBox,.spinner{ display:none !important; }
 }
 
-/* ─── RESPONSIVE ─────────────────────────────────────────── */
-@media(max-width: 700px){
-  .topbar{ padding: 12px 14px; }
-  .content{ padding: 16px 12px 40px; }
-  .summaryChip{ min-width: 90px; }
+@media(max-width:700px){
+  .topbar{ padding:12px 14px; }
+  .content{ padding:16px 12px 40px; }
+  .summaryChip{ min-width:90px; }
 }
 </style>
 
 </head>
-
 <body>
 
 <!-- TOPBAR -->
 
 <div class="topbar">
-
   <div class="topbarLeft">
     <div>
       <div class="brand">ALORA · Expo Line</div>
       <div class="brandSub">Kitchen production sheet</div>
     </div>
   </div>
-
   <div class="topbarControls">
-
-```
-<div class="selectWrap">
-  <select id="funcionSelect" class="funcionSelect">
-    <option value="">Cargando funciones…</option>
-  </select>
-  <span class="selectArrow">▾</span>
-</div>
-
-<button class="topbarBtn" onclick="load()">
-  ↺ Refresh
-</button>
-
-<button class="topbarBtn printBtn" onclick="window.print()">
-  🖨 Print
-</button>
-
-<div class="timestamp" id="timestamp">—</div>
-```
-
+    <div class="selectWrap">
+      <select id="funcionSelect" class="funcionSelect">
+        <option value="">Cargando funciones…</option>
+      </select>
+      <span class="selectArrow">▾</span>
+    </div>
+    <button class="topbarBtn" onclick="load()">↺ Refresh</button>
+    <button class="topbarBtn printBtn" onclick="window.print()">🖨 Print</button>
+    <div class="timestamp" id="timestamp">—</div>
   </div>
-
 </div>
 
 <!-- CONTENT -->
 
 <div class="content">
-
-  <!-- SUMMARY CHIPS -->
-
   <div class="summaryBar" id="summaryBar" style="display:none"></div>
-
-  <!-- MAIN OUTPUT -->
-
+  <div id="groupLegendWrap"></div>
   <div id="content">
     <div class="stateBox">
       <div class="spinner"></div>
@@ -717,211 +269,195 @@ tbody td{
       <p>Conectando con el sistema de reservaciones</p>
     </div>
   </div>
-
 </div>
 
 <script>
-// ─── STATE ────────────────────────────────────────────────
 const LIMITE_POR_HORA = 20;
 
-// ─── HELPERS ──────────────────────────────────────────────
+// ── Palette for groups — cycles if more than 6 groups ──
+const GROUP_COLORS = [
+  { bg:"rgba(42,90,138,.12)",  border:"rgba(42,90,138,.5)",  text:"#1a4a7a",  solid:"#2a5a8a"  },
+  { bg:"rgba(122,58,138,.12)", border:"rgba(122,58,138,.5)", text:"#5a1a7a",  solid:"#7a3a8a"  },
+  { bg:"rgba(58,122,74,.12)",  border:"rgba(58,122,74,.5)",  text:"#1a5a2a",  solid:"#3a7a4a"  },
+  { bg:"rgba(138,90,42,.12)",  border:"rgba(138,90,42,.5)",  text:"#7a4a0a",  solid:"#8a5a2a"  },
+  { bg:"rgba(42,122,122,.12)", border:"rgba(42,122,122,.5)", text:"#0a5a5a",  solid:"#2a7a7a"  },
+  { bg:"rgba(138,42,58,.12)",  border:"rgba(138,42,58,.5)",  text:"#7a0a1a",  solid:"#8a2a3a"  },
+];
+
 function esc(str){
-  return String(str || "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;");
+  return String(str||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
 function updateTimestamp(){
   document.getElementById("timestamp").textContent =
-    "Actualizado " + new Date().toLocaleTimeString("es-PR",{
-      hour:"numeric",
-      minute:"2-digit",
-      second:"2-digit"
-    });
+    "Actualizado " + new Date().toLocaleTimeString("es-PR",{hour:"numeric",minute:"2-digit",second:"2-digit"});
 }
 
 function showLoading(){
-  document.getElementById("summaryBar").style.display = "none";
-  document.getElementById("content").innerHTML = `
-    <div class="stateBox">
-      <div class="spinner"></div>
-      <h3>Cargando expo line…</h3>
-      <p>Obteniendo reservaciones y preórdenes</p>
-    </div>
-  `;
+  document.getElementById("summaryBar").style.display="none";
+  document.getElementById("groupLegendWrap").innerHTML="";
+  document.getElementById("content").innerHTML=`
+    <div class="stateBox"><div class="spinner"></div><h3>Cargando expo line…</h3><p>Obteniendo reservaciones y preórdenes</p></div>`;
 }
 
 function showError(msg){
-  document.getElementById("summaryBar").style.display = "none";
-  document.getElementById("content").innerHTML = `
-    <div class="stateBox">
-      <div class="icon">⚠️</div>
-      <h3>Error cargando datos</h3>
-      <p>${esc(msg)}</p>
-    </div>
-  `;
+  document.getElementById("summaryBar").style.display="none";
+  document.getElementById("groupLegendWrap").innerHTML="";
+  document.getElementById("content").innerHTML=`
+    <div class="stateBox"><div class="icon">⚠️</div><h3>Error cargando datos</h3><p>${esc(msg)}</p></div>`;
 }
 
-// ─── API ──────────────────────────────────────────────────
 async function api(body){
-  const res = await fetch(CONFIG.BACKEND_URL,{
-    method: "POST",
-    headers: {"Content-Type":"text/plain;charset=utf-8"},
-    body: JSON.stringify({
-      ...body,
-      secret: CONFIG.SECRET
-    })
+  const res=await fetch(CONFIG.BACKEND_URL,{
+    method:"POST",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body:JSON.stringify({...body,secret:CONFIG.SECRET})
   });
   return await res.json();
 }
 
-// ─── LOAD FUNCIONES ───────────────────────────────────────
 async function loadFunciones(){
   try{
-    const data = await api({ action:"funciones" });
-
-    if(!data.ok || !data.funciones?.length){
-      showError("No se encontraron funciones activas.");
-      return;
-    }
-
-    const select = document.getElementById("funcionSelect");
-    select.innerHTML = "";
-
-    data.funciones.forEach(f=>{
-      const opt = document.createElement("option");
-      opt.value = f;
-      opt.textContent = f;
-      select.appendChild(opt);
-    });
-
-    select.addEventListener("change", load);
-
-    // auto-load first
+    const data=await api({action:"funciones"});
+    if(!data.ok||!data.funciones?.length){ showError("No se encontraron funciones activas."); return; }
+    const select=document.getElementById("funcionSelect");
+    select.innerHTML="";
+    data.funciones.forEach(f=>{ const o=document.createElement("option"); o.value=f; o.textContent=f; select.appendChild(o); });
+    select.addEventListener("change",load);
     load();
-
-  }catch(e){
-    showError("No se pudo conectar con el backend: " + e.message);
-  }
+  }catch(e){ showError("No se pudo conectar con el backend: "+e.message); }
 }
 
-// ─── LOAD KITCHEN DATA ────────────────────────────────────
 async function load(){
-  const funcion = document.getElementById("funcionSelect").value;
+  const funcion=document.getElementById("funcionSelect").value;
   if(!funcion) return;
-
   showLoading();
-
   try{
-    const data = await api({
-      action: "kitchen_list",
-      funcion
-    });
-
-    if(!data.ok){
-      showError(data.error || "Error desconocido");
-      return;
-    }
-
-    render(data.rows || [], funcion);
+    const data=await api({action:"kitchen_list",funcion});
+    if(!data.ok){ showError(data.error||"Error desconocido"); return; }
+    render(data.rows||[],funcion);
     updateTimestamp();
-
-  }catch(e){
-    showError("Error de conexión: " + e.message);
-  }
+  }catch(e){ showError("Error de conexión: "+e.message); }
 }
 
-// ─── RENDER ───────────────────────────────────────────────
-function render(rows, funcion){
-
+function render(rows,funcion){
   if(!rows.length){
-    document.getElementById("summaryBar").style.display = "none";
-    document.getElementById("content").innerHTML = `
-      <div class="stateBox">
-        <div class="icon">🍽</div>
-        <h3>Sin reservaciones</h3>
-        <p>No hay preórdenes registradas para ${esc(funcion)}</p>
-      </div>
-    `;
+    document.getElementById("summaryBar").style.display="none";
+    document.getElementById("groupLegendWrap").innerHTML="";
+    document.getElementById("content").innerHTML=`
+      <div class="stateBox"><div class="icon">🍽</div><h3>Sin reservaciones</h3><p>No hay preórdenes registradas para ${esc(funcion)}</p></div>`;
     return;
   }
 
-  // ── GROUP BY HORA ────────────────────────────────────────
-  const byHora = {};
+  // ── Build group color map ──────────────────────────────────────────
+  // grupoId → color index. Only non-null grupos get a color.
+  const grupoColorMap = {};
+  let colorIdx = 0;
   rows.forEach(r=>{
-    if(!byHora[r.hora]) byHora[r.hora] = [];
-    byHora[r.hora].push(r);
+    if(r.grupo && !grupoColorMap[r.grupo]){
+      grupoColorMap[r.grupo] = GROUP_COLORS[colorIdx % GROUP_COLORS.length];
+      colorIdx++;
+    }
   });
+  const hasGroups = Object.keys(grupoColorMap).length > 0;
 
-  // ── SUMMARY CHIPS ────────────────────────────────────────
-  const totalCovers = rows.length;
-  const totalHoras  = Object.keys(byHora).length;
+  // ── Summary chips ──────────────────────────────────────────────────
+  const byHora = {};
+  rows.forEach(r=>{ if(!byHora[r.hora]) byHora[r.hora]=[]; byHora[r.hora].push(r); });
 
-  // count unique reservas
-  const reservaSet = new Set(rows.map(r=>r.reservaId));
+  const totalCovers   = rows.length;
+  const totalHoras    = Object.keys(byHora).length;
+  const reservaSet    = new Set(rows.map(r=>r.reservaId));
   const totalReservas = reservaSet.size;
+  const gruposSet     = new Set(rows.filter(r=>r.grupo).map(r=>r.grupo));
+  const totalGrupos   = gruposSet.size;
 
-  const bar = document.getElementById("summaryBar");
-  bar.style.display = "flex";
-  bar.innerHTML = `
-    <div class="summaryChip">
-      <div class="chipLabel">Función</div>
-      <div class="chipValue" style="font-size:14px;padding-top:4px">${esc(funcion)}</div>
-    </div>
-    <div class="summaryChip">
-      <div class="chipLabel">Covers</div>
-      <div class="chipValue gold">${totalCovers}</div>
-    </div>
-    <div class="summaryChip">
-      <div class="chipLabel">Reservaciones</div>
-      <div class="chipValue">${totalReservas}</div>
-    </div>
-    <div class="summaryChip">
-      <div class="chipLabel">Horarios</div>
-      <div class="chipValue">${totalHoras}</div>
-    </div>
+  const bar=document.getElementById("summaryBar");
+  bar.style.display="flex";
+  bar.innerHTML=`
+    <div class="summaryChip"><div class="chipLabel">Función</div><div class="chipValue" style="font-size:14px;padding-top:4px">${esc(funcion)}</div></div>
+    <div class="summaryChip"><div class="chipLabel">Covers</div><div class="chipValue gold">${totalCovers}</div></div>
+    <div class="summaryChip"><div class="chipLabel">Reservaciones</div><div class="chipValue">${totalReservas}</div></div>
+    <div class="summaryChip"><div class="chipLabel">Horarios</div><div class="chipValue">${totalHoras}</div></div>
+    ${totalGrupos>0?`<div class="summaryChip"><div class="chipLabel">Grupos</div><div class="chipValue">${totalGrupos}</div></div>`:""}
   `;
 
-  // ── BUILD HTML ───────────────────────────────────────────
-  let html = "";
+  // ── Group legend (screen only) ─────────────────────────────────────
+  const legendWrap=document.getElementById("groupLegendWrap");
+  if(hasGroups){
+    let legendHtml=`<div class="groupLegend"><span class="groupLegend-label">Grupos activos</span>`;
+    Object.keys(grupoColorMap).forEach(gId=>{
+      const c=grupoColorMap[gId];
+      // Find all reservas in this group for the legend label
+      const members=[...new Set(rows.filter(r=>r.grupo===gId).map(r=>r.reserva))];
+      const label=members.length<=3 ? members.join(" + ") : `${members.slice(0,2).join(" + ")} +${members.length-2}`;
+      legendHtml+=`<span class="groupPill" style="background:${c.bg};border-color:${c.border};color:${c.text}">
+        🔗 ${esc(label)}
+      </span>`;
+    });
+    legendHtml+=`</div>`;
+    legendWrap.innerHTML=legendHtml;
+  }else{
+    legendWrap.innerHTML="";
+  }
+
+  // ── Build HTML per hour ────────────────────────────────────────────
+  let html="";
 
   Object.keys(byHora).forEach(hora=>{
-    const horaRows = byHora[hora];
+    const horaRows=byHora[hora];
+    const coversHora=horaRows.length;
+    let badgeClass="", badgeText=`${coversHora} covers`;
+    if(coversHora>=LIMITE_POR_HORA){ badgeClass="full"; badgeText=`${coversHora} covers · LLENO`; }
+    else if(coversHora>=LIMITE_POR_HORA*.75){ badgeClass="warn"; badgeText=`${coversHora} covers · Casi lleno`; }
 
-    // covers at this hour
-    const coversHora = horaRows.length;
+    // Group rows by reserva — but ALSO cluster by grupo for display
+    // Strategy: 
+    //   1. Build reservation groups as before
+    //   2. Then cluster reservations sharing the same grupo together
+    //   3. Render grouped reservations with a colored group header row
 
-    // capacity badge
-    let badgeClass = "";
-    let badgeText  = `${coversHora} covers`;
-
-    if(coversHora >= LIMITE_POR_HORA){
-      badgeClass = "full";
-      badgeText  = `${coversHora} covers · LLENO`;
-    }else if(coversHora >= LIMITE_POR_HORA * 0.75){
-      badgeClass = "warn";
-      badgeText  = `${coversHora} covers · Casi lleno`;
-    }
-
-    // group by reserva within this hora
-    const byReserva = {};
+    // Step 1: group covers by reservation
+    const byReserva={};
     horaRows.forEach(r=>{
-      const key = r.reserva + "||" + r.reservaId;
-      if(!byReserva[key]) byReserva[key] = [];
+      const key=r.reservaId+"||"+r.reserva;
+      if(!byReserva[key]) byReserva[key]=[];
       byReserva[key].push(r);
     });
 
-    html += `
-      <div class="hourBlock">
+    // Step 2: cluster reservations by grupo
+    // Result: array of "slots" — each slot is either:
+    //   { type:"single", key, rows[] }
+    //   { type:"group",  grupoId, reservations:[ {key, rows[]} ] }
+    const slots=[];
+    const processedKeys=new Set();
 
+    Object.keys(byReserva).forEach(key=>{
+      if(processedKeys.has(key)) return;
+      const firstRow=byReserva[key][0];
+      const grupoId=firstRow.grupo;
+
+      if(!grupoId){
+        // No group — standalone slot
+        slots.push({type:"single",key,rows:byReserva[key]});
+        processedKeys.add(key);
+      } else {
+        // Part of a group — find all reservation keys in this hora with same grupo
+        const groupKeys=Object.keys(byReserva).filter(k=>
+          !processedKeys.has(k) && byReserva[k][0].grupo===grupoId
+        );
+        const groupedReservations=groupKeys.map(k=>({key:k,rows:byReserva[k]}));
+        slots.push({type:"group",grupoId,reservations:groupedReservations});
+        groupKeys.forEach(k=>processedKeys.add(k));
+      }
+    });
+
+    html+=`
+      <div class="hourBlock">
         <div class="hourHeader">
           <div class="hourLabel">${esc(hora)}</div>
-          <div class="hourMeta">
-            <div class="hourBadge ${badgeClass}">${badgeText}</div>
-          </div>
+          <div class="hourMeta"><div class="hourBadge ${badgeClass}">${badgeText}</div></div>
         </div>
-
         <div class="tableWrap">
           <table>
             <thead>
@@ -936,83 +472,109 @@ function render(rows, funcion){
             <tbody>
     `;
 
-    Object.keys(byReserva).forEach((key, groupIdx)=>{
-      const group     = byReserva[key];
-      const resName   = group[0].reserva;
-      const resId     = group[0].reservaId;
-      const groupSize = group.length;
+    slots.forEach((slot,slotIdx)=>{
+      const isFirstSlot=slotIdx===0;
 
-      group.forEach((r, rowIdx)=>{
+      if(slot.type==="single"){
+        // ── Standalone reservation ────────────────────────────────
+        renderReservationRows(slot.rows, slot.key, isFirstSlot, null, html);
+        // (we build into the string below)
+        html+=buildReservationRows(slot.rows, slot.key, isFirstSlot, null);
 
-        const isFirst = rowIdx === 0;
+      } else {
+        // ── Grouped reservations ──────────────────────────────────
+        const c=grupoColorMap[slot.grupoId]||GROUP_COLORS[0];
+        const totalGroupPax=slot.reservations.reduce((s,res)=>s+res.rows.length,0);
+        const memberNames=slot.reservations.map(res=>res.rows[0].reserva);
+        const memberLabel=memberNames.join(" · ");
 
-        // principal + proteína inline
-        let principalHtml = "";
-        if(r.principal){
-          principalHtml = `<span>${esc(r.principal)}</span>`;
-          if(r.proteina){
-            principalHtml += `<span class="proteinaBadge">${esc(r.proteina)}</span>`;
-          }
-        }else{
-          principalHtml = `<span class="courseCell empty">—</span>`;
-        }
-
-        html += `
-          <tr class="${isFirst ? "groupFirstRow" : ""}">
-            <td class="resCell">
-              ${isFirst ? `
-                ${esc(resName)}
-                <div class="resId">#${esc(resId)} · ${groupSize} pax</div>
-              ` : ""}
-            </td>
-            <td class="personCell">${esc(r.persona) || "—"}</td>
-            <td class="courseCell ${!r.aperitivo ? "empty" : ""}">
-              ${r.aperitivo ? esc(r.aperitivo) : "—"}
-            </td>
-            <td class="courseCell">
-              ${principalHtml}
-            </td>
-            <td class="courseCell ${!r.postre ? "empty" : ""}">
-              ${r.postre ? esc(r.postre) : "—"}
+        // Group header row spanning all columns
+        html+=`
+          <tr class="group-header-row ${isFirstSlot?"":"mergedGroupFirstRow"}" style="--group-border-color:${c.solid}">
+            <td colspan="5" style="border-top:${isFirstSlot?"none":`2px solid ${c.solid}`}">
+              <div class="group-header-cell">
+                <span class="group-tag" style="background:${c.bg};border-color:${c.border};color:${c.text}">
+                  <span class="group-tag-icon">🔗</span>
+                  Grupo · ${memberNames.length} reservas · ${totalGroupPax} covers
+                </span>
+                <span style="font-size:11px;color:var(--muted);font-style:italic">${esc(memberLabel)}</span>
+              </div>
             </td>
           </tr>
         `;
 
-        // notas callout — only on last row of group, only if notas exist
-        if(rowIdx === group.length - 1 && r.notas){
-          html += `
-            <tr class="notasRow">
-              <td colspan="5">
-                <div class="notasCallout">
-                  <span class="notasIcon">⚠️</span>
-                  <span><strong>${esc(resName)}:</strong> ${esc(r.notas)}</span>
-                </div>
-              </td>
-            </tr>
-          `;
-        }
-
-      });
-
-      // visual gap between reservation groups (not after last)
-      if(groupIdx < Object.keys(byReserva).length - 1){
-        html += `<tr class="dividerRow"><td colspan="5"></td></tr>`;
+        // Each reservation within the group
+        slot.reservations.forEach((res,resIdx)=>{
+          html+=buildReservationRows(res.rows, res.key, resIdx===0, c);
+        });
       }
 
+      // Divider between top-level slots (not after last)
+      if(slotIdx<slots.length-1){
+        html+=`<tr class="dividerRow"><td colspan="5"></td></tr>`;
+      }
     });
 
-    html += `
-            </tbody>
-          </table>
-        </div>
-      </div>
-    `;
+    html+=`</tbody></table></div></div>`;
   });
 
-  document.getElementById("content").innerHTML = html;
+  document.getElementById("content").innerHTML=html;
 }
 
-// ─── INIT ─────────────────────────────────────────────────
+// Builds the <tr> rows for one reservation (multiple covers)
+function buildReservationRows(rows, key, isFirst, groupColor){
+  let html="";
+  const resName=rows[0].reserva;
+  const resId=rows[0].reservaId;
+  const groupSize=rows.length;
+
+  rows.forEach((r,rowIdx)=>{
+    const isFirstRow=rowIdx===0;
+    const colorStyle=groupColor ? `style="--group-color:${groupColor.solid}"` : "";
+    const groupClass=groupColor ? "group-row" : "";
+    const firstClass=isFirst&&isFirstRow ? "groupFirstRow" : "";
+
+    let principalHtml="";
+    if(r.principal){
+      principalHtml=`<span>${esc(r.principal)}</span>`;
+      if(r.proteina) principalHtml+=`<span class="proteinaBadge">${esc(r.proteina)}</span>`;
+    }else{
+      principalHtml=`<span class="courseCell empty">—</span>`;
+    }
+
+    html+=`
+      <tr class="${firstClass} ${groupClass}" ${colorStyle}>
+        <td class="resCell">
+          ${isFirstRow?`${esc(resName)}<div class="resId">#${esc(resId)} · ${groupSize} pax</div>`:""}
+        </td>
+        <td class="personCell">${esc(r.persona)||"—"}</td>
+        <td class="courseCell ${!r.aperitivo?"empty":""}">${r.aperitivo?esc(r.aperitivo):"—"}</td>
+        <td class="courseCell">${principalHtml}</td>
+        <td class="courseCell ${!r.postre?"empty":""}">${r.postre?esc(r.postre):"—"}</td>
+      </tr>
+    `;
+
+    // Notas callout — last row of reservation, only if notas exist
+    if(rowIdx===rows.length-1&&r.notas){
+      html+=`
+        <tr class="notasRow">
+          <td colspan="5">
+            <div class="notasCallout">
+              <span class="notasIcon">⚠️</span>
+              <span><strong>${esc(resName)}:</strong> ${esc(r.notas)}</span>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+  });
+
+  return html;
+}
+
+// (unused stub — html is built via buildReservationRows)
+function renderReservationRows(){}
+
 loadFunciones();
 </script>
 
