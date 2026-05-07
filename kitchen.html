@@ -476,9 +476,6 @@ function render(rows,funcion){
       const isFirstSlot=slotIdx===0;
 
       if(slot.type==="single"){
-        // ── Standalone reservation ────────────────────────────────
-        renderReservationRows(slot.rows, slot.key, isFirstSlot, null, html);
-        // (we build into the string below)
         html+=buildReservationRows(slot.rows, slot.key, isFirstSlot, null);
 
       } else {
@@ -571,9 +568,6 @@ function buildReservationRows(rows, key, isFirst, groupColor){
 
   return html;
 }
-
-// (unused stub — html is built via buildReservationRows)
-function renderReservationRows(){}
 
 loadFunciones();
 </script>
