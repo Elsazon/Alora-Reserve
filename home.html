@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALORA — Fusión Boricua e Italiana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ======================================
+   RESET & BASE
+====================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #0a0c0a;
+  --bg-soft:     #111411;
+  --bg-mid:      #141914;
+  --olive:       #4a4a38;
+  --olive-light: #6b6b52;
+  --olive-deep:  #2a2a1e;
+  --cream:       #f0ebe0;
+  --cream-dim:   #c8c2b4;
+  --terracotta:  #a56b52;
+  --terra-soft:  #8d5b49;
+  --muted:       #7a7268;
+  --serif:       'Cormorant Garamond', Georgia, serif;
+  --sans:        'Jost', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  background: var(--bg);
+  color: var(--cream);
+}
+
+body {
+  font-family: var(--sans);
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ======================================
+   SMOOTH SCROLL ENGINE
+====================================== */
+#smooth-wrapper {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#smooth-content {
+  will-change: transform;
+}
+
+/* ======================================
+   SCROLL REVEAL SYSTEM
+====================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+              transform 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.35s; }
+.reveal-delay-4 { transition-delay: 0.5s; }
+.reveal-delay-5 { transition-delay: 0.65s; }
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 1s cubic-bezier(0.16,1,0.3,1),
+              transform 1s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-left, .reveal-scale {
+    opacity: 1; transform: none; transition: none;
+  }
+}
+
+/* ======================================
+   NAV
+====================================== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 1.5rem 4vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(10,12,10,0.8) 0%, transparent 100%);
+  backdrop-filter: blur(0px);
+  transition: background 0.5s, backdrop-filter 0.5s;
+}
+nav.scrolled {
+  background: rgba(10,12,10,0.92);
+  backdrop-filter: blur(12px);
+}
+
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  color: var(--cream);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--cream); }
+
+.nav-cta {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--cream);
+  padding: 0.6rem 1.6rem;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s;
+}
+.nav-cta:hover { background: var(--terracotta); color: var(--cream); }
+
+.nav-mobile-btn {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 4px;
+}
+.nav-mobile-btn span {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: var(--cream);
+  transition: 0.3s;
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-cta { display: none; }
+  .nav-mobile-btn { display: flex; }
+}
+
+/* ======================================
+   HERO
+====================================== */
+#hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: -8%;
+  background-image: url('0BC2FFF9-4AF6-4CDC-8D41-976515A164DF.png');
+  background-size: cover;
+  background-position: center right;
+  will-change: transform;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    rgba(10,12,10,0.72) 0%,
+    rgba(10,12,10,0.45) 50%,
+    rgba(10,12,10,0.1) 100%
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 8vw;
+  max-width: 680px;
+}
+
+.hero-eyebrow {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin-bottom: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  opacity: 0;
+  animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--terracotta);
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(5rem, 12vw, 10rem);
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: 0.08em;
+  color: var(--cream);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.5s forwards;
+}
+
+.hero-subtitle {
+  font-family: var(--serif);
+  font-size: clamp(1rem, 2.2vw, 1.4rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--cream-dim);
+  line-height: 1.6;
+  margin-top: 1.4rem;
+  max-width: 400px;
+  opacity: 0;
+  animation: fadeUp 1.1s cubic-bezier(0.16,1,0.3,1) 0.75s forwards;
+}
+
+.hero-price-note {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-top: 0.8rem;
+  opacity: 0;
+  animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 0.9s forwards;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 1s cubic-bezier(0.16,1,0.3,1) 1.1s forwards;
+}
+
+.btn-primary {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--cream);
+  padding: 1rem 2.4rem;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.35s, color 0.35s, transform 0.2s;
+}
+.btn-primary:hover {
+  background: var(--terracotta);
+  color: var(--cream);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  background: transparent;
+  padding: 1rem 2.4rem;
+  text-decoration: none;
+  display: inline-block;
+  border: 1px solid rgba(240,235,224,0.25);
+  transition: border-color 0.35s, color 0.35s, transform 0.2s;
+}
+.btn-ghost:hover {
+  border-color: var(--cream-dim);
+  color: var(--cream);
+  transform: translateY(-2px);
+}
+
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+  animation: fadeIn 1s ease 2s forwards;
+}
+.hero-scroll-hint span {
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--terracotta), transparent);
+  animation: scrollPulse 2s ease-in-out 2.5s infinite;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 0.7; }
+}
+@keyframes scrollPulse {
+  0%, 100% { transform: scaleY(1); opacity: 0.6; }
+  50%       { transform: scaleY(0.6); opacity: 1; }
+}
+
+/* ======================================
+   SECTION SHARED
+====================================== */
+section {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-label {
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+.section-label::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 1px;
+  background: var(--terracotta);
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  color: var(--cream);
+}
+
+.section-body {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--cream-dim);
+  max-width: 560px;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(240,235,224,0.08), transparent);
+  margin: 0 auto;
+}
+
+/* ======================================
+   CONCEPTO
+====================================== */
+#concepto {
+  background: var(--bg-soft);
+  padding: 10rem 8vw;
+}
+
+.concepto-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('400F5A11-FE15-4A3D-99FF-4E9F5DBB0BC6.png');
+  background-size: cover;
+  background-position: center right;
+  opacity: 0.12;
+}
+
+.concepto-inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6vw;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.concepto-text .section-title { margin-bottom: 1.5rem; }
+.concepto-text .section-body { margin-bottom: 1.5rem; }
+
+.concepto-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid rgba(240,235,224,0.08);
+}
+.concepto-stat + .concepto-stat { border-bottom: none; }
+.concepto-stat-num {
+  font-family: var(--serif);
+  font-size: 2.6rem;
+  font-weight: 300;
+  color: var(--cream);
+  letter-spacing: 0.04em;
+}
+.concepto-stat-label {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.concepto-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.flow-step {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 1.5rem;
+  align-items: flex-start;
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(240,235,224,0.06);
+  position: relative;
+}
+.flow-step:last-child { border-bottom: none; }
+
+.flow-num {
+  font-family: var(--serif);
+  font-size: 2.8rem;
+  font-weight: 300;
+  color: rgba(165,107,82,0.3);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.flow-title {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--cream);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.02em;
+}
+.flow-desc {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .concepto-inner { grid-template-columns: 1fr; gap: 4rem; }
+  #concepto { padding: 6rem 6vw; }
+}
+
+/* ======================================
+   MENÚ
+====================================== */
+#menu {
+  background: var(--bg);
+  padding: 10rem 8vw;
+}
+
+.menu-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('9844B4E7-815A-48DF-9984-7FF0D53C55FE.png');
+  background-size: cover;
+  background-position: top right;
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+.menu-header {
+  text-align: center;
+  margin-bottom: 5rem;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.menu-header .section-label { justify-content: center; }
+.menu-header .section-label::before { display: none; }
+.menu-header .section-title { margin: 0.5rem 0 1rem; }
+
+.menu-price-note {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+.price-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+.price-amount {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--cream);
+}
+.price-label {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.price-note {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  color: var(--terracotta);
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(240,235,224,0.05);
+  border: 1px solid rgba(240,235,224,0.05);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.menu-course {
+  background: var(--bg);
+  padding: 3rem 2.5rem;
+  transition: background 0.4s;
+}
+.menu-course:hover { background: var(--bg-soft); }
+
+.course-label {
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.course-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(165,107,82,0.25);
+}
+
+.menu-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(240,235,224,0.05);
+}
+.menu-item:last-child { border-bottom: none; }
+
+.menu-item-name {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--cream);
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  margin-bottom: 0.3rem;
+}
+.menu-item-desc {
+  font-family: var(--sans);
+  font-size: 0.73rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.menu-item-sub {
+  font-family: var(--sans);
+  font-size: 0.67rem;
+  color: var(--terracotta);
+  margin-top: 0.3rem;
+  letter-spacing: 0.05em;
+}
+
+.menu-course.full-width {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+  .menu-grid { grid-template-columns: 1fr; }
+  .menu-course.full-width { grid-column: 1; }
+  #menu { padding: 6rem 6vw; }
+}
+
+/* ======================================
+   FUNCIONES
+====================================== */
+#funciones {
+  background: var(--bg-soft);
+  padding: 10rem 8vw;
+}
+
+.funciones-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('23B72BD0-4AAA-4A44-B20F-24292A309526.png');
+  background-size: cover;
+  background-position: bottom right;
+  opacity: 0.1;
+}
+
+.funciones-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.funciones-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 4rem;
+  align-items: end;
+}
+.funciones-header .section-body { max-width: none; }
+
+.funciones-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(240,235,224,0.05);
+  border: 1px solid rgba(240,235,224,0.05);
+}
+
+.funcion-card {
+  background: var(--bg-soft);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: background 0.35s;
+  position: relative;
+}
+.funcion-card:hover { background: var(--bg-mid); }
+
+.funcion-badge {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  margin-bottom: 0.4rem;
+  align-self: flex-start;
+}
+.funcion-badge.disponible {
+  background: rgba(74,74,56,0.4);
+  color: #9aaa78;
+  border: 1px solid rgba(74,74,56,0.5);
+}
+.funcion-badge.proxima {
+  background: rgba(165,107,82,0.15);
+  color: var(--terracotta);
+  border: 1px solid rgba(165,107,82,0.3);
+}
+.funcion-badge.cerrada {
+  background: rgba(240,235,224,0.04);
+  color: var(--muted);
+  border: 1px solid rgba(240,235,224,0.08);
+}
+.funcion-badge.llena {
+  background: rgba(100,40,30,0.3);
+  color: #c07060;
+  border: 1px solid rgba(100,40,30,0.4);
+}
+
+.funcion-num {
+  font-family: var(--serif);
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+.funcion-date {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--cream);
+  letter-spacing: 0.02em;
+}
+.funcion-time {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+.funciones-cta {
+  text-align: center;
+  margin-top: 3.5rem;
+}
+
+@media (max-width: 900px) {
+  .funciones-grid { grid-template-columns: repeat(2, 1fr); }
+  .funciones-header { grid-template-columns: 1fr; gap: 1.5rem; }
+  #funciones { padding: 6rem 6vw; }
+}
+@media (max-width: 500px) {
+  .funciones-grid { grid-template-columns: 1fr; }
+}
+
+/* ======================================
+   RESERVACIONES
+====================================== */
+#reservaciones {
+  background: var(--bg);
+  padding: 10rem 8vw;
+  position: relative;
+}
+
+.reservaciones-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('0BC2FFF9-4AF6-4CDC-8D41-976515A164DF.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.06;
+}
+
+.reservaciones-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.reservaciones-inner .section-label { justify-content: center; }
+.reservaciones-inner .section-label::before { display: none; }
+
+.reservaciones-inner .section-title {
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  margin: 0.5rem 0 1.5rem;
+}
+
+.reservaciones-inner .section-body {
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.reserva-details {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin: 2rem 0 3rem;
+  flex-wrap: wrap;
+}
+.reserva-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: center;
+}
+.reserva-detail-val {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: var(--cream);
+}
+.reserva-detail-key {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.reserva-flow-items {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin: 3rem 0;
+  flex-wrap: wrap;
+}
+.reserva-flow-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 2rem;
+  border-right: 1px solid rgba(240,235,224,0.07);
+  flex: 1;
+  min-width: 100px;
+}
+.reserva-flow-item:last-child { border-right: none; }
+.reserva-flow-icon {
+  font-size: 1.2rem;
+  margin-bottom: 0.2rem;
+  color: var(--terracotta);
+}
+.reserva-flow-name {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+}
+
+/* ======================================
+   EXPERIENCIA
+====================================== */
+#experiencia {
+  background: var(--bg-soft);
+  padding: 10rem 8vw;
+}
+
+.experiencia-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('9844B4E7-815A-48DF-9984-7FF0D53C55FE.png');
+  background-size: cover;
+  background-position: top right;
+  opacity: 0.09;
+}
+
+.experiencia-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6vw;
+  align-items: center;
+}
+
+.exp-text .section-title { margin: 0.5rem 0 1.5rem; }
+
+.exp-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.exp-step {
+  display: flex;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(240,235,224,0.05);
+  align-items: flex-start;
+}
+.exp-step:last-child { border-bottom: none; }
+.exp-step-icon {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(165,107,82,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--terracotta);
+  font-size: 0.95rem;
+}
+.exp-step-info {}
+.exp-step-title {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: var(--cream);
+  margin-bottom: 0.3rem;
+}
+.exp-step-desc {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .experiencia-inner { grid-template-columns: 1fr; }
+  #experiencia { padding: 6rem 6vw; }
+}
+
+/* ======================================
+   STAFF / OPERACIÓN
+====================================== */
+#operacion {
+  background: var(--bg);
+  padding: 8rem 8vw;
+}
+
+.operacion-header {
+  max-width: 1100px;
+  margin: 0 auto 3rem;
+}
+
+.staff-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(240,235,224,0.04);
+  border: 1px solid rgba(240,235,224,0.04);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.staff-card {
+  background: var(--bg);
+  padding: 2rem 1.8rem;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  transition: background 0.35s;
+}
+.staff-card:hover { background: var(--bg-soft); }
+
+.staff-card-icon {
+  font-size: 1.2rem;
+  color: rgba(165,107,82,0.5);
+}
+.staff-card-title {
+  font-family: var(--serif);
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--cream-dim);
+  letter-spacing: 0.02em;
+  transition: color 0.3s;
+}
+.staff-card:hover .staff-card-title { color: var(--cream); }
+.staff-card-desc {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.staff-card-link {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: gap 0.3s;
+}
+.staff-card:hover .staff-card-link { gap: 0.8rem; }
+
+@media (max-width: 900px) {
+  .staff-grid { grid-template-columns: repeat(2, 1fr); }
+  #operacion { padding: 5rem 6vw; }
+}
+@media (max-width: 500px) {
+  .staff-grid { grid-template-columns: 1fr; }
+}
+
+/* ======================================
+   FOOTER
+====================================== */
+footer {
+  background: var(--bg-soft);
+  padding: 5rem 8vw 3rem;
+  border-top: 1px solid rgba(240,235,224,0.05);
+}
+
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 4rem;
+}
+
+.footer-brand-name {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 0.8rem;
+}
+.footer-brand-tagline {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+.footer-col-title {
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin-bottom: 1.2rem;
+}
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.footer-links a {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--cream-dim); }
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(240,235,224,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-copy {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 300;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+.footer-origin {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--olive-light);
+}
+
+@media (max-width: 768px) {
+  .footer-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  footer { padding: 4rem 6vw 2rem; }
+}
+
+/* ======================================
+   PARALLAX SECTIONS
+====================================== */
+.parallax-section {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ======================================
+   ROOTS TRANSITION SECTION
+====================================== */
+.roots-transition {
+  height: 60vh;
+  min-height: 400px;
+  position: relative;
+  overflow: hidden;
+}
+.roots-img {
+  position: absolute;
+  inset: -10%;
+  background-image: url('23B72BD0-4AAA-4A44-B20F-24292A309526.png');
+  background-size: cover;
+  background-position: bottom center;
+  opacity: 0.35;
+  will-change: transform;
+}
+.roots-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 0%,
+    transparent 30%,
+    transparent 70%,
+    var(--bg-soft) 100%
+  );
+}
+.roots-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  gap: 1rem;
+  padding: 4vw;
+  z-index: 2;
+}
+.roots-quote {
+  font-family: var(--serif);
+  font-size: clamp(1.4rem, 3.5vw, 2.6rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--cream);
+  max-width: 700px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+.roots-attr {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+}
+</style>
+
+</head>
+<body>
+
+<!-- NAV -->
+
+<nav id="main-nav">
+  <a href="#hero" class="nav-logo">Alora</a>
+  <ul class="nav-links">
+    <li><a href="#concepto">Concepto</a></li>
+    <li><a href="#menu">Menú</a></li>
+    <li><a href="#funciones">Funciones</a></li>
+    <li><a href="#experiencia">Experiencia</a></li>
+  </ul>
+  <a href="index.html" class="nav-cta">Reservar</a>
+  <div class="nav-mobile-btn" id="menuBtn" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ======================================
+     HERO
+====================================== -->
+
+<section id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Fusión Boricua e Italiana</div>
+    <h1 class="hero-title">Alora</h1>
+    <p class="hero-subtitle">Una experiencia culinaria por función.<br>Prix-fixe. Artesanal. Inmersiva.</p>
+    <p class="hero-price-note">Adultos $35 · Niños $12.50 · Primera bebida incluida</p>
+    <div class="hero-actions">
+      <a href="index.html" class="btn-primary">Reserva Ya</a>
+      <a href="#menu" class="btn-ghost">Ver Menú</a>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span>Descubrir</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ======================================
+     CONCEPTO
+====================================== -->
+
+<section id="concepto" class="parallax-section">
+  <div class="concepto-bg"></div>
+  <div class="concepto-inner">
+    <div class="concepto-text">
+      <div class="section-label reveal">La Experiencia</div>
+      <h2 class="section-title reveal reveal-delay-1">Donde el Olivo<br><em>toca raíz</em></h2>
+      <p class="section-body reveal reveal-delay-2">
+        ALORA es una función gastronómica — no solo una cena. Cada noche es un universo curado, donde la cocina boricua y la tradición italiana se entrelazan como las raíces de un olivo: dos mundos distintos que nacen del mismo suelo.
+      </p>
+      <p class="section-body reveal reveal-delay-3">
+        Prix-fixe. Íntimo. Un menú cuidado, un horario preciso, y una experiencia que comienza mucho antes de tu primera pausa.
+      </p>
+      <div class="concepto-stat reveal reveal-delay-4">
+        <span class="concepto-stat-num">8</span>
+        <span class="concepto-stat-label">Funciones por temporada</span>
+      </div>
+      <div class="concepto-stat reveal reveal-delay-4">
+        <span class="concepto-stat-num">3</span>
+        <span class="concepto-stat-label">Tiempos por experiencia</span>
+      </div>
+    </div>
+
+```
+<div class="concepto-flow">
+  <div class="flow-step reveal reveal-delay-1">
+    <div class="flow-num">01</div>
+    <div>
+      <div class="flow-title">Reserva tu función</div>
+      <div class="flow-desc">Elige tu fecha, hora e invitados. Disponibilidad limitada a cada función.</div>
+    </div>
+  </div>
+  <div class="flow-step reveal reveal-delay-2">
+    <div class="flow-num">02</div>
+    <div>
+      <div class="flow-title">Selecciona tu menú</div>
+      <div class="flow-desc">Cada invitado elige aperitivo, plato principal y postre al reservar.</div>
+    </div>
+  </div>
+  <div class="flow-step reveal reveal-delay-3">
+    <div class="flow-num">03</div>
+    <div>
+      <div class="flow-title">Vive la función</div>
+      <div class="flow-desc">5:30 PM a 9:00 PM. Intervalos de 30 minutos. Una velada diseñada con intención.</div>
+    </div>
+  </div>
+  <div class="flow-step reveal reveal-delay-4">
+    <div class="flow-num">04</div>
+    <div>
+      <div class="flow-title">Tu ticket &amp; QR</div>
+      <div class="flow-desc">Recibes un ticket digital con QR para check-in sin filas. Tu entrada al universo ALORA.</div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ROOTS TRANSITION -->
+
+<div class="roots-transition">
+  <div class="roots-img" id="rootsParallax"></div>
+  <div class="roots-overlay"></div>
+  <div class="roots-text">
+    <p class="roots-quote reveal">"La raíz no sigue caminos — los crea."</p>
+    <p class="roots-attr reveal reveal-delay-1">ALORA · Boritaly</p>
+  </div>
+</div>
+
+<!-- ======================================
+     MENÚ
+====================================== -->
+
+<section id="menu" class="parallax-section">
+  <div class="menu-bg"></div>
+
+  <div style="position:relative;z-index:2;">
+    <div class="menu-header">
+      <div class="section-label reveal">La Mesa</div>
+      <h2 class="section-title reveal reveal-delay-1">El Menú</h2>
+      <p class="section-body reveal reveal-delay-2" style="text-align:center;margin:0 auto;">
+        Prix-fixe. Cada invitado escoge un plato de cada tiempo.
+      </p>
+      <div class="menu-price-note reveal reveal-delay-3">
+        <div class="price-item">
+          <span class="price-amount">$35</span>
+          <span class="price-label">Adulto</span>
+        </div>
+        <div class="price-item">
+          <span class="price-amount">$12.50</span>
+          <span class="price-label">Niño</span>
+        </div>
+      </div>
+      <p class="price-note reveal reveal-delay-4">★ Primera bebida incluida con el precio adulto</p>
+    </div>
+
+```
+<div class="menu-grid reveal-scale">
+  <!-- Aperitivos -->
+  <div class="menu-course">
+    <div class="course-label">Aperitivos</div>
+    <div class="menu-item">
+      <div class="menu-item-name">Arancini de Queso del País</div>
+      <div class="menu-item-desc">Con salsa de guayaba. Fusión italiana en corazón boricua.</div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Sopa de Tomate Cremosa</div>
+      <div class="menu-item-desc">Con pan de agua y aceite infusionado de orégano brujo y recao.</div>
+    </div>
+  </div>
+
+  <!-- Postres -->
+  <div class="menu-course">
+    <div class="course-label">Postres</div>
+    <div class="menu-item">
+      <div class="menu-item-name">Cannoli Deconstruido</div>
+      <div class="menu-item-desc">Reinterpretación artesanal del clásico siciliano.</div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Gelato de Piña Colada</div>
+      <div class="menu-item-desc">Con crumble de Galletas María. Sabor boricua en forma helada.</div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-name">Dulce de Papaya</div>
+      <div class="menu-item-desc">Tradición de isla. Dulzura natural y textura caramelizada.</div>
+    </div>
+  </div>
+
+  <!-- Platos Principales - full width -->
+  <div class="menu-course full-width">
+    <div class="course-label">Platos Principales</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0;">
+      <div class="menu-item" style="padding-right:2rem;border-right:1px solid rgba(240,235,224,0.05);">
+        <div class="menu-item-name">Falso Risotto de Calabaza</div>
+        <div class="menu-item-desc">Con queso del país y crocante de chicharrón volao.</div>
+        <div class="menu-item-sub">Proteína: pechuga a la parrilla o medallones de cerdo</div>
+      </div>
+      <div class="menu-item" style="padding:1rem 2rem;border-right:1px solid rgba(240,235,224,0.05);">
+        <div class="menu-item-name">Pasta con Pimientos Rojos</div>
+        <div class="menu-item-desc">Salsa de pimientos rojos o pesto alla calabrese con parmesano rallado.</div>
+        <div class="menu-item-sub">Proteína: pechuga a la parrilla</div>
+      </div>
+      <div class="menu-item" style="padding:1rem 0 1rem 2rem;">
+        <div class="menu-item-name">Pasta Vegana de Garbanzos</div>
+        <div class="menu-item-desc">Salsa de pimientos rojos, crispy onions, cauliflower steak y aceite infusionado.</div>
+        <div class="menu-item-sub">Opción vegana disponible</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menú niños -->
+  <div class="menu-course full-width" style="background:rgba(240,235,224,0.015);">
+    <div class="course-label">Menú de los Pequeños</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;">
+      <div class="menu-item" style="padding-right:2rem;border-right:1px solid rgba(240,235,224,0.05);">
+        <div class="menu-item-name">Grilled Cheese</div>
+        <div class="menu-item-desc">En pan de agua con sopa de tomate cremosa y papas fritas.</div>
+      </div>
+      <div class="menu-item" style="padding:1rem 2rem;border-right:1px solid rgba(240,235,224,0.05);">
+        <div class="menu-item-name">Chicken Tenders</div>
+        <div class="menu-item-desc">Crujientes, con papas fritas.</div>
+      </div>
+      <div class="menu-item" style="padding:1rem 0 1rem 2rem;">
+        <div class="menu-item-name">Mac &amp; Cheese</div>
+        <div class="menu-item-desc">Cremoso con salsa de ajo rostizado, pan de agua tostado y papas fritas.</div>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ======================================
+     FUNCIONES
+====================================== -->
+
+<section id="funciones" class="parallax-section">
+  <div class="funciones-bg"></div>
+  <div class="funciones-inner">
+    <div class="funciones-header">
+      <div>
+        <div class="section-label reveal">Calendario</div>
+        <h2 class="section-title reveal reveal-delay-1">Las Funciones</h2>
+      </div>
+      <p class="section-body reveal reveal-delay-2">
+        Ocho noches. Horarios a las 5:30 PM. Intervalos de 30 minutos. Cada función es un universo irrepetible — reserva con tiempo.
+      </p>
+    </div>
+
+```
+<div class="funciones-grid reveal-scale">
+  <div class="funcion-card">
+    <span class="funcion-badge cerrada">Cerrada</span>
+    <div class="funcion-num">Función 01</div>
+    <div class="funcion-date">19 Mar 2026</div>
+    <div class="funcion-time">5:30 PM — 9:00 PM</div>
+  </div>
+  <div class="funcion-card">
+    <span class="funcion-badge cerrada">Cerrada</span>
+    <div class="funcion-num">Función 02</div>
+    <div class="funcion-date">26 Mar 2026</div>
+    <div class="funcion-time">5:30 PM — 9:00 PM</div>
+  </div>
+  <div class="funcion-card">
+    <span class="funcion-badge cerrada">Cerrada</span>
+    <div class="funcion-num">Función 03</div>
+    <div class="funcion-date">9 Abr 2026</div>
+    <div class="funcion-time">5:30 PM — 9:00 PM</div>
+  </div>
+  <div class="funcion-card">
+    <span class="funcion-badge cerrada">Cerrada</span>
+    <div class="funcion-num">Función 04</div>
+    <div class="funcion-date">16 Abr 2026</div>
+    <div class="funcion-time">5:30 PM — 9:00 PM</div>
+  </div>
+  <div class="funcion-card">
+    <span class="funcion-badge cerrada">Cerrada</span>
+    <div class="funcion-num">Función 05</div>
+    <div class="funcion-date">23 Abr 2026</div>
+    <div class="funcion-time">5:30 PM — 9:00 PM</div>
+  </div>
+  <div class="funcion-card">
+    <span class="funcion-badge cerrada">Cerrada</span>
+    <div class="funcion-num">Función 06</div>
+    <div class="funcion-date">30 Abr 2026</div>
+    <div class="funcion-time">5:30 PM — 9:00 PM</div>
+  </div>
+  <div class="funcion-card">
+    <span class="funcion-badge cerrada">Cerrada</span>
+    <div class="funcion-num">Función 07</div>
+    <div class="funcion-date">7 May 2026</div>
+    <div class="funcion-time">5:30 PM — 9:00 PM</div>
+  </div>
+  <div class="funcion-card">
+    <span class="funcion-badge proxima">Próxima</span>
+    <div class="funcion-num">Función 08</div>
+    <div class="funcion-date">14 May 2026</div>
+    <div class="funcion-time">5:30 PM — 9:00 PM</div>
+  </div>
+</div>
+
+<div class="funciones-cta reveal">
+  <a href="index.html" class="btn-primary">Ver disponibilidad &amp; Reservar</a>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ======================================
+     RESERVACIONES CTA HERO
+====================================== -->
+
+<section id="reservaciones">
+  <div class="reservaciones-bg"></div>
+  <div class="reservaciones-inner">
+    <div class="section-label reveal">Reservaciones</div>
+    <h2 class="section-title reveal reveal-delay-1">Tu noche<br><em>te espera</em></h2>
+    <p class="section-body reveal reveal-delay-2">
+      Cada función tiene cupo limitado. Selecciona tu menú al reservar y llega listo para vivir la experiencia completa.
+    </p>
+
+```
+<div class="reserva-details reveal reveal-delay-2">
+  <div class="reserva-detail">
+    <span class="reserva-detail-val">$35</span>
+    <span class="reserva-detail-key">por adulto</span>
+  </div>
+  <div class="reserva-detail">
+    <span class="reserva-detail-val">$12.50</span>
+    <span class="reserva-detail-key">por niño</span>
+  </div>
+  <div class="reserva-detail">
+    <span class="reserva-detail-val">3</span>
+    <span class="reserva-detail-key">tiempos</span>
+  </div>
+  <div class="reserva-detail">
+    <span class="reserva-detail-val">1</span>
+    <span class="reserva-detail-key">bebida incluida</span>
+  </div>
+</div>
+
+<div class="reserva-flow-items reveal reveal-delay-3">
+  <div class="reserva-flow-item">
+    <div class="reserva-flow-icon">◈</div>
+    <div class="reserva-flow-name">Reserva</div>
+  </div>
+  <div class="reserva-flow-item">
+    <div class="reserva-flow-icon">◉</div>
+    <div class="reserva-flow-name">Menú</div>
+  </div>
+  <div class="reserva-flow-item">
+    <div class="reserva-flow-icon">◎</div>
+    <div class="reserva-flow-name">Ticket</div>
+  </div>
+  <div class="reserva-flow-item">
+    <div class="reserva-flow-icon">◇</div>
+    <div class="reserva-flow-name">Check-in</div>
+  </div>
+  <div class="reserva-flow-item">
+    <div class="reserva-flow-icon">✦</div>
+    <div class="reserva-flow-name">Función</div>
+  </div>
+</div>
+
+<div class="reveal reveal-delay-4">
+  <a href="index.html" class="btn-primary" style="font-size:0.78rem;padding:1.1rem 3rem;">Reserva Ya</a>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ======================================
+     EXPERIENCIA DEL INVITADO
+====================================== -->
+
+<section id="experiencia">
+  <div class="experiencia-bg"></div>
+  <div class="experiencia-inner">
+    <div class="exp-text">
+      <div class="section-label reveal">Invitado</div>
+      <h2 class="section-title reveal reveal-delay-1">La experiencia<br><em>del invitado</em></h2>
+      <p class="section-body reveal reveal-delay-2">
+        Diseñada para que no tengas que pensar en nada más que disfrutar. Desde el momento en que reservas hasta el último sorbo.
+      </p>
+    </div>
+
+```
+<div class="exp-steps">
+  <div class="exp-step reveal reveal-delay-1">
+    <div class="exp-step-icon">⬡</div>
+    <div class="exp-step-info">
+      <div class="exp-step-title">Confirmación Inmediata</div>
+      <div class="exp-step-desc">Al completar tu reserva recibes confirmación con los detalles de tu función y selección de menú.</div>
+    </div>
+  </div>
+  <div class="exp-step reveal reveal-delay-2">
+    <div class="exp-step-icon">⬡</div>
+    <div class="exp-step-info">
+      <div class="exp-step-title">Tu Ticket Digital</div>
+      <div class="exp-step-desc">Recibes un ticket con código QR único por reserva. Tu llave de entrada a ALORA.</div>
+    </div>
+  </div>
+  <div class="exp-step reveal reveal-delay-3">
+    <div class="exp-step-icon">⬡</div>
+    <div class="exp-step-info">
+      <div class="exp-step-title">Check-in sin Fricciones</div>
+      <div class="exp-step-desc">El host escanea tu QR a la llegada. Sin papeles, sin esperas innecesarias.</div>
+    </div>
+  </div>
+  <div class="exp-step reveal reveal-delay-4">
+    <div class="exp-step-icon">⬡</div>
+    <div class="exp-step-info">
+      <div class="exp-step-title">La Función Comienza</div>
+      <div class="exp-step-desc">Tu mesa, tu menú seleccionado, y una noche que no existirá dos veces igual.</div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ======================================
+     STAFF / OPERACIÓN
+====================================== -->
+
+<section id="operacion">
+  <div class="operacion-header">
+    <div class="section-label reveal">Sistema</div>
+    <h2 class="section-title reveal reveal-delay-1" style="max-width:500px;">Acceso al<br>Equipo ALORA</h2>
+  </div>
+  <div class="staff-grid reveal-scale">
+    <a href="host.html" class="staff-card">
+      <div class="staff-card-icon">◈</div>
+      <div class="staff-card-title">Host Dashboard</div>
+      <div class="staff-card-desc">Gestión de llegadas, check-in de invitados y control de la sala.</div>
+      <div class="staff-card-link">Acceder →</div>
+    </a>
+    <a href="kitchens.html" class="staff-card">
+      <div class="staff-card-icon">◈</div>
+      <div class="staff-card-title">Kitchen View</div>
+      <div class="staff-card-desc">Vista de cocina con los pedidos por función y tiempo en tiempo real.</div>
+      <div class="staff-card-link">Acceder →</div>
+    </a>
+    <a href="production.html" class="staff-card">
+      <div class="staff-card-icon">◈</div>
+      <div class="staff-card-title">Production Dashboard</div>
+      <div class="staff-card-desc">Control operacional, estadísticas de producción y seguimiento de función.</div>
+      <div class="staff-card-link">Acceder →</div>
+    </a>
+    <a href="ticket.html" class="staff-card">
+      <div class="staff-card-icon">◈</div>
+      <div class="staff-card-title">Ticket &amp; QR</div>
+      <div class="staff-card-desc">Consulta y validación de tickets digitales por función e invitado.</div>
+      <div class="staff-card-link">Acceder →</div>
+    </a>
+  </div>
+</section>
+
+<!-- ======================================
+     FOOTER
+====================================== -->
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">Alora</div>
+      <div class="footer-brand-tagline">Una experiencia culinaria por función. Fusión boricua e italiana. Prix-fixe y completamente artesanal.</div>
+    </div>
+    <div>
+      <div class="footer-col-title">Navegación</div>
+      <ul class="footer-links">
+        <li><a href="#concepto">El Concepto</a></li>
+        <li><a href="#menu">El Menú</a></li>
+        <li><a href="#funciones">Las Funciones</a></li>
+        <li><a href="#experiencia">Experiencia</a></li>
+        <li><a href="index.html">Reservar</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Acceso Staff</div>
+      <ul class="footer-links">
+        <li><a href="host.html">Host Dashboard</a></li>
+        <li><a href="kitchens.html">Kitchen View</a></li>
+        <li><a href="production.html">Producción</a></li>
+        <li><a href="ticket.html">Tickets &amp; QR</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 ALORA · Fusión Boricua e Italiana · Todos los derechos reservados</div>
+    <div class="footer-origin">Nacido de dos mundos, enraizado en uno solo.</div>
+  </div>
+</footer>
+
+<!-- ======================================
+     JAVASCRIPT
+====================================== -->
+
+<script>
+// --- SMOOTH SCROLL ENGINE ---
+(function() {
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) return;
+
+  let currentY = 0;
+  let targetY = 0;
+  let rafId;
+  const ease = 0.085;
+
+  const content = document.documentElement;
+  let ticking = false;
+
+  window.addEventListener('scroll', () => {
+    targetY = window.scrollY;
+  }, { passive: true });
+
+  // We use native scroll but smooth it with parallax layers
+  // No full smooth scroll wrapper to preserve accessibility + form usability
+})();
+
+// --- NAV SCROLL STATE ---
+const nav = document.getElementById('main-nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+// --- SCROLL REVEAL ---
+const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-scale');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+revealEls.forEach(el => revealObserver.observe(el));
+
+// --- HERO PARALLAX ---
+const heroBg = document.getElementById('heroBg');
+const rootsPx = document.getElementById('rootsParallax');
+
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const heroH = document.getElementById('hero').offsetHeight;
+
+  if (heroBg && scrollY < heroH * 1.5) {
+    const progress = scrollY / heroH;
+    heroBg.style.transform = `translateY(${progress * 12}%)`;
+  }
+
+  if (rootsPx) {
+    const rootsSection = rootsPx.closest('.roots-transition');
+    const rect = rootsSection.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      const progress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+      rootsPx.style.transform = `translateY(${(progress - 0.5) * 10}%)`;
+    }
+  }
+}, { passive: true });
+
+// --- SMOOTH ANCHOR SCROLL ---
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', (e) => {
+    const target = document.querySelector(anchor.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// --- FUNCION STATUS (live: compare to today) ---
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const funcionDates = [
+  new Date('2026-03-19'),
+  new Date('2026-03-26'),
+  new Date('2026-04-09'),
+  new Date('2026-04-16'),
+  new Date('2026-04-23'),
+  new Date('2026-04-30'),
+  new Date('2026-05-07'),
+  new Date('2026-05-14'),
+];
+
+document.querySelectorAll('.funcion-card').forEach((card, i) => {
+  const badge = card.querySelector('.funcion-badge');
+  const d = funcionDates[i];
+  if (!d || !badge) return;
+
+  const diff = (d - today) / (1000 * 60 * 60 * 24);
+
+  if (diff < 0) {
+    badge.textContent = 'Cerrada';
+    badge.className = 'funcion-badge cerrada';
+  } else if (diff === 0) {
+    badge.textContent = 'Hoy';
+    badge.className = 'funcion-badge proxima';
+  } else if (diff <= 7) {
+    badge.textContent = 'Próxima';
+    badge.className = 'funcion-badge proxima';
+  } else {
+    badge.textContent = 'Disponible';
+    badge.className = 'funcion-badge disponible';
+  }
+});
+</script>
+
+</body>
+</html>
