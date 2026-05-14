@@ -14,16 +14,7 @@
    RESET & BASE
 ====================================== */
 
-/* Global page background - tree shows through all sections */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url('https://elsazon.github.io/Alora-Reserve/IMG_0134.png');
-  background-size: cover;
-  background-position: center top;
-  z-index: -1;
-}
+/* Global page background removed - handled by hero-bg */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -212,7 +203,6 @@ nav.scrolled {
   background-image: url('https://elsazon.github.io/Alora-Reserve/IMG_0134.png');
   background-size: cover;
   background-position: center top;
-  background-attachment: fixed;
   z-index: -1;
 }
 
@@ -1790,10 +1780,7 @@ window.addEventListener('scroll', () => {
   const scrollY = window.scrollY;
   const heroH = document.getElementById('hero').offsetHeight;
 
-  if (heroBg && scrollY < heroH * 1.5) {
-    const progress = scrollY / heroH;
-    heroBg.style.transform = `translateY(${progress * 12}%)`;
-  }
+  // heroBg is position:fixed, no parallax needed
 
   if (rootsPx) {
     const rootsSection = rootsPx.closest('.roots-transition');
@@ -1868,7 +1855,7 @@ document.querySelectorAll('.funcion-card').forEach((card, i) => {
     leaf.className = 'leaf';
     leaf.innerHTML = leafSVG;
     const size = 10 + Math.random() * 8;
-    const startX = 52 + Math.random() * 35;
+    const startX = 58 + Math.random() * 28;
     const duration = 6 + Math.random() * 10;
     const delay = Math.random() * 8;
     leaf.style.cssText = `
@@ -1881,7 +1868,7 @@ document.querySelectorAll('.funcion-card').forEach((card, i) => {
     container.appendChild(leaf);
   }
 
-  for (let i = 0; i < 7; i++) createLeaf();
+  for (let i = 0; i < 5; i++) createLeaf();
 })();
 
 </script>
