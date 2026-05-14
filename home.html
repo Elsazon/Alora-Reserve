@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ALORA — Fusión Boricua e Italiana</title>
+<title>ALORA · Una Temporada en 8 Funciones · 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
@@ -941,7 +941,7 @@ section {
 
 .staff-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1px;
   background: rgba(240,235,224,0.04);
   border: 1px solid rgba(240,235,224,0.04);
@@ -994,7 +994,10 @@ section {
 }
 .staff-card:hover .staff-card-link { gap: 0.8rem; }
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
+  .staff-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 700px) {
   .staff-grid { grid-template-columns: repeat(2, 1fr); }
   #operacion { padding: 5rem 6vw; }
 }
@@ -1164,6 +1167,222 @@ footer {
   100% { opacity: 0; transform: translateY(105vh) rotate(680deg) translateX(80px); }
 }
 
+
+/* ======================================
+   CIFRAS (La Temporada en Números)
+====================================== */
+#cifras {
+  background: rgba(10,12,10,0.82);
+  padding: 8rem 8vw;
+  position: relative;
+}
+.cifras-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.cifras-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+.cifras-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(240,235,224,0.05);
+  border: 1px solid rgba(240,235,224,0.05);
+}
+.cifra-item {
+  background: rgba(10,12,10,0.6);
+  padding: 3rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  transition: background 0.35s;
+}
+.cifra-item:hover { background: rgba(20,25,20,0.8); }
+.cifra-prefix {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--terracotta);
+  line-height: 1;
+  align-self: flex-start;
+  margin-left: 2rem;
+}
+.cifra-num {
+  font-family: var(--serif);
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  font-weight: 300;
+  color: var(--cream);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+.cifra-suffix {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--terracotta);
+}
+.cifra-label {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  font-weight: 300;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+.cifra-desc {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: rgba(240,235,224,0.35);
+  margin-top: 0.2rem;
+}
+@media (max-width: 768px) {
+  .cifras-grid { grid-template-columns: repeat(2, 1fr); }
+  #cifras { padding: 5rem 6vw; }
+}
+@media (max-width: 400px) {
+  .cifras-grid { grid-template-columns: 1fr; }
+}
+
+/* ======================================
+   LA MESA DINÁMICA
+====================================== */
+.mesa-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+.mesa-funcion-indicator {
+  text-align: center;
+}
+.mesa-funcion-num {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--cream);
+  display: block;
+  letter-spacing: 0.05em;
+}
+.mesa-funcion-date {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  font-weight: 300;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 0.3rem;
+}
+.mesa-arrow {
+  background: transparent;
+  border: 1px solid rgba(240,235,224,0.2);
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  color: var(--cream-dim);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mesa-arrow:hover {
+  background: var(--terracotta);
+  border-color: var(--terracotta);
+  color: var(--cream);
+}
+.mesa-arrow:disabled { opacity: 0.2; cursor: not-allowed; }
+
+.mesa-courses {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(240,235,224,0.05);
+  border: 1px solid rgba(240,235,224,0.05);
+  transition: opacity 0.35s, filter 0.35s;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.mesa-courses.changing {
+  opacity: 0.2;
+  filter: blur(3px);
+}
+.mesa-course-col {
+  background: rgba(10,12,10,0.55);
+  padding: 2.5rem 2rem;
+}
+.mesa-course-title {
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(165,107,82,0.2);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.mesa-course-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(165,107,82,0.15);
+}
+.mesa-item {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--cream-dim);
+  line-height: 1.6;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(240,235,224,0.04);
+}
+.mesa-item:last-child { border-bottom: none; }
+.mesa-item.changed {
+  color: var(--terracotta);
+}
+.mesa-item.changed::before {
+  content: '· ';
+  color: var(--terracotta);
+}
+
+.mesa-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 2rem;
+}
+.mesa-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(240,235,224,0.15);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 0;
+}
+.mesa-dot.active {
+  background: var(--terracotta);
+  width: 22px;
+  border-radius: 3px;
+}
+
+@media (max-width: 700px) {
+  .mesa-courses { grid-template-columns: 1fr; }
+}
+
 </style>
 
 </head>
@@ -1194,12 +1413,12 @@ footer {
   <div class="hero-overlay"></div>
   <div class="leaves-container" id="leavesContainer"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">Fusión Boricua e Italiana</div>
+    <div class="hero-eyebrow">Proyecto Final · UAGM · 2026</div>
     <h1 class="hero-title">Alora</h1>
-    <p class="hero-subtitle">Una experiencia culinaria por función.<br>Prix-fixe. Artesanal. Inmersiva.</p>
+    <p class="hero-subtitle">Una temporada en 8 funciones.<br>Fusión boricua e italiana.</p>
     <p class="hero-price-note">Adultos $35 · Niños $12.50 · Primera bebida incluida</p>
     <div class="hero-actions">
-      <a href="index.html" class="btn-primary">Reserva Ya</a>
+      <a href="#cifras" class="btn-primary">Explorar la Temporada</a>
       <a href="#menu" class="btn-ghost">Ver Menú</a>
     </div>
   </div>
@@ -1218,12 +1437,12 @@ footer {
   <div class="concepto-inner">
     <div class="concepto-text">
       <div class="section-label reveal">La Experiencia</div>
-      <h2 class="section-title reveal reveal-delay-1">Donde el Olivo<br><em>toca raíz</em></h2>
+      <h2 class="section-title reveal reveal-delay-1">Una temporada<br><em>en 8 funciones</em></h2>
       <p class="section-body reveal reveal-delay-2">
-        ALORA es una función gastronómica — no solo una cena. Cada noche es un universo curado, donde la cocina boricua y la tradición italiana se entrelazan como las raíces de un olivo: dos mundos distintos que nacen del mismo suelo.
+        ALORA fue nuestro proyecto final universitario — una experiencia gastronómica por función donde la cocina boricua y la tradición italiana se encontraron como las raíces de un olivo: dos mundos distintos que nacen del mismo suelo.
       </p>
       <p class="section-body reveal reveal-delay-3">
-        Prix-fixe. Íntimo. Un menú cuidado, un horario preciso, y una experiencia que comienza mucho antes de tu primera pausa.
+        Prix-fixe. Íntimo. Un menú cuidado, un horario preciso, y una experiencia diseñada con intención desde el primer plato hasta el último postre.
       </p>
       <div class="concepto-stat reveal reveal-delay-4">
         <span class="concepto-stat-num">8</span>
@@ -1271,6 +1490,50 @@ footer {
   </div>
 </section>
 
+<!-- ======================================
+     CIFRAS — La Temporada en Números
+====================================== -->
+
+<section id="cifras">
+  <div class="cifras-inner">
+    <div class="cifras-header">
+      <div class="section-label reveal" style="justify-content:center;">La Temporada</div>
+      <h2 class="section-title reveal reveal-delay-1" style="text-align:center;">El proyecto en números</h2>
+      <p class="section-body reveal reveal-delay-2" style="text-align:center;margin:0.8rem auto 0;">
+        Ocho funciones completadas como parte del proyecto final de Administración de Empresas Hoteleras.
+      </p>
+    </div>
+    <div class="cifras-grid reveal-scale">
+      <div class="cifra-item">
+        <span class="cifra-num"><span class="cifra-counter" data-target="8" data-prefix="" data-suffix="">0</span></span>
+        <span class="cifra-label">Funciones</span>
+        <span class="cifra-desc">Noches completas</span>
+      </div>
+      <div class="cifra-item">
+        <span class="cifra-num"><span class="cifra-counter" data-target="240" data-prefix="" data-suffix="">0</span></span>
+        <span class="cifra-label">Comensales</span>
+        <span class="cifra-desc">Invitados servidos</span>
+      </div>
+      <div class="cifra-item">
+        <div style="display:flex;align-items:flex-start;justify-content:center;">
+          <span class="cifra-prefix">$</span>
+          <span class="cifra-num"><span class="cifra-counter" data-target="8400" data-prefix="$" data-suffix="">0</span></span>
+        </div>
+        <span class="cifra-label">Ventas</span>
+        <span class="cifra-desc">Ingresos totales</span>
+      </div>
+      <div class="cifra-item">
+        <div style="display:flex;align-items:flex-end;justify-content:center;gap:0.1rem;">
+          <span class="cifra-num"><span class="cifra-counter" data-target="28" data-prefix="" data-suffix="">0</span></span>
+          <span class="cifra-suffix" style="margin-bottom:0.8rem;">%</span>
+        </div>
+        <span class="cifra-label">Food Cost</span>
+        <span class="cifra-desc">Costo de alimentos</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ROOTS TRANSITION -->
 
 <div class="roots-transition">
@@ -1294,7 +1557,7 @@ footer {
       <div class="section-label reveal">La Mesa</div>
       <h2 class="section-title reveal reveal-delay-1">El Menú</h2>
       <p class="section-body reveal reveal-delay-2" style="text-align:center;margin:0 auto;">
-        Prix-fixe. Cada invitado escoge un plato de cada tiempo.
+        Prix-fixe. Tres tiempos por invitado. El menú base que se sirvió en las ocho funciones.
       </p>
       <div class="menu-price-note reveal reveal-delay-3">
         <div class="price-item">
@@ -1381,6 +1644,40 @@ footer {
       </div>
     </div>
   </div>
+<!-- MESA DINÁMICA POR FUNCIÓN -->
+<div style="margin-top:4rem;position:relative;z-index:2;">
+  <div style="text-align:center;margin-bottom:2rem;">
+    <div class="section-label reveal" style="justify-content:center;">Menú por función</div>
+    <h3 class="section-title reveal reveal-delay-1" style="font-size:clamp(1.6rem,3vw,2.4rem);margin-top:0.4rem;">La Mesa — Función a función</h3>
+    <p class="section-body reveal reveal-delay-2" style="text-align:center;margin:0.8rem auto 0;max-width:500px;">
+      Navega por cada una de las 8 funciones y explora el menú que se sirvió esa noche.
+    </p>
+  </div>
+  <div class="mesa-nav">
+    <button class="mesa-arrow" id="mesa-prev" aria-label="Función anterior">←</button>
+    <div class="mesa-funcion-indicator">
+      <span class="mesa-funcion-num" id="mesa-num">Función I</span>
+      <div class="mesa-funcion-date" id="mesa-date">19 Mar 2026</div>
+    </div>
+    <button class="mesa-arrow" id="mesa-next" aria-label="Siguiente función">→</button>
+  </div>
+  <div class="mesa-courses" id="mesa-courses">
+    <div class="mesa-course-col">
+      <div class="mesa-course-title">Aperitivos</div>
+      <div id="mesa-aperitivos"></div>
+    </div>
+    <div class="mesa-course-col">
+      <div class="mesa-course-title">Principales</div>
+      <div id="mesa-principales"></div>
+    </div>
+    <div class="mesa-course-col">
+      <div class="mesa-course-title">Postres</div>
+      <div id="mesa-postres"></div>
+    </div>
+  </div>
+  <div class="mesa-dots" id="mesa-dots"></div>
+</div>
+
 </div>
 ```
 
@@ -1396,60 +1693,60 @@ footer {
   <div class="funciones-inner">
     <div class="funciones-header">
       <div>
-        <div class="section-label reveal">Calendario</div>
-        <h2 class="section-title reveal reveal-delay-1">Las Funciones</h2>
+        <div class="section-label reveal">Temporada 2026</div>
+        <h2 class="section-title reveal reveal-delay-1">Las 8 Funciones</h2>
       </div>
       <p class="section-body reveal reveal-delay-2">
-        Ocho noches. Horarios a las 5:30 PM. Intervalos de 30 minutos. Cada función es un universo irrepetible — reserva con tiempo.
+        Ocho funciones completadas como parte del proyecto final. Horarios a las 5:30 PM, intervalos de 30 minutos, cada noche irrepetible.
       </p>
     </div>
 
 ```
 <div class="funciones-grid reveal-scale">
   <div class="funcion-card">
-    <span class="funcion-badge cerrada">Cerrada</span>
+    <span class="funcion-badge cerrada">Completada</span>
     <div class="funcion-num">Función 01</div>
     <div class="funcion-date">19 Mar 2026</div>
     <div class="funcion-time">5:30 PM — 9:00 PM</div>
   </div>
   <div class="funcion-card">
-    <span class="funcion-badge cerrada">Cerrada</span>
+    <span class="funcion-badge cerrada">Completada</span>
     <div class="funcion-num">Función 02</div>
     <div class="funcion-date">26 Mar 2026</div>
     <div class="funcion-time">5:30 PM — 9:00 PM</div>
   </div>
   <div class="funcion-card">
-    <span class="funcion-badge cerrada">Cerrada</span>
+    <span class="funcion-badge cerrada">Completada</span>
     <div class="funcion-num">Función 03</div>
     <div class="funcion-date">9 Abr 2026</div>
     <div class="funcion-time">5:30 PM — 9:00 PM</div>
   </div>
   <div class="funcion-card">
-    <span class="funcion-badge cerrada">Cerrada</span>
+    <span class="funcion-badge cerrada">Completada</span>
     <div class="funcion-num">Función 04</div>
     <div class="funcion-date">16 Abr 2026</div>
     <div class="funcion-time">5:30 PM — 9:00 PM</div>
   </div>
   <div class="funcion-card">
-    <span class="funcion-badge cerrada">Cerrada</span>
+    <span class="funcion-badge cerrada">Completada</span>
     <div class="funcion-num">Función 05</div>
     <div class="funcion-date">23 Abr 2026</div>
     <div class="funcion-time">5:30 PM — 9:00 PM</div>
   </div>
   <div class="funcion-card">
-    <span class="funcion-badge cerrada">Cerrada</span>
+    <span class="funcion-badge cerrada">Completada</span>
     <div class="funcion-num">Función 06</div>
     <div class="funcion-date">30 Abr 2026</div>
     <div class="funcion-time">5:30 PM — 9:00 PM</div>
   </div>
   <div class="funcion-card">
-    <span class="funcion-badge cerrada">Cerrada</span>
+    <span class="funcion-badge cerrada">Completada</span>
     <div class="funcion-num">Función 07</div>
     <div class="funcion-date">7 May 2026</div>
     <div class="funcion-time">5:30 PM — 9:00 PM</div>
   </div>
   <div class="funcion-card">
-    <span class="funcion-badge proxima">Próxima</span>
+    <span class="funcion-badge cerrada">Completada</span>
     <div class="funcion-num">Función 08</div>
     <div class="funcion-date">14 May 2026</div>
     <div class="funcion-time">5:30 PM — 9:00 PM</div>
@@ -1457,7 +1754,7 @@ footer {
 </div>
 
 <div class="funciones-cta reveal">
-  <a href="index.html" class="btn-primary">Ver disponibilidad &amp; Reservar</a>
+  <a href="index.html" class="btn-primary">Ver sistema de reservaciones</a>
 </div>
 ```
 
@@ -1471,10 +1768,10 @@ footer {
 <section id="reservaciones">
   <div class="reservaciones-bg"></div>
   <div class="reservaciones-inner">
-    <div class="section-label reveal">Reservaciones</div>
-    <h2 class="section-title reveal reveal-delay-1">Tu noche<br><em>te espera</em></h2>
+    <div class="section-label reveal">El Sistema</div>
+    <h2 class="section-title reveal reveal-delay-1">El sistema de<br><em>reservaciones</em></h2>
     <p class="section-body reveal reveal-delay-2">
-      Cada función tiene cupo limitado. Selecciona tu menú al reservar y llega listo para vivir la experiencia completa.
+      El sistema de reservaciones fue parte esencial del proyecto — permitió organizar invitados, horarios, selección de menú y tickets digitales para las ocho funciones.
     </p>
 
 ```
@@ -1521,7 +1818,7 @@ footer {
 </div>
 
 <div class="reveal reveal-delay-4">
-  <a href="index.html" class="btn-primary" style="font-size:0.78rem;padding:1.1rem 3rem;">Reserva Ya</a>
+  <a href="index.html" class="btn-primary" style="font-size:0.78rem;padding:1.1rem 3rem;">Entrar al archivo</a>
 </div>
 ```
 
@@ -1536,10 +1833,10 @@ footer {
   <div class="experiencia-bg"></div>
   <div class="experiencia-inner">
     <div class="exp-text">
-      <div class="section-label reveal">Invitado</div>
+      <div class="section-label reveal">El Invitado</div>
       <h2 class="section-title reveal reveal-delay-1">La experiencia<br><em>del invitado</em></h2>
       <p class="section-body reveal reveal-delay-2">
-        Diseñada para que no tengas que pensar en nada más que disfrutar. Desde el momento en que reservas hasta el último sorbo.
+        Diseñada para que el invitado no tuviera que pensar en nada más que disfrutar. Desde la reserva hasta el último sorbo.
       </p>
     </div>
 
@@ -1549,28 +1846,28 @@ footer {
     <div class="exp-step-icon">⬡</div>
     <div class="exp-step-info">
       <div class="exp-step-title">Confirmación Inmediata</div>
-      <div class="exp-step-desc">Al completar tu reserva recibes confirmación con los detalles de tu función y selección de menú.</div>
+      <div class="exp-step-desc">Al completar la reserva el invitado recibía confirmación con los detalles de tu función y selección de menú.</div>
     </div>
   </div>
   <div class="exp-step reveal reveal-delay-2">
     <div class="exp-step-icon">⬡</div>
     <div class="exp-step-info">
       <div class="exp-step-title">Tu Ticket Digital</div>
-      <div class="exp-step-desc">Recibes un ticket con código QR único por reserva. Tu llave de entrada a ALORA.</div>
+      <div class="exp-step-desc">Cada invitado recibía un ticket con código QR único. Su llave de entrada a ALORA.</div>
     </div>
   </div>
   <div class="exp-step reveal reveal-delay-3">
     <div class="exp-step-icon">⬡</div>
     <div class="exp-step-info">
       <div class="exp-step-title">Check-in sin Fricciones</div>
-      <div class="exp-step-desc">El host escanea tu QR a la llegada. Sin papeles, sin esperas innecesarias.</div>
+      <div class="exp-step-desc">El host escaneaba el QR a la llegada. Sin papeles, sin esperas innecesarias.</div>
     </div>
   </div>
   <div class="exp-step reveal reveal-delay-4">
     <div class="exp-step-icon">⬡</div>
     <div class="exp-step-info">
       <div class="exp-step-title">La Función Comienza</div>
-      <div class="exp-step-desc">Tu mesa, tu menú seleccionado, y una noche que no existirá dos veces igual.</div>
+      <div class="exp-step-desc">Su mesa, su menú seleccionado, y una noche que no existió dos veces igual.</div>
     </div>
   </div>
 </div>
@@ -1585,8 +1882,9 @@ footer {
 
 <section id="operacion">
   <div class="operacion-header">
-    <div class="section-label reveal">Sistema</div>
-    <h2 class="section-title reveal reveal-delay-1" style="max-width:500px;">Acceso al<br>Equipo ALORA</h2>
+    <div class="section-label reveal">Backstage</div>
+    <h2 class="section-title reveal reveal-delay-1" style="max-width:600px;">El sistema detrás<br><em>de la temporada</em></h2>
+    <p class="section-body reveal reveal-delay-2" style="margin-top:1rem;max-width:560px;">Estas páginas formaron el ecosistema operativo del proyecto — desde la reserva hasta la cocina, el ticket y los insights de cada función.</p>
   </div>
   <div class="staff-grid reveal-scale">
     <a href="host.html" class="staff-card">
@@ -1611,7 +1909,19 @@ footer {
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Ticket &amp; QR</div>
       <div class="staff-card-desc">Consulta y validación de tickets digitales por función e invitado.</div>
-      <div class="staff-card-link">Acceder →</div>
+      <div class="staff-card-link">Ver sistema →</div>
+    </a>
+    <a href="feedback.html" class="staff-card">
+      <div class="staff-card-icon">◈</div>
+      <div class="staff-card-title">Feedback</div>
+      <div class="staff-card-desc">Sistema de retroalimentación de invitados por función y experiencia.</div>
+      <div class="staff-card-link">Ver sistema →</div>
+    </a>
+    <a href="feedback-insights.html" class="staff-card">
+      <div class="staff-card-icon">◈</div>
+      <div class="staff-card-title">Insights</div>
+      <div class="staff-card-desc">Análisis de datos y métricas de la temporada completa.</div>
+      <div class="staff-card-link">Ver insights →</div>
     </a>
   </div>
 </section>
@@ -1656,7 +1966,7 @@ footer {
       text-transform:uppercase;
       color:#a56b52;
       margin-bottom:1.2rem;
-    ">Una última noche</p>
+    ">Proyecto Final · UAGM · 2026</p>
     <h2 style="
       font-family:'Cormorant Garamond',Georgia,serif;
       font-size:clamp(2.4rem,5vw,4.5rem);
@@ -1665,7 +1975,7 @@ footer {
       letter-spacing:0.06em;
       line-height:1.1;
       margin-bottom:1.5rem;
-    ">Gracias por ser parte<br><em>de ALORA</em></h2>
+    ">Ocho funciones.<br><em>Una temporada irrepetible.</em></h2>
     <p style="
       font-family:'Jost',sans-serif;
       font-size:0.85rem;
@@ -1674,7 +1984,7 @@ footer {
       max-width:480px;
       margin:0 auto 2.5rem;
       line-height:1.8;
-    ">Ocho funciones. Una temporada irrepetible.<br>Fusión boricua e italiana, enraizada para siempre.</p>
+    ">Un proyecto final convertido en experiencia. Fusión boricua e italiana, enraizada para siempre.</p>
     <a href="index.html" style="
       font-family:'Jost',sans-serif;
       font-size:0.72rem;
@@ -1687,7 +1997,7 @@ footer {
       text-decoration:none;
       display:inline-block;
       transition:background 0.35s,color 0.35s;
-    ">Reserva Ya</a>
+    ">Ver el sistema</a>
   </div>
 </section>
 
@@ -1699,7 +2009,7 @@ footer {
   <div class="footer-inner">
     <div>
       <div class="footer-brand-name">Alora</div>
-      <div class="footer-brand-tagline">Una experiencia culinaria por función. Fusión boricua e italiana. Prix-fixe y completamente artesanal.</div>
+      <div class="footer-brand-tagline">Proyecto final universitario. Una temporada en 8 funciones. Fusión boricua e italiana, enraizada para siempre.</div>
     </div>
     <div>
       <div class="footer-col-title">Navegación</div>
@@ -1722,7 +2032,7 @@ footer {
     </div>
   </div>
   <div class="footer-bottom">
-    <div class="footer-copy">© 2026 ALORA · Fusión Boricua e Italiana · Todos los derechos reservados</div>
+    <div class="footer-copy">© 2026 ALORA · Proyecto Final · UAGM Carolina · Todos los derechos reservados</div>
     <div class="footer-origin">Nacido de dos mundos, enraizado en uno solo.</div>
   </div>
 </footer>
@@ -1870,6 +2180,237 @@ document.querySelectorAll('.funcion-card').forEach((card, i) => {
 
   for (let i = 0; i < 5; i++) createLeaf();
 })();
+
+
+// ======================================
+// ALORA CONFIG — EDITA AQUÍ LOS DATOS
+// ======================================
+const ALORA_RECAP = {
+  funciones: 8,
+  comensales: 240,   // TODO: actualiza con número real
+  ventas: 8400,      // TODO: actualiza con ventas reales
+  foodCost: 28       // TODO: actualiza con food cost real (%)
+};
+
+const ALORA_MENUS = [
+  {
+    funcion: 'I', fecha: '19 Mar 2026',
+    aperitivos: [
+      'Arancini de Queso del País con salsa de guayaba',
+      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
+    ],
+    principales: [
+      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
+      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
+      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
+    ],
+    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
+  },
+  {
+    funcion: 'II', fecha: '26 Mar 2026',
+    aperitivos: [
+      'Arancini de Queso del País con salsa de guayaba',
+      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
+    ],
+    principales: [
+      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
+      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
+      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
+    ],
+    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
+  },
+  {
+    funcion: 'III', fecha: '9 Abr 2026',
+    aperitivos: [
+      'Arancini de Queso del País con salsa de guayaba',
+      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
+    ],
+    principales: [
+      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
+      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
+      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
+    ],
+    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
+  },
+  {
+    funcion: 'IV', fecha: '16 Abr 2026',
+    aperitivos: [
+      'Arancini de Queso del País con salsa de guayaba',
+      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
+    ],
+    principales: [
+      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
+      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
+      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
+    ],
+    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
+  },
+  {
+    funcion: 'V', fecha: '23 Abr 2026',
+    aperitivos: [
+      'Arancini de Queso del País con salsa de guayaba',
+      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
+    ],
+    principales: [
+      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
+      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
+      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
+    ],
+    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
+  },
+  {
+    funcion: 'VI', fecha: '30 Abr 2026',
+    aperitivos: [
+      'Arancini de Queso del País con salsa de guayaba',
+      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
+    ],
+    principales: [
+      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
+      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
+      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
+    ],
+    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
+  },
+  {
+    funcion: 'VII', fecha: '7 May 2026',
+    aperitivos: [
+      'Arancini de Queso del País con salsa de guayaba',
+      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
+    ],
+    principales: [
+      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
+      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
+      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
+    ],
+    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
+  },
+  {
+    funcion: 'VIII', fecha: '14 May 2026',
+    aperitivos: [
+      'Arancini de Queso del País con salsa de guayaba',
+      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
+    ],
+    principales: [
+      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
+      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
+      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
+    ],
+    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
+  }
+];
+// TODO: Actualiza cada objeto en ALORA_MENUS con el menú real de cada función si cambió
+
+// ======================================
+// COUNT-UP ANIMATION — CIFRAS
+// ======================================
+function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+
+function startCountUp(el) {
+  if (el.dataset.done) return;
+  el.dataset.done = '1';
+  const target = +el.dataset.target;
+  const duration = 2000;
+  const start = performance.now();
+  (function tick(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const val = Math.round(easeOutQuart(p) * target);
+    el.textContent = val.toLocaleString('es-PR');
+    if (p < 1) requestAnimationFrame(tick);
+    else el.textContent = target.toLocaleString('es-PR');
+  })(performance.now());
+}
+
+const cifraObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      startCountUp(entry.target);
+      cifraObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.cifra-counter').forEach(el => {
+  // Sync targets from ALORA_RECAP
+  if (el.dataset.target === '240') el.dataset.target = ALORA_RECAP.comensales;
+  if (el.dataset.target === '8400') el.dataset.target = ALORA_RECAP.ventas;
+  if (el.dataset.target === '28') el.dataset.target = ALORA_RECAP.foodCost;
+  if (el.dataset.target === '8') el.dataset.target = ALORA_RECAP.funciones;
+  cifraObserver.observe(el);
+});
+
+// ======================================
+// MESA DINÁMICA
+// ======================================
+(function setupMesa() {
+  const menus = ALORA_MENUS;
+  let current = 0;
+
+  const numEl     = document.getElementById('mesa-num');
+  const dateEl    = document.getElementById('mesa-date');
+  const aperEl    = document.getElementById('mesa-aperitivos');
+  const prinEl    = document.getElementById('mesa-principales');
+  const postEl    = document.getElementById('mesa-postres');
+  const coursesEl = document.getElementById('mesa-courses');
+  const dotsEl    = document.getElementById('mesa-dots');
+  const prevBtn   = document.getElementById('mesa-prev');
+  const nextBtn   = document.getElementById('mesa-next');
+
+  if (!numEl) return;
+
+  // Build dots
+  menus.forEach((_, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'mesa-dot' + (i === 0 ? ' active' : '');
+    btn.setAttribute('aria-label', 'Función ' + (i + 1));
+    btn.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(btn);
+  });
+
+  function renderItems(container, items, prevItems) {
+    container.innerHTML = '';
+    items.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'mesa-item';
+      const isNew = prevItems && !prevItems.includes(item);
+      if (isNew) div.classList.add('changed');
+      div.textContent = item;
+      container.appendChild(div);
+    });
+  }
+
+  function renderMenu(idx) {
+    const m = menus[idx];
+    const prev = idx > 0 ? menus[idx - 1] : null;
+    numEl.textContent = 'Función ' + m.funcion;
+    dateEl.textContent = m.fecha;
+    renderItems(aperEl, m.aperitivos, prev?.aperitivos);
+    renderItems(prinEl, m.principales, prev?.principales);
+    renderItems(postEl, m.postres, prev?.postres);
+    document.querySelectorAll('.mesa-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === menus.length - 1;
+  }
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= menus.length) return;
+    coursesEl.classList.add('changing');
+    setTimeout(() => {
+      current = idx;
+      renderMenu(idx);
+      coursesEl.classList.remove('changing');
+    }, 300);
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+  renderMenu(0);
+})();
+
+// Update funcion badges to all show "Completada"
+document.querySelectorAll('.funcion-badge').forEach(badge => {
+  badge.textContent = 'Completada';
+  badge.className = 'funcion-badge cerrada';
+});
 
 </script>
 
