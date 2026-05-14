@@ -1410,30 +1410,49 @@ footer {
 }
 .home-funcion-card.active {
   border-color: var(--terracotta);
-  background: rgba(165,107,82,0.1);
-  box-shadow: 0 0 0 1px var(--terracotta);
+  background: rgba(165,107,82,0.12);
+  box-shadow: 0 0 0 1px var(--terracotta), 0 8px 24px rgba(165,107,82,0.15);
+  transform: translateY(-2px);
 }
 .hfc-num {
   font-family: var(--serif);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 300;
   font-style: italic;
   color: var(--terracotta);
   display: block;
   margin-bottom: 0.3rem;
+  transition: color 0.3s;
 }
+.home-funcion-card.active .hfc-num { color: var(--cream); }
 .hfc-date {
   font-family: var(--sans);
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   letter-spacing: 0.15em;
   color: var(--muted);
   text-transform: uppercase;
+  transition: color 0.3s;
 }
+.home-funcion-card.active .hfc-date { color: var(--cream-dim); }
 .hfc-hint {
   font-family: var(--sans);
-  font-size: 0.65rem;
-  color: rgba(240,235,224,0.3);
+  font-size: 0.62rem;
+  color: rgba(240,235,224,0.25);
   margin-top: 0.6rem;
+  transition: color 0.3s;
+}
+.home-funcion-card.active .hfc-hint { color: var(--terracotta); }
+.hfc-badge {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9aaa78;
+  background: rgba(74,74,56,0.3);
+  border: 1px solid rgba(74,74,56,0.5);
+  padding: 0.2rem 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 /* ======================================
@@ -1772,7 +1791,12 @@ footer {
   <div class="hero-content">
     <div class="hero-eyebrow">Proyecto Final · UAGM · 2026</div>
     <h1 class="hero-title">Alora</h1>
-    <p class="hero-subtitle">Una temporada en 8 funciones.<br>Fusión Boritaly.</p>
+    <div style="display:flex;align-items:center;gap:1rem;margin:1.2rem 0;" class="hero-divider-line">
+      <div style="width:40px;height:1px;background:var(--terracotta);opacity:0.6;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:var(--terracotta);opacity:0.5;"></div>
+      <div style="width:40px;height:1px;background:var(--terracotta);opacity:0.6;"></div>
+    </div>
+    <p class="hero-subtitle">Una temporada en 8 funciones.<br><em>Fusión Boritaly.</em></p>
   </div>
   <div class="hero-scroll-hint">
     <span>Descubrir</span>
@@ -1898,8 +1922,24 @@ footer {
   </div>
 </section>
 
+<div style="
+  text-align:center;
+  padding:1.5rem 0;
+  background:rgba(10,12,10,0.9);
+  position:relative;
+  z-index:2;
+">
+  <div style="
+    display:inline-flex;
+    align-items:center;
+    gap:1.2rem;
+  ">
+    <div style="width:60px;height:1px;background:linear-gradient(to right,transparent,rgba(240,235,224,0.08));"></div>
+    <div style="font-family:var(--serif);font-size:0.9rem;color:rgba(165,107,82,0.35);">✦</div>
+    <div style="width:60px;height:1px;background:linear-gradient(to left,transparent,rgba(240,235,224,0.08));"></div>
+  </div>
+</div>
 <!-- ROOTS TRANSITION -->
-
 <div class="roots-transition">
   <div class="roots-img" id="rootsParallax"></div>
   <div class="roots-overlay"></div>
@@ -1962,10 +2002,26 @@ footer {
   </div>
 </section>
 
+<div style="
+  text-align:center;
+  padding:1.5rem 0;
+  background:rgba(10,12,10,0.9);
+  position:relative;
+  z-index:2;
+">
+  <div style="
+    display:inline-flex;
+    align-items:center;
+    gap:1.2rem;
+  ">
+    <div style="width:60px;height:1px;background:linear-gradient(to right,transparent,rgba(240,235,224,0.08));"></div>
+    <div style="font-family:var(--serif);font-size:0.9rem;color:rgba(165,107,82,0.35);">✦</div>
+    <div style="width:60px;height:1px;background:linear-gradient(to left,transparent,rgba(240,235,224,0.08));"></div>
+  </div>
+</div>
 <!-- ======================================
      FUNCIONES
 ====================================== -->
-
 <section id="funciones" class="parallax-section">
   <div class="funciones-bg"></div>
   <div class="funciones-inner">
@@ -2035,10 +2091,26 @@ footer {
   </div>
 </section>
 
+<div style="
+  text-align:center;
+  padding:1.5rem 0;
+  background:rgba(10,12,10,0.9);
+  position:relative;
+  z-index:2;
+">
+  <div style="
+    display:inline-flex;
+    align-items:center;
+    gap:1.2rem;
+  ">
+    <div style="width:60px;height:1px;background:linear-gradient(to right,transparent,rgba(240,235,224,0.08));"></div>
+    <div style="font-family:var(--serif);font-size:0.9rem;color:rgba(165,107,82,0.35);">✦</div>
+    <div style="width:60px;height:1px;background:linear-gradient(to left,transparent,rgba(240,235,224,0.08));"></div>
+  </div>
+</div>
 <!-- ======================================
      EXPERIENCIA DEL INVITADO
 ====================================== -->
-
 <section id="experiencia">
   <div class="experiencia-bg"></div>
   <div class="experiencia-inner">
@@ -2107,30 +2179,35 @@ footer {
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Kitchen View</div>
       <div class="staff-card-desc">Vista de cocina con los pedidos por función y tiempo en tiempo real.</div>
-      <div class="staff-card-link">Acceder →</div>
+      <div style="font-family:var(--serif);font-style:italic;font-size:0.78rem;color:var(--terracotta);margin-top:0.4rem;">8 funciones coordinadas</div>
+      <div class="staff-card-link">Ver sistema →</div>
     </a>
     <a href="production.html" class="staff-card" target="_blank" rel="noopener">
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Production Dashboard</div>
       <div class="staff-card-desc">Control operacional, estadísticas de producción y seguimiento de función.</div>
-      <div class="staff-card-link">Acceder →</div>
+      <div style="font-family:var(--serif);font-style:italic;font-size:0.78rem;color:var(--terracotta);margin-top:0.4rem;">240+ comensales coordinados</div>
+      <div class="staff-card-link">Ver sistema →</div>
     </a>
     <a href="ticket.html?id=3424ec79-f198-81a2-9e25-fbb367fe9cb4" class="staff-card" target="_blank" rel="noopener">
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Ticket &amp; QR</div>
       <div class="staff-card-desc">Consulta y validación de tickets digitales por función e invitado.</div>
+      <div style="font-family:var(--serif);font-style:italic;font-size:0.78rem;color:var(--terracotta);margin-top:0.4rem;">Check-in digital sin fricciones</div>
       <div class="staff-card-link">Ver sistema →</div>
     </a>
     <a href="feedback.html" class="staff-card" target="_blank" rel="noopener">
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Feedback</div>
       <div class="staff-card-desc">Sistema de retroalimentación de invitados por función y experiencia.</div>
+      <div style="font-family:var(--serif);font-style:italic;font-size:0.78rem;color:var(--terracotta);margin-top:0.4rem;">Cada voz, capturada</div>
       <div class="staff-card-link">Ver sistema →</div>
     </a>
     <a href="feedback-insights.html" class="staff-card" target="_blank" rel="noopener">
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Insights</div>
       <div class="staff-card-desc">Análisis de datos y métricas de la temporada completa.</div>
+      <div style="font-family:var(--serif);font-style:italic;font-size:0.78rem;color:var(--terracotta);margin-top:0.4rem;">Temporada completa analizada</div>
       <div class="staff-card-link">Ver insights →</div>
     </a>
   </div>
@@ -2229,6 +2306,67 @@ footer {
     <span style="opacity:0.4;">→</span>
   </a>
 </div>
+```
+
+  </div>
+</section>
+
+<div style="
+  text-align:center;
+  padding:1.5rem 0;
+  background:rgba(10,12,10,0.9);
+  position:relative;
+  z-index:2;
+">
+  <div style="
+    display:inline-flex;
+    align-items:center;
+    gap:1.2rem;
+  ">
+    <div style="width:60px;height:1px;background:linear-gradient(to right,transparent,rgba(240,235,224,0.08));"></div>
+    <div style="font-family:var(--serif);font-size:0.9rem;color:rgba(165,107,82,0.35);">✦</div>
+    <div style="width:60px;height:1px;background:linear-gradient(to left,transparent,rgba(240,235,224,0.08));"></div>
+  </div>
+</div>
+<!-- ======================================
+     REFLEXIÓN
+====================================== -->
+<section id="reflexion" style="background:rgba(10,12,10,0.9);padding:10rem 8vw;position:relative;">
+  <div style="max-width:800px;margin:0 auto;text-align:center;position:relative;z-index:2;">
+
+```
+<!-- Opening quote mark decorative -->
+<div style="font-family:var(--serif);font-size:6rem;line-height:0.5;color:var(--terracotta);opacity:0.25;margin-bottom:2rem;font-style:italic;" class="reveal">"</div>
+
+<div class="section-label reveal" style="justify-content:center;margin-bottom:1.5rem;">La Reflexión</div>
+
+<p style="
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:clamp(1.2rem,2.5vw,1.8rem);
+  font-weight:300;
+  color:var(--cream);
+  line-height:1.85;
+  letter-spacing:0.02em;
+  margin-bottom:2.5rem;
+" class="reveal reveal-delay-1">
+  Ha sido un proyecto lleno de obstáculos que como equipo logramos superar. Estoy muy orgulloso de todos y cada uno de mis compañeros por sobresalir en sus áreas de fortaleza y mejorar en las que no lo eran.
+</p>
+
+<div style="display:flex;align-items:center;justify-content:center;gap:1.5rem;margin-bottom:1rem;" class="reveal reveal-delay-2">
+  <div style="width:40px;height:1px;background:rgba(240,235,224,0.2);"></div>
+  <div style="width:5px;height:5px;border-radius:50%;background:var(--terracotta);opacity:0.6;"></div>
+  <div style="width:40px;height:1px;background:rgba(240,235,224,0.2);"></div>
+</div>
+
+<p style="
+  font-family:var(--sans);
+  font-size:0.72rem;
+  font-weight:300;
+  letter-spacing:0.25em;
+  text-transform:uppercase;
+  color:var(--terracotta);
+" class="reveal reveal-delay-2">Bryan N. · Director del Proyecto · ALORA 2026</p>
 ```
 
   </div>
@@ -2349,7 +2487,14 @@ footer {
   <div class="footer-inner">
     <div>
       <div class="footer-brand-name">Alora</div>
-      <div class="footer-brand-tagline">Proyecto final universitario. Una temporada en 8 funciones. Fusión Boritaly, enraizada para siempre.</div>
+      <div style="font-family:var(--sans);font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--terracotta);margin-bottom:0.6rem;">Fusión Boritaly · 2026</div>
+      <div class="footer-brand-tagline">Proyecto final universitario. Una temporada en 8 funciones, enraizada para siempre.</div>
+      <div style="margin-top:1.2rem;padding-top:1.2rem;border-top:1px solid rgba(240,235,224,0.06);">
+        <div style="font-family:var(--sans);font-size:0.65rem;color:var(--muted);line-height:1.7;">
+          José A. "Tony" Santana International<br>School of Hospitality and Culinary Arts<br>
+          <span style="color:rgba(240,235,224,0.45);">Universidad Ana G. Méndez · Carolina</span>
+        </div>
+      </div>
     </div>
     <div>
       <div class="footer-col-title">Navegación</div>
@@ -2372,8 +2517,8 @@ footer {
     </div>
   </div>
   <div class="footer-bottom">
-    <div class="footer-copy">© 2026 ALORA · Proyecto Final · UAGM Carolina · Todos los derechos reservados</div>
-    <div class="footer-origin">Boritaly — Enraizado para siempre.</div>
+    <div class="footer-copy">© 2026 ALORA · Gerencia Culinaria · UAGM Carolina</div>
+    <div class="footer-origin">Hecho con orgullo por el Equipo ALORA · Bryan N. y equipo</div>
   </div>
 </footer>
 
