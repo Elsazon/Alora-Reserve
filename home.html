@@ -514,6 +514,7 @@ section {
 @media (max-width: 768px) {
   .concepto-inner { grid-template-columns: 1fr; gap: 4rem; }
   #concepto { padding: 6rem 6vw; }
+  #concepto .flow-step { padding: 1.5rem; }
 }
 
 /* ======================================
@@ -1545,9 +1546,9 @@ footer {
 }
 .equipo-photo-wrap {
   position: relative;
-  max-width: 900px;
+  max-width: 700px;
   margin: 0 auto 3rem;
-  aspect-ratio: 16/9;
+  aspect-ratio: 3/4;
   border: 1px solid rgba(240,235,224,0.08);
   overflow: hidden;
   background: rgba(20,25,20,0.6);
@@ -1697,64 +1698,55 @@ footer {
 
 <section id="concepto" class="parallax-section">
   <div class="concepto-bg"></div>
-  <div class="concepto-inner">
+  <div style="position:relative;z-index:2;padding:10rem 8vw;max-width:1200px;margin:0 auto;">
 
 ```
-<!-- LEFT: Texto -->
-<div class="concepto-text">
-  <div class="section-label reveal">El Proyecto</div>
+<!-- TOP: Header centrado -->
+<div style="text-align:center;margin-bottom:4rem;">
+  <div class="section-label reveal" style="justify-content:center;">El Proyecto</div>
   <h2 class="section-title reveal reveal-delay-1">Una temporada<br><em>en 8 funciones</em></h2>
-  <p class="section-body reveal reveal-delay-2">
+  <p class="section-body reveal reveal-delay-2" style="text-align:center;margin:1rem auto 0;max-width:640px;">
     ALORA fue nuestro proyecto final universitario — una experiencia gastronómica por función donde la cocina boricua y la tradición italiana se encontraron como las raíces de un olivo: dos mundos distintos que nacen del mismo suelo.
   </p>
-  <p class="section-body reveal reveal-delay-3">
-    Prix-fixe. Íntimo. Un menú cuidado, un horario preciso, y una experiencia diseñada con intención desde el primer plato hasta el último postre.
-  </p>
+</div>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:1.5rem;">
-    <div class="concepto-stat reveal reveal-delay-4">
-      <span class="concepto-stat-num">8</span>
-      <span class="concepto-stat-label">Funciones</span>
-    </div>
-    <div class="concepto-stat reveal reveal-delay-4">
-      <span class="concepto-stat-num">3</span>
-      <span class="concepto-stat-label">Tiempos</span>
-    </div>
-    <div class="concepto-stat reveal reveal-delay-5">
-      <span class="concepto-stat-num">$35</span>
-      <span class="concepto-stat-label">Adulto</span>
-    </div>
-    <div class="concepto-stat reveal reveal-delay-5">
-      <span class="concepto-stat-num">$12.50</span>
-      <span class="concepto-stat-label">Niño</span>
-    </div>
+<!-- MIDDLE: Stats en 4 columnas -->
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(240,235,224,0.05);border:1px solid rgba(240,235,224,0.05);margin-bottom:4rem;" class="reveal-scale">
+  <div class="concepto-stat" style="text-align:center;align-items:center;">
+    <span class="concepto-stat-num">8</span>
+    <span class="concepto-stat-label">Funciones</span>
   </div>
-
-  <div style="margin-top:2rem;" class="reveal reveal-delay-5">
-    <a href="https://www.instagram.com/alora.uagm/" target="_blank" rel="noopener"
-      style="font-family:var(--sans);font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--terracotta);text-decoration:none;display:inline-flex;align-items:center;gap:0.6rem;border:1px solid rgba(165,107,82,0.3);padding:0.7rem 1.4rem;transition:all 0.3s;">
-      &#x1F4F7; @alora.uagm
-    </a>
+  <div class="concepto-stat" style="text-align:center;align-items:center;">
+    <span class="concepto-stat-num">3</span>
+    <span class="concepto-stat-label">Tiempos</span>
+  </div>
+  <div class="concepto-stat" style="text-align:center;align-items:center;">
+    <span class="concepto-stat-num">$35</span>
+    <span class="concepto-stat-label">Adulto</span>
+  </div>
+  <div class="concepto-stat" style="text-align:center;align-items:center;">
+    <span class="concepto-stat-num">$12.50</span>
+    <span class="concepto-stat-label">Niño</span>
   </div>
 </div>
 
-<!-- RIGHT: Flow de la experiencia -->
-<div class="concepto-flow">
-  <div class="flow-step reveal reveal-delay-1">
+<!-- BOTTOM: Flow 2 columnas x 2 filas -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:0;background:rgba(240,235,224,0.03);border:1px solid rgba(240,235,224,0.05);">
+  <div class="flow-step reveal reveal-delay-1" style="border-right:1px solid rgba(240,235,224,0.05);border-bottom:1px solid rgba(240,235,224,0.05);">
     <div class="flow-num">01</div>
     <div>
       <div class="flow-title">El invitado reserva</div>
       <div class="flow-desc">Seleccionaba su función, hora y menú antes de llegar. Sistema digital completo.</div>
     </div>
   </div>
-  <div class="flow-step reveal reveal-delay-2">
+  <div class="flow-step reveal reveal-delay-2" style="border-bottom:1px solid rgba(240,235,224,0.05);">
     <div class="flow-num">02</div>
     <div>
       <div class="flow-title">Recibe su ticket QR</div>
       <div class="flow-desc">Cada reserva generaba un ticket digital único con código QR para el check-in.</div>
     </div>
   </div>
-  <div class="flow-step reveal reveal-delay-3">
+  <div class="flow-step reveal reveal-delay-3" style="border-right:1px solid rgba(240,235,224,0.05);">
     <div class="flow-num">03</div>
     <div>
       <div class="flow-title">Vive la función</div>
@@ -1768,6 +1760,14 @@ footer {
       <div class="flow-desc">Cada invitado completaba un formulario de feedback que alimentó nuestro análisis final.</div>
     </div>
   </div>
+</div>
+
+<!-- Instagram link centrado -->
+<div style="text-align:center;margin-top:3rem;" class="reveal">
+  <a href="https://www.instagram.com/alora.uagm/" target="_blank" rel="noopener"
+    style="font-family:var(--sans);font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--terracotta);text-decoration:none;display:inline-flex;align-items:center;gap:0.6rem;border:1px solid rgba(165,107,82,0.3);padding:0.8rem 1.6rem;transition:all 0.3s;">
+    &#x1F4F7; @alora.uagm
+  </a>
 </div>
 ```
 
@@ -2134,14 +2134,7 @@ footer {
 
 ```
 <div class="equipo-photo-wrap reveal-scale">
-  <div class="equipo-placeholder">
-    <div class="equipo-placeholder-icon">◈</div>
-    <div class="equipo-placeholder-text">Foto del equipo ALORA</div>
-    <div class="equipo-placeholder-sub">TODO: Reemplaza este div con la foto del equipo completo</div>
-  </div>
-  <!-- TODO: reemplaza el div anterior con:
-  <img src="NOMBRE-FOTO-EQUIPO.png" alt="Equipo ALORA" style="width:100%;height:100%;object-fit:cover;">
-  -->
+  <img src="https://elsazon.github.io/Alora-Reserve/WhatsApp_Image_2026-05-14_at_8_28_20_AM.jpeg" alt="Equipo ALORA · Temporada 2026" style="width:100%;height:100%;object-fit:cover;object-position:center top;">
 </div>
 
 <div class="equipo-caption reveal">
