@@ -1560,10 +1560,6 @@ footer {
     <h1 class="hero-title">Alora</h1>
     <p class="hero-subtitle">Una temporada en 8 funciones.<br>Fusión boricua e italiana.</p>
     <p class="hero-price-note">Adultos $35 · Niños $12.50 · Primera bebida incluida</p>
-    <div class="hero-actions">
-      <a href="#cifras" class="btn-primary">Explorar la Temporada</a>
-      <a href="#menu" class="btn-ghost">Ver Menú</a>
-    </div>
   </div>
   <div class="hero-scroll-hint">
     <span>Descubrir</span>
@@ -1694,100 +1690,47 @@ footer {
 
 <section id="menu" class="parallax-section">
   <div class="menu-bg"></div>
-
-  <div style="position:relative;z-index:2;">
-    <div class="menu-header">
-      <div class="section-label reveal">La Mesa</div>
-      <h2 class="section-title reveal reveal-delay-1">El Menú</h2>
-      <p class="section-body reveal reveal-delay-2" style="text-align:center;margin:0 auto;">
-        Prix-fixe. Tres tiempos por invitado. Selecciona una función para ver el menú exacto de esa noche.
-      </p>
-      <div class="menu-price-note reveal reveal-delay-3">
-        <div class="price-item">
-          <span class="price-amount">$35</span>
-          <span class="price-label">Adulto</span>
-        </div>
-        <div class="price-item">
-          <span class="price-amount">$12.50</span>
-          <span class="price-label">Niño</span>
-        </div>
-      </div>
-      <p class="price-note reveal reveal-delay-4">★ Primera bebida incluida con el precio adulto</p>
-    </div>
+  <div style="position:relative;z-index:2;padding:10rem 8vw;">
 
 ```
-<div class="menu-grid reveal-scale">
-  <!-- Aperitivos -->
-  <div class="menu-course">
-    <div class="course-label">Aperitivos</div>
-    <div class="menu-item">
-      <div class="menu-item-name">Arancini de Queso del País</div>
-      <div class="menu-item-desc">Con salsa de guayaba. Fusión italiana en corazón boricua.</div>
+<div class="menu-header" style="margin-bottom:3rem;">
+  <div class="section-label reveal" style="justify-content:center;">La Mesa</div>
+  <h2 class="section-title reveal reveal-delay-1" style="text-align:center;">El Menú</h2>
+  <p class="section-body reveal reveal-delay-2" style="text-align:center;margin:0.8rem auto 0;">
+    Selecciona una función para ver el menú exacto de esa noche. Prix-fixe, tres tiempos por invitado.
+  </p>
+</div>
+
+<!-- FUNCIÓN CAROUSEL — from Notion -->
+<div class="function-carousel-wrap reveal">
+  <div id="homeCarousel" class="function-carousel">
+    <div style="color:var(--muted);font-family:var(--sans);font-size:0.8rem;padding:1rem;">Cargando funciones…</div>
+  </div>
+</div>
+
+<!-- MENÚ DINÁMICO -->
+<div class="notion-menu-wrap">
+  <div id="notionMenuState" class="notion-menu-state">
+    <span>Selecciona una función arriba para ver su menú</span>
+  </div>
+  <div id="notionMenuGrid" class="notion-menu-grid" style="display:none;">
+    <div class="notion-course">
+      <div class="notion-course-label">Aperitivos</div>
+      <div id="notionAperitivos" class="notion-items"></div>
     </div>
-    <div class="menu-item">
-      <div class="menu-item-name">Sopa de Tomate Cremosa</div>
-      <div class="menu-item-desc">Con pan de agua y aceite infusionado de orégano brujo y recao.</div>
+    <div class="notion-course">
+      <div class="notion-course-label">Platos Principales</div>
+      <div id="notionPrincipales" class="notion-items"></div>
+    </div>
+    <div class="notion-course">
+      <div class="notion-course-label">Postres</div>
+      <div id="notionPostres" class="notion-items"></div>
+    </div>
+    <div class="notion-course">
+      <div class="notion-course-label">Menú Infantil</div>
+      <div id="notionNinos" class="notion-items"></div>
     </div>
   </div>
-
-  <!-- Postres -->
-  <div class="menu-course">
-    <div class="course-label">Postres</div>
-    <div class="menu-item">
-      <div class="menu-item-name">Cannoli Deconstruido</div>
-      <div class="menu-item-desc">Reinterpretación artesanal del clásico siciliano.</div>
-    </div>
-    <div class="menu-item">
-      <div class="menu-item-name">Gelato de Piña Colada</div>
-      <div class="menu-item-desc">Con crumble de Galletas María. Sabor boricua en forma helada.</div>
-    </div>
-    <div class="menu-item">
-      <div class="menu-item-name">Dulce de Papaya</div>
-      <div class="menu-item-desc">Tradición de isla. Dulzura natural y textura caramelizada.</div>
-    </div>
-  </div>
-
-  <!-- Platos Principales - full width -->
-  <div class="menu-course full-width">
-    <div class="course-label">Platos Principales</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0;">
-      <div class="menu-item" style="padding-right:2rem;border-right:1px solid rgba(240,235,224,0.05);">
-        <div class="menu-item-name">Falso Risotto de Calabaza</div>
-        <div class="menu-item-desc">Con queso del país y crocante de chicharrón volao.</div>
-        <div class="menu-item-sub">Proteína: pechuga a la parrilla o medallones de cerdo</div>
-      </div>
-      <div class="menu-item" style="padding:1rem 2rem;border-right:1px solid rgba(240,235,224,0.05);">
-        <div class="menu-item-name">Pasta con Pimientos Rojos</div>
-        <div class="menu-item-desc">Salsa de pimientos rojos o pesto alla calabrese con parmesano rallado.</div>
-        <div class="menu-item-sub">Proteína: pechuga a la parrilla</div>
-      </div>
-      <div class="menu-item" style="padding:1rem 0 1rem 2rem;">
-        <div class="menu-item-name">Pasta Vegana de Garbanzos</div>
-        <div class="menu-item-desc">Salsa de pimientos rojos, crispy onions, cauliflower steak y aceite infusionado.</div>
-        <div class="menu-item-sub">Opción vegana disponible</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Menú niños -->
-  <div class="menu-course full-width" style="background:rgba(240,235,224,0.015);">
-    <div class="course-label">Menú de los Pequeños</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;">
-      <div class="menu-item" style="padding-right:2rem;border-right:1px solid rgba(240,235,224,0.05);">
-        <div class="menu-item-name">Grilled Cheese</div>
-        <div class="menu-item-desc">En pan de agua con sopa de tomate cremosa y papas fritas.</div>
-      </div>
-      <div class="menu-item" style="padding:1rem 2rem;border-right:1px solid rgba(240,235,224,0.05);">
-        <div class="menu-item-name">Chicken Tenders</div>
-        <div class="menu-item-desc">Crujientes, con papas fritas.</div>
-      </div>
-      <div class="menu-item" style="padding:1rem 0 1rem 2rem;">
-        <div class="menu-item-name">Mac &amp; Cheese</div>
-        <div class="menu-item-desc">Cremoso con salsa de ajo rostizado, pan de agua tostado y papas fritas.</div>
-      </div>
-    </div>
-  </div>
-
 </div>
 ```
 
@@ -1860,70 +1803,6 @@ footer {
     <div class="funcion-num">Función 08</div>
     <div class="funcion-date">14 May 2026</div>
     <div class="funcion-time">5:30 PM — 9:00 PM</div>
-  </div>
-</div>
-
-<div class="funciones-cta reveal">
-  <a href="index.html" class="btn-primary">Ver sistema de reservaciones</a>
-</div>
-```
-
-  </div>
-</section>
-
-<!-- ======================================
-     RESERVACIONES CTA HERO
-====================================== -->
-
-<section id="reservaciones">
-  <div class="reservaciones-bg"></div>
-  <div class="reservaciones-inner">
-    <div class="section-label reveal">El Sistema</div>
-    <h2 class="section-title reveal reveal-delay-1">El sistema de<br><em>reservaciones</em></h2>
-    <p class="section-body reveal reveal-delay-2">
-      El sistema de reservaciones fue parte esencial del proyecto — permitió organizar invitados, horarios, selección de menú y tickets digitales para las ocho funciones.
-    </p>
-
-```
-<div class="reserva-details reveal reveal-delay-2">
-  <div class="reserva-detail">
-    <span class="reserva-detail-val">$35</span>
-    <span class="reserva-detail-key">por adulto</span>
-  </div>
-  <div class="reserva-detail">
-    <span class="reserva-detail-val">$12.50</span>
-    <span class="reserva-detail-key">por niño</span>
-  </div>
-  <div class="reserva-detail">
-    <span class="reserva-detail-val">3</span>
-    <span class="reserva-detail-key">tiempos</span>
-  </div>
-  <div class="reserva-detail">
-    <span class="reserva-detail-val">1</span>
-    <span class="reserva-detail-key">bebida incluida</span>
-  </div>
-</div>
-
-<div class="reserva-flow-items reveal reveal-delay-3">
-  <div class="reserva-flow-item">
-    <div class="reserva-flow-icon">◈</div>
-    <div class="reserva-flow-name">Reserva</div>
-  </div>
-  <div class="reserva-flow-item">
-    <div class="reserva-flow-icon">◉</div>
-    <div class="reserva-flow-name">Menú</div>
-  </div>
-  <div class="reserva-flow-item">
-    <div class="reserva-flow-icon">◎</div>
-    <div class="reserva-flow-name">Ticket</div>
-  </div>
-  <div class="reserva-flow-item">
-    <div class="reserva-flow-icon">◇</div>
-    <div class="reserva-flow-name">Check-in</div>
-  </div>
-  <div class="reserva-flow-item">
-    <div class="reserva-flow-icon">✦</div>
-    <div class="reserva-flow-name">Función</div>
   </div>
 </div>
 ```
