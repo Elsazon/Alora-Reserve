@@ -1162,11 +1162,14 @@ footer {
    FALLING LEAVES
 ====================================== */
 
-@keyframes leafFall {
-  0%   { opacity: 0; transform: translateY(0px) rotate(0deg) translateX(0px); }
-  8%   { opacity: 0.65; }
-  90%  { opacity: 0.4; }
-  100% { opacity: 0; transform: translateY(105vh) rotate(680deg) translateX(80px); }
+@keyframes leafDrift_OLD {
+  0%   { opacity: 0;    transform: translate(0, 0) rotate(0deg); }
+  5%   { opacity: 0.6; }
+  25%  { transform: translate(calc(var(--sway, 50px) * -0.3), 18vh) rotate(120deg); }
+  50%  { transform: translate(calc(var(--sway, 50px) * -0.6), 38vh) rotate(260deg); opacity: 0.5; }
+  75%  { transform: translate(calc(var(--sway, 50px) * -0.85), 58vh) rotate(400deg); opacity: 0.3; }
+  95%  { opacity: 0.1; }
+  100% { opacity: 0;    transform: translate(calc(var(--sway, 50px) * -1), 80vh) rotate(540deg); }
 }
 
 
@@ -1693,7 +1696,7 @@ footer {
 <section id="hero">
   <div class="hero-bg" id="heroBg"></div>
   <div class="hero-overlay"></div>
-  <div class="leaves-container" id="leavesContainer"></div>
+  <div id="leavesContainer" style="position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden;"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">Proyecto Final · UAGM · 2026</div>
     <h1 class="hero-title">Alora</h1>
@@ -2022,13 +2025,13 @@ footer {
     <p class="section-body reveal reveal-delay-2" style="margin-top:1rem;max-width:560px;">Estas páginas formaron el ecosistema operativo del proyecto — desde la reserva hasta la cocina, el ticket y los insights de cada función.</p>
   </div>
   <div class="staff-grid reveal-scale">
-    <a href="host.html" class="staff-card" target="_blank" rel="noopener">
-      <div class="staff-card-icon">◈</div>
-      <div class="staff-card-title">Host Dashboard</div>
+    <div class="staff-card" style="opacity:0.5;cursor:default;">
+      <div class="staff-card-icon" style="color:var(--muted);">◈</div>
+      <div class="staff-card-title" style="color:var(--muted);">Host Dashboard</div>
       <div class="staff-card-desc">Gestión de llegadas, check-in de invitados y control de la sala.</div>
-      <div class="staff-card-link">Acceder →</div>
-    </a>
-    <a href="kitchens.html" class="staff-card" target="_blank" rel="noopener">
+      <div class="staff-card-link" style="color:var(--muted);">Acceso restringido</div>
+    </div>
+    <a href="kitchen.html" class="staff-card" target="_blank" rel="noopener">
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Kitchen View</div>
       <div class="staff-card-desc">Vista de cocina con los pedidos por función y tiempo en tiempo real.</div>
@@ -2040,7 +2043,7 @@ footer {
       <div class="staff-card-desc">Control operacional, estadísticas de producción y seguimiento de función.</div>
       <div class="staff-card-link">Acceder →</div>
     </a>
-    <a href="ticket.html" class="staff-card" target="_blank" rel="noopener">
+    <a href="ticket.html?id=3424ec79-f198-81a2-9e25-fbb367fe9cb4" class="staff-card" target="_blank" rel="noopener">
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Ticket &amp; QR</div>
       <div class="staff-card-desc">Consulta y validación de tickets digitales por función e invitado.</div>
@@ -2280,10 +2283,9 @@ footer {
     <div>
       <div class="footer-col-title">Acceso Staff</div>
       <ul class="footer-links">
-        <li><a href="host.html" target="_blank" rel="noopener">Host Dashboard</a></li>
-        <li><a href="kitchens.html" target="_blank" rel="noopener">Kitchen View</a></li>
+                <li><a href="kitchen.html" target="_blank" rel="noopener">Kitchen View</a></li>
         <li><a href="production.html" target="_blank" rel="noopener">Producción</a></li>
-        <li><a href="ticket.html" target="_blank" rel="noopener">Tickets &amp; QR</a></li>
+        <li><a href="ticket.html?id=3424ec79-f198-81a2-9e25-fbb367fe9cb4" target="_blank" rel="noopener">Tickets &amp; QR</a></li>
       </ul>
     </div>
   </div>
@@ -2406,35 +2408,106 @@ document.querySelectorAll('.funcion-card').forEach((card, i) => {
 });
 
 // --- FALLING LEAVES ANIMATION ---
+// Uses fixed positioning to match tree location on screen
 (function() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const container = document.getElementById('leavesContainer');
   if (!container) return;
 
-  const leafSVG = `<svg viewBox="0 0 24 10" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,5 Q6,0 12,2 Q18,4 24,1 Q18,8 12,7 Q6,10 0,5Z" fill="rgba(160,170,120,0.35)"/>
-    <line x1="0" y1="5" x2="24" y2="1" stroke="rgba(200,210,160,0.2)" stroke-width="0.5"/>
-  </svg>`;
+  const leafSVGs = [
+    // olive leaf shape 1
+    `<svg viewBox="0 0 32 14" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2,7 Q10,1 18,4 Q26,7 30,3 Q24,12 16,10 Q8,13 2,7Z" fill="rgba(130,152,90,0.65)"/>
+      <line x1="2" y1="7" x2="30" y2="3" stroke="rgba(170,195,125,0.4)" stroke-width="1"/>
+    </svg>`,
+    // olive leaf shape 2 — smaller
+    `<svg viewBox="0 0 24 10" xmlns="http://www.w3.org/2000/svg">
+      <path d="M1,5 Q7,0 13,3 Q19,5 23,2 Q17,9 11,8 Q5,10 1,5Z" fill="rgba(140,162,100,0.6)"/>
+      <line x1="1" y1="5" x2="23" y2="2" stroke="rgba(180,205,140,0.35)" stroke-width="0.8"/>
+    </svg>`
+  ];
 
-  function createLeaf() {
+  // Tree canopy occupies roughly right 40% of screen, top 60% of viewport
+  // We spawn leaves from that zone using fixed viewport coordinates
+  function spawnLeaf() {
     const leaf = document.createElement('div');
     leaf.className = 'leaf';
-    leaf.innerHTML = leafSVG;
-    const size = 10 + Math.random() * 8;
-    const startX = 58 + Math.random() * 28;
-    const duration = 6 + Math.random() * 10;
-    const delay = Math.random() * 8;
+    const svg = leafSVGs[Math.floor(Math.random() * leafSVGs.length)];
+    leaf.innerHTML = svg;
+
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    // Spawn zone: right portion where tree canopy is visible
+    const spawnX = vw * (0.52 + Math.random() * 0.38); // 52-90% from left
+    const spawnY = vh * (0.05 + Math.random() * 0.45); // 5-50% from top
+
+    const size = 16 + Math.random() * 14;
+    const duration = 5000 + Math.random() * 8000;
+    const initRotate = Math.random() * 360;
+
     leaf.style.cssText = `
-      left: ${startX}%;
+      left: ${spawnX}px;
+      top: ${spawnY}px;
       width: ${size}px;
-      height: ${size * 0.45}px;
-      animation: leafFall ${duration}s ${delay}s linear infinite;
-      transform: rotate(${Math.random() * 360}deg);
+      height: ${size * 0.44}px;
+      transform: rotate(${initRotate}deg);
+      opacity: 0;
+      transition: none;
     `;
+
     container.appendChild(leaf);
+
+    // Animate with JS for precise control
+    let start = null;
+    const driftX = -(60 + Math.random() * 120); // drift left
+    const driftY = 350 + Math.random() * 200;   // fall down
+    const totalRotation = 360 + Math.random() * 360;
+
+    function tick(ts) {
+      if (!start) start = ts;
+      const elapsed = ts - start;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Ease: slow start, accelerate
+      const eased = progress < 0.1
+        ? progress * 10 * 0.1
+        : 0.1 + (progress - 0.1) * (1/0.9) * 0.9;
+
+      // Sway: gentle sine wave side-to-side
+      const sway = Math.sin(progress * Math.PI * 3) * 20;
+
+      const x = driftX * eased + sway;
+      const y = driftY * eased;
+      const rot = initRotate + totalRotation * eased;
+
+      // Opacity: fade in, hold, fade out
+      let opacity;
+      if (progress < 0.08) opacity = progress / 0.08 * 0.65;
+      else if (progress > 0.82) opacity = (1 - progress) / 0.18 * 0.65;
+      else opacity = 0.65;
+
+      leaf.style.opacity = opacity;
+      leaf.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg)`;
+
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        leaf.remove();
+        // Respawn after random delay
+        setTimeout(spawnLeaf, Math.random() * 4000);
+      }
+    }
+
+    // Start after random delay
+    setTimeout(() => requestAnimationFrame(tick), Math.random() * 6000);
   }
 
-  for (let i = 0; i < 5; i++) createLeaf();
+  // Spawn initial set
+  const count = window.innerWidth < 768 ? 4 : 7;
+  for (let i = 0; i < count; i++) {
+    spawnLeaf();
+  }
 })();
 
 
