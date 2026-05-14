@@ -1651,6 +1651,19 @@ footer {
 }
 .notion-item:last-child { border-bottom: none; }
 
+
+/* ======================================
+   GALERÍA responsive
+====================================== */
+@media (max-width: 768px) {
+  #galeriaGrid { columns: 2 !important; }
+}
+@media (max-width: 480px) {
+  #galeriaGrid { columns: 1 !important; }
+}
+.galeria-item { cursor: pointer; transition: opacity 0.3s; }
+.galeria-item:hover { opacity: 0.88; }
+
 </style>
 
 </head>
@@ -1760,14 +1773,6 @@ footer {
       <div class="flow-desc">Cada invitado completaba un formulario de feedback que alimentó nuestro análisis final.</div>
     </div>
   </div>
-</div>
-
-<!-- Instagram link centrado -->
-<div style="text-align:center;margin-top:3rem;" class="reveal">
-  <a href="https://www.instagram.com/alora.uagm/" target="_blank" rel="noopener"
-    style="font-family:var(--sans);font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--terracotta);text-decoration:none;display:inline-flex;align-items:center;gap:0.6rem;border:1px solid rgba(165,107,82,0.3);padding:0.8rem 1.6rem;transition:all 0.3s;">
-    &#x1F4F7; @alora.uagm
-  </a>
 </div>
 ```
 
@@ -2134,7 +2139,7 @@ footer {
 
 ```
 <div class="equipo-photo-wrap reveal-scale">
-  <img src="https://elsazon.github.io/Alora-Reserve/WhatsApp_Image_2026-05-14_at_8_28_20_AM.jpeg" alt="Equipo ALORA · Temporada 2026" style="width:100%;height:100%;object-fit:cover;object-position:center top;">
+  <img src="https://elsazon.github.io/Alora-Reserve/WhatsApp%20Image%202026-05-14%20at%208.28.20%20AM.jpeg" alt="Equipo ALORA · Temporada 2026" style="width:100%;height:100%;object-fit:cover;object-position:center top;">
 </div>
 
 <div class="equipo-caption reveal">
@@ -2147,6 +2152,101 @@ footer {
     <span class="ig-icon">&#x1F4F7;</span>
     Síguenos en Instagram · @alora.uagm
     <span style="opacity:0.4;">→</span>
+  </a>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ======================================
+     GALERÍA
+====================================== -->
+
+<section id="galeria" style="background:rgba(10,12,10,0.88);padding:8rem 8vw;position:relative;">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:4rem;">
+      <div class="section-label reveal" style="justify-content:center;">La Temporada</div>
+      <h2 class="section-title reveal reveal-delay-1" style="text-align:center;">Momentos de ALORA</h2>
+      <p class="section-body reveal reveal-delay-2" style="text-align:center;margin:0.8rem auto 0;max-width:500px;">
+        Ocho noches capturadas. La cocina, la sala, el equipo y los invitados de la temporada 2026.
+      </p>
+    </div>
+
+```
+<!-- MASONRY GRID — TODO: reemplaza cada div.galeria-placeholder con <img> real -->
+<div id="galeriaGrid" style="
+  columns: 3;
+  column-gap: 1rem;
+  margin-bottom: 3rem;
+" class="reveal-scale">
+
+  <!-- Foto 1 — grande -->
+  <div class="galeria-item" style="break-inside:avoid;margin-bottom:1rem;position:relative;overflow:hidden;background:rgba(20,25,20,0.5);border:1px solid rgba(240,235,224,0.06);">
+    <div style="aspect-ratio:4/5;display:flex;align-items:center;justify-content:center;color:rgba(240,235,224,0.15);font-family:var(--sans);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;flex-direction:column;gap:0.5rem;">
+      <span style="font-size:1.5rem;opacity:0.3;">◈</span>
+      <span>Foto 1</span>
+    </div>
+    <!-- TODO: <img src="foto1.jpg" alt="ALORA" style="width:100%;display:block;"> -->
+  </div>
+
+  <!-- Foto 2 — cuadrada -->
+  <div class="galeria-item" style="break-inside:avoid;margin-bottom:1rem;position:relative;overflow:hidden;background:rgba(20,25,20,0.5);border:1px solid rgba(240,235,224,0.06);">
+    <div style="aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;color:rgba(240,235,224,0.15);font-family:var(--sans);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;flex-direction:column;gap:0.5rem;">
+      <span style="font-size:1.5rem;opacity:0.3;">◈</span>
+      <span>Foto 2</span>
+    </div>
+  </div>
+
+  <!-- Foto 3 — horizontal -->
+  <div class="galeria-item" style="break-inside:avoid;margin-bottom:1rem;position:relative;overflow:hidden;background:rgba(20,25,20,0.5);border:1px solid rgba(240,235,224,0.06);">
+    <div style="aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:rgba(240,235,224,0.15);font-family:var(--sans);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;flex-direction:column;gap:0.5rem;">
+      <span style="font-size:1.5rem;opacity:0.3;">◈</span>
+      <span>Foto 3</span>
+    </div>
+  </div>
+
+  <!-- Foto 4 -->
+  <div class="galeria-item" style="break-inside:avoid;margin-bottom:1rem;position:relative;overflow:hidden;background:rgba(20,25,20,0.5);border:1px solid rgba(240,235,224,0.06);">
+    <div style="aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;color:rgba(240,235,224,0.15);font-family:var(--sans);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;flex-direction:column;gap:0.5rem;">
+      <span style="font-size:1.5rem;opacity:0.3;">◈</span>
+      <span>Foto 4</span>
+    </div>
+  </div>
+
+  <!-- Foto 5 — vertical -->
+  <div class="galeria-item" style="break-inside:avoid;margin-bottom:1rem;position:relative;overflow:hidden;background:rgba(20,25,20,0.5);border:1px solid rgba(240,235,224,0.06);">
+    <div style="aspect-ratio:3/4;display:flex;align-items:center;justify-content:center;color:rgba(240,235,224,0.15);font-family:var(--sans);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;flex-direction:column;gap:0.5rem;">
+      <span style="font-size:1.5rem;opacity:0.3;">◈</span>
+      <span>Foto 5</span>
+    </div>
+  </div>
+
+  <!-- Foto 6 -->
+  <div class="galeria-item" style="break-inside:avoid;margin-bottom:1rem;position:relative;overflow:hidden;background:rgba(20,25,20,0.5);border:1px solid rgba(240,235,224,0.06);">
+    <div style="aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;color:rgba(240,235,224,0.15);font-family:var(--sans);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;flex-direction:column;gap:0.5rem;">
+      <span style="font-size:1.5rem;opacity:0.3;">◈</span>
+      <span>Foto 6</span>
+    </div>
+  </div>
+
+</div>
+<!-- TODO: Para agregar fotos reales, reemplaza cada div.galeria-item con:
+<div class="galeria-item" style="break-inside:avoid;margin-bottom:1rem;overflow:hidden;cursor:pointer;" onclick="openLightbox(this)">
+  <img src="NOMBRE-FOTO.jpg" alt="ALORA" style="width:100%;display:block;transition:transform 0.5s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+</div>
+-->
+
+<!-- Link Instagram para ver más -->
+<div style="text-align:center;" class="reveal">
+  <p style="font-family:var(--serif);font-style:italic;font-size:0.9rem;color:var(--muted);margin-bottom:1.5rem;">
+    Ver más fotos de la temporada en nuestro Instagram
+  </p>
+  <a href="https://www.instagram.com/alora.uagm/" target="_blank" rel="noopener"
+    style="font-family:var(--sans);font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--cream);text-decoration:none;display:inline-flex;align-items:center;gap:0.8rem;border:1px solid rgba(240,235,224,0.15);padding:1rem 2rem;transition:all 0.35s;background:rgba(240,235,224,0.03);"
+    onmouseover="this.style.borderColor='var(--terracotta)';this.style.color='var(--terracotta)'"
+    onmouseout="this.style.borderColor='rgba(240,235,224,0.15)';this.style.color='var(--cream)'">
+    &#x1F4F7; @alora.uagm
   </a>
 </div>
 ```
@@ -2173,6 +2273,7 @@ footer {
         <li><a href="#experiencia">Experiencia</a></li>
     <li><a href="#equipo">Equipo</a></li>
         <li><a href="#equipo">Equipo</a></li>
+        <li><a href="#galeria">Galería</a></li>
         <li><a href="https://www.instagram.com/alora.uagm/" target="_blank" rel="noopener">Instagram</a></li>
       </ul>
     </div>
