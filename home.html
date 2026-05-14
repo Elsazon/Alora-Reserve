@@ -1526,6 +1526,130 @@ footer {
   .home-funcion-card { flex: 0 0 150px; }
 }
 
+
+/* ======================================
+   EQUIPO
+====================================== */
+#equipo {
+  background: rgba(10,12,10,0.85);
+  padding: 8rem 8vw;
+  position: relative;
+}
+.equipo-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.equipo-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+.equipo-photo-wrap {
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto 3rem;
+  aspect-ratio: 16/9;
+  border: 1px solid rgba(240,235,224,0.08);
+  overflow: hidden;
+  background: rgba(20,25,20,0.6);
+}
+.equipo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--muted);
+}
+.equipo-placeholder-icon {
+  font-size: 3rem;
+  opacity: 0.3;
+}
+.equipo-placeholder-text {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+.equipo-placeholder-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.85rem;
+  opacity: 0.3;
+}
+.equipo-caption {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.equipo-caption-title {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--cream-dim);
+  margin-bottom: 0.4rem;
+}
+.equipo-caption-sub {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.equipo-instagram {
+  display: flex;
+  justify-content: center;
+}
+.equipo-ig-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cream);
+  text-decoration: none;
+  border: 1px solid rgba(240,235,224,0.15);
+  padding: 1rem 2rem;
+  transition: all 0.35s;
+  background: rgba(240,235,224,0.03);
+}
+.equipo-ig-link:hover {
+  border-color: var(--terracotta);
+  color: var(--terracotta);
+  background: rgba(165,107,82,0.08);
+}
+.ig-icon {
+  font-size: 1.1rem;
+}
+
+/* ======================================
+   NOTION MENU — enhanced with descriptions
+====================================== */
+.notion-item-name {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--cream);
+  line-height: 1.4;
+  margin-bottom: 0.3rem;
+}
+.notion-item-desc {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.notion-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(240,235,224,0.05);
+}
+.notion-item:last-child { border-bottom: none; }
+
 </style>
 
 </head>
@@ -1540,8 +1664,9 @@ footer {
     <li><a href="#menu">Menú</a></li>
     <li><a href="#funciones">Funciones</a></li>
     <li><a href="#experiencia">Experiencia</a></li>
+    <li><a href="#equipo">Equipo</a></li>
   </ul>
-  <a href="index.html" class="nav-cta">Reservar</a>
+  <a href="https://www.instagram.com/alora.uagm/" target="_blank" rel="noopener" class="nav-cta" style="display:flex;align-items:center;gap:0.5rem;">&#x1F4F7; @alora.uagm</a>
   <div class="nav-mobile-btn" id="menuBtn" aria-label="Menú">
     <span></span><span></span><span></span>
   </div>
@@ -1559,7 +1684,6 @@ footer {
     <div class="hero-eyebrow">Proyecto Final · UAGM · 2026</div>
     <h1 class="hero-title">Alora</h1>
     <p class="hero-subtitle">Una temporada en 8 funciones.<br>Fusión boricua e italiana.</p>
-    <p class="hero-price-note">Adultos $35 · Niños $12.50 · Primera bebida incluida</p>
   </div>
   <div class="hero-scroll-hint">
     <span>Descubrir</span>
@@ -1574,53 +1698,74 @@ footer {
 <section id="concepto" class="parallax-section">
   <div class="concepto-bg"></div>
   <div class="concepto-inner">
-    <div class="concepto-text">
-      <div class="section-label reveal">La Experiencia</div>
-      <h2 class="section-title reveal reveal-delay-1">Una temporada<br><em>en 8 funciones</em></h2>
-      <p class="section-body reveal reveal-delay-2">
-        ALORA fue nuestro proyecto final universitario — una experiencia gastronómica por función donde la cocina boricua y la tradición italiana se encontraron como las raíces de un olivo: dos mundos distintos que nacen del mismo suelo.
-      </p>
-      <p class="section-body reveal reveal-delay-3">
-        Prix-fixe. Íntimo. Un menú cuidado, un horario preciso, y una experiencia diseñada con intención desde el primer plato hasta el último postre.
-      </p>
-      <div class="concepto-stat reveal reveal-delay-4">
-        <span class="concepto-stat-num">8</span>
-        <span class="concepto-stat-label">Funciones por temporada</span>
-      </div>
-      <div class="concepto-stat reveal reveal-delay-4">
-        <span class="concepto-stat-num">3</span>
-        <span class="concepto-stat-label">Tiempos por experiencia</span>
-      </div>
-    </div>
 
 ```
+<!-- LEFT: Texto -->
+<div class="concepto-text">
+  <div class="section-label reveal">El Proyecto</div>
+  <h2 class="section-title reveal reveal-delay-1">Una temporada<br><em>en 8 funciones</em></h2>
+  <p class="section-body reveal reveal-delay-2">
+    ALORA fue nuestro proyecto final universitario — una experiencia gastronómica por función donde la cocina boricua y la tradición italiana se encontraron como las raíces de un olivo: dos mundos distintos que nacen del mismo suelo.
+  </p>
+  <p class="section-body reveal reveal-delay-3">
+    Prix-fixe. Íntimo. Un menú cuidado, un horario preciso, y una experiencia diseñada con intención desde el primer plato hasta el último postre.
+  </p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:1.5rem;">
+    <div class="concepto-stat reveal reveal-delay-4">
+      <span class="concepto-stat-num">8</span>
+      <span class="concepto-stat-label">Funciones</span>
+    </div>
+    <div class="concepto-stat reveal reveal-delay-4">
+      <span class="concepto-stat-num">3</span>
+      <span class="concepto-stat-label">Tiempos</span>
+    </div>
+    <div class="concepto-stat reveal reveal-delay-5">
+      <span class="concepto-stat-num">$35</span>
+      <span class="concepto-stat-label">Adulto</span>
+    </div>
+    <div class="concepto-stat reveal reveal-delay-5">
+      <span class="concepto-stat-num">$12.50</span>
+      <span class="concepto-stat-label">Niño</span>
+    </div>
+  </div>
+
+  <div style="margin-top:2rem;" class="reveal reveal-delay-5">
+    <a href="https://www.instagram.com/alora.uagm/" target="_blank" rel="noopener"
+      style="font-family:var(--sans);font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--terracotta);text-decoration:none;display:inline-flex;align-items:center;gap:0.6rem;border:1px solid rgba(165,107,82,0.3);padding:0.7rem 1.4rem;transition:all 0.3s;">
+      &#x1F4F7; @alora.uagm
+    </a>
+  </div>
+</div>
+
+<!-- RIGHT: Flow de la experiencia -->
 <div class="concepto-flow">
   <div class="flow-step reveal reveal-delay-1">
     <div class="flow-num">01</div>
     <div>
-      <div class="flow-title">Reserva tu función</div>
-      <div class="flow-desc">Elige tu fecha, hora e invitados. Disponibilidad limitada a cada función.</div>
+      <div class="flow-title">El invitado reserva</div>
+      <div class="flow-desc">Seleccionaba su función, hora y menú antes de llegar. Sistema digital completo.</div>
     </div>
   </div>
   <div class="flow-step reveal reveal-delay-2">
     <div class="flow-num">02</div>
     <div>
-      <div class="flow-title">Selecciona tu menú</div>
-      <div class="flow-desc">Cada invitado elige aperitivo, plato principal y postre al reservar.</div>
+      <div class="flow-title">Recibe su ticket QR</div>
+      <div class="flow-desc">Cada reserva generaba un ticket digital único con código QR para el check-in.</div>
     </div>
   </div>
   <div class="flow-step reveal reveal-delay-3">
     <div class="flow-num">03</div>
     <div>
       <div class="flow-title">Vive la función</div>
-      <div class="flow-desc">5:30 PM a 9:00 PM. Intervalos de 30 minutos. Una velada diseñada con intención.</div>
+      <div class="flow-desc">5:30 PM a 9:00 PM. Intervalos de 30 minutos. Cocina en vivo, servicio de sala.</div>
     </div>
   </div>
   <div class="flow-step reveal reveal-delay-4">
     <div class="flow-num">04</div>
     <div>
-      <div class="flow-title">Tu ticket &amp; QR</div>
-      <div class="flow-desc">Recibes un ticket digital con QR para check-in sin filas. Tu entrada al universo ALORA.</div>
+      <div class="flow-title">Deja su huella</div>
+      <div class="flow-desc">Cada invitado completaba un formulario de feedback que alimentó nuestro análisis final.</div>
     </div>
   </div>
 </div>
@@ -1970,19 +2115,49 @@ footer {
       margin:0 auto 2.5rem;
       line-height:1.8;
     ">Un proyecto final convertido en experiencia. Fusión boricua e italiana, enraizada para siempre.</p>
-    <a href="index.html" style="
-      font-family:'Jost',sans-serif;
-      font-size:0.72rem;
-      font-weight:400;
-      letter-spacing:0.2em;
-      text-transform:uppercase;
-      color:#0a0c0a;
-      background:#f0ebe0;
-      padding:1rem 2.4rem;
-      text-decoration:none;
-      display:inline-block;
-      transition:background 0.35s,color 0.35s;
-    ">Explorar la temporada</a>
+  </div>
+</section>
+
+<!-- ======================================
+     EQUIPO
+====================================== -->
+
+<section id="equipo">
+  <div class="equipo-inner">
+    <div class="equipo-header">
+      <div class="section-label reveal" style="justify-content:center;">El Equipo</div>
+      <h2 class="section-title reveal reveal-delay-1" style="text-align:center;">Detrás de ALORA</h2>
+      <p class="section-body reveal reveal-delay-2" style="text-align:center;margin:0.8rem auto 0;max-width:520px;">
+        El equipo detrás de ocho noches de fusión boricua e italiana. Estudiantes de la José A. "Tony" Santana International School of Hospitality and Culinary Arts, UAGM Carolina.
+      </p>
+    </div>
+
+```
+<div class="equipo-photo-wrap reveal-scale">
+  <div class="equipo-placeholder">
+    <div class="equipo-placeholder-icon">◈</div>
+    <div class="equipo-placeholder-text">Foto del equipo ALORA</div>
+    <div class="equipo-placeholder-sub">TODO: Reemplaza este div con la foto del equipo completo</div>
+  </div>
+  <!-- TODO: reemplaza el div anterior con:
+  <img src="NOMBRE-FOTO-EQUIPO.png" alt="Equipo ALORA" style="width:100%;height:100%;object-fit:cover;">
+  -->
+</div>
+
+<div class="equipo-caption reveal">
+  <div class="equipo-caption-title">Equipo ALORA · Temporada 2026</div>
+  <div class="equipo-caption-sub">UAGM Carolina · Hospitality & Culinary Arts</div>
+</div>
+
+<div class="equipo-instagram reveal reveal-delay-1">
+  <a href="https://www.instagram.com/alora.uagm/" target="_blank" rel="noopener" class="equipo-ig-link">
+    <span class="ig-icon">&#x1F4F7;</span>
+    Síguenos en Instagram · @alora.uagm
+    <span style="opacity:0.4;">→</span>
+  </a>
+</div>
+```
+
   </div>
 </section>
 
@@ -2003,7 +2178,9 @@ footer {
         <li><a href="#menu">El Menú</a></li>
         <li><a href="#funciones">Las Funciones</a></li>
         <li><a href="#experiencia">Experiencia</a></li>
-        <li><a href="index.html">Reservar</a></li>
+    <li><a href="#equipo">Equipo</a></li>
+        <li><a href="#equipo">Equipo</a></li>
+        <li><a href="https://www.instagram.com/alora.uagm/" target="_blank" rel="noopener">Instagram</a></li>
       </ul>
     </div>
     <div>
@@ -2295,23 +2472,23 @@ function renderNotionMenu(funcion) {
   if (!menu) {
     // Show base menu as fallback
     renderMenuItems('notionAperitivos', [
-      { nombre: 'Arancini de Queso del País con salsa de guayaba' },
-      { nombre: 'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao' }
+      { nombre: 'Arancini de Queso del País', descripcion: 'Con salsa de guayaba. Fusión italiana en corazón boricua.' },
+      { nombre: 'Sopa de Tomate Cremosa', descripcion: 'Con pan de agua y aceite infusionado de orégano brujo y recao.' }
     ]);
     renderMenuItems('notionPrincipales', [
-      { nombre: 'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao', tieneProteina: true, proteinas: ['Pechuga a la parrilla', 'Medallones de cerdo'] },
-      { nombre: 'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese', tieneProteina: true, proteinas: ['Pechuga a la parrilla'] },
-      { nombre: 'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado' }
+      { nombre: 'Falso Risotto de Calabaza', descripcion: 'Con queso del país y crocante de chicharrón volao.', tieneProteina: true, proteinas: ['Pechuga a la parrilla', 'Medallones de cerdo'] },
+      { nombre: 'Pasta con Salsa de Pimientos Rojos', descripcion: 'Pesto alla Calabrese con parmesano rallado.', tieneProteina: true, proteinas: ['Pechuga a la parrilla'] },
+      { nombre: 'Pasta Vegana de Garbanzos', descripcion: 'Salsa de pimientos rojos, crispy onions, cauliflower steak y aceite infusionado.' }
     ]);
     renderMenuItems('notionPostres', [
-      { nombre: 'Cannoli Deconstruido' },
-      { nombre: 'Gelato de Piña Colada con crumble de Galletas María' },
-      { nombre: 'Dulce de Papaya' }
+      { nombre: 'Cannoli Deconstruido', descripcion: 'Reinterpretación artesanal del clásico siciliano.' },
+      { nombre: 'Gelato de Piña Colada', descripcion: 'Con crumble de Galletas María. Sabor boricua en forma helada.' },
+      { nombre: 'Dulce de Papaya', descripcion: 'Tradición de isla. Dulzura natural y textura caramelizada.' }
     ]);
     renderMenuItems('notionNinos', [
-      { nombre: 'Grilled Cheese en pan de agua con sopa de tomate y papas fritas' },
-      { nombre: 'Chicken Tenders + papas fritas' },
-      { nombre: 'Mac & Cheese cremoso con ajo rostizado + pan de agua tostado' }
+      { nombre: 'Grilled Cheese', descripcion: 'En pan de agua con sopa de tomate cremosa y papas fritas.' },
+      { nombre: 'Chicken Tenders', descripcion: 'Crujientes y dorados, servidos con papas fritas.' },
+      { nombre: 'Mac & Cheese', descripcion: 'Cremoso con salsa de ajo rostizado, pan de agua tostado y papas fritas.' }
     ]);
   } else {
     renderMenuItems('notionAperitivos', menu.aperitivos || []);
@@ -2341,10 +2518,23 @@ function renderMenuItems(containerId, items) {
   items.forEach(item => {
     const div = document.createElement('div');
     div.className = 'notion-item';
-    const nombre = typeof item === 'string' ? item : item.nombre;
-    div.textContent = nombre;
 
-    if (item.tieneProteina && item.proteinas && item.proteinas.length > 0) {
+    const nombre = typeof item === 'string' ? item : (item.nombre || '');
+    const desc = typeof item === 'object' ? (item.descripcion || '') : '';
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'notion-item-name';
+    nameEl.textContent = nombre;
+    div.appendChild(nameEl);
+
+    if (desc) {
+      const descEl = document.createElement('div');
+      descEl.className = 'notion-item-desc';
+      descEl.textContent = desc;
+      div.appendChild(descEl);
+    }
+
+    if (item && item.tieneProteina && item.proteinas && item.proteinas.length > 0) {
       const sub = document.createElement('div');
       sub.className = 'notion-item-sub';
       sub.textContent = 'Proteína: ' + item.proteinas.filter(Boolean).join(' · ');
