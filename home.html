@@ -1650,6 +1650,49 @@ footer {
   #galeriaGrid { columns: 1 !important; }
 }
 
+
+/* ======================================
+   MOBILE FIXES
+====================================== */
+@media (max-width: 768px) {
+  #hero { min-height: 100svh; }
+  
+  .hero-title { font-size: clamp(3.5rem, 18vw, 6rem); }
+  
+  .hero-content { padding: 0 6vw; }
+
+  .concepto-stat-num { font-size: clamp(2rem, 8vw, 3.5rem); }
+
+  .cifras-grid { grid-template-columns: repeat(2,1fr); }
+
+  .notion-menu-grid { grid-template-columns: 1fr 1fr; }
+
+  .funciones-grid { grid-template-columns: repeat(2,1fr); }
+
+  .staff-grid { grid-template-columns: repeat(2,1fr); }
+
+  .experiencia-inner { grid-template-columns: 1fr; gap: 3rem; }
+
+  .footer-inner { grid-template-columns: 1fr; gap: 2rem; }
+
+  #galeriaGrid { columns: 2 !important; column-gap: 0.4rem; }
+
+  .equipo-photo-wrap { aspect-ratio: 3/4; max-width: 100%; }
+
+  nav { padding: 1rem 4vw; }
+
+  .mesa-courses { grid-template-columns: 1fr; }
+
+  section { overflow-x: hidden; }
+}
+
+@media (max-width: 480px) {
+  .cifras-grid { grid-template-columns: repeat(2,1fr); }
+  .funciones-grid { grid-template-columns: 1fr; }
+  #galeriaGrid { columns: 1 !important; }
+  .notion-menu-grid { grid-template-columns: 1fr; }
+}
+
 </style>
 
 </head>
@@ -2268,8 +2311,6 @@ footer {
         <li><a href="#menu">El Menú</a></li>
         <li><a href="#funciones">Las Funciones</a></li>
         <li><a href="#experiencia">Experiencia</a></li>
-    <li><a href="#equipo">Equipo</a></li>
-        <li><a href="#equipo">Equipo</a></li>
         <li><a href="#galeria">Galería</a></li>
         <li><a href="https://www.instagram.com/alora.uagm/" target="_blank" rel="noopener">Instagram</a></li>
       </ul>
@@ -2652,7 +2693,18 @@ const GALERIA_PHOTOS = [
     "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%209.29.13%20AM%20%281%29.jpeg",
     "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%209.29.13%20AM%20%282%29.jpeg",
     "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%209.29.13%20AM%20%283%29.jpeg",
-    "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%209.29.13%20AM.jpeg"
+    "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%209.29.13%20AM.jpeg",
+    "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%2011.09.54%20AM.jpeg",
+    "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%2011.10.39%20AM.jpeg",
+    "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%2011.12.45%20AM%20%281%29.jpeg",
+    "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%2011.12.45%20AM.jpeg",
+    "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%2011.12.46%20AM%20%281%29.jpeg",
+    "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%2011.12.46%20AM%20%282%29.jpeg",
+    "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%2011.12.46%20AM%20%283%29.jpeg",
+    "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%2011.12.46%20AM.jpeg",
+    "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%2011.13.04%20AM.jpeg",
+    "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%2011.13.05%20AM%20%281%29.jpeg",
+    "https://elsazon.github.io/Alora-Reserve/assets/WhatsApp%20Image%202026-05-14%20at%2011.13.05%20AM.jpeg"
   ];
 const GALERIA_PER_PAGE = 9;
 let galeriaPage = 0;
