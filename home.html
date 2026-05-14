@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALORA · Una Temporada en 8 Funciones · 2026</title>
+<script src="./config.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
@@ -1383,6 +1384,148 @@ footer {
   .mesa-courses { grid-template-columns: 1fr; }
 }
 
+
+/* ======================================
+   FUNCIÓN CAROUSEL (home)
+====================================== */
+.function-carousel-wrap {
+  max-width: 1100px;
+  margin: 0 auto 3rem;
+  overflow: hidden;
+  position: relative;
+}
+.function-carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0.5rem 0 1.5rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.function-carousel::-webkit-scrollbar { display: none; }
+
+.home-funcion-card {
+  flex: 0 0 180px;
+  border: 1px solid rgba(240,235,224,0.1);
+  background: rgba(10,12,10,0.5);
+  border-radius: 4px;
+  padding: 1.4rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  scroll-snap-align: start;
+}
+.home-funcion-card:hover {
+  border-color: var(--terracotta);
+  background: rgba(20,20,15,0.7);
+}
+.home-funcion-card.active {
+  border-color: var(--terracotta);
+  background: rgba(165,107,82,0.1);
+  box-shadow: 0 0 0 1px var(--terracotta);
+}
+.hfc-num {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--terracotta);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+.hfc-date {
+  font-family: var(--sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.hfc-hint {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  color: rgba(240,235,224,0.3);
+  margin-top: 0.6rem;
+}
+
+/* ======================================
+   NOTION MENU GRID (home)
+====================================== */
+.notion-menu-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  min-height: 200px;
+}
+.notion-menu-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--muted);
+  font-size: 1.1rem;
+  border: 1px solid rgba(240,235,224,0.05);
+}
+.notion-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(240,235,224,0.05);
+  border: 1px solid rgba(240,235,224,0.05);
+  transition: opacity 0.3s, filter 0.3s;
+}
+.notion-menu-grid.loading {
+  opacity: 0.3;
+  filter: blur(2px);
+}
+.notion-course {
+  background: rgba(10,12,10,0.55);
+  padding: 2rem 1.5rem;
+}
+.notion-course-label {
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid rgba(165,107,82,0.2);
+}
+.notion-item {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--cream-dim);
+  line-height: 1.5;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(240,235,224,0.04);
+}
+.notion-item:last-child { border-bottom: none; }
+.notion-item-sub {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  color: var(--terracotta);
+  margin-top: 0.25rem;
+  font-style: normal;
+}
+.notion-empty {
+  font-family: var(--serif);
+  font-style: italic;
+  color: rgba(240,235,224,0.2);
+  font-size: 0.85rem;
+  padding: 0.5rem 0;
+}
+
+@media (max-width: 800px) {
+  .notion-menu-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+  .notion-menu-grid { grid-template-columns: 1fr; }
+  .home-funcion-card { flex: 0 0 150px; }
+}
+
 </style>
 
 </head>
@@ -1557,7 +1700,7 @@ footer {
       <div class="section-label reveal">La Mesa</div>
       <h2 class="section-title reveal reveal-delay-1">El Menú</h2>
       <p class="section-body reveal reveal-delay-2" style="text-align:center;margin:0 auto;">
-        Prix-fixe. Tres tiempos por invitado. El menú base que se sirvió en las ocho funciones.
+        Prix-fixe. Tres tiempos por invitado. Selecciona una función para ver el menú exacto de esa noche.
       </p>
       <div class="menu-price-note reveal reveal-delay-3">
         <div class="price-item">
@@ -1644,39 +1787,6 @@ footer {
       </div>
     </div>
   </div>
-<!-- MESA DINÁMICA POR FUNCIÓN -->
-<div style="margin-top:4rem;position:relative;z-index:2;">
-  <div style="text-align:center;margin-bottom:2rem;">
-    <div class="section-label reveal" style="justify-content:center;">Menú por función</div>
-    <h3 class="section-title reveal reveal-delay-1" style="font-size:clamp(1.6rem,3vw,2.4rem);margin-top:0.4rem;">La Mesa — Función a función</h3>
-    <p class="section-body reveal reveal-delay-2" style="text-align:center;margin:0.8rem auto 0;max-width:500px;">
-      Navega por cada una de las 8 funciones y explora el menú que se sirvió esa noche.
-    </p>
-  </div>
-  <div class="mesa-nav">
-    <button class="mesa-arrow" id="mesa-prev" aria-label="Función anterior">←</button>
-    <div class="mesa-funcion-indicator">
-      <span class="mesa-funcion-num" id="mesa-num">Función I</span>
-      <div class="mesa-funcion-date" id="mesa-date">19 Mar 2026</div>
-    </div>
-    <button class="mesa-arrow" id="mesa-next" aria-label="Siguiente función">→</button>
-  </div>
-  <div class="mesa-courses" id="mesa-courses">
-    <div class="mesa-course-col">
-      <div class="mesa-course-title">Aperitivos</div>
-      <div id="mesa-aperitivos"></div>
-    </div>
-    <div class="mesa-course-col">
-      <div class="mesa-course-title">Principales</div>
-      <div id="mesa-principales"></div>
-    </div>
-    <div class="mesa-course-col">
-      <div class="mesa-course-title">Postres</div>
-      <div id="mesa-postres"></div>
-    </div>
-  </div>
-  <div class="mesa-dots" id="mesa-dots"></div>
-</div>
 
 </div>
 ```
@@ -1816,10 +1926,6 @@ footer {
     <div class="reserva-flow-name">Función</div>
   </div>
 </div>
-
-<div class="reveal reveal-delay-4">
-  <a href="index.html" class="btn-primary" style="font-size:0.78rem;padding:1.1rem 3rem;">Entrar al archivo</a>
-</div>
 ```
 
   </div>
@@ -1887,37 +1993,37 @@ footer {
     <p class="section-body reveal reveal-delay-2" style="margin-top:1rem;max-width:560px;">Estas páginas formaron el ecosistema operativo del proyecto — desde la reserva hasta la cocina, el ticket y los insights de cada función.</p>
   </div>
   <div class="staff-grid reveal-scale">
-    <a href="host.html" class="staff-card">
+    <a href="host.html" class="staff-card" target="_blank" rel="noopener">
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Host Dashboard</div>
       <div class="staff-card-desc">Gestión de llegadas, check-in de invitados y control de la sala.</div>
       <div class="staff-card-link">Acceder →</div>
     </a>
-    <a href="kitchens.html" class="staff-card">
+    <a href="kitchens.html" class="staff-card" target="_blank" rel="noopener">
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Kitchen View</div>
       <div class="staff-card-desc">Vista de cocina con los pedidos por función y tiempo en tiempo real.</div>
       <div class="staff-card-link">Acceder →</div>
     </a>
-    <a href="production.html" class="staff-card">
+    <a href="production.html" class="staff-card" target="_blank" rel="noopener">
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Production Dashboard</div>
       <div class="staff-card-desc">Control operacional, estadísticas de producción y seguimiento de función.</div>
       <div class="staff-card-link">Acceder →</div>
     </a>
-    <a href="ticket.html" class="staff-card">
+    <a href="ticket.html" class="staff-card" target="_blank" rel="noopener">
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Ticket &amp; QR</div>
       <div class="staff-card-desc">Consulta y validación de tickets digitales por función e invitado.</div>
       <div class="staff-card-link">Ver sistema →</div>
     </a>
-    <a href="feedback.html" class="staff-card">
+    <a href="feedback.html" class="staff-card" target="_blank" rel="noopener">
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Feedback</div>
       <div class="staff-card-desc">Sistema de retroalimentación de invitados por función y experiencia.</div>
       <div class="staff-card-link">Ver sistema →</div>
     </a>
-    <a href="feedback-insights.html" class="staff-card">
+    <a href="feedback-insights.html" class="staff-card" target="_blank" rel="noopener">
       <div class="staff-card-icon">◈</div>
       <div class="staff-card-title">Insights</div>
       <div class="staff-card-desc">Análisis de datos y métricas de la temporada completa.</div>
@@ -1997,7 +2103,7 @@ footer {
       text-decoration:none;
       display:inline-block;
       transition:background 0.35s,color 0.35s;
-    ">Ver el sistema</a>
+    ">Explorar la temporada</a>
   </div>
 </section>
 
@@ -2024,10 +2130,10 @@ footer {
     <div>
       <div class="footer-col-title">Acceso Staff</div>
       <ul class="footer-links">
-        <li><a href="host.html">Host Dashboard</a></li>
-        <li><a href="kitchens.html">Kitchen View</a></li>
-        <li><a href="production.html">Producción</a></li>
-        <li><a href="ticket.html">Tickets &amp; QR</a></li>
+        <li><a href="host.html" target="_blank" rel="noopener">Host Dashboard</a></li>
+        <li><a href="kitchens.html" target="_blank" rel="noopener">Kitchen View</a></li>
+        <li><a href="production.html" target="_blank" rel="noopener">Producción</a></li>
+        <li><a href="ticket.html" target="_blank" rel="noopener">Tickets &amp; QR</a></li>
       </ul>
     </div>
   </div>
@@ -2192,113 +2298,6 @@ const ALORA_RECAP = {
   foodCost: 28       // TODO: actualiza con food cost real (%)
 };
 
-const ALORA_MENUS = [
-  {
-    funcion: 'I', fecha: '19 Mar 2026',
-    aperitivos: [
-      'Arancini de Queso del País con salsa de guayaba',
-      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
-    ],
-    principales: [
-      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
-      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
-      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
-    ],
-    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
-  },
-  {
-    funcion: 'II', fecha: '26 Mar 2026',
-    aperitivos: [
-      'Arancini de Queso del País con salsa de guayaba',
-      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
-    ],
-    principales: [
-      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
-      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
-      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
-    ],
-    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
-  },
-  {
-    funcion: 'III', fecha: '9 Abr 2026',
-    aperitivos: [
-      'Arancini de Queso del País con salsa de guayaba',
-      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
-    ],
-    principales: [
-      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
-      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
-      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
-    ],
-    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
-  },
-  {
-    funcion: 'IV', fecha: '16 Abr 2026',
-    aperitivos: [
-      'Arancini de Queso del País con salsa de guayaba',
-      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
-    ],
-    principales: [
-      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
-      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
-      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
-    ],
-    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
-  },
-  {
-    funcion: 'V', fecha: '23 Abr 2026',
-    aperitivos: [
-      'Arancini de Queso del País con salsa de guayaba',
-      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
-    ],
-    principales: [
-      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
-      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
-      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
-    ],
-    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
-  },
-  {
-    funcion: 'VI', fecha: '30 Abr 2026',
-    aperitivos: [
-      'Arancini de Queso del País con salsa de guayaba',
-      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
-    ],
-    principales: [
-      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
-      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
-      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
-    ],
-    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
-  },
-  {
-    funcion: 'VII', fecha: '7 May 2026',
-    aperitivos: [
-      'Arancini de Queso del País con salsa de guayaba',
-      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
-    ],
-    principales: [
-      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
-      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
-      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
-    ],
-    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
-  },
-  {
-    funcion: 'VIII', fecha: '14 May 2026',
-    aperitivos: [
-      'Arancini de Queso del País con salsa de guayaba',
-      'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao'
-    ],
-    principales: [
-      'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao',
-      'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese',
-      'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado'
-    ],
-    postres: ['Cannoli Deconstruido', 'Gelato de Piña Colada con crumble de Galletas María', 'Dulce de Papaya']
-  }
-];
-// TODO: Actualiza cada objeto en ALORA_MENUS con el menú real de cada función si cambió
 
 // ======================================
 // COUNT-UP ANIMATION — CIFRAS
@@ -2338,79 +2337,153 @@ document.querySelectorAll('.cifra-counter').forEach(el => {
   cifraObserver.observe(el);
 });
 
+
+
+
+
 // ======================================
-// MESA DINÁMICA
+// NOTION BOOTSTRAP — menú por función
 // ======================================
-(function setupMesa() {
-  const menus = ALORA_MENUS;
-  let current = 0;
+const FUNCION_FECHAS_HOME = {
+  "Función 1": "19 Mar 2026",
+  "Función 2": "26 Mar 2026",
+  "Función 3": "9 Abr 2026",
+  "Función 4": "16 Abr 2026",
+  "Función 5": "23 Abr 2026",
+  "Función 6": "30 Abr 2026",
+  "Función 7": "7 May 2026",
+  "Función 8": "14 May 2026"
+};
 
-  const numEl     = document.getElementById('mesa-num');
-  const dateEl    = document.getElementById('mesa-date');
-  const aperEl    = document.getElementById('mesa-aperitivos');
-  const prinEl    = document.getElementById('mesa-principales');
-  const postEl    = document.getElementById('mesa-postres');
-  const coursesEl = document.getElementById('mesa-courses');
-  const dotsEl    = document.getElementById('mesa-dots');
-  const prevBtn   = document.getElementById('mesa-prev');
-  const nextBtn   = document.getElementById('mesa-next');
+let HOME_ALL_MENUS = {};
 
-  if (!numEl) return;
+async function loadNotionMenus() {
+  try {
+    const res = await fetch(CONFIG.BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ action: "bootstrap", secret: CONFIG.SECRET })
+    });
+    const boot = await res.json();
+    if (!boot || !boot.ok) return;
 
-  // Build dots
-  menus.forEach((_, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'mesa-dot' + (i === 0 ? ' active' : '');
-    btn.setAttribute('aria-label', 'Función ' + (i + 1));
-    btn.addEventListener('click', () => goTo(i));
-    dotsEl.appendChild(btn);
+    HOME_ALL_MENUS = boot.menus || {};
+
+    const funciones = boot.funciones || Object.keys(FUNCION_FECHAS_HOME);
+    renderHomeCarousel(funciones);
+
+  } catch(e) {
+    console.warn("No se pudo cargar menú de Notion:", e);
+    // Fallback: show base menu
+    renderHomeCarousel(Object.keys(FUNCION_FECHAS_HOME));
+  }
+}
+
+function renderHomeCarousel(funciones) {
+  const carousel = document.getElementById('homeCarousel');
+  if (!carousel) return;
+  carousel.innerHTML = '';
+
+  funciones.forEach((funcion, i) => {
+    const card = document.createElement('div');
+    card.className = 'home-funcion-card' + (i === 0 ? ' active' : '');
+    card.innerHTML = `
+      <span class="hfc-num">${funcion.replace('Función ', 'F.')}</span>
+      <div class="hfc-date">${FUNCION_FECHAS_HOME[funcion] || ''}</div>
+      <div class="hfc-hint">Ver menú →</div>
+    `;
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.home-funcion-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      renderNotionMenu(funcion);
+    });
+    carousel.appendChild(card);
   });
 
-  function renderItems(container, items, prevItems) {
-    container.innerHTML = '';
-    items.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'mesa-item';
-      const isNew = prevItems && !prevItems.includes(item);
-      if (isNew) div.classList.add('changed');
-      div.textContent = item;
-      container.appendChild(div);
-    });
+  // Auto-load first function
+  if (funciones.length > 0) renderNotionMenu(funciones[0]);
+}
+
+function renderNotionMenu(funcion) {
+  const grid = document.getElementById('notionMenuGrid');
+  const state = document.getElementById('notionMenuState');
+  if (!grid) return;
+
+  grid.classList.add('loading');
+
+  const menu = HOME_ALL_MENUS[funcion] || null;
+
+  if (!menu) {
+    // Show base menu as fallback
+    renderMenuItems('notionAperitivos', [
+      { nombre: 'Arancini de Queso del País con salsa de guayaba' },
+      { nombre: 'Sopa de Tomate Cremosa con Pan de Agua y Aceite de Orégano Brujo y Recao' }
+    ]);
+    renderMenuItems('notionPrincipales', [
+      { nombre: 'Falso Risotto de Calabaza con Queso del País y Crocante de Chicharrón Volao', tieneProteina: true, proteinas: ['Pechuga a la parrilla', 'Medallones de cerdo'] },
+      { nombre: 'Pasta con Salsa de Pimientos Rojos / Pesto alla Calabrese', tieneProteina: true, proteinas: ['Pechuga a la parrilla'] },
+      { nombre: 'Pasta Vegana de Garbanzos con salsa de pimientos rojos y aceite infusionado' }
+    ]);
+    renderMenuItems('notionPostres', [
+      { nombre: 'Cannoli Deconstruido' },
+      { nombre: 'Gelato de Piña Colada con crumble de Galletas María' },
+      { nombre: 'Dulce de Papaya' }
+    ]);
+    renderMenuItems('notionNinos', [
+      { nombre: 'Grilled Cheese en pan de agua con sopa de tomate y papas fritas' },
+      { nombre: 'Chicken Tenders + papas fritas' },
+      { nombre: 'Mac & Cheese cremoso con ajo rostizado + pan de agua tostado' }
+    ]);
+  } else {
+    renderMenuItems('notionAperitivos', menu.aperitivos || []);
+    renderMenuItems('notionPrincipales', menu.principales || []);
+    renderMenuItems('notionPostres', menu.postres || []);
+    renderMenuItems('notionNinos', menu.ninos || []);
   }
 
-  function renderMenu(idx) {
-    const m = menus[idx];
-    const prev = idx > 0 ? menus[idx - 1] : null;
-    numEl.textContent = 'Función ' + m.funcion;
-    dateEl.textContent = m.fecha;
-    renderItems(aperEl, m.aperitivos, prev?.aperitivos);
-    renderItems(prinEl, m.principales, prev?.principales);
-    renderItems(postEl, m.postres, prev?.postres);
-    document.querySelectorAll('.mesa-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
-    prevBtn.disabled = idx === 0;
-    nextBtn.disabled = idx === menus.length - 1;
+  state.style.display = 'none';
+  grid.style.display = 'grid';
+  setTimeout(() => grid.classList.remove('loading'), 50);
+}
+
+function renderMenuItems(containerId, items) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+
+  if (!items || items.length === 0) {
+    const empty = document.createElement('div');
+    empty.className = 'notion-empty';
+    empty.textContent = 'Menú no disponible';
+    el.appendChild(empty);
+    return;
   }
 
-  function goTo(idx) {
-    if (idx < 0 || idx >= menus.length) return;
-    coursesEl.classList.add('changing');
-    setTimeout(() => {
-      current = idx;
-      renderMenu(idx);
-      coursesEl.classList.remove('changing');
-    }, 300);
-  }
+  items.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'notion-item';
+    const nombre = typeof item === 'string' ? item : item.nombre;
+    div.textContent = nombre;
 
-  prevBtn.addEventListener('click', () => goTo(current - 1));
-  nextBtn.addEventListener('click', () => goTo(current + 1));
-  renderMenu(0);
-})();
+    if (item.tieneProteina && item.proteinas && item.proteinas.length > 0) {
+      const sub = document.createElement('div');
+      sub.className = 'notion-item-sub';
+      sub.textContent = 'Proteína: ' + item.proteinas.filter(Boolean).join(' · ');
+      div.appendChild(sub);
+    }
 
-// Update funcion badges to all show "Completada"
+    el.appendChild(div);
+  });
+}
+
+// All funcion badges → Completada
 document.querySelectorAll('.funcion-badge').forEach(badge => {
   badge.textContent = 'Completada';
   badge.className = 'funcion-badge cerrada';
 });
+
+// Load Notion menus on page load
+loadNotionMenus();
 
 </script>
 
