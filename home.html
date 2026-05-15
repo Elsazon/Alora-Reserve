@@ -1176,7 +1176,7 @@ footer {
 }
 .cifras-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 1px;
   background: rgba(240,235,224,0.05);
   border: 1px solid rgba(240,235,224,0.05);
@@ -1726,7 +1726,7 @@ footer {
     font-size: clamp(1.8rem, 7vw, 2.8rem) !important;
   }
   .cifras-grid {
-    grid-template-columns: repeat(2,1fr) !important;
+    grid-template-columns: repeat(3,1fr) !important;
   }
   .cifra-item { padding: 1.8rem 1rem !important; }
   .cifra-num {
@@ -1750,6 +1750,7 @@ footer {
 
 @media (max-width: 480px) {
   .cifras-grid { grid-template-columns: repeat(2,1fr) !important; }
+  .cifra-item { padding: 1.2rem 0.8rem !important; }
   .funciones-grid { grid-template-columns: 1fr; }
   #galeriaGrid { columns: 1 !important; }
   .notion-menu-grid { grid-template-columns: 1fr; }
@@ -1767,7 +1768,10 @@ footer {
 <!-- NAV -->
 
 <nav id="main-nav">
-  <a href="#hero" class="nav-logo">Alora</a>
+  <a href="#hero" class="nav-logo" style="display:flex;align-items:center;gap:0.6rem;">
+    <img src="https://elsazon.github.io/Alora-Reserve/0F20BD63-E7D0-44D4-B9DA-C78048846944.png" alt="ALORA" style="height:28px;width:auto;opacity:0.85;filter:brightness(0) invert(1) sepia(0.2);">
+    Alora
+  </a>
   <ul class="nav-links">
     <li><a href="#concepto">Concepto</a></li>
     <li><a href="#menu">Menú</a></li>
@@ -1898,25 +1902,33 @@ footer {
         <span class="cifra-desc">Noches completas</span>
       </div>
       <div class="cifra-item">
-        <span class="cifra-num"><span class="cifra-counter" data-target="240" data-prefix="" data-suffix="">0</span></span>
+        <span class="cifra-num"><span class="cifra-counter" data-target="378" data-prefix="" data-suffix="">0</span></span>
         <span class="cifra-label">Comensales</span>
-        <span class="cifra-desc">Invitados servidos</span>
+        <span class="cifra-desc">Covers totales</span>
       </div>
       <div class="cifra-item">
         <div style="display:flex;align-items:flex-start;justify-content:center;">
           <span class="cifra-prefix">$</span>
-          <span class="cifra-num"><span class="cifra-counter" data-target="8400" data-prefix="$" data-suffix="">0</span></span>
+          <span class="cifra-num"><span class="cifra-counter" data-target="14246" data-prefix="$" data-suffix="">0</span></span>
         </div>
         <span class="cifra-label">Ventas</span>
-        <span class="cifra-desc">Ingresos totales</span>
+        <span class="cifra-desc">Ventas totales</span>
       </div>
       <div class="cifra-item">
         <div style="display:flex;align-items:flex-end;justify-content:center;gap:0.1rem;">
-          <span class="cifra-num"><span class="cifra-counter" data-target="28" data-prefix="" data-suffix="">0</span></span>
+          <span class="cifra-num"><span class="cifra-counter" data-target="30" data-prefix="" data-suffix="">0</span></span>
           <span class="cifra-suffix" style="margin-bottom:0.8rem;">%</span>
         </div>
         <span class="cifra-label">Food Cost</span>
-        <span class="cifra-desc">Costo de alimentos</span>
+        <span class="cifra-desc">30.15% exacto</span>
+      </div>
+      <div class="cifra-item">
+        <div style="display:flex;align-items:center;justify-content:center;">
+          <span class="cifra-prefix">$</span>
+          <span class="cifra-num"><span class="cifra-counter" data-target="4295" data-prefix="$" data-suffix="">0</span></span>
+        </div>
+        <span class="cifra-label">Gastos</span>
+        <span class="cifra-desc">Compras totales</span>
       </div>
     </div>
   </div>
@@ -2486,6 +2498,7 @@ footer {
 <footer>
   <div class="footer-inner">
     <div>
+      <img src="https://elsazon.github.io/Alora-Reserve/0F20BD63-E7D0-44D4-B9DA-C78048846944.png" alt="ALORA" style="height:48px;width:auto;opacity:0.7;margin-bottom:0.8rem;filter:brightness(0) invert(1) sepia(0.3);display:block;">
       <div class="footer-brand-name">Alora</div>
       <div style="font-family:var(--sans);font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--terracotta);margin-bottom:0.6rem;">Fusión Boritaly · 2026</div>
       <div class="footer-brand-tagline">Proyecto final universitario. Una temporada en 8 funciones, enraizada para siempre.</div>
@@ -2641,9 +2654,9 @@ document.querySelectorAll('.funcion-card').forEach((card, i) => {
 // ======================================
 const ALORA_RECAP = {
   funciones: 8,
-  comensales: 240,   // TODO: actualiza con número real
-  ventas: 8400,      // TODO: actualiza con ventas reales
-  foodCost: 28       // TODO: actualiza con food cost real (%)
+  comensales: 378,
+  ventas: 14246,
+  foodCost: 30.15,
 };
 
 
@@ -2678,9 +2691,9 @@ const cifraObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.cifra-counter').forEach(el => {
   // Sync targets from ALORA_RECAP
-  if (el.dataset.target === '240') el.dataset.target = ALORA_RECAP.comensales;
-  if (el.dataset.target === '8400') el.dataset.target = ALORA_RECAP.ventas;
-  if (el.dataset.target === '28') el.dataset.target = ALORA_RECAP.foodCost;
+  if (el.dataset.target === '378') el.dataset.target = ALORA_RECAP.comensales;
+  if (el.dataset.target === '14246') el.dataset.target = ALORA_RECAP.ventas;
+  if (el.dataset.target === '30') el.dataset.target = ALORA_RECAP.foodCost;
   if (el.dataset.target === '8') el.dataset.target = ALORA_RECAP.funciones;
   cifraObserver.observe(el);
 });
