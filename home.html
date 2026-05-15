@@ -1176,7 +1176,7 @@ footer {
 }
 .cifras-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   background: rgba(240,235,224,0.05);
   border: 1px solid rgba(240,235,224,0.05);
@@ -1769,7 +1769,7 @@ footer {
 
 <nav id="main-nav">
   <a href="#hero" class="nav-logo" style="display:flex;align-items:center;gap:0.6rem;">
-    <img src="https://elsazon.github.io/Alora-Reserve/0F20BD63-E7D0-44D4-B9DA-C78048846944.png" alt="ALORA" style="height:28px;width:auto;opacity:0.85;filter:brightness(0) invert(1) sepia(0.2);">
+    <img src="https://elsazon.github.io/Alora-Reserve/0F20BD63-E7D0-44D4-B9DA-C78048846944.png" alt="ALORA" style="height:42px;width:auto;opacity:0.9;filter:brightness(0) invert(1) sepia(0.15);">
     Alora
   </a>
   <ul class="nav-links">
@@ -1896,11 +1896,6 @@ footer {
       </p>
     </div>
     <div class="cifras-grid reveal-scale">
-      <div class="cifra-item">
-        <span class="cifra-num"><span class="cifra-counter" data-target="8" data-prefix="" data-suffix="">0</span></span>
-        <span class="cifra-label">Funciones</span>
-        <span class="cifra-desc">Noches completas</span>
-      </div>
       <div class="cifra-item">
         <span class="cifra-num"><span class="cifra-counter" data-target="378" data-prefix="" data-suffix="">0</span></span>
         <span class="cifra-label">Comensales</span>
@@ -2694,7 +2689,6 @@ document.querySelectorAll('.cifra-counter').forEach(el => {
   if (el.dataset.target === '378') el.dataset.target = ALORA_RECAP.comensales;
   if (el.dataset.target === '14246') el.dataset.target = ALORA_RECAP.ventas;
   if (el.dataset.target === '30') el.dataset.target = ALORA_RECAP.foodCost;
-  if (el.dataset.target === '8') el.dataset.target = ALORA_RECAP.funciones;
   cifraObserver.observe(el);
 });
 
