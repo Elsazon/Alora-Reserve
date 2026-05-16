@@ -4,528 +4,924 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ALORA | Sistema de Reservaciones · Archivo 2026</title>
+  <title>ALORA | Fusión Boritaly</title>
 <script src="./config.js"></script>
+  <!-- Tipografías (gratis) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
   <style>
+ :root{
+  --bg0:#0e1511;
+  --bg1:#121a16;
 
-/* ===== MODO ARCHIVO ===== */
-#archiveBanner {
-position: fixed;
-top: 0; left: 0; right: 0;
-z-index: 99998;
-background: linear-gradient(135deg, #1a1208, #2a1f0e);
-border-bottom: 1px solid rgba(191,161,90,.35);
-padding: 12px 20px;
-display: flex;
-align-items: center;
-justify-content: space-between;
-gap: 12px;
-flex-wrap: wrap;
-}
-.archive-badge {
-display: inline-flex;
-align-items: center;
-gap: 8px;
-background: rgba(191,161,90,.15);
-border: 1px solid rgba(191,161,90,.4);
-border-radius: 999px;
-padding: 4px 12px;
-font-size: 11px;
-font-weight: 600;
-letter-spacing: 0.2em;
-text-transform: uppercase;
-color: #bfa15a;
-}
-.archive-dot {
-width: 6px; height: 6px;
-border-radius: 50%;
-background: #bfa15a;
-animation: archivePulse 2s ease-in-out infinite;
-}
-@keyframes archivePulse {
-0%,100% { opacity: 1; }
-50% { opacity: 0.3; }
-}
-.archive-text {
-font-size: 13px;
-color: rgba(244,241,234,.75);
-font-family: Inter, sans-serif;
-}
-.archive-text strong { color: #bfa15a; }
-.archive-link {
-font-size: 12px;
-color: rgba(191,161,90,.8);
-text-decoration: none;
-border: 1px solid rgba(191,161,90,.3);
-padding: 6px 14px;
-border-radius: 999px;
-transition: all .2s;
-white-space: nowrap;
-}
-.archive-link:hover {
-background: rgba(191,161,90,.12);
-color: #bfa15a;
-}
-body { padding-top: 52px; }
+  --ink:#f4f1ea;
+  --muted:rgba(244,241,234,.65);
 
-/* Form disabled overlay */
-#formArchiveOverlay {
-position: absolute;
-inset: 0;
-background: rgba(10,13,11,.55);
-backdrop-filter: blur(2px);
-z-index: 10;
-border-radius: inherit;
-display: flex;
-align-items: center;
-justify-content: center;
-flex-direction: column;
-gap: 1rem;
-text-align: center;
-padding: 2rem;
-}
-.overlay-icon {
-font-size: 2rem;
-opacity: 0.6;
-}
-.overlay-title {
-font-family: “Playfair Display”, serif;
-font-size: 1.4rem;
-color: #bfa15a;
-margin: 0;
-}
-.overlay-sub {
-font-size: 13px;
-color: rgba(244,241,234,.6);
-line-height: 1.6;
-max-width: 320px;
-}
-.overlay-cta {
-display: inline-block;
-margin-top: .5rem;
-background: rgba(191,161,90,.15);
-border: 1px solid rgba(191,161,90,.4);
-color: #bfa15a;
-padding: 10px 20px;
-border-radius: 999px;
-font-size: 13px;
-text-decoration: none;
-transition: all .2s;
-}
-.overlay-cta:hover { background: rgba(191,161,90,.25); }
+  --olive:#4f5138;
+  --terracotta:#c26a4a;
+  --gold:#bfa15a;
 
-/* All original CSS preserved below */
-:root{
-–bg0:#0e1511;–bg1:#121a16;–ink:#f4f1ea;–muted:rgba(244,241,234,.65);
-–olive:#4f5138;–terracotta:#c26a4a;–gold:#bfa15a;
-–line:rgba(255,255,255,.08);–radius:24px;–shadow:0 30px 80px rgba(0,0,0,.65);
+  --line:rgba(255,255,255,.08);
+
+  --radius:24px;
+  --shadow:0 30px 80px rgba(0,0,0,.65);
 }
-*{box-sizing:border-box}html{scroll-behavior:smooth;}
-body{margin:0;font-family:Inter,system-ui,-apple-system,sans-serif;color:var(–ink);
-background:radial-gradient(900px 600px at 15% 10%,rgba(194,106,74,.10),transparent 60%),
-radial-gradient(1000px 700px at 85% 20%,rgba(79,81,56,.15),transparent 60%),
-linear-gradient(180deg,var(–bg0),var(–bg1));min-height:100vh;overflow-x:hidden;}
-.wrap{max-width:1100px;margin:0 auto;padding:0 18px;}
-a{color:inherit;text-decoration:none}
-.hero{padding-top:200px;padding-bottom:170px;display:flex;align-items:center;justify-content:center;}
-.heroDivider{width:60px;height:1px;background:var(–line);margin:18px auto;opacity:.6;}
-.heroInner{width:100%;border:1px solid rgba(255,255,255,.06);border-radius:32px;background:rgba(255,255,255,.04);padding:100px 40px;text-align:center;position:relative;overflow:hidden;box-shadow:0 60px 140px rgba(0,0,0,.7);}
-.heroCenter{max-width:720px;margin:auto;position:relative;z-index:2;}
-.glow{position:absolute;inset:-40%;background:radial-gradient(closest-side at 22% 20%,rgba(194,106,74,.18),transparent 50%),radial-gradient(closest-side at 78% 30%,rgba(79,81,56,.22),transparent 55%);filter:blur(18px);pointer-events:none;opacity:.9;}
-.heroGrid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;position:relative;z-index:1;}
-@media(max-width:900px){.heroGrid{grid-template-columns:1fr;}}
-.heroLogo{display:flex;justify-content:center;margin-bottom:25px;position:relative;}
-.heroLogo img{height:240px;filter:drop-shadow(0 35px 80px rgba(0,0,0,.7)) drop-shadow(0 0 30px rgba(191,161,90,.25));margin-bottom:34px;transition:transform .5s ease;}
-.heroLogo img:hover{transform:scale(1.03);}
-.heroLogo::before{content:””;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:380px;height:380px;background:radial-gradient(circle,rgba(191,161,90,.18) 0%,rgba(191,161,90,.10) 35%,transparent 70%);filter:blur(40px);z-index:0;}
-.heroMeta{font-size:12px;letter-spacing:2px;color:var(–muted);text-transform:uppercase;margin-bottom:20px;}
-.heroTitle{font-family:“Playfair Display”,serif;font-size:48px;margin-bottom:18px;}
-.heroText{color:var(–muted);line-height:1.9;font-size:15px;margin-bottom:30px;}
-.heroButtons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:10px}
-.heroInstitution{display:flex;justify-content:center;margin-bottom:50px;position:relative;}
-.heroInstitution img{height:100px;width:auto;background:rgba(255,255,255,.88);backdrop-filter:blur(6px);padding:14px 26px;border-radius:18px;border:1px solid rgba(255,255,255,.35);box-shadow:0 25px 70px rgba(0,0,0,.6),0 0 28px rgba(191,161,90,.15);}
-.heroInstitution::after{content:””;position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);width:80px;height:1px;background:var(–gold);opacity:.45;}
-h1{font-family:“Playfair Display”,serif;font-weight:700;font-size:clamp(40px,4.4vw,58px);margin:6px 0 10px;letter-spacing:.2px;}
-.tagline{font-family:“Playfair Display”,serif;font-weight:500;color:var(–terracotta)!important;letter-spacing:2px;text-transform:uppercase;font-size:18px;margin:0 0 14px;}
-.lede{color:var(–muted);line-height:1.7;font-size:14px;max-width:72ch;margin:0 0 18px;}
-.lede strong{color:rgba(255,255,255,.88);font-weight:600;}
-.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
-.chip{border:1px solid var(–line);background:rgba(255,255,255,.04);padding:8px 12px;border-radius:999px;font-size:12px;color:rgba(255,255,255,.82);}
-.heroCard{border:1px solid var(–line);border-radius:var(–radius);padding:18px;background:rgba(0,0,0,.18);box-shadow:0 16px 55px rgba(0,0,0,.45);display:flex;flex-direction:column;gap:10px;height:100%;}
-.infoRow{display:flex;justify-content:space-between;gap:14px;padding:10px 2px;border-bottom:1px solid var(–line);font-size:13px;color:rgba(255,255,255,.86);}
-.infoRow:last-child{border-bottom:none;}.infoRow span{color:var(–muted)}
-.ctaRow{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;}
-.btn{border:none;cursor:pointer;border-radius:16px;padding:12px 14px;font-weight:600;font-size:14px;}
-.btnPrimary{background:var(–terracotta)!important;color:#111!important;border-radius:30px!important;box-shadow:0 20px 50px rgba(194,106,74,.35),0 0 0 1px rgba(255,255,255,.05)!important;flex:1;min-width:220px;}
-.btnPrimary:hover{background:#b95839!important;}
-.btnGhost{background:rgba(255,255,255,.05);border:1px solid var(–line);color:rgba(255,255,255,.88);min-width:160px;}
-section.block{padding:120px 0!important;}
-.sectionCard{border:1px solid var(–line);border-radius:calc(var(–radius)+6px);padding:60px!important;background:rgba(255,255,255,.04);box-shadow:0 40px 100px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.03);backdrop-filter:blur(6px);}
-.sectionTitle{font-family:“Playfair Display”,serif;font-size:24px;margin:0 0 25px!important;position:relative;padding-bottom:12px;}
-.sectionTitle::after{content:””;position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:60px;height:1px;background:var(–gold);opacity:.4;}
-.sectionCard .sectionTitle{text-align:center;}
-.sectionText{color:var(–muted);line-height:1.9!important;margin:0 0 20px!important;font-size:14px;}
-.divider{height:1px;background:var(–line);margin:16px 0;}
-.menuGrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px;}
-@media(max-width:900px){.menuGrid{grid-template-columns:1fr;}}
-.menuCol{border:1px solid var(–line);border-radius:var(–radius);background:rgba(0,0,0,.16);padding:16px;}
-.menuCol h3{margin:0 0 10px;font-size:13px;letter-spacing:.35px;text-transform:uppercase;color:rgba(255,255,255,.84);}
-.menuItem{position:relative;display:inline-block;border:1px solid var(–line);background:rgba(255,255,255,.04);border-radius:999px;padding:8px 14px;margin:6px 8px 0 0;font-size:12px;cursor:pointer;transition:all .25s ease;transform:translateY(0);}
-.menuItem:hover{border-color:var(–terracotta);color:white;box-shadow:0 0 0 1px var(–terracotta),0 12px 28px rgba(194,106,74,.25);transform:translateY(-1px);}
-.menuName{pointer-events:none;}
-.menuTooltip{position:absolute;left:50%;top:140%;transform:translateX(-50%) translateY(6px);width:240px;background:#111;border:1px solid var(–line);padding:14px;border-radius:14px;font-size:12px;line-height:1.6;color:var(–muted);opacity:0;transition:all .25s ease;z-index:20;box-shadow:0 20px 50px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.04);}
-.menuItem:hover .menuTooltip{opacity:1;transform:translateX(-50%) translateY(0);}
-.menuTooltip::before{content:””;position:absolute;top:-6px;left:50%;transform:translateX(-50%) rotate(45deg);width:12px;height:12px;background:#111;border-left:1px solid var(–line);border-top:1px solid var(–line);}
-@media(hover:none){.menuTooltip{position:relative;left:auto;top:auto;transform:none;margin-top:8px;width:100%;opacity:1;display:none;}.menuItem.active .menuTooltip{display:block;}}
-.pill{display:inline-block;border:1px solid var(–line);background:rgba(255,255,255,.04);border-radius:999px;padding:8px 10px;margin:6px 8px 0 0;font-size:12px;color:rgba(255,255,255,.86);}
-.smallNote{font-size:12px;color:rgba(255,255,255,.62);margin-top:10px;line-height:1.55;}
-.reserveGrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px;}
-@media(max-width:900px){.reserveGrid{grid-template-columns:1fr;}}
-.formCard{border:1px solid rgba(191,161,90,.15)!important;background:rgba(255,255,255,.04)!important;box-shadow:var(–shadow)!important;padding:70px!important;position:relative;border-radius:calc(var(–radius)+6px);}
-.formCard::before{content:””;position:absolute;top:0;left:0;width:100%;height:3px;background:var(–gold);opacity:.5;}
-label{display:block;font-size:12px;color:rgba(255,255,255,.76);margin:10px 0 6px;}
-input,select,textarea{width:100%;padding:12px;border-radius:14px!important;border:1px solid rgba(255,255,255,.08)!important;background:rgba(255,255,255,.05)!important;color:rgba(255,255,255,.92);outline:none;}
-input:focus,select:focus,textarea:focus{border-color:var(–terracotta)!important;box-shadow:0 0 0 1px var(–terracotta)!important;}
-textarea{min-height:96px;resize:vertical;}
-input::placeholder,textarea::placeholder{color:rgba(255,255,255,.45);}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-@media(max-width:520px){.row2{grid-template-columns:1fr;}}
-.guest{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.03);border-radius:16px;padding:12px;margin-top:12px;}
-.guestTop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px;}
-.guestLabel{font-weight:600;font-size:13px;color:rgba(255,255,255,.9);}
-.ghostBtn{background:transparent;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.82);padding:8px 10px;border-radius:999px;font-size:12px;cursor:pointer;}
-.ghostBtn:hover{border-color:rgba(255,255,255,.34);}
-.btnRow{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
-.btnSecondary{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.9);min-width:170px;}
-.priceLine{margin-top:12px;border-top:1px solid var(–line);padding-top:12px;display:flex;justify-content:space-between;gap:12px;align-items:baseline;}
-.priceLine .label{color:var(–muted);font-size:13px;}
-.total{font-family:“Playfair Display”,serif;font-size:24px!important;color:var(–gold)!important;}
-.toast{margin-top:12px;padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.28);color:rgba(255,255,255,.92);display:none;line-height:1.45;}
-.toast.ok{border-color:#2ecc71;background:rgba(46,204,113,.08);}
-.toast.warn{border-color:rgba(241,196,15,.35);}
-.toast.err{border-color:rgba(255,92,92,.35);}
-.mono{font-family:monospace;font-size:12px;color:rgba(255,255,255,.82);margin-top:8px;word-break:break-word;}
-.markRow{display:flex;align-items:center;gap:12px;margin-top:10px;}
-.markRow img{height:44px;width:auto;filter:drop-shadow(0 0 18px rgba(191,161,90,.18)) drop-shadow(0 0 30px rgba(191,161,90,.08));}
-footer{padding:26px 0 50px;color:rgba(255,255,255,.55);font-size:12px;text-align:center;}
-.reveal{opacity:0;transform:translateY(25px);transition:opacity .8s ease,transform .8s ease;}
-.reveal.show{opacity:1;transform:translateY(0);}
-.floatIn{animation:floatIn .9s ease both;}
-@keyframes floatIn{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-.chipsProteina{display:flex;gap:10px;margin-top:8px;}
-.chipProteina{border:1px solid var(–line);background:rgba(255,255,255,.04);color:rgba(255,255,255,.82);padding:8px 12px;border-radius:999px;font-size:12px;cursor:pointer;transition:all .2s ease;}
-.chipProteina.active{background:var(–terracotta);color:#1b0f0a;border-color:var(–terracotta);}
-.serviceOption{margin-top:24px;}
-.descorcheCard{display:flex;align-items:center;gap:16px;padding:16px;border-radius:18px;border:1px solid var(–line);background:rgba(255,255,255,.03);cursor:pointer;transition:all .25s ease;}
-.descorcheCard:hover{background:rgba(255,255,255,.06);border-color:var(–gold);transform:translateY(-2px);}
-.descorcheIcon{font-size:22px;}
-.descorcheText{flex:1;display:flex;flex-direction:column;}
-.descorcheTitle{font-weight:600;font-size:14px;}
-.descorcheSubtitle{font-size:12px;color:var(–muted);margin-top:2px;}
-.descorchePrice{font-size:12px;color:var(–gold);margin-top:4px;}
-.descorcheCard input{width:20px;height:20px;accent-color:var(–terracotta);cursor:pointer;}
-select{cursor:pointer;color:#fff;background:rgba(255,255,255,.05);}
-select option{color:#000;background:#fff;}
-.drinkGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:20px;}
-.drinkCard{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;border:1px solid var(–line);background:rgba(255,255,255,.04);font-size:13px;}
-.drinkIcon{font-size:18px;}
-.drinkNote{margin-top:20px;font-size:13px;color:var(–muted);line-height:1.6;text-align:center;}
-.functionCarousel{margin-bottom:40px;overflow-x:auto;overflow-y:hidden;padding:10px 4px 20px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;position:relative;scroll-padding-left:20px;}
-.functionCarousel::-webkit-scrollbar{display:none;}
-.functionTrack{display:flex;gap:14px;}
-.functionCard{flex:0 0 240px;padding:20px;border-radius:22px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));cursor:pointer;transition:.35s ease;scroll-snap-align:start;}
-.functionCard:hover{transform:translateY(-3px);border-color:var(–terracotta);box-shadow:0 20px 50px rgba(194,106,74,.25);}
-.functionCard.active{border-color:var(–terracotta);box-shadow:0 0 0 1px var(–terracotta),0 20px 60px rgba(194,106,74,.35);}
-.functionTitle{font-family:“Playfair Display”,serif;font-size:17px;margin-bottom:6px;}
-.functionMeta{font-size:12px;color:var(–muted);}
-.functionMenuPreview{margin-top:10px;font-size:12px;color:rgba(255,255,255,.75);line-height:1.5;}
-.carouselArrow{position:absolute;right:0;top:50%;transform:translateY(-50%);padding:12px 18px;font-size:18px;color:rgba(255,255,255,.35);background:linear-gradient(90deg,transparent,rgba(0,0,0,.35));pointer-events:none;animation:arrowFade 2s infinite;}
-@keyframes arrowFade{0%{opacity:.2;transform:translateY(-50%) translateX(0);}50%{opacity:.6;transform:translateY(-50%) translateX(6px);}100%{opacity:.2;transform:translateY(-50%) translateX(0);}}
-@media(max-width:600px){.functionCard{flex:0 0 180px;padding:16px;}.functionTitle{font-size:16px;}}
-#pageLoader{position:fixed;inset:0;background:#0e1511;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;transition:opacity .6s ease;}
-#pageLoader img{height:110px;margin-bottom:30px;filter:drop-shadow(0 30px 60px rgba(0,0,0,.7)) drop-shadow(0 0 18px rgba(191,161,90,.2));}
-.loaderLine{width:120px;height:1px;background:var(–gold);opacity:.4;position:relative;overflow:hidden;margin-bottom:18px;}
-.loaderLine::after{content:””;position:absolute;left:-40%;top:0;width:40%;height:100%;background:var(–gold);animation:loaderMove 1.4s infinite;}
-@keyframes loaderMove{0%{left:-40%}100%{left:120%}}
-.loaderText{font-size:12px;letter-spacing:2px;color:rgba(255,255,255,.6);text-transform:uppercase;}
-</style>
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(1100px 800px at 12% 12%, rgba(194,106,74,.16), transparent 55%),
+        radial-gradient(1000px 750px at 85% 18%, rgba(79,81,56,.20), transparent 55%),
+        linear-gradient(180deg, var(--bg0) 0%, var(--bg1) 40%, var(--bg0) 100%);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    .wrap{max-width:1100px; margin:0 auto; padding:0 18px;}
+    a{color:inherit; text-decoration:none}
+
+    .hero{
+      min-height: 92vh;
+      display:flex;
+      align-items:center;
+      padding: 64px 0 34px;
+      position:relative;
+    }
+    .heroDivider{width:60px;height:1px;background:var(--line);margin:18px auto;opacity:.6;}
+    .heroInner{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius: calc(var(--radius) + 6px);
+      padding: 34px 26px;
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .glow{position:absolute;inset:-40%;background:radial-gradient(closest-side at 22% 20%, rgba(194,106,74,.18), transparent 50%),radial-gradient(closest-side at 78% 30%, rgba(79,81,56,.22), transparent 55%);filter: blur(18px);pointer-events:none;opacity:.9;}
+    .heroGrid{display:grid;grid-template-columns: 1.25fr .75fr;gap:18px;position:relative;z-index:1;}
+    @media (max-width: 900px){.heroGrid{grid-template-columns:1fr;}}
+    .logoMain{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+    .logoMain img{height:56px;width:auto;filter: drop-shadow(0 18px 40px rgba(0,0,0,.45));}
+    .brandMeta{color:var(--muted);font-size:12px;letter-spacing:.35px;text-transform:uppercase;margin-top: 2px;}
+    h1{font-family:"Playfair Display", serif;font-weight:700;font-size: clamp(40px, 4.4vw, 58px);margin: 6px 0 10px;letter-spacing:.2px;}
+    .tagline{font-family:"Playfair Display", serif;font-weight:500;color: rgba(255,255,255,.88);font-size: 18px;margin:0 0 14px;}
+    .lede{color: var(--muted);line-height:1.7;font-size: 14px;max-width: 72ch;margin:0 0 18px;}
+    .lede strong{color: rgba(255,255,255,.88); font-weight:600;}
+    .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;}
+    .chip{border:1px solid var(--line);background: rgba(255,255,255,.04);padding: 8px 12px;border-radius: 999px;font-size: 12px;color: rgba(255,255,255,.82);}
+    .heroCard{border:1px solid var(--line);border-radius: var(--radius);padding: 18px;background: rgba(0,0,0,.18);box-shadow: 0 16px 55px rgba(0,0,0,.45);display:flex;flex-direction:column;gap: 10px;height:100%;}
+    .infoRow{display:flex;justify-content:space-between;gap:14px;padding: 10px 2px;border-bottom: 1px solid var(--line);font-size: 13px;color: rgba(255,255,255,.86);}
+    .infoRow:last-child{border-bottom:none;}
+    .infoRow span{color:var(--muted)}
+    .ctaRow{display:flex;gap:10px;margin-top: 6px;flex-wrap:wrap;}
+    .btn{border:none;cursor:pointer;border-radius: 16px;padding: 12px 14px;font-weight:600;font-size: 14px;}
+    .btnPrimary{background: linear-gradient(135deg, var(--terracotta), rgba(194,106,74,.72));color:#120b08;box-shadow: 0 18px 48px rgba(194,106,74,.18);flex:1;min-width: 220px;}
+    .btnGhost{background: rgba(255,255,255,.05);border: 1px solid var(--line);color: rgba(255,255,255,.88);min-width: 160px;}
+    section.block{padding: 18px 0 30px;}
+    .sectionCard{border:1px solid var(--line);border-radius: calc(var(--radius) + 6px);padding: 24px;background: rgba(255,255,255,.04);box-shadow: var(--shadow);}
+    .sectionTitle{font-family:"Playfair Display", serif;font-size: 24px;margin: 0 0 10px;}
+    .sectionText{color: var(--muted);line-height: 1.75;margin: 0;font-size: 14px;}
+    .divider{height:1px;background: var(--line);margin: 16px 0;}
+    .menuGrid{display:grid;grid-template-columns: 1fr 1fr;gap: 18px;margin-top: 16px;}
+    @media (max-width: 900px){.menuGrid{grid-template-columns:1fr;}}
+    .menuCol{border:1px solid var(--line);border-radius: var(--radius);background: rgba(0,0,0,.16);padding: 16px;}
+    .menuCol h3{margin: 0 0 10px;font-size: 13px;letter-spacing: .35px;text-transform: uppercase;color: rgba(255,255,255,.84);}
+    .pill{display:inline-block;border:1px solid var(--line);background: rgba(255,255,255,.04);border-radius: 999px;padding: 8px 10px;margin: 6px 8px 0 0;font-size: 12px;color: rgba(255,255,255,.86);}
+    .smallNote{font-size: 12px;color: rgba(255,255,255,.62);margin-top: 10px;line-height: 1.55;}
+    .reserveGrid{display:grid;grid-template-columns: 1fr 1fr;gap: 18px;margin-top: 16px;}
+    @media (max-width: 900px){.reserveGrid{grid-template-columns:1fr;}}
+    .formCard{border:1px solid var(--line);border-radius: calc(var(--radius) + 6px);padding: 22px;background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));box-shadow: var(--shadow);}
+    label{display:block;font-size:12px;color: rgba(255,255,255,.76);margin: 10px 0 6px;}
+    input, select, textarea{width:100%;padding: 12px 12px;border-radius: 12px;border: 1px solid rgba(255,255,255,.14);background: rgba(0,0,0,.25);color: rgba(255,255,255,.92);outline:none;}
+    textarea{min-height: 96px; resize:vertical;}
+    input::placeholder, textarea::placeholder{color: rgba(255,255,255,.45);}
+    .row2{display:grid;grid-template-columns: 1fr 1fr;gap: 12px;}
+    @media (max-width: 520px){.row2{grid-template-columns:1fr;}}
+    .guest{border:1px solid rgba(255,255,255,.14);background: rgba(255,255,255,.03);border-radius: 16px;padding: 12px;margin-top: 12px;}
+    .guestTop{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px;}
+    .guestLabel{font-weight:600; font-size:13px; color: rgba(255,255,255,.9);}
+    .ghostBtn{background: transparent;border: 1px solid rgba(255,255,255,.18);color: rgba(255,255,255,.82);padding: 8px 10px;border-radius: 999px;font-size: 12px;cursor:pointer;}
+    .ghostBtn:hover{border-color: rgba(255,255,255,.34);}
+    .btnRow{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;}
+    .btnSecondary{background: rgba(255,255,255,.06);border: 1px solid rgba(255,255,255,.14);color: rgba(255,255,255,.9);min-width: 170px;}
+    .priceLine{margin-top: 12px;border-top: 1px solid var(--line);padding-top: 12px;display:flex;justify-content:space-between;gap: 12px;align-items:baseline;}
+    .priceLine .label{color: var(--muted); font-size:13px;}
+    .priceLine .total{font-family:"Playfair Display", serif;font-size: 22px;color: rgba(255,255,255,.92);}
+    .toast{margin-top: 12px;padding: 12px 12px;border-radius: 16px;border: 1px solid rgba(255,255,255,.14);background: rgba(0,0,0,.28);color: rgba(255,255,255,.92);display:none;line-height:1.45;}
+    .toast.ok{border-color:#2ecc71;background:rgba(46,204,113,.08);}
+    .toast.warn{border-color: rgba(241,196,15,.35);}
+    .toast.err{border-color: rgba(255,92,92,.35);}
+    .mono{font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size: 12px;color: rgba(255,255,255,.82);margin-top: 8px;word-break: break-word;}
+    .markRow{display:flex;align-items:center;gap:12px;margin-top: 10px;}
+    .markRow img{height:44px;width:auto;opacity:.94;filter: drop-shadow(0 14px 28px rgba(0,0,0,.40));}
+    footer{padding: 26px 0 50px;color: rgba(255,255,255,.55);font-size: 12px;text-align:center;}
+    .reveal{opacity:0;transform: translateY(14px);transition: opacity .7s ease, transform .7s ease;will-change: opacity, transform;}
+    .reveal.show{opacity:1;transform: translateY(0);}
+    .floatIn{animation: floatIn .9s ease both;}
+    @keyframes floatIn{from{opacity:0; transform: translateY(14px);}to{opacity:1; transform: translateY(0);}}
+    .chipsProteina{display:flex;gap:10px;margin-top:8px;}
+    .chipProteina{border:1px solid var(--line);background:rgba(255,255,255,.04);color:rgba(255,255,255,.82);padding:8px 12px;border-radius:999px;font-size:12px;cursor:pointer;transition:all .2s ease;}
+    .chipProteina:hover{border-color:var(--terracotta);color:white;}
+    .chipProteina.active{background:var(--terracotta);color:#1b0f0a;border-color:var(--terracotta);box-shadow:0 8px 20px rgba(194,106,74,.25);}
+    body{background:linear-gradient(180deg,var(--bg0),var(--bg1));color:var(--ink);}
+    .btnPrimary{background:var(--terracotta) !important;color:#111 !important;border-radius:30px !important;box-shadow:0 15px 35px rgba(194,106,74,.25) !important;}
+    .btnPrimary:hover{background:#b95839 !important;}
+    .sectionTitle::after{content:"";display:block;width:50px;height:2px;background:var(--gold);margin-top:10px;opacity:.5;}
+    .formCard{border:1px solid rgba(191,161,90,.15) !important;background:rgba(255,255,255,.04) !important;box-shadow:var(--shadow) !important;padding:50px !important;position:relative;}
+    .formCard::before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:var(--gold);opacity:.5;}
+    input,select,textarea{border:1px solid rgba(255,255,255,.08) !important;background:rgba(255,255,255,.05) !important;border-radius:14px !important;}
+    input:focus,select:focus,textarea:focus{border-color:var(--terracotta) !important;box-shadow:0 0 0 1px var(--terracotta) !important;}
+    .total{font-family:"Playfair Display", serif;font-size:24px !important;color:var(--gold) !important;}
+    .markRow img{filter:drop-shadow(0 0 12px rgba(191,161,90,.15)) !important;}
+    .tagline{color:var(--terracotta) !important;letter-spacing:2px;text-transform:uppercase;}
+    .hero{padding-top:140px !important;padding-bottom:140px !important;}
+    section.block{padding-top:120px !important;padding-bottom:120px !important;}
+    .sectionCard{padding:60px !important;}
+    .formCard{padding:70px !important;}
+    .sectionTitle{margin-bottom:25px !important;}
+    .sectionText{margin-bottom:20px !important;line-height:1.9 !important;}
+    body{background:radial-gradient(900px 600px at 15% 10%, rgba(194,106,74,.10), transparent 60%),radial-gradient(1000px 700px at 85% 20%, rgba(79,81,56,.15), transparent 60%),linear-gradient(180deg,var(--bg0),var(--bg1));}
+    .sectionCard,.formCard{backdrop-filter: blur(6px);box-shadow:0 40px 100px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.03);}
+    .btnPrimary{box-shadow:0 20px 50px rgba(194,106,74,.35),0 0 0 1px rgba(255,255,255,.05);}
+    .markRow img{filter:drop-shadow(0 0 18px rgba(191,161,90,.18)) drop-shadow(0 0 30px rgba(191,161,90,.08));}
+    .serviceOption{margin-top:24px;}
+    .descorcheCard{display:flex;align-items:center;gap:16px;padding:16px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.03);cursor:pointer;transition:all .25s ease;}
+    .descorcheCard:hover{background:rgba(255,255,255,.06);border-color:var(--gold);transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.4);}
+    .descorcheIcon{font-size:22px;}
+    .descorcheText{flex:1;display:flex;flex-direction:column;}
+    .descorcheTitle{font-weight:600;font-size:14px;}
+    .descorcheSubtitle{font-size:12px;color:var(--muted);margin-top:2px;}
+    .descorchePrice{font-size:12px;color:var(--gold);margin-top:4px;}
+    .descorcheCard input{width:20px;height:20px;accent-color:var(--terracotta);cursor:pointer;}
+    .descorcheCard input:checked{transform:scale(1.1);}
+    select{cursor:pointer;color:#fff;background:rgba(255,255,255,.05);}
+    select option{color:#000;background:#fff;}
+    select:focus{outline:none;border-color:var(--terracotta);box-shadow:0 0 0 1px var(--terracotta);}
+    .drinkGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:20px;}
+    .drinkCard{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:13px;}
+    .drinkIcon{font-size:18px;}
+    .drinkNote{margin-top:20px;font-size:13px;color:var(--muted);line-height:1.6;text-align:center;}
+    .heroLogo{display:flex;justify-content:center;margin-bottom:25px;}
+    .heroLogo img{height:200px;width:auto;filter:drop-shadow(0 25px 50px rgba(0,0,0,.65)) drop-shadow(0 0 18px rgba(191,161,90,.18));}
+    .block + .block{border-top:1px solid rgba(255,255,255,.05);}
+    .menuItem{position:relative;display:inline-block;border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:999px;padding:8px 14px;margin:6px 8px 0 0;font-size:12px;cursor:pointer;transition:all .25s ease;}
+    .menuItem:hover{border-color:var(--terracotta);color:white;box-shadow:0 0 0 1px var(--terracotta),0 12px 28px rgba(194,106,74,.25);}
+    .menuName{pointer-events:none;}
+    .menuTooltip{position:absolute;left:50%;top:140%;transform:translateX(-50%) translateY(6px);width:240px;background:#111;border:1px solid var(--line);padding:14px;border-radius:14px;font-size:12px;line-height:1.6;color:var(--muted);opacity:0;transition:all .25s ease;z-index:20;box-shadow:0 20px 50px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.04);}
+    .menuItem:hover .menuTooltip{opacity:1;transform:translateX(-50%) translateY(0);}
+    .menuTooltip::before{content:"";position:absolute;top:-6px;left:50%;transform:translateX(-50%) rotate(45deg);width:12px;height:12px;background:#111;border-left:1px solid var(--line);border-top:1px solid var(--line);}
+    @media (hover:none){.menuTooltip{position:relative;left:auto;top:auto;transform:none;margin-top:8px;width:100%;opacity:1;display:none;}.menuItem.active .menuTooltip{display:block;}}
+    .functionCarousel{margin-bottom:32px;overflow-x:auto;overflow-y:hidden;padding:10px 4px 16px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
+    .functionCarousel::-webkit-scrollbar{display:none;}
+    .functionTrack{display:flex;gap:14px;}
+    .functionCard{flex:0 0 220px;border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:18px;padding:18px;cursor:pointer;transition:.25s ease;scroll-snap-align:start;}
+    .functionCard:hover{border-color:var(--terracotta);box-shadow:0 12px 30px rgba(194,106,74,.25);transform:translateY(-2px);}
+    .functionCard.active{border-color:var(--terracotta);box-shadow:0 0 0 1px var(--terracotta),0 16px 40px rgba(194,106,74,.35);}
+    .functionTitle{font-family:"Playfair Display",serif;font-size:17px;margin-bottom:6px;}
+    .functionMeta{font-size:12px;color:var(--muted);}
+    .functionMenuPreview{margin-top:10px;font-size:12px;color:rgba(255,255,255,.75);line-height:1.5;}
+    @media (max-width:600px){.functionCard{flex:0 0 180px;padding:16px;}.functionTitle{font-size:16px;}}
+    .functionCarousel{position:relative;padding-bottom:20px;margin-bottom:40px;}
+    .hero{padding-top:200px;padding-bottom:170px;display:flex;align-items:center;justify-content:center;}
+    .heroInner{width:100%;border:1px solid rgba(255,255,255,.06);border-radius:32px;background:rgba(255,255,255,.04);padding:100px 40px;text-align:center;position:relative;overflow:hidden;box-shadow:0 60px 140px rgba(0,0,0,.7);}
+    .heroCenter{max-width:720px;margin:auto;position:relative;z-index:2;}
+    .heroLogo img{height:240px;filter:drop-shadow(0 35px 80px rgba(0,0,0,.7)) drop-shadow(0 0 30px rgba(191,161,90,.25));margin-bottom:34px;transition:transform .5s ease;}
+    .heroLogo img:hover{transform:scale(1.03);}
+    .heroMeta{font-size:12px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;}
+    .heroTitle{font-family:"Playfair Display",serif;font-size:48px;margin-bottom:18px;}
+    .heroText{color:var(--muted);line-height:1.9;font-size:15px;margin-bottom:30px;}
+    .heroButtons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:10px;}
+    .functionSection{margin-bottom:40px;}
+    .functionCard{flex:0 0 240px;padding:20px;border-radius:22px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));cursor:pointer;transition:.35s ease;}
+    .functionCard:hover{transform:translateY(-3px);border-color:var(--terracotta);box-shadow:0 20px 50px rgba(194,106,74,.25);}
+    .functionCard.active{border-color:var(--terracotta);box-shadow:0 0 0 1px var(--terracotta),0 20px 60px rgba(194,106,74,.35);}
+    .sectionCard .sectionTitle{text-align:center;}
+    .menuItem{transform:translateY(0);}
+    .menuItem:hover{transform:translateY(-1px);}
+    .functionCarousel{scroll-padding-left:20px;}
+    .sectionTitle{position:relative;padding-bottom:12px;}
+    .sectionTitle::after{content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:60px;height:1px;background:var(--gold);opacity:.4;}
+    .reveal{opacity:0;transform:translateY(25px);transition:opacity .8s ease,transform .8s ease;}
+    .reveal.show{opacity:1;transform:translateY(0);}
+    #pageLoader{position:fixed;inset:0;background:#0e1511;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;transition:opacity .6s ease;}
+    #pageLoader img{height:110px;margin-bottom:30px;filter:drop-shadow(0 30px 60px rgba(0,0,0,.7)) drop-shadow(0 0 18px rgba(191,161,90,.2));}
+    .loaderLine{width:120px;height:1px;background:var(--gold);opacity:.4;position:relative;overflow:hidden;margin-bottom:18px;}
+    .loaderLine::after{content:"";position:absolute;left:-40%;top:0;width:40%;height:100%;background:var(--gold);animation:loaderMove 1.4s infinite;}
+    @keyframes loaderMove{0%{left:-40%}100%{left:120%}}
+    .loaderText{font-size:12px;letter-spacing:2px;color:rgba(255,255,255,.6);text-transform:uppercase;}
+    .heroInstitution{display:flex;justify-content:center;margin-bottom:50px;position:relative;}
+    .heroInstitution img{height:100px;width:auto;background:rgba(255,255,255,.88);backdrop-filter:blur(6px);padding:14px 26px;border-radius:18px;border:1px solid rgba(255,255,255,.35);box-shadow:0 25px 70px rgba(0,0,0,.6),0 0 28px rgba(191,161,90,.15);}
+    .heroInstitution::after{content:"";position:absolute;bottom:-22px;left:50%;transform:translateX(-50%);width:80px;height:1px;background:var(--gold);opacity:.45;}
+    .heroLogo{position:relative;}
+    .heroLogo::before{content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:380px;height:380px;background:radial-gradient(circle,rgba(191,161,90,.18) 0%,rgba(191,161,90,.10) 35%,transparent 70%);filter:blur(40px);z-index:0;}
+    .heroLogo img{position:relative;z-index:1;}
+    .carouselArrow{position:absolute;right:0;top:50%;transform:translateY(-50%);padding:12px 18px;font-size:18px;color:rgba(255,255,255,.35);background:linear-gradient(90deg,transparent,rgba(0,0,0,.35));pointer-events:none;animation:arrowFade 2s infinite;}
+    @keyframes arrowFade{0%{opacity:.2;transform:translateY(-50%) translateX(0);}50%{opacity:.6;transform:translateY(-50%) translateX(6px);}100%{opacity:.2;transform:translateY(-50%) translateX(0);}}
+    .functionCarousel{position:relative;}
+    /* ===== MODO ARCHIVO — solo el banner ===== */
+    #archiveBanner {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 999999;
+      background: linear-gradient(135deg, #1a1208, #2a1f0e);
+      border-bottom: 2px solid rgba(191,161,90,.4);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-family: Inter, sans-serif;
+    }
+    .archive-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(191,161,90,.15);
+      border: 1px solid rgba(191,161,90,.45);
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #bfa15a;
+      white-space: nowrap;
+    }
+    .archive-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #bfa15a;
+      animation: archivePulse 2s ease-in-out infinite;
+    }
+    @keyframes archivePulse {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .archive-text {
+      font-size: 13px;
+      color: rgba(244,241,234,.75);
+      line-height: 1.4;
+    }
+    .archive-text strong { color: #bfa15a; }
+    .archive-back {
+      font-size: 12px;
+      color: rgba(191,161,90,.85);
+      text-decoration: none;
+      border: 1px solid rgba(191,161,90,.35);
+      padding: 6px 14px;
+      border-radius: 999px;
+      transition: all .2s;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+    .archive-back:hover {
+      background: rgba(191,161,90,.15);
+      color: #bfa15a;
+    }
+    body { padding-top: 48px !important; }
+    @media (max-width: 600px) {
+      #archiveBanner { padding: 8px 14px; }
+      .archive-text { font-size: 12px; }
+      body { padding-top: 72px !important; }
+    }
+
+  </style>
 
 </head>
-<body>
-<!-- ARCHIVO BANNER -->
-<div id="archiveBanner">
-  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-    <div class="archive-badge">
-      <div class="archive-dot"></div>
-      Modo Archivo
-    </div>
-    <span class="archive-text">
-      <strong>ALORA · Temporada 2026</strong> — La temporada ha concluido. Este sistema se presenta como archivo del proyecto final.
-    </span>
-  </div>
-  <a href="home.html" class="archive-link">← Ver resumen del proyecto</a>
-</div>
 
-<div id="pageLoader">
+<body>
+  <div id="archiveBanner">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <div class="archive-badge">
+        <div class="archive-dot"></div>
+        Modo Archivo
+      </div>
+      <span class="archive-text">
+        <strong>ALORA &middot; Temporada 2026</strong> &mdash; La temporada ha concluido. Este sistema se presenta como demo del proyecto final.
+      </span>
+    </div>
+    <a href="home.html" class="archive-back">&larr; Ver resumen del proyecto</a>
+  </div>
+
+  <div id="pageLoader">
   <img src="7E279685-0A21-4575-9890-80E64F81A59E.png" alt="ALORA">
   <div class="loaderLine"></div>
-  <div class="loaderText">Modo Archivo · ALORA 2026</div>
+  <div class="loaderText">Preparando experiencia…</div>
 </div>
 
-<div class="wrap">
-  <section class="hero">
-    <div class="heroInner floatIn">
-      <div class="heroCenter">
-        <div class="heroInstitution">
-          <img src="uagm-hospitality.png" alt="UAGM Hospitality Program">
-        </div>
-        <div class="heroLogo">
-          <img src="7E279685-0A21-4575-9890-80E64F81A59E.png" alt="ALORA">
-        </div>
-        <div class="heroDivider"></div>
-        <div class="heroMeta">Universidad Ana G. Méndez · Recinto de Carolina</div>
-        <h1 class="heroTitle">Sistema de Reservaciones</h1>
-        <p class="heroText" style="color:#bfa15a;font-style:italic;">
-          Temporada 2026 — Archivo del Proyecto Final<br>
-          <span style="color:var(--muted);font-size:13px;">Este sistema procesó 378 reservaciones a lo largo de 8 funciones.</span>
-        </p>
-        <div class="heroButtons">
-          <a class="btn btnGhost" href="home.html">← Ver resumen del proyecto</a>
-          <a class="btn btnGhost" href="#menu">Ver menú</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="menu" class="block">
-    <div class="sectionCard reveal">
-      <div class="functionCarousel">
-        <div class="carouselArrow">→</div>
-        <div class="functionTrack" id="functionTrack"></div>
-      </div>
-      <div class="sectionTitle">Menú de la Temporada</div>
-      <p class="sectionText">El menú que se sirvió durante las 8 funciones de ALORA · Temporada 2026.</p>
-      <div class="menuGrid">
-        <div class="menuCol">
-          <h3>Aperitivos</h3>
-          <div id="menuAperitivos"></div>
-        </div>
-        <div class="menuCol">
-          <h3>Platos principales</h3>
-          <div id="menuPrincipales"></div>
-          <div style="margin-top:14px;">
-            <h3 style="font-size:11px;opacity:.7;">Proteínas disponibles</h3>
-            <div id="menuProteinas"></div>
-          </div>
-        </div>
-        <div class="menuCol">
-          <h3>Postres</h3>
-          <div id="menuPostres"></div>
-        </div>
-        <div class="menuCol">
-          <h3>Menú infantil</h3>
-          <div id="menuNinos"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="sectionCard reveal" style="margin:0 0 20px;">
-    <div class="sectionTitle">Bebidas</div>
-    <p class="sectionText" style="text-align:center">Cada reservación incluía <strong>una bebida de cortesía por persona</strong>.</p>
-    <div class="drinkGrid">
-      <div class="drinkCard"><div class="drinkIcon">💧</div>Agua</div>
-      <div class="drinkCard"><div class="drinkIcon">🥤</div>Coca-Cola</div>
-      <div class="drinkCard"><div class="drinkIcon">🥤</div>Sprite</div>
-      <div class="drinkCard"><div class="drinkIcon">🥫</div>Coke Zero</div>
-      <div class="drinkCard"><div class="drinkIcon">🍊</div>Jugo de China</div>
-      <div class="drinkCard"><div class="drinkIcon">🍋</div>Jugo de Limón</div>
-      <div class="drinkCard"><div class="drinkIcon">🍹</div>Mocktail Sunrise</div>
-      <div class="drinkCard"><div class="drinkIcon">🍓</div>Sangría Virgen</div>
-    </div>
-  </div>
-
-  <section id="reservar" class="block">
-    <div class="reserveGrid">
-      <div class="formCard reveal">
-<!-- OVERLAY ARCHIVO sobre el formulario -->
-<div id="formArchiveOverlay">
-  <div class="overlay-icon">🗂</div>
-  <p class="overlay-title">Temporada Cerrada</p>
-  <p class="overlay-sub">
-    Las 8 funciones de ALORA se completaron exitosamente.<br>
-    Este formulario se presenta como parte del archivo del proyecto final.
-  </p>
-  <a href="home.html" class="overlay-cta">Ver resumen de la temporada →</a>
-</div>
+  <div class="wrap">
 
 ```
-    <div class="sectionTitle" style="margin-bottom:6px;">Sistema de Reservaciones</div>
-    <p class="sectionText" style="margin-top:0;">Así funcionaba el proceso de reservación digital de ALORA durante la temporada.</p>
-    <div class="row2">
-      <div><label>Cliente</label><input placeholder="Nombre y apellido" disabled></div>
-      <div><label>Teléfono</label><input placeholder="+1 787 000 0000" disabled></div>
+<!-- HERO -->
+<section class="hero">
+  <div class="heroInner floatIn">
+    <div class="heroCenter">
+      <div class="heroInstitution">
+        <img src="uagm-hospitality.png" alt="UAGM Hospitality Program">
+      </div>
+      <div class="heroLogo">
+        <img src="7E279685-0A21-4575-9890-80E64F81A59E.png" alt="ALORA">
+      </div>
+      <div class="heroDivider"></div>
+      <div class="heroMeta">Universidad Ana G. Méndez · Recinto de Carolina</div>
+      <h1 class="heroTitle">Una experiencia gastronómica</h1>
+      <p class="heroText">ALORA presenta una propuesta culinaria donde la tradición italiana y la identidad puertorriqueña se encuentran en una experiencia gastronómica elegante, contemporánea y cuidadosamente ejecutada.</p>
+      <div class="heroButtons">
+        <a class="btn btnPrimary" href="#menu">Explorar menú</a>
+        <a class="btn btnGhost" href="#reservar">Reservar experiencia</a>
+      </div>
     </div>
-    <label>Email</label>
-    <input type="email" placeholder="correo@email.com" disabled>
-    <div class="row2">
-      <div><label>Función</label><select id="funcion" disabled></select></div>
-      <div><label>Hora</label><select id="hora" disabled><option>Temporada finalizada</option></select></div>
+  </div>
+</section>
+
+<!-- MENÚ -->
+<section id="menu" class="block">
+  <div class="sectionCard reveal">
+    <div class="functionCarousel">
+      <div class="carouselArrow">→</div>
+      <div class="functionTrack" id="functionTrack"><!-- se llenará con JS --></div>
     </div>
-    <div class="divider"></div>
-    <div id="guests"></div>
-    <div class="serviceOption">
-      <label class="descorcheCard" style="pointer-events:none;opacity:.5;">
-        <div class="descorcheIcon">🍷</div>
-        <div class="descorcheText">
-          <div class="descorcheTitle">Descorche de vino</div>
-          <div class="descorcheSubtitle">+$12 por botella</div>
+    <div class="sectionTitle">Menú disponible</div>
+    <p class="sectionText">Opciones activas para la pre-orden. (Los adicionales se atienden en restaurante.)</p>
+    <div class="menuGrid">
+      <div class="menuCol">
+        <h3>Aperitivos</h3>
+        <div id="menuAperitivos"></div>
+      </div>
+      <div class="menuCol">
+        <h3>Platos principales</h3>
+        <div id="menuPrincipales"></div>
+        <div style="margin-top:14px;">
+          <h3 style="font-size:11px; opacity:.7;">Proteínas disponibles</h3>
+          <div id="menuProteinas"></div>
         </div>
-        <input type="checkbox" id="descorche" disabled>
+      </div>
+      <div class="menuCol">
+        <h3>Postres</h3>
+        <div id="menuPostres"></div>
+      </div>
+      <div class="menuCol">
+        <h3>Menú infantil</h3>
+        <div id="menuNinos"></div>
+        <div class="smallNote">Al seleccionar "Niño", solo se muestran platos infantiles, incluira postre y bebida.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--BEBIDAS-->
+<div class="sectionCard reveal">
+  <div class="sectionTitle">Bebidas</div>
+  <p class="sectionText" style="text-align:center">Cada reservación incluye <strong>una bebida de cortesía por persona</strong> para acompañar la experiencia gastronómica.</p>
+  <div class="drinkGrid">
+    <div class="drinkCard"><div class="drinkIcon">💧</div>Agua</div>
+    <div class="drinkCard"><div class="drinkIcon">🥤</div>Coca-Cola</div>
+    <div class="drinkCard"><div class="drinkIcon">🥤</div>Sprite</div>
+    <div class="drinkCard"><div class="drinkIcon">🥫</div>Coke Zero</div>
+    <div class="drinkCard"><div class="drinkIcon">🍊</div>Jugo de China</div>
+    <div class="drinkCard"><div class="drinkIcon">🍋</div>Jugo de Limón</div>
+    <div class="drinkCard"><div class="drinkIcon">🍹</div>Mocktail Sunrise</div>
+    <div class="drinkCard"><div class="drinkIcon">🍓</div>Sangría Virgen</div>
+  </div>
+  <div class="drinkNote">Bebidas adicionales estarán disponibles en el restaurante y podrán solicitarse durante el servicio. Estas <strong>no están incluidas en el precio del menú</strong> y se facturarán por separado.</div>
+</div>
+
+<section class="block">
+  <div class="sectionCard reveal">
+    <div class="sectionTitle">La propuesta</div>
+    <p class="sectionText" style="text-align:center">ALORA presenta una experiencia culinaria de precio fijo donde cada comensal disfruta un recorrido gastronómico cuidadosamente diseñado. Inspirada en la tradición italiana y reinterpretada con ingredientes y carácter puertorriqueño, la propuesta combina técnica, producto y elegancia en un formato accesible al público.</p>
+    <div style="margin-top:28px">
+      <div style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;text-align:center">Experiencia Adulto</div>
+      <div class="drinkGrid">
+        <div class="drinkCard">🍽 Aperitivo</div>
+        <div class="drinkCard">🍝 Plato principal</div>
+        <div class="drinkCard">🍰 Postre</div>
+        <div class="drinkCard">🥤 1 bebida incluida</div>
+      </div>
+    </div>
+    <div style="margin-top:30px">
+      <div style="font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;text-align:center">Menú Infantil</div>
+      <div class="drinkGrid">
+        <div class="drinkCard">🧒 Plato infantil</div>
+        <div class="drinkCard">🍰 Postre</div>
+        <div class="drinkCard">🥤 1 bebida incluida</div>
+      </div>
+      <div class="drinkNote">El menú infantil incluye plato principal, postre y bebida. El postre se selecciona en el restaurante durante el servicio.</div>
+    </div>
+    <div class="drinkNote">Duración aproximada de la experiencia: <strong>90 minutos</strong><br>Precio fijo adulto: <strong>$35</strong> · Menú infantil: <strong>$12.50</strong></div>
+
+    <section class="block" style="padding-top:40px;">
+      <div class="sectionCard reveal">
+        <div class="sectionTitle">Métodos de pago</div>
+        <p class="sectionText" style="text-align:center">Para esta experiencia gastronómica aceptamos los siguientes métodos de pago directamente en el restaurante.</p>
+        <div class="drinkGrid" style="margin-top:24px">
+          <div class="drinkCard"><div class="drinkIcon">📱</div>ATH Móvil</div>
+          <div class="drinkCard"><div class="drinkIcon">💵</div>Efectivo</div>
+        </div>
+        <div class="drinkNote">El pago se realiza al llegar al restaurante antes de comenzar el servicio.<br><br><strong>Se recomienda ATH Móvil para agilizar el proceso de pago.</strong></div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- RESERVAR -->
+<section id="reservar" class="block">
+  <div class="reserveGrid">
+    <div class="formCard reveal">
+      <div class="sectionTitle" style="margin-bottom:6px;">Reservar</div>
+      <p class="sectionText" style="margin-top:0;">Completa la reserva y añade las personas. Se ocultan automáticamente las horas llenas.</p>
+      <div class="row2">
+        <div>
+          <label for="cliente">Cliente</label>
+          <input id="cliente" placeholder="Nombre y apellido" autocomplete="name">
+        </div>
+        <div>
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" placeholder="+1 787 000 0000" inputmode="tel" autocomplete="tel">
+        </div>
+      </div>
+      <label for="email">Email (recibirás tu confirmación y QR)</label>
+      <input id="email" type="email" placeholder="correo@email.com" autocomplete="email">
+      <div class="row2">
+        <div>
+          <label for="funcion">Función</label>
+          <select id="funcion"></select>
+        </div>
+        <div>
+          <label for="hora">Hora</label>
+          <select id="hora"></select>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="sectionTitle" style="font-size:18px;margin:0">Personas</div>
+      <div id="guests"></div>
+      <div style="margin-top:12px">
+        <button class="btn btnSecondary" id="addGuestBtn" type="button" style="width:100%">+ Añadir persona</button>
+      </div>
+      <div id="menuResetNotice" style="display:none;margin-top:12px;padding:12px;border-radius:12px;border:1px solid rgba(241,196,15,.35);background:rgba(241,196,15,.08);color:#f4f1ea;font-size:13px;">El menú cambió según la función seleccionada. Por favor selecciona nuevamente los platos.</div>
+      <label for="notas" class="formLabel">
+        <div class="divider"></div>
+        Notas, alergias o solicitudes especiales
       </label>
-    </div>
-    <div class="priceLine">
-      <div><div class="label">Total estimado</div><div class="total">—</div></div>
-    </div>
-    <div style="margin-top:18px;">
-      <button class="btn btnPrimary" id="submitBtn" type="button" style="width:100%;opacity:.35;cursor:not-allowed;" disabled>
-        Temporada finalizada · Reservaciones cerradas
-      </button>
-    </div>
-    <div id="toast" class="toast"></div>
-    <div class="divider"></div>
-    <div class="markRow">
-      <img src="2BE6E097-CFDA-4844-A545-BCFA182CF730.png" alt="ALORA mark">
-      <div>
-        <div style="font-weight:600;color:rgba(255,255,255,.88)">ALORA</div>
-        <div style="font-size:12px;color:var(--muted)">Fusión Boritaly · Temporada 2026</div>
+      <textarea id="notas" name="notas" rows="3" placeholder="Ejemplo: alergia a nueces, intolerancia a lactosa, vegetariano, acceso para silla de ruedas, celebración especial, etc." style="width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.03);color:white;resize:vertical;font-size:14px;line-height:1.5;margin-bottom:12px;"></textarea>
+      <div class="serviceOption">
+        <label class="descorcheCard">
+          <div class="descorcheIcon">🍷</div>
+          <div class="descorcheText">
+            <div class="descorcheTitle">Descorche de vino</div>
+            <div class="descorcheSubtitle">Trae tu propia botella a la mesa</div>
+            <div class="descorchePrice">+$12 por botella</div>
+          </div>
+          <input type="checkbox" id="descorche">
+        </label>
       </div>
+      <div class="priceLine">
+        <div>
+          <div class="label">Total estimado</div>
+          <div class="total" id="total">$0.00</div>
+        </div>
+      </div>
+      <div style="margin-top:18px">
+        <button class="btn btnPrimary" id="submitBtn" type="button" style="width:100%">Confirmar experiencia</button>
+      </div>
+      <div id="toast" class="toast"></div>
+      <div class="divider"></div>
+      <div style="margin:18px 0 26px 0;padding:12px 16px;background:rgba(191,161,90,.08);border:1px solid rgba(191,161,90,.25);border-radius:10px;font-size:13px;color:#d8cfa8;line-height:1.6;">⚠️ <strong>Alergias o necesidades especiales:</strong><br>Si algún invitado tiene alergias alimentarias, restricciones dietéticas o alguna discapacidad que debamos considerar para su comodidad, por favor indíquelo en el campo de notas.</div>
+      <div id="detalles" style="margin-top:20px;padding:18px 20px;background:rgba(255,255,255,.03);border-radius:12px;border:1px solid rgba(255,255,255,.08);font-size:13px;line-height:1.7;color:rgba(255,255,255,.75);"><strong>Detalles de la experiencia</strong><br><br>• Cada reservación incluye un menú de tres cursos preparado por nuestro equipo culinario.<br><br>• Las bebidas de cortesía se ofrecerán al llegar al restaurante antes de comenzar el servicio.<br><br>• El pago se realiza presencialmente el día del evento mediante <strong>ATH Móvil o efectivo</strong>.<br><br></div>
+      <div class="divider"></div>
+      <div class="markRow">
+        <img src="2BE6E097-CFDA-4844-A545-BCFA182CF730.png" alt="ALORA mark">
+        <div>
+          <div style="font-weight:600; color:rgba(255,255,255,.88)">ALORA</div>
+          <div style="font-size:12px; color:var(--muted)">Fusión Boritaly · Fine dining</div>
+        </div>
+        <a href="https://maps.google.com/?q=UAGM+Carolina" target="_blank" class="smallNote">📍 Ver ubicación en Google Maps</a>
+      </div>
+      <div class="divider"></div>
+      <p class="sectionText" style="text-align:center"><strong>Tradición. Técnica. Elegancia.</strong></p>
     </div>
-    <div class="divider"></div>
-    <p class="sectionText" style="text-align:center"><strong>Tradición. Técnica. Elegancia.</strong></p>
   </div>
-</div>
+</section>
+
+<footer style="text-align:center;padding:10px 0 60px;">
+  <div style="margin-top:18px;font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;">
+    © <span id="year"></span> ALORA<br>
+    Proyecto académico presentado en la<br>
+    <strong>José A. "Tony" Santana International School of Hospitality and Culinary Arts</strong><br>
+    Universidad Ana G. Méndez · Recinto de Carolina
+  </div>
+</footer>
 ```
 
-  </section>
+  </div>
 
-  <footer style="text-align:center;padding:10px 0 60px;">
-    <div style="margin-top:18px;font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;">
-      © 2026 ALORA · Proyecto académico · Archivo de la temporada<br>
-      <strong>José A. "Tony" Santana International School of Hospitality and Culinary Arts</strong><br>
-      Universidad Ana G. Méndez · Recinto de Carolina<br>
-      <a href="home.html" style="color:#bfa15a;margin-top:8px;display:inline-block;">← Volver al resumen del proyecto</a>
-    </div>
-  </footer>
-</div>
+  <script>
+    const PRECIO_ADULTO = 35;
+    const PRECIO_NINO = 12.50;
+    let editId = null;
+    let PLATOS_MAP = {};
 
-<script>
-const CONFIG_LOADED = typeof CONFIG !== 'undefined';
+    function hideLoader(){
+      const loader = document.getElementById("pageLoader");
+      loader.style.opacity = "0";
+      setTimeout(()=>{ loader.style.display = "none"; }, 600);
+    }
 
-const FUNCION_FECHAS = {
-  "Función 1":"19 marzo 2026","Función 2":"26 marzo 2026",
-  "Función 3":"9 abril 2026","Función 4":"16 abril 2026",
-  "Función 5":"23 abril 2026","Función 6":"30 abril 2026",
-  "Función 7":"7 mayo 2026","Función 8":"14 mayo 2026"
-};
+    function funcionCerradaFrontend(funcion){
+      const FUNCION_FECHAS = {
+        "Función 1":"2026-03-19","Función 2":"2026-03-26",
+        "Función 3":"2026-04-09","Función 4":"2026-04-16",
+        "Función 5":"2026-04-23","Función 6":"2026-04-30",
+        "Función 7":"2026-05-07","Función 8":"2026-05-14"
+      };
+      const fecha = FUNCION_FECHAS[funcion];
+      if(!fecha) return false;
+      const funcionDate = new Date(fecha);
+      const dia = funcionDate.getDay();
+      const diff = dia === 0 ? -6 : 1 - dia;
+      const lunes = new Date(funcionDate);
+      lunes.setDate(funcionDate.getDate() + diff);
+      if(funcion === "Función 2"){
+        const cierreEspecial = new Date("2026-03-24T08:00:00");
+        return new Date() > cierreEspecial;
+      }
+      lunes.setHours(23,59,59,999);
+      return new Date() > lunes;
+    }
 
-let PLATOS_MAP = {};
-
-function hideLoader(){
-  const l = document.getElementById("pageLoader");
-  l.style.opacity="0";
-  setTimeout(()=>l.style.display="none",600);
-}
-
-function pillList(id, items){
-  const c = document.getElementById(id);
-  if(!c) return;
-  c.innerHTML = "";
-  items.forEach(name=>{
-    const plato = PLATOS_MAP[name] || {};
-    const el = document.createElement("div");
-    el.className = "menuItem";
-    el.innerHTML = `<div class="menuName">${name}</div><div class="menuTooltip">${plato.descripcion || "Descripción del plato"}</div>`;
-    c.appendChild(el);
-  });
-}
-
-function hydrateMenu(funcion){
-  const menu = window.ALL_MENUS?.[funcion] || {aperitivos:[],principales:[],postres:[],ninos:[]};
-  PLATOS_MAP = {};
-  [...menu.aperitivos,...menu.principales,...menu.postres,...menu.ninos].forEach(p=>{ PLATOS_MAP[p.nombre]=p; });
-  pillList("menuAperitivos", menu.aperitivos.map(p=>p.nombre));
-  pillList("menuPrincipales", menu.principales.map(p=>p.nombre));
-  pillList("menuPostres", menu.postres.map(p=>p.nombre));
-  pillList("menuNinos", menu.ninos.map(p=>p.nombre));
-  const proteinasSet = new Set();
-  menu.principales.forEach(p=>{ if(p.tieneProteina && p.proteinas) p.proteinas.forEach(pr=>{ if(pr) proteinasSet.add(pr); }); });
-  pillList("menuProteinas", Array.from(proteinasSet));
-}
-
-function renderCarousel(funciones){
-  const track = document.getElementById("functionTrack");
-  if(!track) return;
-  track.innerHTML = "";
-  funciones.forEach((funcion,i)=>{
-    const card = document.createElement("div");
-    card.className = "functionCard" + (i===0?" active":"");
-    card.innerHTML = `<div class="functionTitle">${funcion}</div><div class="functionMeta">${FUNCION_FECHAS[funcion]||""}</div><div class="functionMenuPreview">Ver menú</div>`;
-    card.addEventListener("click",()=>{
-      document.querySelectorAll(".functionCard").forEach(c=>c.classList.remove("active"));
-      card.classList.add("active");
-      hydrateMenu(funcion);
-    });
-    track.appendChild(card);
-  });
-}
-
-function initReveal(){
-  const io = new IntersectionObserver(entries=>entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add("show"); }),{threshold:.12});
-  document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
-}
-
-document.addEventListener("click", e=>{
-  const item = e.target.closest(".menuItem");
-  if(!item) return;
-  if(window.matchMedia("(hover:none)").matches) item.classList.toggle("active");
-});
-
-document.addEventListener("DOMContentLoaded", async ()=>{
-  const todasLasFunciones = Object.keys(FUNCION_FECHAS);
-  renderCarousel(todasLasFunciones);
-
-  if(CONFIG_LOADED){
-    try {
+    async function cargarBootstrap(){
       const res = await fetch(CONFIG.BACKEND_URL,{
         method:"POST",
-        headers:{"Content-Type":"text/plain;charset=utf-8"},
-        body:JSON.stringify({action:"bootstrap",secret:CONFIG.SECRET})
+        headers:{ "Content-Type":"text/plain;charset=utf-8" },
+        body:JSON.stringify({ action:"bootstrap", secret: CONFIG.SECRET })
       });
-      const boot = await res.json();
-      if(boot?.ok){
-        window.ALL_MENUS = boot.menus;
-        if(todasLasFunciones[0]) hydrateMenu(todasLasFunciones[0]);
+      return await res.json();
+    }
+
+    const FUNCION_FECHAS = {
+      "Función 1":"19 marzo 2026","Función 2":"26 marzo 2026",
+      "Función 3":"9 abril 2026","Función 4":"16 abril 2026",
+      "Función 5":"23 abril 2026","Función 6":"30 abril 2026",
+      "Función 7":"7 mayo 2026","Función 8":"14 mayo 2026"
+    };
+
+    function renderFunctionCarousel(funciones){
+      const track = document.getElementById("functionTrack");
+      track.innerHTML = "";
+      funciones.forEach(funcion=>{
+        const card = document.createElement("div");
+        card.className = "functionCard";
+        card.innerHTML = `<div class="functionTitle">${funcion}</div><div class="functionMeta">${FUNCION_FECHAS[funcion] || ""}</div><div class="functionMenuPreview">Ver menú disponible</div>`;
+        card.addEventListener("click", ()=>{
+          document.querySelectorAll(".functionCard").forEach(c=>c.classList.remove("active"));
+          card.classList.add("active");
+          hydrateMenu(funcion);
+        });
+        track.appendChild(card);
+      });
+    }
+
+    let CURRENT_MENU = { aperitivos:[], principales:[], postres:[], ninos:[] };
+
+    function hydrateMenu(funcion){
+      CURRENT_MENU = window.ALL_MENUS[funcion] || { aperitivos:[], principales:[], postres:[], ninos:[] };
+      PLATOS_MAP = {};
+      [...CURRENT_MENU.aperitivos,...CURRENT_MENU.principales,...CURRENT_MENU.postres,...CURRENT_MENU.ninos].forEach(p=>{ PLATOS_MAP[p.nombre] = p; });
+      pillList("menuAperitivos", CURRENT_MENU.aperitivos.map(p=>p.nombre));
+      pillList("menuPrincipales", CURRENT_MENU.principales.map(p=>p.nombre));
+      pillList("menuPostres", CURRENT_MENU.postres.map(p=>p.nombre));
+      pillList("menuNinos", CURRENT_MENU.ninos.map(p=>p.nombre));
+      const proteinasSet = new Set();
+      CURRENT_MENU.principales.forEach(p=>{ if(p.tieneProteina && Array.isArray(p.proteinas)){ p.proteinas.forEach(pr=>{ if(pr && pr.trim() !== "") proteinasSet.add(pr); }); } });
+      pillList("menuProteinas", Array.from(proteinasSet));
+    }
+
+    function renderHorasBootstrap(funcion, horaActual = null){
+      const selHora = document.getElementById("hora");
+      const horas = window.BOOTSTRAP_HORAS[funcion] || [];
+      selHora.innerHTML = "";
+      horas.forEach(h=>{
+        if(h.full && h.hora !== horaActual) return;
+        const opt = document.createElement("option");
+        opt.value = h.hora;
+        opt.textContent = (h.full && h.hora === horaActual) ? `${h.hora} (tu reserva)` : `${h.hora} (${h.disponibles} disponibles)`;
+        selHora.appendChild(opt);
+      });
+      if(selHora.options.length === 0) selHora.innerHTML = "<option>No hay horas disponibles</option>";
+    }
+
+    const MAX_GUESTS = 14;
+    const $ = (id) => document.getElementById(id);
+
+    function setToast(type, message, extraHtml){
+      const t = $("toast");
+      t.className = "toast " + (type || "");
+      t.style.display = "block";
+      t.innerHTML = message + (extraHtml ? `<div class="mono">${extraHtml}</div>` : "");
+    }
+
+    function clearToast(){
+      const t = $("toast");
+      t.style.display = "none";
+      t.innerHTML = "";
+    }
+
+    function fillSelect(selectEl, options){
+      selectEl.innerHTML = "";
+      const placeholder = document.createElement("option");
+      placeholder.value = ""; placeholder.textContent = "Seleccionar";
+      placeholder.disabled = true; placeholder.selected = true;
+      selectEl.appendChild(placeholder);
+      options.forEach(v=>{
+        const o = document.createElement("option");
+        o.value = v;
+        const fecha = FUNCION_FECHAS[v] || "";
+        o.textContent = fecha ? `${v} · ${fecha}` : v;
+        selectEl.appendChild(o);
+      });
+    }
+
+    function pillList(containerId, items){
+      const c = $(containerId);
+      c.innerHTML = "";
+      items.forEach(name=>{
+        const plato = PLATOS_MAP[name] || {};
+        const el = document.createElement("div");
+        el.className = "menuItem";
+        el.innerHTML = `<div class="menuName">${name}</div><div class="menuTooltip">${plato.descripcion || "Descripción próximamente"}</div>`;
+        c.appendChild(el);
+      });
+    }
+
+    document.addEventListener("click", e=>{
+      const item = e.target.closest(".menuItem");
+      if(!item) return;
+      if(window.matchMedia("(hover:none)").matches) item.classList.toggle("active");
+    });
+
+    function initReveal(){
+      const els = Array.from(document.querySelectorAll(".reveal"));
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add("show"); });
+      }, {threshold: 0.12});
+      els.forEach(el=>io.observe(el));
+    }
+
+    function actualizarTotal(){
+      let total = 0;
+      document.querySelectorAll(".tipoPersona").forEach(sel=>{ total += (sel.value === "nino") ? PRECIO_NINO : PRECIO_ADULTO; });
+      if($("descorche") && $("descorche").checked) total += 12;
+      $("total").textContent = "$" + total.toFixed(2);
+    }
+
+    let guestCount = 0;
+
+    function guestTemplate(idx){
+      const wrap = document.createElement("div");
+      wrap.className = "guest";
+      wrap.dataset.idx = String(idx);
+      wrap.innerHTML = `
+        <div class="guestTop">
+          <div class="guestLabel">Persona ${idx}</div>
+          <button type="button" class="ghostBtn" data-action="remove">Eliminar</button>
+        </div>
+        <label>Nombre Persona</label>
+        <input class="name" placeholder="Nombre" />
+        <label>Tipo</label>
+        <select class="tipoPersona">
+          <option value="adulto">Adulto $${PRECIO_ADULTO}</option>
+          <option value="nino">Niño $${PRECIO_NINO.toFixed(2)}</option>
+        </select>
+        <div class="menuAdulto">
+          <div class="row2">
+            <div><label>Aperitivo</label><select class="aperitivo"></select></div>
+            <div><label>Plato principal</label><select class="principal"></select></div>
+          </div>
+          <div class="proteinaBlock" style="display:none">
+            <label>Proteína</label>
+            <select class="proteina"></select>
+          </div>
+          <label>Postre</label>
+          <select class="postre"></select>
+        </div>
+        <div class="menuNino" style="display:none">
+          <label>Menú Niño</label>
+          <select class="principalNino"></select>
+          <div class="smallNote">Incluye solo plato principal en pre-orden.</div>
+        </div>`;
+      fillSelect(wrap.querySelector(".aperitivo"), CURRENT_MENU.aperitivos.map(p=>p.nombre));
+      fillSelect(wrap.querySelector(".principal"), CURRENT_MENU.principales.map(p=>p.nombre));
+      fillSelect(wrap.querySelector(".postre"), CURRENT_MENU.postres.map(p=>p.nombre));
+      fillSelect(wrap.querySelector(".principalNino"), CURRENT_MENU.ninos.map(p=>p.nombre));
+      wrap.querySelector(".principal").addEventListener("change", e=>{
+        const platoNombre = e.target.value;
+        const bloqueProteina = wrap.querySelector(".proteinaBlock");
+        const selectProteina = wrap.querySelector(".proteina");
+        selectProteina.innerHTML = ""; selectProteina.value = "";
+        if(!platoNombre){ bloqueProteina.style.display = "none"; return; }
+        const plato = PLATOS_MAP[platoNombre];
+        if(plato && plato.tieneProteina){ fillSelect(selectProteina, plato.proteinas ? plato.proteinas : []); bloqueProteina.style.display = "block"; }
+        else bloqueProteina.style.display = "none";
+      });
+      wrap.querySelector('[data-action="remove"]').addEventListener("click", ()=>{ wrap.remove(); renumberGuests(); setTimeout(()=>actualizarTotal(),0); });
+      wrap.querySelector(".tipoPersona").addEventListener("change", (e)=>{
+        const adulto = wrap.querySelector(".menuAdulto");
+        const nino = wrap.querySelector(".menuNino");
+        if(e.target.value === "nino"){ adulto.style.display="none"; nino.style.display="block"; }
+        else { adulto.style.display="block"; nino.style.display="none"; }
+        actualizarTotal();
+      });
+      wrap.addEventListener("change", (e)=>{
+        if(e.target.classList.contains("tipoPersona")||e.target.classList.contains("principal")||e.target.classList.contains("principalNino")||e.target.classList.contains("aperitivo")||e.target.classList.contains("postre")||e.target.classList.contains("proteina")) actualizarTotal();
+      });
+      return wrap;
+    }
+
+    function renumberGuests(){
+      const all = Array.from($("guests").querySelectorAll(".guest"));
+      guestCount = all.length;
+      all.forEach((g,i)=>{ const n=i+1; g.dataset.idx=String(n); g.querySelector(".guestLabel").textContent=`Persona ${n}`; });
+      $("addGuestBtn").disabled = guestCount >= MAX_GUESTS;
+    }
+
+    function addGuest(){
+      if(guestCount >= MAX_GUESTS) return;
+      const guest = guestTemplate(guestCount + 1);
+      $("guests").appendChild(guest);
+      renumberGuests(); actualizarTotal();
+    }
+
+    function getGuests(){
+      return Array.from($("guests").querySelectorAll(".guest")).map(g=>{
+        const tipo = g.querySelector(".tipoPersona").value;
+        const name = (g.querySelector(".name").value || "").trim();
+        if(tipo === "nino") return { name, aperitivo:"", principal: g.querySelector(".principalNino").value, postre:"" };
+        return { name, aperitivo: g.querySelector(".aperitivo").value, principal: g.querySelector(".principal").value, proteina: g.querySelector(".proteina")?.value || "", postre: g.querySelector(".postre").value };
+      });
+    }
+
+    function validate(payload){
+      if(!payload.cliente || payload.cliente.trim().length < 3) return "Escribe el nombre del cliente.";
+      if(!payload.phone || payload.phone.trim().length < 7) return "Escribe un teléfono válido.";
+      if(!payload.email || !payload.email.includes("@")) return "Escribe un email válido para enviar la confirmación.";
+      if(!payload.funcion) return "Selecciona la función.";
+      if(!payload.hora) return "Selecciona una hora.";
+      if(!payload.guests || payload.guests.length === 0) return "Añade al menos 1 persona.";
+      for(let i=0;i<payload.guests.length;i++){
+        const g = payload.guests[i];
+        if(!g.name) return `Falta el nombre en Persona ${i+1}.`;
+        if(!g.principal) return `Persona ${i+1}: selecciona el plato principal.`;
+        const platoInfo = PLATOS_MAP[g.principal];
+        if(platoInfo && platoInfo.tieneProteina && !g.proteina) return `Persona ${i+1}: selecciona proteína.`;
+        const isAdult = (g.aperitivo && g.aperitivo.trim() !== "") || (g.postre && g.postre.trim() !== "");
+        if(isAdult && (!g.aperitivo || !g.postre)) return `Persona ${i+1}: adulto requiere aperitivo y postre.`;
       }
-    } catch(e){ console.log("Archivo mode — backend not available"); }
-  }
+      return null;
+    }
 
-  if(todasLasFunciones[0]) hydrateMenu(todasLasFunciones[0]);
+    async function submitReservation(){
+      clearToast();
+      const payload = {
+        secret: CONFIG.SECRET, action: editId ? "update" : "create",
+        reservationId: editId || null,
+        cliente: $("cliente").value, phone: $("telefono").value,
+        email: $("email").value, funcion: $("funcion").value,
+        hora: $("hora").value, guests: getGuests(),
+        notas: $("notas").value || "", descorche: $("descorche").checked
+      };
+      const err = validate(payload);
+      if(err){ setToast("warn","Revisa el formulario:",err); return; }
+      if(!$("hora").value){ setToast("warn","No hay horas disponibles.","Selecciona otra función o intenta más tarde."); return; }
+      const btn = $("submitBtn");
+      if(btn.dataset.loading === "1") return;
+      btn.dataset.loading = "1"; btn.disabled = true;
+      btn.textContent = editId ? "Actualizando…" : "Confirmando…";
+      try{
+        const res = await fetch(CONFIG.BACKEND_URL,{ method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(payload) });
+        const data = await res.json();
+        if(data.ok){
+          if(editId){ window.location.href = "ticket.html?id=" + editId; return; }
+          let total = 0;
+          payload.guests.forEach(g=>{ total += (g.aperitivo||g.postre) ? PRECIO_ADULTO : PRECIO_NINO; });
+          if(payload.descorche) total += 12;
+          setToast("ok",`<strong>✔ Reserva confirmada</strong><br>📧 Te enviamos un email de confirmación`,`ID: ${data.reservation_id}\n\nHora: ${payload.hora}\nPersonas: ${payload.guests.length}\n\nTotal estimado: $${total.toFixed(2)}`);
+          $("cliente").value=""; $("telefono").value=""; $("email").value=""; $("notas").value="";
+          if($("descorche")) $("descorche").checked = false;
+          $("guests").innerHTML=""; guestCount=0; addGuest(); actualizarTotal();
+          hydrateMenu($("funcion").value); renderHorasBootstrap($("funcion").value);
+        } else { setToast("err","No se pudo confirmar.",data.error || "Error desconocido"); }
+      } catch(e){ setToast("err","Error de conexión.",String(e)); }
+      finally{ btn.dataset.loading="0"; btn.disabled=false; btn.textContent="Confirmar experiencia"; }
+    }
 
-  hideLoader();
-  initReveal();
+    function loadReservationIntoForm(reserva){
+      $("cliente").value = reserva.cliente || "";
+      $("telefono").value = reserva.telefono || "";
+      $("email").value = reserva.email || "";
+      $("funcion").value = reserva.funcion;
+      $("hora").disabled = false;
+      hydrateMenu(reserva.funcion);
+      renderHorasBootstrap(reserva.funcion, reserva.hora);
+      const horaSelect = $("hora");
+      setTimeout(()=>{
+        let existe = false;
+        Array.from(horaSelect.options).forEach(o=>{ if(o.value === reserva.hora) existe = true; });
+        if(!existe){ const opt=document.createElement("option"); opt.value=reserva.hora; opt.textContent=reserva.hora+" (tu reserva)"; horaSelect.appendChild(opt); }
+        horaSelect.value = reserva.hora;
+        $("guests").innerHTML=""; guestCount=0;
+        reserva.guests.forEach(g=>{
+          addGuest();
+          const guestEl = $("guests").lastElementChild;
+          const tipoSelect = guestEl.querySelector(".tipoPersona");
+          if(!g.aperitivo && !g.postre){ tipoSelect.value="nino"; guestEl.querySelector(".menuAdulto").style.display="none"; guestEl.querySelector(".menuNino").style.display="block"; guestEl.querySelector(".principalNino").value=g.principal||""; }
+          else tipoSelect.value="adulto";
+          guestEl.querySelector(".name").value = g.name || "";
+          if(g.aperitivo) guestEl.querySelector(".aperitivo").value = g.aperitivo;
+          if(g.principal){ const ps=guestEl.querySelector(".principal"); ps.value=g.principal; ps.dispatchEvent(new Event("change")); }
+          if(g.postre) guestEl.querySelector(".postre").value = g.postre;
+          if(g.proteina) guestEl.querySelector(".proteina").value = g.proteina;
+        });
+        $("notas").value = reserva.notas || "";
+        actualizarTotal();
+      }, 80);
+    }
 
-  setTimeout(()=>{
-    const el = document.querySelector(".functionCarousel");
-    if(!el) return;
-    el.scrollLeft=40;
-    setTimeout(()=>el.scrollLeft=0,600);
-  },800);
-});
-</script>
+    document.addEventListener("DOMContentLoaded", async ()=>{
+      $("year").textContent = new Date().getFullYear();
+      const boot = await cargarBootstrap();
+      if(!boot || !boot.ok){ alert("Error cargando menú"); return; }
+      window.ALL_MENUS = boot.menus;
+      window.BOOTSTRAP_HORAS = boot.horas;
+      const funcionesDisponibles = boot.funciones.filter(f => !funcionCerradaFrontend(f));
+      fillSelect($("funcion"), funcionesDisponibles);
+      renderFunctionCarousel(funcionesDisponibles);
+      const params = new URLSearchParams(window.location.search);
+      editId = params.get("edit");
+      if(editId){
+        $("submitBtn").textContent = "Actualizar reserva";
+        document.querySelector(".sectionTitle").textContent = "Editar reserva";
+        const res = await fetch(CONFIG.BACKEND_URL,{ method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify({ action:"get_ticket", secret:CONFIG.SECRET, ticketId:editId }) });
+        const data = await res.json();
+        if(data.ok) loadReservationIntoForm(data.reserva);
+      }
+      if(!editId){
+        $("hora").innerHTML = "<option>Selecciona una función primero</option>";
+        $("hora").disabled = true;
+        $("guests").innerHTML = ""; guestCount = 0; addGuest();
+      }
+      hideLoader();
+      $("hora").innerHTML = "<option>Seleccione función primero</option>";
+      $("hora").disabled = true;
+      $("guests").innerHTML = ""; guestCount = 0;
+      $("funcion").addEventListener("change", async ()=>{
+        document.querySelectorAll(".functionCard").forEach(c=>{ c.classList.toggle("active", c.textContent.includes($("funcion").value)); });
+        $("hora").disabled = false;
+        const funcion = $("funcion").value;
+        hydrateMenu(funcion); renderHorasBootstrap(funcion);
+        $("guests").innerHTML=""; guestCount=0; addGuest();
+        $("menuResetNotice").style.display = "block";
+        pillList("menuAperitivos", CURRENT_MENU.aperitivos.map(p=>p.nombre));
+        pillList("menuPrincipales", CURRENT_MENU.principales.map(p=>p.nombre));
+        pillList("menuPostres", CURRENT_MENU.postres.map(p=>p.nombre));
+        pillList("menuNinos", CURRENT_MENU.ninos.map(p=>p.nombre));
+      });
+      $("addGuestBtn").addEventListener("click", addGuest);
+      $("descorche").addEventListener("change", actualizarTotal);
+      $("submitBtn").addEventListener("click", submitReservation);
+      initReveal();
+      const mapModal = document.getElementById("mapModal");
+      document.getElementById("openMap").addEventListener("click",(e)=>{ e.preventDefault(); mapModal.style.display="flex"; });
+      document.getElementById("closeMap").addEventListener("click",()=>{ mapModal.style.display="none"; });
+      mapModal.addEventListener("click",(e)=>{ if(e.target===mapModal) mapModal.style.display="none"; });
+      setTimeout(()=>{
+        const el = document.querySelector(".functionCarousel");
+        if(!el) return;
+        el.scrollLeft = 40;
+        setTimeout(()=>{ el.scrollLeft = 0; }, 600);
+      }, 800);
+      const arrow = document.querySelector(".carouselArrow");
+      const carousel = document.querySelector(".functionCarousel");
+      if(carousel && arrow){ carousel.addEventListener("scroll", ()=>{ arrow.style.opacity="0"; }); }
+    });
+  </script>
 
+  <div id="mapModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);align-items:center;justify-content:center;z-index:9999;">
+    <div style="background:#111;border-radius:18px;padding:20px;max-width:800px;width:90%;box-shadow:0 40px 120px rgba(0,0,0,.7);position:relative;">
+      <button id="closeMap" style="position:absolute;top:10px;right:12px;background:none;border:none;color:white;font-size:20px;cursor:pointer;">✕</button>
+      <h3 style="margin-top:0;font-family:'Playfair Display',serif;">Restaurante UAGM Carolina</h3>
+      <iframe src="https://www.google.com/maps?q=UAGM+Carolina&output=embed" width="100%" height="400" style="border:0;border-radius:12px;" loading="lazy"></iframe>
+      <div style="margin-top:12px;text-align:right;">
+        <a href="https://maps.google.com/?q=UAGM+Carolina" target="_blank" style="background:var(--terracotta);color:#111;padding:10px 16px;border-radius:12px;font-weight:600;display:inline-block;">Abrir en Google Maps</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
