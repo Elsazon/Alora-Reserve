@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menú del Día — Cookout Caribeño</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap');
+
+  :root {
+    --bg: #0e0f0d;
+    --surface: #161714;
+    --surface2: #1d1f1b;
+    --surface3: #242620;
+    --border: #2a2c27;
+    --border2: #333530;
+    --text: #e8e6df;
+    --text2: #9a9890;
+    --text3: #5e5d58;
+    --gold: #c9933a;
+    --gold-light: #e8b05a;
+    --gold-dim: rgba(201,147,58,0.15);
+    --gold-dim2: rgba(201,147,58,0.08);
+    --green: #4a7c59;
+    --green-dim: rgba(74,124,89,0.15);
+    --red: #7c4a4a;
+    --accent: #c9933a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    .no-print { display: none !important; }
+    body { background: #fff; color: #000; font-size: 11px; }
+    .surface { background: #fff; border: 1px solid #ccc; }
+    .badge-gold { background: #f5e0b0; color: #8a5a00; border: 1px solid #c9933a; }
+    header { background: #fff; border-bottom: 2px solid #000; }
+    .header-inner h1 { color: #000; }
+    .header-inner p { color: #555; }
+    .ingredient-row { border-bottom: 1px solid #eee; }
+    .ingredient-row:hover { background: transparent; }
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 24px 18px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .header-left h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 400;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  .header-left h1 span { color: var(--gold); font-style: italic; }
+
+  .header-left p {
+    color: var(--text3);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 7px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--border2);
+    background: var(--surface2);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  .btn-gold {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: var(--gold-dim2);
+  }
+
+  .btn-gold:hover { background: var(--gold-dim); }
+
+  .btn-danger:hover { border-color: var(--red); color: #e06060; }
+
+  /* ── LAYOUT ── */
+  .main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* ── STATS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .stat-label {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text3);
+  }
+
+  .stat-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .stat-card.gold .stat-value { color: var(--gold); }
+  .stat-card.green .stat-value { color: #6db882; }
+  .stat-card.muted .stat-value { color: var(--text2); }
+
+  /* ── MENU SUMMARY ── */
+  .menu-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+
+  .menu-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+
+  .menu-card-cat {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 5px;
+  }
+
+  .menu-card-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.25;
+  }
+
+  .menu-card-note {
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 4px;
+  }
+
+  /* ── SEARCH + FILTERS ── */
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text3);
+    font-size: 11px;
+    pointer-events: none;
+  }
+
+  #searchInput {
+    width: 100%;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    padding: 8px 12px 8px 32px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  #searchInput:focus { border-color: var(--gold); }
+  #searchInput::placeholder { color: var(--text3); }
+
+  .filter-btns {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 6px 12px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text3);
+    cursor: pointer;
+    transition: all 0.12s;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover { border-color: var(--border2); color: var(--text2); }
+
+  .filter-btn.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: var(--gold-dim2);
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* ── CATEGORY BLOCK ── */
+  .cat-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .cat-header {
+    padding: 12px 18px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .cat-header:hover { background: var(--surface3); }
+
+  .cat-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .cat-count {
+    font-size: 10px;
+    color: var(--text3);
+    background: var(--surface3);
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  .cat-chevron {
+    color: var(--text3);
+    font-size: 10px;
+    transition: transform 0.2s;
+  }
+
+  .cat-block.collapsed .cat-chevron { transform: rotate(-90deg); }
+  .cat-block.collapsed .cat-body { display: none; }
+
+  /* ── INGREDIENT TABLE ── */
+  .ingredient-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .ingredient-table th {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 8px 18px;
+    text-align: left;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+  }
+
+  .ingredient-row {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+
+  .ingredient-row:last-child { border-bottom: none; }
+  .ingredient-row:hover { background: var(--surface2); }
+
+  .ingredient-row.done-comprar td { opacity: 0.45; }
+  .ingredient-row.done-tengo td:not(.td-check) { opacity: 0.55; }
+
+  .ingredient-row td {
+    padding: 10px 18px;
+    vertical-align: middle;
+  }
+
+  .td-check {
+    width: 80px;
+    text-align: center;
+  }
+
+  .td-name { font-size: 12px; color: var(--text); }
+
+  .td-amount {
+    font-size: 11px;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+  .td-notes {
+    font-size: 10px;
+    color: var(--text3);
+    max-width: 260px;
+  }
+
+  .td-used {
+    font-size: 10px;
+    color: var(--text3);
+    white-space: nowrap;
+  }
+
+  /* ── CUSTOM CHECKBOX ── */
+  .check-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .check-wrap input[type="checkbox"] {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    background: var(--surface);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.12s;
+    flex-shrink: 0;
+  }
+
+  .check-wrap input[type="checkbox"]:hover { border-color: var(--gold); }
+
+  .check-wrap input[type="checkbox"]:checked {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .check-wrap input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 1.5px;
+    width: 5px;
+    height: 8px;
+    border: 2px solid #0e0f0d;
+    border-left: none;
+    border-top: none;
+    transform: rotate(45deg);
+  }
+
+  .check-tengo input[type="checkbox"]:checked {
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .check-label {
+    font-size: 9px;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+    margin-left: 5px;
+  }
+
+  /* ── BADGE ── */
+  .badge-gold {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 2px;
+    background: var(--gold-dim);
+    color: var(--gold-light);
+    border: 1px solid rgba(201,147,58,0.3);
+    vertical-align: middle;
+    margin-left: 6px;
+    white-space: nowrap;
+  }
+
+  /* ── NOTAS EXTRAS ── */
+  .extras-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+  }
+
+  .extra-card {
+    background: var(--surface);
+    border: 1px solid rgba(201,147,58,0.25);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+
+  .extra-card-name {
+    font-size: 12px;
+    color: var(--gold-light);
+    margin-bottom: 4px;
+  }
+
+  .extra-card-type {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .extra-card-note {
+    font-size: 11px;
+    color: var(--text3);
+    line-height: 1.5;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap {
+    background: var(--surface2);
+    border-radius: 2px;
+    height: 3px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .progress-bar.green { background: var(--green); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text3);
+    font-size: 12px;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 4px 0;
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .main { padding: 16px; gap: 16px; }
+    .header-inner { padding: 16px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .ingredient-table { display: none; }
+    .mobile-cards { display: flex !important; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .filter-btns { justify-content: flex-start; }
+  }
+
+  @media (min-width: 769px) {
+    .mobile-cards { display: none !important; }
+  }
+
+  /* ── MOBILE INGREDIENT CARDS ── */
+  .mobile-cards {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .mobile-ingredient {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mobile-ingredient:last-child { border-bottom: none; }
+
+  .mi-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .mi-name { font-size: 13px; color: var(--text); flex: 1; }
+  .mi-amount { font-size: 11px; color: var(--text2); }
+  .mi-note { font-size: 10px; color: var(--text3); }
+
+  .mi-checks {
+    display: flex;
+    gap: 16px;
+    margin-top: 4px;
+  }
+
+  .mi-check-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+
+  /* ── HIDDEN ── */
+  .hidden { display: none !important; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--text3);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="no-print">
+  <div class="header-inner">
+    <div class="header-left">
+      <h1>Menú del Día — <span>Cookout Caribeño</span></h1>
+      <p>Planner de compra y producción &nbsp;·&nbsp; 16 personas</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-gold no-print" onclick="window.print()">Imprimir lista</button>
+      <button class="btn btn-danger no-print" onclick="resetAll()">Reset checklist</button>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- STATS -->
+  <div class="stats-grid no-print" id="statsGrid">
+    <div class="stat-card">
+      <span class="stat-label">Total ingredientes</span>
+      <span class="stat-value" id="statTotal">—</span>
+    </div>
+    <div class="stat-card gold">
+      <span class="stat-label">A comprar</span>
+      <span class="stat-value" id="statComprar">—</span>
+      <div class="progress-wrap"><div class="progress-bar" id="pbComprar" style="width:0%"></div></div>
+    </div>
+    <div class="stat-card green">
+      <span class="stat-label">Ya tengo</span>
+      <span class="stat-value" id="statTengo">—</span>
+      <div class="progress-wrap"><div class="progress-bar green" id="pbTengo" style="width:0%"></div></div>
+    </div>
+    <div class="stat-card muted">
+      <span class="stat-label">Pendientes</span>
+      <span class="stat-value" id="statPending">—</span>
+    </div>
+  </div>
+
+  <!-- MENU SUMMARY -->
+  <div>
+    <div class="section-label">Resumen del menú</div>
+    <div class="menu-summary">
+      <div class="menu-card">
+        <div class="menu-card-cat">Appetizer</div>
+        <div class="menu-card-name">Corn Ribs</div>
+        <div class="menu-card-note">2 piezas por persona / ~32 piezas</div>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-cat">Principal</div>
+        <div class="menu-card-name">Costillas BBQ Bacardi Spice</div>
+        <div class="menu-card-note">6–8 oz cocidas por persona</div>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-cat">Principal / Side</div>
+        <div class="menu-card-name">Jalapeño Mac and Cheese</div>
+        <div class="menu-card-note">4–5 oz por persona</div>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-cat">Side</div>
+        <div class="menu-card-name">Coleslaw Caribeño</div>
+        <div class="menu-card-note">3–4 oz por persona</div>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-cat">Postre</div>
+        <div class="menu-card-name">Bizcocho de maíz · Syrup de canela · Mousse cream cheese</div>
+        <div class="menu-card-note">1 porción por persona</div>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-cat">Miscellaneous</div>
+        <div class="menu-card-name">Bandejas · Palitos · Papel aluminio</div>
+        <div class="menu-card-note">Equipos y servicio</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls no-print">
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="Buscar ingrediente, notas, categoría..." oninput="filterAll()">
+    </div>
+    <div class="filter-btns" id="filterBtns">
+      <button class="filter-btn active" data-cat="todos" onclick="setFilter('todos')">Todos</button>
+      <button class="filter-btn" data-cat="appetizer" onclick="setFilter('appetizer')">Appetizer</button>
+      <button class="filter-btn" data-cat="principal" onclick="setFilter('principal')">Principal</button>
+      <button class="filter-btn" data-cat="side" onclick="setFilter('side')">Side</button>
+      <button class="filter-btn" data-cat="coleslaw" onclick="setFilter('coleslaw')">Coleslaw / Dressing</button>
+      <button class="filter-btn" data-cat="postre" onclick="setFilter('postre')">Postre</button>
+      <button class="filter-btn" data-cat="miscellaneous" onclick="setFilter('miscellaneous')">Misc</button>
+      <button class="filter-btn" data-cat="extra" onclick="setFilter('extra')">Extra / Opcional</button>
+    </div>
+  </div>
+
+  <!-- INGREDIENTS LIST -->
+  <div>
+    <div class="section-label">
+      <span>Ingredientes por componente</span>
+      <span id="visibleCount" style="color:var(--text3)"></span>
+    </div>
+    <div id="ingredientsList"></div>
+  </div>
+
+  <!-- EXTRAS NOTES -->
+  <div>
+    <div class="section-label">Extras sugeridos y opcionales</div>
+    <div class="extras-grid" id="extrasGrid"></div>
+  </div>
+
+</div>
+
+<footer class="no-print">
+  Cookout Caribeño · 16 personas · Menú del Día
+</footer>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+
+const INGREDIENTS = [
+  // APPETIZER
+  { id:'a1', cat:'appetizer', name:'Mazorcas', amount:'8 unidades (cortadas en 4)', usedIn:'Corn Ribs', notes:'Rinde ~32 piezas · 2 pzas por persona', extra:false, comprar:true },
+  { id:'a2', cat:'appetizer', name:'Limón', amount:'10–12 unidades total', usedIn:'Corn Ribs · Coleslaw dressing', notes:'Compartido entre corn ribs y dressing', extra:false, comprar:true },
+  { id:'a3', cat:'appetizer', name:'Spices (mezcla)', amount:'3–4 tbsp total', usedIn:'Corn Ribs', notes:'Mezcla de especias para corn ribs', extra:false, comprar:true },
+  { id:'a4', cat:'appetizer', name:'Aceite o mantequilla', amount:'4–6 tbsp', usedIn:'Corn Ribs', notes:'Para adherir los spices al maíz', extra:true, comprar:false },
+
+  // PRINCIPAL
+  { id:'p1', cat:'principal', name:'Costillas de cerdo', amount:'9–10 lb crudas', usedIn:'Costillas BBQ', notes:'Plato principal · 6–8 oz cocidas por persona', extra:false, comprar:true },
+  { id:'p2', cat:'principal', name:'Azúcar morena', amount:'1½ taza', usedIn:'Costillas BBQ', notes:'Para glaze y salsa', extra:false, comprar:true },
+  { id:'p3', cat:'principal', name:'Jugo de piña', amount:'4 tazas total', usedIn:'Costillas BBQ · Coleslaw dressing', notes:'3 tazas para costillas · 1 taza para dressing', extra:false, comprar:true },
+  { id:'p4', cat:'principal', name:'Paprika', amount:'¼ taza', usedIn:'Costillas BBQ', notes:'Sazón', extra:false, comprar:true },
+  { id:'p5', cat:'principal', name:'Bacardi Spice', amount:'1½ taza', usedIn:'Costillas BBQ', notes:'Para BBQ glaze', extra:false, comprar:true },
+  { id:'p6', cat:'principal', name:'Salsa BBQ', amount:'3–4 tazas', usedIn:'Costillas BBQ', notes:'Si se quiere más estilo BBQ sauce clásica', extra:true, comprar:false },
+  { id:'p7', cat:'principal', name:'Sal', amount:'Al gusto', usedIn:'Costillas · Mac & Cheese · Coleslaw', notes:'Para balancear los tres platos', extra:true, comprar:false },
+
+  // PRINCIPAL / SIDE — MAC AND CHEESE
+  { id:'m1', cat:'side', name:'Macaroni', amount:'3 lb', usedIn:'Jalapeño Mac & Cheese', notes:'Base del plato · 4–5 oz por persona', extra:false, comprar:true },
+  { id:'m2', cat:'side', name:'Heavy cream', amount:'2 qt total', usedIn:'Mac & Cheese · Mousse', notes:'1 qt para mac & cheese · 1 qt para mousse', extra:false, comprar:true },
+  { id:'m3', cat:'side', name:'Leche', amount:'1 qt', usedIn:'Jalapeño Mac & Cheese', notes:'Para la salsa', extra:false, comprar:true },
+  { id:'m4', cat:'side', name:'Harina', amount:'1 taza', usedIn:'Jalapeño Mac & Cheese', notes:'Para el roux', extra:false, comprar:true },
+  { id:'m5', cat:'side', name:'Mantequilla', amount:'8 oz / 2 barras', usedIn:'Jalapeño Mac & Cheese', notes:'Para el roux', extra:false, comprar:true },
+  { id:'m6', cat:'side', name:'Cream cheese', amount:'32 oz total', usedIn:'Mac & Cheese · Mousse', notes:'16 oz para mac & cheese · 16 oz para mousse', extra:false, comprar:true },
+  { id:'m7', cat:'side', name:'Queso Papa Pinto & Cheddar', amount:'3 lb total', usedIn:'Jalapeño Mac & Cheese', notes:'Queso principal', extra:false, comprar:true },
+  { id:'m8', cat:'side', name:'Jalapeño', amount:'6–8 unidades', usedIn:'Jalapeño Mac & Cheese', notes:'Picante y sabor', extra:false, comprar:true },
+
+  // COLESLAW + DRESSING
+  { id:'c1', cat:'coleslaw', name:'Repollo verde', amount:'2 cabezas medianas (~3 lb)', usedIn:'Coleslaw Caribeño', notes:'Base del slaw · 3–4 oz por persona', extra:false, comprar:true },
+  { id:'c2', cat:'coleslaw', name:'Cebolla lila', amount:'1 grande', usedIn:'Coleslaw Caribeño', notes:'Cortar fina', extra:false, comprar:true },
+  { id:'c3', cat:'coleslaw', name:'Zanahoria', amount:'1 lb', usedIn:'Coleslaw Caribeño', notes:'Rallada o julienne', extra:false, comprar:true },
+  { id:'c4', cat:'coleslaw', name:'Cilantro', amount:'1–2 bunches', usedIn:'Coleslaw Caribeño', notes:'Fresco', extra:false, comprar:true },
+  { id:'c5', cat:'coleslaw', name:'Piña fresca', amount:'1 entera o 2 lb cortada', usedIn:'Coleslaw Caribeño', notes:'Para dulzor natural', extra:false, comprar:true },
+  { id:'c6', cat:'coleslaw', name:'Apple cider vinegar', amount:'½ taza', usedIn:'Coleslaw dressing', notes:'Para acidez del dressing', extra:false, comprar:true },
+  { id:'c7', cat:'coleslaw', name:'Aceite de oliva', amount:'½ taza', usedIn:'Coleslaw dressing', notes:'Para emulsión', extra:false, comprar:true },
+  { id:'c8', cat:'coleslaw', name:'Pimienta negra', amount:'Al gusto', usedIn:'Coleslaw dressing', notes:'Opcional para el dressing', extra:true, comprar:false },
+
+  // POSTRE
+  { id:'d1', cat:'postre', name:'Bizcocho de maíz', amount:'1 bandeja 9×13 o equivalente', usedIn:'Postre', notes:'Base del postre · 1 porción por persona', extra:false, comprar:true },
+  { id:'d2', cat:'postre', name:'Azúcar blanca', amount:'2 tazas total', usedIn:'Simple syrup · Mousse', notes:'1 taza para syrup · 1 taza para mousse', extra:false, comprar:true },
+  { id:'d3', cat:'postre', name:'Canela completa (palitos)', amount:'2–3 palitos', usedIn:'Simple syrup', notes:'Para infusionar el syrup', extra:false, comprar:true },
+  { id:'d4', cat:'postre', name:'Clavos', amount:'8–10 unidades', usedIn:'Simple syrup', notes:'Para infusionar el syrup', extra:false, comprar:true },
+  { id:'d5', cat:'postre', name:'Agua', amount:'1 taza', usedIn:'Simple syrup', notes:'Necesaria para hacer el simple syrup', extra:true, comprar:false },
+  { id:'d6', cat:'postre', name:'Vanilla extract', amount:'2 tsp', usedIn:'Mousse cream cheese', notes:'Sabor del mousse', extra:false, comprar:true },
+
+  // MISCELLANEOUS
+  { id:'x1', cat:'miscellaneous', name:'Bandejas de aluminio', amount:'3–5 bandejas grandes', usedIn:'Servicio / Cocina', notes:'Para cocinar o servir', extra:false, comprar:true },
+  { id:'x2', cat:'miscellaneous', name:'Palitos de madera', amount:'1 paquete', usedIn:'Corn Ribs / Servicio', notes:'Para corn ribs o presentación', extra:false, comprar:true },
+  { id:'x3', cat:'miscellaneous', name:'Papel aluminio', amount:'1 roll grande', usedIn:'Costillas / Cocina', notes:'Para cubrir o asar', extra:false, comprar:true },
+];
+
+const EXTRAS_NOTES = [
+  { name:'Sal', type:'Extra sugerido', note:'Balancea costillas, mac & cheese y dressing del coleslaw. Esencial aunque se liste por separado.' },
+  { name:'Salsa BBQ', type:'Extra sugerido', note:'Ayuda a lograr textura de glaze BBQ más clásica. Complementa el Bacardi Spice.' },
+  { name:'Aceite o mantequilla', type:'Extra sugerido', note:'Ayuda a que los spices se adhieran mejor a los corn ribs durante el asado.' },
+  { name:'Agua', type:'Extra sugerido', note:'Necesaria para preparar el simple syrup del postre (1 taza de agua + azúcar).' },
+  { name:'Pimienta negra', type:'Opcional', note:'Añade profundidad al dressing del Coleslaw Caribeño. A gusto del chef.' },
+];
+
+const CAT_LABELS = {
+  appetizer: 'Appetizer — Corn Ribs',
+  principal: 'Principal — Costillas BBQ Bacardi Spice',
+  side: 'Principal/Side — Jalapeño Mac and Cheese',
+  coleslaw: 'Side — Coleslaw Caribeño + Dressing',
+  postre: 'Postre — Bizcocho de maíz · Syrup · Mousse',
+  miscellaneous: 'Miscellaneous',
+};
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+
+let activeFilter = 'todos';
+let searchQuery = '';
+
+function getState() {
+  try { return JSON.parse(localStorage.getItem('cookout_state') || '{}'); } catch { return {}; }
+}
+
+function saveState(id, field, val) {
+  const s = getState();
+  if (!s[id]) s[id] = {};
+  s[id][field] = val;
+  localStorage.setItem('cookout_state', JSON.stringify(s));
+}
+
+function isChecked(id, field) {
+  const s = getState();
+  return !!(s[id] && s[id][field]);
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+
+function renderAll() {
+  renderIngredients();
+  renderExtras();
+  updateStats();
+}
+
+function getVisible() {
+  const q = searchQuery.toLowerCase().trim();
+  return INGREDIENTS.filter(ing => {
+    const catMatch = activeFilter === 'todos'
+      || activeFilter === 'extra' && ing.extra
+      || ing.cat === activeFilter;
+    if (!catMatch) return false;
+    if (!q) return true;
+    return [ing.name, ing.cat, ing.usedIn, ing.notes, ing.amount]
+      .some(f => f && f.toLowerCase().includes(q));
+  });
+}
+
+function renderIngredients() {
+  const container = document.getElementById('ingredientsList');
+  const visible = getVisible();
+  document.getElementById('visibleCount').textContent = `${visible.length} ingredientes`;
+
+  if (visible.length === 0) {
+    container.innerHTML = '<div class="empty-state">No se encontraron ingredientes.</div>';
+    return;
+  }
+
+  // Group by category
+  const cats = [...new Set(visible.map(i => i.cat))];
+  const state = getState();
+
+  container.innerHTML = cats.map(cat => {
+    const items = visible.filter(i => i.cat === cat);
+    const label = CAT_LABELS[cat] || cat;
+
+    const desktopRows = items.map(ing => {
+      const chkComprar = isChecked(ing.id, 'comprar');
+      const chkTengo = isChecked(ing.id, 'tengo');
+      const rowCls = chkComprar ? 'done-comprar' : (chkTengo ? 'done-tengo' : '');
+      return `
+        <tr class="ingredient-row ${rowCls}" id="row-${ing.id}">
+          <td class="td-check">
+            <div class="check-wrap check-comprar">
+              <input type="checkbox" id="cc-${ing.id}" ${chkComprar?'checked':''} onchange="toggle('${ing.id}','comprar',this.checked)">
+            </div>
+          </td>
+          <td class="td-check">
+            <div class="check-wrap check-tengo">
+              <input type="checkbox" id="ct-${ing.id}" ${chkTengo?'checked':''} onchange="toggle('${ing.id}','tengo',this.checked)">
+            </div>
+          </td>
+          <td class="td-name">
+            ${ing.name}
+            ${ing.extra ? '<span class="badge-gold">Extra</span>' : ''}
+          </td>
+          <td class="td-amount">${ing.amount}</td>
+          <td class="td-used">${ing.usedIn}</td>
+          <td class="td-notes">${ing.notes}</td>
+        </tr>`;
+    }).join('');
+
+    const mobileCards = items.map(ing => {
+      const chkComprar = isChecked(ing.id, 'comprar');
+      const chkTengo = isChecked(ing.id, 'tengo');
+      return `
+        <div class="mobile-ingredient">
+          <div class="mi-top">
+            <div class="mi-name">
+              ${ing.name}
+              ${ing.extra ? '<span class="badge-gold">Extra</span>' : ''}
+            </div>
+            <div class="mi-amount">${ing.amount}</div>
+          </div>
+          <div class="mi-note">${ing.usedIn} · ${ing.notes}</div>
+          <div class="mi-checks">
+            <label class="mi-check-item">
+              <input type="checkbox" ${chkComprar?'checked':''} onchange="toggle('${ing.id}','comprar',this.checked)">
+              <span class="check-label">Comprar</span>
+            </label>
+            <label class="mi-check-item">
+              <input type="checkbox" ${chkTengo?'checked':''} onchange="toggle('${ing.id}','tengo',this.checked)">
+              <span class="check-label">Ya tengo</span>
+            </label>
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="cat-block" id="cat-${cat}">
+        <div class="cat-header" onclick="toggleCat('${cat}')">
+          <span class="cat-title">${label}</span>
+          <span class="cat-count">${items.length}</span>
+          <span class="cat-chevron">▾</span>
+        </div>
+        <div class="cat-body">
+          <table class="ingredient-table">
+            <thead>
+              <tr>
+                <th>Comprar</th>
+                <th>Ya tengo</th>
+                <th>Ingrediente</th>
+                <th>Cantidad</th>
+                <th>Usado en</th>
+                <th>Notas</th>
+              </tr>
+            </thead>
+            <tbody>${desktopRows}</tbody>
+          </table>
+          <div class="mobile-cards">${mobileCards}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function renderExtras() {
+  document.getElementById('extrasGrid').innerHTML = EXTRAS_NOTES.map(e => `
+    <div class="extra-card">
+      <div class="extra-card-type">${e.type}</div>
+      <div class="extra-card-name">${e.name}</div>
+      <div class="extra-card-note">${e.note}</div>
+    </div>`).join('');
+}
+
+function updateStats() {
+  const total = INGREDIENTS.length;
+  let comprar = 0, tengo = 0;
+  INGREDIENTS.forEach(ing => {
+    if (isChecked(ing.id, 'comprar')) comprar++;
+    if (isChecked(ing.id, 'tengo')) tengo++;
+  });
+  const pending = total - comprar - tengo;
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statComprar').textContent = comprar;
+  document.getElementById('statTengo').textContent = tengo;
+  document.getElementById('statPending').textContent = Math.max(0, pending);
+
+  document.getElementById('pbComprar').style.width = (comprar/total*100).toFixed(1) + '%';
+  document.getElementById('pbTengo').style.width = (tengo/total*100).toFixed(1) + '%';
+}
+
+// ─── INTERACTIONS ─────────────────────────────────────────────────────────────
+
+function toggle(id, field, val) {
+  saveState(id, field, val);
+  // Update row class for desktop
+  const row = document.getElementById('row-' + id);
+  if (row) {
+    const chkC = isChecked(id, 'comprar');
+    const chkT = isChecked(id, 'tengo');
+    row.className = 'ingredient-row' + (chkC ? ' done-comprar' : chkT ? ' done-tengo' : '');
+  }
+  updateStats();
+}
+
+function setFilter(cat) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.cat === cat);
+  });
+  renderIngredients();
+}
+
+function filterAll() {
+  searchQuery = document.getElementById('searchInput').value;
+  renderIngredients();
+}
+
+function toggleCat(cat) {
+  const el = document.getElementById('cat-' + cat);
+  if (el) el.classList.toggle('collapsed');
+}
+
+function resetAll() {
+  if (!confirm('¿Resetear todos los checkboxes? Esto borra el progreso guardado.')) return;
+  localStorage.removeItem('cookout_state');
+  renderAll();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+
+renderAll();
+</script>
+</body>
+</html>
